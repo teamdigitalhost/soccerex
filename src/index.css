@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+@theme {
+  /* Soccerex Brand Colors */
+  --color-navy: #09203e;
+  --color-navy-light: #0e2a4f;
+  --color-navy-dark: #061729;
+  --color-gold: #bfb170;
+  --color-gold-light: #d4c78e;
+  --color-blue-accent: #1a3fbf;
+  --color-midnight: #050d1a;
+  --color-charcoal: #0c1a2e;
+  --color-slate: #6B7280;
+
+  /* Font Families */
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+}
+
+/* Fade-up animation via IntersectionObserver */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Node pulse animation */
+@keyframes node-pulse {
+  0%, 100% { opacity: 0.3; r: 3; }
+  50% { opacity: 1; r: 5; }
+}
+
+/* Editorial container */
+.container-editorial {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 5vw, 80px);
+}
+
+/* Section label style (IBM Plex Mono) */
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Dark textured backgrounds */
+.bg-navy-textured {
+  background-color: #09203e;
+  background-image:
+    linear-gradient(rgba(26, 63, 191, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 63, 191, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.bg-dark-textured {
+  background-color: #061729;
+  background-image:
+    linear-gradient(rgba(26, 63, 191, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 63, 191, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.bg-charcoal-textured {
+  background-color: #0c1a2e;
+  background-image:
+    linear-gradient(rgba(191, 177, 112, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(191, 177, 112, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Section divider line */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #bfb170, transparent);
+  transform: scaleX(0);
+  transition: transform 1s ease;
+}
+.section-divider.visible {
+  transform: scaleX(1);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Text glow */
+.text-glow {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.15), 0 0 80px rgba(255, 255, 255, 0.05);
+}
+
+/* Underline grow animation */
+.underline-grow {
+  display: inline-block;
+  position: relative;
+}
+.underline-grow::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #bfb170, #1a3fbf);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s ease;
+}
+.underline-grow.visible::after {
+  transform: scaleX(1);
+}
+
+/* Slide in from left */
+.slide-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.slide-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Slide in from right */
+.slide-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scale up */
+.scale-up {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.scale-up.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Blur reveal */
+.blur-reveal {
+  opacity: 0;
+  filter: blur(8px);
+  transition: opacity 1s ease, filter 1s ease;
+}
+.blur-reveal.visible {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* Gold accent underline for headings */
+.gold-underline {
+  position: relative;
+  display: inline-block;
+}
+.gold-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #bfb170, rgba(191, 177, 112, 0.3));
+}

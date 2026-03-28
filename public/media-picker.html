@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soccerex Media Picker</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: #09203e;
+    color: #e8e6e1;
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+
+  /* Header */
+  .header {
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid rgba(191,177,112,0.2);
+    position: sticky;
+    top: 0;
+    background: #09203e;
+    z-index: 100;
+  }
+  .header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #bfb170;
+    letter-spacing: -0.02em;
+  }
+  .header p {
+    font-size: 0.85rem;
+    color: rgba(232,230,225,0.5);
+    margin-top: 0.25rem;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0.25rem;
+    padding: 1rem 2rem 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 72px;
+    background: #09203e;
+    z-index: 99;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(191,177,112,0.1);
+  }
+  .tab {
+    padding: 0.5rem 1.1rem;
+    border-radius: 6px;
+    background: rgba(191,177,112,0.08);
+    border: 1px solid rgba(191,177,112,0.15);
+    color: rgba(232,230,225,0.6);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab:hover {
+    background: rgba(191,177,112,0.15);
+    color: #e8e6e1;
+  }
+  .tab.active {
+    background: #bfb170;
+    color: #09203e;
+    border-color: #bfb170;
+    font-weight: 600;
+  }
+
+  /* Category section */
+  .category {
+    padding: 2rem;
+    display: none;
+  }
+  .category.visible { display: block; }
+  .category-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #bfb170;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(191,177,112,0.2);
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Card */
+  .card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  .card:hover {
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .card.selected {
+    border-color: #bfb170;
+    box-shadow: 0 0 0 1px #bfb170, 0 8px 30px rgba(191,177,112,0.15);
+  }
+  .card.selected::after {
+    content: '\2713';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    background: #bfb170;
+    color: #09203e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    z-index: 2;
+  }
+  .card-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+  .card-body {
+    padding: 1rem 1.1rem;
+  }
+  .card-id {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #bfb170;
+    background: rgba(191,177,112,0.12);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+  .card-top-pick {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #09203e;
+    background: #bfb170;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-left: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .card-desc {
+    font-size: 0.85rem;
+    color: rgba(232,230,225,0.75);
+    line-height: 1.45;
+    margin-bottom: 0.5rem;
+  }
+  .card-photographer {
+    font-size: 0.75rem;
+    color: rgba(232,230,225,0.4);
+  }
+  .card-photographer span {
+    color: rgba(191,177,112,0.7);
+  }
+
+  /* Bottom bar */
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0d2847;
+    border-top: 1px solid rgba(191,177,112,0.25);
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 200;
+    backdrop-filter: blur(12px);
+    min-height: 56px;
+  }
+  .bottom-bar .count {
+    font-size: 0.85rem;
+    color: #bfb170;
+    font-weight: 600;
+  }
+  .bottom-bar .selected-ids {
+    font-size: 0.8rem;
+    color: rgba(232,230,225,0.6);
+    flex: 1;
+    margin-left: 1.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .bottom-bar .selected-ids .id-tag {
+    display: inline-block;
+    background: rgba(191,177,112,0.12);
+    border: 1px solid rgba(191,177,112,0.25);
+    color: #bfb170;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-right: 0.4rem;
+  }
+  .btn-clear {
+    background: transparent;
+    border: 1px solid rgba(191,177,112,0.3);
+    color: rgba(232,230,225,0.5);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 1rem;
+    white-space: nowrap;
+  }
+  .btn-clear:hover {
+    border-color: #bfb170;
+    color: #bfb170;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Soccerex Media Picker</h1>
+  <p>Select images for the website rebuild. Click to toggle selection.</p>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" data-cat="hero">Hero Backgrounds</button>
+  <button class="tab" data-cat="amsterdam">Amsterdam</button>
+  <button class="tab" data-cat="miami">Miami</button>
+  <button class="tab" data-cat="riyadh">Riyadh / Middle East</button>
+  <button class="tab" data-cat="networking">Networking / Business</button>
+  <button class="tab" data-cat="stadium">Stadium / Venue</button>
+  <button class="tab" data-cat="all">All Images</button>
+</div>
+
+<!-- HERO BACKGROUNDS -->
+<div class="category visible" data-cat="hero">
+  <h2 class="category-title">Hero Backgrounds</h2>
+  <div class="grid">
+    <div class="card" data-id="H1" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/16474846/pexels-photo-16474846.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Budapest Stadium Night" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">H1</span><span class="card-top-pick">Top Pick</span>
+        <p class="card-desc">Stadium interior at night, dramatic floodlights, empty pitch. 7335x4346px.</p>
+        <p class="card-photographer">Photo by <span>ShotsBy Csongii</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="H2" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/1884574/pexels-photo-1884574.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Stadium Aerial" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">H2</span>
+        <p class="card-desc">Aerial view of stadium complex, architectural perspective.</p>
+        <p class="card-photographer">Photo by <span>Tom Fisk</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="H3" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Stadium Tunnel" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">H3</span>
+        <p class="card-desc">Empty stadium from field level, dramatic perspective.</p>
+        <p class="card-photographer">Photo by <span>Martin P&eacute;chy</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="H4" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Floodlights at Night" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">H4</span>
+        <p class="card-desc">Stadium floodlights against dark sky, moody atmosphere.</p>
+        <p class="card-photographer">Photo by <span>Markus Spiske</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="H5" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Empty Pitch Night" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">H5</span>
+        <p class="card-desc">Empty football pitch at night with floodlights.</p>
+        <p class="card-photographer">Photo by <span>Pixabay</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AMSTERDAM -->
+<div class="category" data-cat="amsterdam">
+  <h2 class="category-title">Amsterdam</h2>
+  <div class="grid">
+    <div class="card" data-id="A1" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/2031706/pexels-photo-2031706.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Canal Houses Night" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">A1</span><span class="card-top-pick">Top Pick</span>
+        <p class="card-desc">Amsterdam canal houses at night with golden reflections in water.</p>
+        <p class="card-photographer">Photo by <span>Felix Schickel</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="A2" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/1796730/pexels-photo-1796730.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Amsterdam Skyline" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">A2</span>
+        <p class="card-desc">Amsterdam cityscape with iconic architecture.</p>
+        <p class="card-photographer">Photo by <span>Adventures in Europe</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="A3" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/1414467/pexels-photo-1414467.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Dutch Architecture" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">A3</span>
+        <p class="card-desc">Classic Amsterdam canal with row houses.</p>
+        <p class="card-photographer">Photo by <span>Nout Gons</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MIAMI -->
+<div class="category" data-cat="miami">
+  <h2 class="category-title">Miami</h2>
+  <div class="grid">
+    <div class="card" data-id="M1" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/421655/pexels-photo-421655.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Miami Skyline Night" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">M1</span>
+        <p class="card-desc">Miami skyline at night from water, city lights reflected.</p>
+        <p class="card-photographer">Photo by <span>Daniel Barnes</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="M2" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/2467558/pexels-photo-2467558.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Miami Downtown" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">M2</span>
+        <p class="card-desc">Modern Miami buildings, blue/teal sky.</p>
+        <p class="card-photographer">Photo by <span>Denys Kostyuchenko</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="M3" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/2827374/pexels-photo-2827374.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Miami Beach" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">M3</span>
+        <p class="card-desc">Miami coastal view, tropical feel.</p>
+        <p class="card-photographer">Photo by <span>Juan Salamanca</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIYADH -->
+<div class="category" data-cat="riyadh">
+  <h2 class="category-title">Riyadh / Middle East</h2>
+  <div class="grid">
+    <div class="card" data-id="R1" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/17829538/pexels-photo-17829538.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Kingdom Tower" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">R1</span>
+        <p class="card-desc">Kingdom Tower silhouette, dramatic sky.</p>
+        <p class="card-photographer">Photo by <span>Hazily Light</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="R2" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/15764925/pexels-photo-15764925.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Riyadh Skyline" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">R2</span>
+        <p class="card-desc">Modern Riyadh skyline with towers.</p>
+        <p class="card-photographer">Photo by <span>Yasser Alshaybi</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="R3" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/19835498/pexels-photo-19835498.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Saudi Architecture" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">R3</span>
+        <p class="card-desc">Modern Middle Eastern architectural details.</p>
+        <p class="card-photographer">Photo by <span>Nour Wageh</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NETWORKING -->
+<div class="category" data-cat="networking">
+  <h2 class="category-title">Networking / Business</h2>
+  <div class="grid">
+    <div class="card" data-id="N1" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/3321793/pexels-photo-3321793.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Panel Discussion" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">N1</span>
+        <p class="card-desc">Professional panel discussion, corporate event setting.</p>
+        <p class="card-photographer">Photo by <span>Henri Mathieu-Saint-Laurent</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="N2" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Conference Crowd" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">N2</span>
+        <p class="card-desc">Conference attendees in professional setting.</p>
+        <p class="card-photographer">Photo by <span>Christina Morillo</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="N3" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Business Networking" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">N3</span>
+        <p class="card-desc">People networking at a business event.</p>
+        <p class="card-photographer">Photo by <span>Christina Morillo</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STADIUM -->
+<div class="category" data-cat="stadium">
+  <h2 class="category-title">Stadium / Venue</h2>
+  <div class="grid">
+    <div class="card" data-id="S1" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/1884576/pexels-photo-1884576.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Berlin Olympic Stadium" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">S1</span>
+        <p class="card-desc">Panoramic stadium view, architectural grandeur.</p>
+        <p class="card-photographer">Photo by <span>Hub JACQU</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="S2" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/270085/pexels-photo-270085.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Modern Stadium Interior" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">S2</span>
+        <p class="card-desc">Empty modern stadium with clean lines.</p>
+        <p class="card-photographer">Photo by <span>Pixabay</span></p>
+      </div>
+    </div>
+    <div class="card" data-id="S3" onclick="toggle(this)">
+      <img class="card-img" src="https://images.pexels.com/photos/1752757/pexels-photo-1752757.jpeg?auto=compress&cs=tinysrgb&w=800" alt="VIP Stadium Area" loading="lazy">
+      <div class="card-body">
+        <span class="card-id">S3</span>
+        <p class="card-desc">Stadium seating area, architectural detail.</p>
+        <p class="card-photographer">Photo by <span>Frans van Heerden</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <span class="count" id="count">0 selected</span>
+  <div class="selected-ids" id="selectedIds">No images selected</div>
+  <button class="btn-clear" onclick="clearAll()">Clear All</button>
+</div>
+
+<script>
+  const selected = new Set();
+
+  function toggle(card) {
+    const id = card.dataset.id;
+    if (selected.has(id)) {
+      selected.delete(id);
+      card.classList.remove('selected');
+    } else {
+      selected.add(id);
+      card.classList.add('selected');
+    }
+    updateBar();
+  }
+
+  function clearAll() {
+    selected.clear();
+    document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected'));
+    updateBar();
+  }
+
+  function updateBar() {
+    const countEl = document.getElementById('count');
+    const idsEl = document.getElementById('selectedIds');
+    const n = selected.size;
+    countEl.textContent = n + ' selected';
+    if (n === 0) {
+      idsEl.innerHTML = 'No images selected';
+    } else {
+      idsEl.innerHTML = [...selected].map(id =>
+        '<span class="id-tag">' + id + '</span>'
+      ).join('');
+    }
+  }
+
+  // Tab navigation
+  document.getElementById('tabs').addEventListener('click', function(e) {
+    if (!e.target.classList.contains('tab')) return;
+    const cat = e.target.dataset.cat;
+
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+
+    document.querySelectorAll('.category').forEach(s => {
+      if (cat === 'all') {
+        s.classList.add('visible');
+      } else {
+        s.classList.toggle('visible', s.dataset.cat === cat);
+      }
+    });
+  });
+</script>
+</body>
+</html>
