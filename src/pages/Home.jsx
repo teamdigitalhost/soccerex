@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Users, MessageSquare, Globe, KeyRound, MapPin, ArrowRight } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
+import HeroSlideshow from '../components/HeroSlideshow'
 
 // Intersection Observer for fade-up animations
 function useScrollAnimations() {
@@ -388,7 +389,7 @@ export default function Home() {
 
   return (
     <>
-      <HeroSection />
+      <HeroSlideshow />
       <TopoDivider color="#0c1a2e" bgColor="#09203e" />
       <MeetingPointSection />
       <TopoDivider color="#0e2a4f" bgColor="#0c1a2e" lineOnly />
