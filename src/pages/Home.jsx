@@ -204,22 +204,22 @@ function MeetingPointSection() {
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div>
-          <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>01 &middot; THE PLATFORM</p>
-          <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
+          <p className="section-label mb-4" style={{ color: '#09203e', fontWeight: 600 }}>01 &middot; THE PLATFORM</p>
+          <h2 className="font-heading font-bold leading-tight mb-6" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
             The Meeting Point for Global Football Business
           </h2>
           <div style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
         </div>
         <div>
-          <p className="font-body leading-relaxed mb-4 fade-up" style={{ fontSize: '1.05rem', color: '#333' }}>
+          <p className="font-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#333' }}>
             Soccerex connects the people who drive the game forward.
           </p>
-          <p className="font-body leading-relaxed mb-6 fade-up" style={{ fontSize: '0.95rem', color: '#666' }}>
+          <p className="font-body leading-relaxed mb-6" style={{ fontSize: '0.95rem', color: '#666' }}>
             Across every event, we bring together:
           </p>
           <div className="space-y-4 mb-8">
             {bullets.map((item, i) => (
-              <div key={i} className="flex items-center gap-4 fade-up">
+              <div key={i} className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(9,32,62,0.08)', border: '1px solid rgba(9,32,62,0.12)' }}>
                   <item.icon size={18} style={{ color: '#09203e' }} />
                 </div>
@@ -227,7 +227,7 @@ function MeetingPointSection() {
               </div>
             ))}
           </div>
-          <p className="font-body leading-relaxed fade-up" style={{ fontSize: '0.95rem', color: '#555' }}>
+          <p className="font-body leading-relaxed" style={{ fontSize: '0.95rem', color: '#555' }}>
             Our role is simple: <span style={{ color: '#09203e', fontWeight: 600 }}>Create an environment where the right conversations happen.</span>
           </p>
         </div>
