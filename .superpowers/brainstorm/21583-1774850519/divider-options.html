@@ -1,0 +1,96 @@
+<h2>Section Divider Options for Soccerex</h2>
+<p class="subtitle">The current TopoDivider is identical to KFG's. Here are 4 alternatives that give Soccerex its own identity. Click the one you like best.</p>
+
+<div class="cards">
+
+  <!-- Option A: Diagonal Slash -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:180px;overflow:hidden;position:relative;background:#09203e;">
+      <!-- Top section -->
+      <div style="position:absolute;top:0;left:0;right:0;height:70px;background:linear-gradient(135deg,#050d1a,#09203e);"></div>
+      <!-- Diagonal slash -->
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none" style="position:absolute;top:50px;left:0;width:100%;height:80px;">
+        <polygon fill="#0e2a4f" points="0,80 1200,0 1200,120 0,120"/>
+        <line x1="0" y1="82" x2="1200" y2="2" stroke="rgba(191,177,112,0.5)" stroke-width="2"/>
+        <line x1="0" y1="90" x2="1200" y2="10" stroke="rgba(191,177,112,0.15)" stroke-width="1"/>
+      </svg>
+      <!-- Bottom section -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:50px;background:#0e2a4f;"></div>
+    </div>
+    <div class="card-body">
+      <h3>A. Diagonal Slash</h3>
+      <p>A bold angled cut with a gold accent line. Sporty, dynamic, conveys energy and forward movement. Common in sports branding.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Gradient Fade with Gold Line -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:180px;overflow:hidden;position:relative;background:#09203e;">
+      <!-- Top section -->
+      <div style="position:absolute;top:0;left:0;right:0;height:60px;background:#09203e;"></div>
+      <!-- Fade zone -->
+      <div style="position:absolute;top:60px;left:0;right:0;height:60px;background:linear-gradient(to bottom,#09203e,#0e2a4f);display:flex;align-items:center;justify-content:center;">
+        <div style="width:60%;height:1px;background:linear-gradient(90deg,transparent,#bfb170,transparent);"></div>
+      </div>
+      <!-- Bottom section -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:#0e2a4f;"></div>
+    </div>
+    <div class="card-body">
+      <h3>B. Gold Line Fade</h3>
+      <p>A subtle gradient blend between sections with a single centered gold hairline. Elegant, minimal, premium — lets content breathe without visual noise.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Hexagonal / Soccer Net Pattern -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:180px;overflow:hidden;position:relative;background:#09203e;">
+      <!-- Top section -->
+      <div style="position:absolute;top:0;left:0;right:0;height:55px;background:#09203e;"></div>
+      <!-- Hex pattern band -->
+      <div style="position:absolute;top:55px;left:0;right:0;height:70px;overflow:hidden;">
+        <svg width="100%" height="70" style="opacity:0.3;">
+          <defs>
+            <pattern id="hex" width="28" height="24" patternUnits="userSpaceOnUse" patternTransform="scale(1.5)">
+              <path d="M14,0 L28,8 L28,20 L14,28 L0,20 L0,8 Z" fill="none" stroke="#bfb170" stroke-width="0.6"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hex)"/>
+        </svg>
+        <div style="position:absolute;top:0;left:0;right:0;height:100%;background:linear-gradient(90deg,#09203e 0%,transparent 15%,transparent 85%,#09203e 100%);"></div>
+        <div style="position:absolute;top:0;left:0;right:0;height:100%;background:linear-gradient(to bottom,#09203e,transparent 20%,transparent 80%,#0e2a4f);"></div>
+      </div>
+      <!-- Bottom section -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:55px;background:#0e2a4f;"></div>
+    </div>
+    <div class="card-body">
+      <h3>C. Net Pattern Band</h3>
+      <p>A hexagonal/net mesh pattern that fades in from the edges — a nod to football/soccer netting. Unique to the sport, impossible to confuse with KFG.</p>
+    </div>
+  </div>
+
+  <!-- Option D: Staggered Bars -->
+  <div class="card" data-choice="d" onclick="toggleSelect(this)">
+    <div class="card-image" style="height:180px;overflow:hidden;position:relative;background:#09203e;">
+      <!-- Top section -->
+      <div style="position:absolute;top:0;left:0;right:0;height:60px;background:#09203e;"></div>
+      <!-- Staggered bars -->
+      <div style="position:absolute;top:60px;left:0;right:0;height:60px;display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;">
+        <div style="width:35%;height:2px;background:linear-gradient(90deg,transparent,#bfb170 30%,#bfb170 70%,transparent);margin-left:-30%;"></div>
+        <div style="width:50%;height:1px;background:linear-gradient(90deg,transparent,rgba(191,177,112,0.4) 20%,rgba(191,177,112,0.4) 80%,transparent);margin-left:10%;"></div>
+        <div style="width:25%;height:2px;background:linear-gradient(90deg,transparent,#bfb170 30%,#bfb170 70%,transparent);margin-left:40%;"></div>
+      </div>
+      <!-- Bottom section -->
+      <div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:#0e2a4f;"></div>
+    </div>
+    <div class="card-body">
+      <h3>D. Staggered Gold Bars</h3>
+      <p>Offset horizontal lines at different widths and positions, like a scoreboard or field markings. Modern, editorial, distinctly different from the topo waves.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:2rem;padding:1rem;border:1px solid rgba(255,255,255,0.1);border-radius:8px;">
+  <h3 style="margin-top:0;">Current: Animated Topo Waves (shared with KFG)</h3>
+  <p style="opacity:0.6;margin:0;">For reference — the current divider uses animated SVG sine waves with gold/blue strokes. Both sites use identical animation logic, wave shapes, and structure. Only the stroke colors differ slightly.</p>
+</div>

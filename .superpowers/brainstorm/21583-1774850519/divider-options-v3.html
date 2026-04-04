@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soccerex Dividers v3</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  h1 { text-align: center; padding: 40px 20px 10px; font-size: 1.6rem; font-weight: 600; }
+  .subtitle { text-align: center; color: rgba(255,255,255,0.5); font-size: 0.9rem; padding: 0 20px 40px; }
+
+  .divider-demo { margin: 0 auto 60px; max-width: 1200px; cursor: pointer; transition: transform 0.2s; }
+  .divider-demo:hover { transform: scale(1.01); }
+  .divider-demo.selected { outline: 2px solid #bfb170; outline-offset: 4px; border-radius: 8px; }
+
+  .demo-label { display: flex; align-items: center; gap: 12px; padding: 0 24px; margin-bottom: 12px; }
+  .demo-letter { width: 32px; height: 32px; border-radius: 50%; background: rgba(191,177,112,0.15); border: 1px solid rgba(191,177,112,0.4); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #bfb170; }
+  .demo-label h2 { font-size: 1.1rem; font-weight: 600; }
+  .demo-label p { color: rgba(255,255,255,0.45); font-size: 0.8rem; margin-left: auto; }
+
+  .demo-container { border-radius: 8px; overflow: hidden; }
+
+  .section-top { padding: 40px 48px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .section-top h3 { font-size: 1.4rem; font-weight: 600; color: rgba(255,255,255,0.7); }
+  .section-top .dots { display: flex; gap: 6px; }
+  .section-top .dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(191,177,112,0.3); }
+
+  .section-bottom { padding: 40px 48px; display: flex; align-items: flex-start; justify-content: space-between; }
+  .section-bottom h3 { font-size: 1.4rem; font-weight: 600; color: rgba(255,255,255,0.7); }
+  .section-bottom .bar { width: 80px; height: 4px; border-radius: 2px; background: rgba(191,177,112,0.2); }
+
+  /* ===== A: DIAGONAL SLASH ===== */
+  .slash-divider { position: relative; height: 100px; overflow: hidden; }
+  .slash-divider canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+  /* ===== B: GOLD LINE FADE ===== */
+  .goldline-divider { position: relative; height: 80px; background: linear-gradient(to bottom, #09203e, #0e2a4f); overflow: hidden; }
+  .goldline-divider canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+  /* ===== C: SOCCER BALL NET ===== */
+  .net-divider { position: relative; height: 110px; overflow: hidden; }
+  .net-divider canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .net-divider .fade-left, .net-divider .fade-right, .net-divider .fade-top, .net-divider .fade-bottom { position: absolute; z-index: 2; }
+  .net-divider .fade-left { top: 0; left: 0; width: 12%; height: 100%; background: linear-gradient(to right, #09203e, transparent); }
+  .net-divider .fade-right { top: 0; right: 0; width: 12%; height: 100%; background: linear-gradient(to left, #0e2a4f, transparent); }
+  .net-divider .fade-top { top: 0; left: 0; width: 100%; height: 30%; background: linear-gradient(to bottom, #09203e, transparent); }
+  .net-divider .fade-bottom { bottom: 0; left: 0; width: 100%; height: 30%; background: linear-gradient(to top, #0e2a4f, transparent); }
+
+  /* ===== D: STAGGERED BARS ===== */
+  .bars-divider { position: relative; height: 90px; background: linear-gradient(to bottom, #09203e, #0e2a4f); overflow: hidden; }
+  .bars-divider canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+  .selection-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); border-top: 1px solid rgba(191,177,112,0.3); padding: 16px 24px; text-align: center; transform: translateY(100%); transition: transform 0.3s; z-index: 100; font-size: 0.9rem; color: #bfb170; }
+  .selection-bar.visible { transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<h1>Soccerex Dividers v3</h1>
+<p class="subtitle">Animated with organic randomness. Click your favorite.</p>
+
+<!-- A: DIAGONAL SLASH -->
+<div class="divider-demo" data-choice="a" onclick="select(this)">
+  <div class="demo-label"><div class="demo-letter">A</div><h2>Diagonal Slash</h2><p>Bold, sporty, forward momentum</p></div>
+  <div class="demo-container">
+    <div class="section-top" style="background:#09203e;"><h3 style="color:rgba(255,255,255,0.7)">Section Above</h3><div class="dots"><span></span><span></span><span></span></div></div>
+    <div class="slash-divider" style="background:#09203e;"><canvas id="slashCanvas"></canvas></div>
+    <div class="section-bottom" style="background:#0e2a4f;"><h3 style="color:rgba(255,255,255,0.7)">Section Below</h3><div class="bar"></div></div>
+  </div>
+</div>
+
+<!-- B: GOLD LINE FADE -->
+<div class="divider-demo" data-choice="b" onclick="select(this)">
+  <div class="demo-label"><div class="demo-letter">B</div><h2>Gold Line Fade</h2><p>Elegant, minimal, organic shimmer</p></div>
+  <div class="demo-container">
+    <div class="section-top" style="background:#09203e;"><h3 style="color:rgba(255,255,255,0.7)">Section Above</h3><div class="dots"><span></span><span></span><span></span></div></div>
+    <div class="goldline-divider"><canvas id="goldCanvas"></canvas></div>
+    <div class="section-bottom" style="background:#0e2a4f;"><h3 style="color:rgba(255,255,255,0.7)">Section Below</h3><div class="bar"></div></div>
+  </div>
+</div>
+
+<!-- C: SOCCER NET -->
+<div class="divider-demo" data-choice="c" onclick="select(this)">
+  <div class="demo-label"><div class="demo-letter">C</div><h2>Soccer Ball Net</h2><p>Pentagon/hexagon tessellation, cascading fill</p></div>
+  <div class="demo-container">
+    <div class="section-top" style="background:#09203e;"><h3 style="color:rgba(255,255,255,0.7)">Section Above</h3><div class="dots"><span></span><span></span><span></span></div></div>
+    <div class="net-divider" style="background:linear-gradient(to bottom,#09203e,#0e2a4f);"><canvas id="netCanvas"></canvas><div class="fade-left"></div><div class="fade-right"></div><div class="fade-top"></div><div class="fade-bottom"></div></div>
+    <div class="section-bottom" style="background:#0e2a4f;"><h3 style="color:rgba(255,255,255,0.7)">Section Below</h3><div class="bar"></div></div>
+  </div>
+</div>
+
+<!-- D: STAGGERED BARS -->
+<div class="divider-demo" data-choice="d" onclick="select(this)">
+  <div class="demo-label"><div class="demo-letter">D</div><h2>Staggered Gold Bars</h2><p>Slow drift, organic movement</p></div>
+  <div class="demo-container">
+    <div class="section-top" style="background:#09203e;"><h3 style="color:rgba(255,255,255,0.7)">Section Above</h3><div class="dots"><span></span><span></span><span></span></div></div>
+    <div class="bars-divider"><canvas id="barsCanvas"></canvas></div>
+    <div class="section-bottom" style="background:#0e2a4f;"><h3 style="color:rgba(255,255,255,0.7)">Section Below</h3><div class="bar"></div></div>
+  </div>
+</div>
+
+<div class="selection-bar" id="selBar"></div>
+
+<script>
+// === Utility ===
+function initCanvas(id) {
+  const c = document.getElementById(id);
+  const ctx = c.getContext('2d');
+  function resize() {
+    const r = c.parentElement.getBoundingClientRect();
+    c.width = r.width * 2; c.height = r.height * 2;
+    c.style.width = r.width + 'px'; c.style.height = r.height + 'px';
+    ctx.scale(2, 2);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  return { c, ctx, w: () => c.width/2, h: () => c.height/2 };
+}
+
+// Seeded-ish random for consistent but varied patterns
+function seededRand(seed) { let s = seed; return () => { s = (s * 16807 + 0) % 2147483647; return s / 2147483647; }; }
+
+// ===== A: DIAGONAL SLASH =====
+;(function() {
+  const { ctx, w, h } = initCanvas('slashCanvas');
+  let t = 0;
+  // Generate random accent lines with different angles/offsets
+  const rng = seededRand(42);
+  const lines = [];
+  for (let i = 0; i < 6; i++) {
+    lines.push({
+      yOffset: 0.3 + rng() * 0.4,
+      slope: 0.6 + rng() * 0.3,
+      width: 0.4 + rng() * 1.4,
+      alpha: 0.08 + rng() * 0.35,
+      speed: 0.15 + rng() * 0.4,
+      phase: rng() * Math.PI * 2,
+      isGold: i < 3,
+    });
+  }
+
+  function draw() {
+    const W = w(), H = h();
+    ctx.clearRect(0, 0, W, H);
+
+    // Main diagonal fill
+    const mainY = H * 0.35;
+    const wobble = Math.sin(t * 0.3) * 3 + Math.sin(t * 0.17) * 2;
+    ctx.beginPath();
+    ctx.moveTo(0, mainY + wobble + 10);
+    ctx.lineTo(W, mainY - H * 0.3 + wobble);
+    ctx.lineTo(W, H); ctx.lineTo(0, H);
+    ctx.closePath();
+    ctx.fillStyle = '#0e2a4f';
+    ctx.fill();
+
+    // Accent lines
+    lines.forEach(l => {
+      const yOff = Math.sin(t * l.speed + l.phase) * 5 + Math.cos(t * l.speed * 0.7 + l.phase * 1.3) * 3;
+      const baseY = H * l.yOffset + yOff;
+      ctx.beginPath();
+      ctx.moveTo(0, baseY + 15);
+      ctx.lineTo(W, baseY - H * l.slope + 15);
+      const color = l.isGold ? `rgba(191,177,112,${l.alpha})` : `rgba(26,63,191,${l.alpha * 0.5})`;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = l.width;
+      ctx.stroke();
+    });
+
+    // Main edge line with glow
+    const glowAlpha = 0.3 + Math.sin(t * 0.5) * 0.1;
+    ctx.beginPath();
+    ctx.moveTo(0, mainY + wobble + 10);
+    ctx.lineTo(W, mainY - H * 0.3 + wobble);
+    ctx.strokeStyle = `rgba(191,177,112,${glowAlpha})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Soft glow along edge
+    ctx.strokeStyle = `rgba(191,177,112,${glowAlpha * 0.3})`;
+    ctx.lineWidth = 8;
+    ctx.stroke();
+
+    t += 0.012;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ===== B: GOLD LINE FADE (organic) =====
+;(function() {
+  const { ctx, w, h } = initCanvas('goldCanvas');
+  let t = 0;
+  const rng = seededRand(99);
+  // Several line segments with different behaviors
+  const segs = [];
+  for (let i = 0; i < 5; i++) {
+    segs.push({ xCenter: 0.2 + rng() * 0.6, width: 0.08 + rng() * 0.25, speed: 0.1 + rng() * 0.3, phase: rng() * Math.PI * 2, alpha: 0.15 + rng() * 0.5, thickness: 0.5 + rng() * 1.2 });
+  }
+
+  function draw() {
+    const W = w(), H = h();
+    ctx.clearRect(0, 0, W, H);
+    const cy = H / 2;
+
+    segs.forEach(s => {
+      const drift = Math.sin(t * s.speed + s.phase) * W * 0.05;
+      const alphaWave = s.alpha * (0.7 + 0.3 * Math.sin(t * s.speed * 0.6 + s.phase * 2));
+      const cx = W * s.xCenter + drift;
+      const hw = W * s.width;
+
+      const grad = ctx.createLinearGradient(cx - hw, 0, cx + hw, 0);
+      grad.addColorStop(0, 'transparent');
+      grad.addColorStop(0.3, `rgba(191,177,112,${alphaWave})`);
+      grad.addColorStop(0.7, `rgba(191,177,112,${alphaWave})`);
+      grad.addColorStop(1, 'transparent');
+
+      ctx.beginPath();
+      ctx.moveTo(cx - hw, cy + Math.sin(t * 0.2 + s.phase) * 2);
+      ctx.lineTo(cx + hw, cy + Math.cos(t * 0.15 + s.phase) * 2);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = s.thickness;
+      ctx.stroke();
+    });
+
+    // Soft ambient glow
+    const glowGrad = ctx.createRadialGradient(W * 0.5, cy, 0, W * 0.5, cy, W * 0.3);
+    glowGrad.addColorStop(0, `rgba(191,177,112,${0.04 + Math.sin(t * 0.2) * 0.02})`);
+    glowGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = glowGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    t += 0.01;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ===== C: SOCCER BALL PATTERN (pentagons + hexagons, cascading fill) =====
+;(function() {
+  const { c, ctx, w, h } = initCanvas('netCanvas');
+  let t = 0;
+
+  // Build a truncated icosahedron-inspired flat tessellation (pentagons surrounded by hexagons)
+  // We'll use a hex grid where every few cells become pentagons
+  const cells = [];
+  const rng = seededRand(777);
+
+  function buildGrid() {
+    cells.length = 0;
+    const W = w(), H = h();
+    const size = 16;
+    const hexH = size * 2;
+    const hexW = Math.sqrt(3) * size;
+    const cols = Math.ceil(W / hexW) + 2;
+    const rows = Math.ceil(H / (hexH * 0.75)) + 2;
+
+    for (let row = -1; row < rows; row++) {
+      for (let col = -1; col < cols; col++) {
+        const offset = (row % 2) ? hexW / 2 : 0;
+        const cx = col * hexW + offset;
+        const cy = row * hexH * 0.75;
+        // Every ~7th cell is a pentagon (like a soccer ball has pentagons among hexagons)
+        const isPentagon = ((row * 7 + col * 3) % 7 === 0);
+        const sides = isPentagon ? 5 : 6;
+        const cellRng = rng();
+        cells.push({ cx, cy, sides, size: size - 0.5, phase: cellRng * Math.PI * 2, speed: 0.15 + cellRng * 0.25, cascadeDelay: (cx + cy * 1.5) * 0.003, isPentagon, fillPeak: 0 });
+      }
+    }
+  }
+  buildGrid();
+  window.addEventListener('resize', buildGrid);
+
+  function draw() {
+    const W = w(), H = h();
+    ctx.clearRect(0, 0, W, H);
+
+    cells.forEach(cell => {
+      // Cascading fill wave that sweeps diagonally
+      const wave = Math.sin(t * 0.4 - cell.cascadeDelay + Math.sin(t * 0.1) * 2);
+      const fillAlpha = Math.max(0, wave) * 0.2;
+      const strokeAlpha = 0.12 + Math.max(0, wave) * 0.15;
+
+      // Subtle breathing per cell
+      const breathe = Math.sin(t * cell.speed + cell.phase) * 0.8;
+
+      ctx.beginPath();
+      for (let i = 0; i < cell.sides; i++) {
+        const angle = (Math.PI * 2 / cell.sides) * i - Math.PI / 2;
+        const r = cell.size + breathe;
+        const px = cell.cx + Math.cos(angle) * r;
+        const py = cell.cy + Math.sin(angle) * r;
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+
+      // Fill on pentagons (like dark panels on a soccer ball)
+      if (cell.isPentagon && fillAlpha > 0.01) {
+        ctx.fillStyle = `rgba(191,177,112,${fillAlpha * 1.5})`;
+        ctx.fill();
+      } else if (fillAlpha > 0.02) {
+        ctx.fillStyle = `rgba(191,177,112,${fillAlpha * 0.4})`;
+        ctx.fill();
+      }
+
+      // Stroke — seamless, no gaps
+      ctx.strokeStyle = `rgba(191,177,112,${strokeAlpha})`;
+      ctx.lineWidth = cell.isPentagon ? 1.0 : 0.6;
+      ctx.stroke();
+    });
+
+    t += 0.008;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ===== D: STAGGERED BARS (slow organic drift) =====
+;(function() {
+  const { ctx, w, h } = initCanvas('barsCanvas');
+  let t = 0;
+  const rng = seededRand(555);
+
+  // Generate bars with varied properties
+  const bars = [];
+  for (let i = 0; i < 7; i++) {
+    bars.push({
+      y: 0.12 + (i / 7) * 0.76 + (rng() - 0.5) * 0.08,
+      x: rng() * 0.6 - 0.1,
+      width: 0.1 + rng() * 0.3,
+      thickness: 0.5 + rng() * 1.5,
+      alpha: 0.1 + rng() * 0.5,
+      driftSpeed: 0.03 + rng() * 0.08,
+      driftAmp: 0.02 + rng() * 0.06,
+      breathSpeed: 0.05 + rng() * 0.15,
+      breathAmp: 0.02 + rng() * 0.05,
+      phase: rng() * Math.PI * 2,
+      isGold: rng() > 0.25,
+    });
+  }
+
+  function draw() {
+    const W = w(), H = h();
+    ctx.clearRect(0, 0, W, H);
+
+    bars.forEach(b => {
+      // Slow horizontal drift
+      const xDrift = Math.sin(t * b.driftSpeed + b.phase) * W * b.driftAmp;
+      // Width breathing
+      const widthBreath = 1 + Math.sin(t * b.breathSpeed + b.phase * 1.7) * b.breathAmp * 3;
+      // Vertical micro-sway
+      const ySway = Math.sin(t * b.driftSpeed * 0.7 + b.phase * 2.3) * 3;
+      // Alpha modulation
+      const alphaMod = b.alpha * (0.6 + 0.4 * Math.sin(t * b.breathSpeed * 0.5 + b.phase * 0.9));
+
+      const bx = W * b.x + xDrift;
+      const bw = W * b.width * widthBreath;
+      const by = H * b.y + ySway;
+
+      const grad = ctx.createLinearGradient(bx, 0, bx + bw, 0);
+      const color = b.isGold ? '191,177,112' : '26,63,191';
+      grad.addColorStop(0, 'transparent');
+      grad.addColorStop(0.15, `rgba(${color},${alphaMod})`);
+      grad.addColorStop(0.85, `rgba(${color},${alphaMod})`);
+      grad.addColorStop(1, 'transparent');
+
+      ctx.beginPath();
+      ctx.moveTo(bx, by);
+      // Slight curve for organic feel
+      const curve = Math.sin(t * 0.1 + b.phase) * 1.5;
+      ctx.quadraticCurveTo(bx + bw / 2, by + curve, bx + bw, by);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = b.thickness;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    });
+
+    t += 0.008;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// === Selection ===
+const bar = document.getElementById('selBar');
+function select(el) {
+  document.querySelectorAll('.divider-demo').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  const choice = el.dataset.choice;
+  const labels = { a: 'Diagonal Slash', b: 'Gold Line Fade', c: 'Soccer Ball Net', d: 'Staggered Gold Bars' };
+  bar.textContent = '✓ Selected: ' + labels[choice];
+  bar.classList.add('visible');
+  try { navigator.sendBeacon && navigator.sendBeacon('/__event', JSON.stringify({type:'click', choice, text: labels[choice], timestamp: Math.floor(Date.now()/1000)})); } catch(e) {}
+}
+</script>
+</body>
+</html>

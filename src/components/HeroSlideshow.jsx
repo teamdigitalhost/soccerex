@@ -1,55 +1,45 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 
-// ─── All hero images — fast cycling, curated from 30 years of Soccerex ──────
-const ALL_IMAGES = [
-  // Original Tier 1 curated
-  '/hero/12-TIER1-packed-keynote.jpg',
-  '/hero/01-TIER1-ronaldo.jpg',
-  '/hero/36-NEW-speaker-champions-league-trophy.jpg',
-  '/hero/04-TIER1-bobby-charlton-handprints.jpg',
-  '/hero/23-NEW-diversity-panel-europe-2024.jpg',
-  '/hero/03-TIER1-infantino-fifa-president.jpg',
-  '/hero/02-TIER1-vieira-soccerex07.jpg',
-  '/hero/25-NEW-packed-keynote-miami.jpg',
-  '/hero/06-TIER1-juan-mata-shirt.jpg',
-  '/hero/07-TIER1-van-der-sar.jpg',
-  '/hero/31-NEW-mixed-gender-panel-europe.jpg',
-  '/hero/09-TIER1-jenny-chiu-diverse-panel.jpg',
-  '/hero/05-TIER1-jordi-cruyff-14.jpg',
-  '/hero/24-NEW-laughing-trio-hardrock.jpg',
-  '/hero/13-TIER2-woman-pink-blazer.jpg',
-  '/hero/11-TIER1-alexi-lalas.jpg',
-  '/hero/30-NEW-artist-painting-stadium.jpg',
-  '/hero/16-TIER2-football-for-hope-youth.jpg',
-  '/hero/29-NEW-laughing-panel-miami-2024.jpg',
-  '/hero/10-TIER1-diverse-group-stadium.jpg',
-  '/hero/33-NEW-tv-interview-soccerex-miami.jpg',
-  '/hero/34-NEW-diverse-team-ajax-arena.jpg',
-  '/hero/27-NEW-interview-ajax-arena-seats.jpg',
-  '/hero/32-NEW-packed-audience-soccerex-europe.jpg',
-  '/hero/35-NEW-woman-signing-football-expo.jpg',
-  '/hero/17-TIER2-soccerex-logo-signage.jpg',
-  '/hero/22-NEW-soccerex-brasil-auditorium.jpg',
-  '/hero/20-NEW-vip-reception-stadium-aerial.jpg',
-  '/hero/08-TIER1-stadium-aerial-night.jpg',
-  '/hero/15-TIER2-asian-forum-panel.jpg',
-  '/hero/18-TIER2-cruyff-arena-team.jpg',
-  '/hero/26-NEW-elevator-pitch-panel-miami.jpg',
-  '/hero/14-TIER2-woman-speaker.jpg',
-  '/hero/38-NEW-man-laughing-jersey-wall.jpg',
-  '/hero/19-NEW-packed-keynote-europe-2024.jpg',
-  '/hero/28-NEW-content-is-king-panel-miami.jpg',
-  '/hero/21-NEW-woman-football-headbalance.jpg',
-  '/hero/37-NEW-artist-painting-football-closeup.jpg',
-]
+// ─── Hero images — built from manifest, shuffled fresh each visit ────────────
+let ALL_IMAGES = []
+
+// Fisher-Yates shuffle
+function shuffle(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+// Interleave: 1 heritage, 2 random — heritage leads but each visit is unique
+function buildPlaylist(heritage, modern) {
+  const h = shuffle(heritage)
+  const m = shuffle(modern)
+  const result = []
+  let hi = 0, mi = 0
+
+  // Alternate 1 heritage, 1 modern until heritage runs out
+  while (hi < h.length && mi < m.length) {
+    result.push(h[hi++])
+    result.push(m[mi++])
+  }
+  // Any remaining heritage
+  while (hi < h.length) result.push(h[hi++])
+  // All remaining modern (shuffled)
+  while (mi < m.length) result.push(m[mi++])
+
+  return result
+}
 
 // ─── Rotating taglines (each completes "30 Years...") ───────────────────────
 const TAGLINES = [
   'of Connecting the Football Industry',
   'of Building Relationships That Matter',
   'of Shaping the Global Game',
-  'Where Deals Get Done',
+  'of Deals Getting Done',
   'at the Center of Football Business',
   'of Uniting Clubs, Brands & Investors',
 ]
@@ -86,6 +76,9 @@ function ParticleField() {
     const ctx = canvas.getContext('2d')
     let animId
     let particles = []
+    let frame = 0
+    const BURST_DURATION = 150 // frames for intro burst (~2.5s, celebratory)
+    const BURST_COUNT = 350 // dense confetti coverage
 
     const resize = () => {
       canvas.width = canvas.offsetWidth * 2
@@ -98,41 +91,88 @@ function ParticleField() {
     const W = () => canvas.offsetWidth
     const H = () => canvas.offsetHeight
 
-    // Emit particles from an elliptical ring around center (where 30 lives)
-    function spawn() {
+    // Spawn a particle radiating outward from around the "30"
+    function spawn(isBurst = false) {
       const cx = W() / 2
       const cy = H() / 2
-      // Random angle
       const angle = Math.random() * Math.PI * 2
-      // Start on an ellipse around the 30 (roughly matching digit bounds)
-      const rx = 80 + Math.random() * 40
-      const ry = 50 + Math.random() * 25
+      // Start near the digits
+      const rx = 60 + Math.random() * 50
+      const ry = 40 + Math.random() * 30
       const x = cx + Math.cos(angle) * rx
       const y = cy + Math.sin(angle) * ry
-      // Radiate outward from center
-      const speed = 0.15 + Math.random() * 0.35
-      const vx = Math.cos(angle) * speed
-      const vy = Math.sin(angle) * speed
-      const life = 120 + Math.random() * 180 // frames
-      const size = 0.5 + Math.random() * 1.5
-      // Gold or white-gold color
-      const gold = Math.random() > 0.3
-      return { x, y, vx, vy, life, maxLife: life, size, gold }
+
+      if (isBurst) {
+        // Burst particles: fast enough to reach screen edges, with spin
+        const maxDist = Math.max(W(), H()) / 2
+        const speed = (maxDist / 80) * (0.6 + Math.random() * 0.8) // calibrated to reach edges over ~80 frames
+        // Add tangential spin component (perpendicular to radial direction)
+        const spinStrength = 0.3 + Math.random() * 0.5
+        const spinDir = Math.random() > 0.5 ? 1 : -1
+        const radialVx = Math.cos(angle) * speed
+        const radialVy = Math.sin(angle) * speed
+        // Tangential = perpendicular to radial
+        const tangentVx = -Math.sin(angle) * speed * spinStrength * spinDir
+        const tangentVy = Math.cos(angle) * speed * spinStrength * spinDir
+        const life = 90 + Math.random() * 120
+        // Confetti colors: gold, white, silver
+        const colorRoll = Math.random()
+        let color
+        if (colorRoll < 0.45) color = 'gold'
+        else if (colorRoll < 0.75) color = 'white'
+        else color = 'silver'
+        return {
+          x, y,
+          vx: radialVx + tangentVx,
+          vy: radialVy + tangentVy,
+          life,
+          maxLife: life,
+          size: 1 + Math.random() * 3.5,
+          color,
+          burst: true,
+        }
+      }
+      // Ambient particles: slow, gentle, wide reach
+      const speed = 0.2 + Math.random() * 0.6
+      return {
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 150 + Math.random() * 250,
+        maxLife: 150 + Math.random() * 250,
+        size: 0.5 + Math.random() * 2,
+        gold: Math.random() > 0.25,
+        burst: false,
+      }
     }
 
     function tick() {
       ctx.clearRect(0, 0, W(), H())
+      frame++
 
-      // Spawn 1-2 particles per frame
-      if (particles.length < 60) {
-        particles.push(spawn())
-        if (Math.random() > 0.5) particles.push(spawn())
+      // Intro burst: spawn many fast particles in the first ~1.5s
+      if (frame <= BURST_DURATION) {
+        const spawnRate = Math.ceil(BURST_COUNT / BURST_DURATION)
+        for (let s = 0; s < spawnRate; s++) {
+          particles.push(spawn(true))
+        }
+      }
+
+      // Ambient: continuous gentle emission
+      if (particles.length < 100) {
+        particles.push(spawn(false))
+        if (Math.random() > 0.4) particles.push(spawn(false))
       }
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i]
         p.x += p.vx
         p.y += p.vy
+        // Gentle deceleration for burst particles (graceful spiral outward)
+        if (p.burst) {
+          p.vx *= 0.992
+          p.vy *= 0.992
+        }
         p.life--
 
         if (p.life <= 0) {
@@ -140,20 +180,25 @@ function ParticleField() {
           continue
         }
 
-        // Fade in quickly, fade out slowly
         const progress = 1 - p.life / p.maxLife
         let alpha
-        if (progress < 0.1) {
-          alpha = progress / 0.1 // fade in
+        if (progress < 0.08) {
+          alpha = progress / 0.08
         } else {
-          alpha = 1 - (progress - 0.1) / 0.9 // fade out
+          alpha = 1 - (progress - 0.08) / 0.92
         }
-        alpha *= 0.4 // keep subtle
+        // Burst particles are brighter, ambient are subtler
+        alpha *= p.burst ? 0.65 : 0.35
 
-        if (p.gold) {
-          ctx.fillStyle = `rgba(197, 165, 114, ${alpha})`
+        if (p.burst) {
+          if (p.color === 'gold') ctx.fillStyle = `rgba(197, 165, 114, ${alpha})`
+          else if (p.color === 'white') ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`
+          else ctx.fillStyle = `rgba(190, 200, 210, ${alpha})` // silver
         } else {
-          ctx.fillStyle = `rgba(220, 210, 180, ${alpha})`
+          // Ambient: always gold tones
+          ctx.fillStyle = p.gold
+            ? `rgba(197, 165, 114, ${alpha})`
+            : `rgba(240, 220, 168, ${alpha})`
         }
 
         ctx.beginPath()
@@ -174,14 +219,12 @@ function ParticleField() {
   return <canvas ref={canvasRef} className="hero-particles" />
 }
 
-// ─── 3D SVG "30" with sweeping light — 3 and 0 breathe independently ────────
+// ─── 3D SVG "30" with Roboto Slab ───────────────────────────────────────────
 function Hero30SVG() {
   return (
     <div className="hero-30-container" aria-label="30">
-      {/* Shared gradient defs */}
       <svg width="0" height="0" style={{ position: 'absolute' }}>
         <defs>
-          {/* Diagonal sweep for "3" — top-left to bottom-right */}
           <linearGradient id="sweepGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#8a7a4a" />
             <stop offset="35%" stopColor="#c5a572" />
@@ -191,7 +234,6 @@ function Hero30SVG() {
             <animateTransform attributeName="gradientTransform" type="translate"
               values="-1 -1; 1 1; 1 1" keyTimes="0; 0.44; 1" dur="4.5s" repeatCount="indefinite" />
           </linearGradient>
-          {/* Diagonal sweep for "0" — same direction, 0.5s stagger */}
           <linearGradient id="sweepGrad0" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#8a7a4a" />
             <stop offset="35%" stopColor="#c5a572" />
@@ -209,19 +251,16 @@ function Hero30SVG() {
       </svg>
 
       <div className="hero-30-digits">
-        {/* "3" — breathes on its own cycle */}
         <div className="hero-digit hero-digit-3">
-          <svg viewBox="10 0 80 160" className="hero-digit-svg">
+          <svg viewBox="5 0 90 160" className="hero-digit-svg">
             <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
               className="hero-30-shadow" fill="url(#shadowGrad)" dx="3" dy="3">3</text>
             <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
               className="hero-30-text" fill="url(#sweepGrad3)">3</text>
           </svg>
         </div>
-
-        {/* "0" — breathes on a different cycle */}
         <div className="hero-digit hero-digit-0">
-          <svg viewBox="5 0 90 160" className="hero-digit-svg">
+          <svg viewBox="0 0 95 160" className="hero-digit-svg">
             <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
               className="hero-30-shadow" fill="url(#shadowGrad)" dx="3" dy="3">0</text>
             <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
@@ -305,20 +344,40 @@ export default function HeroSlideshow() {
   const [currentImage, setCurrentImage] = useState(0)
   const [showImage, setShowImage] = useState(true)
   const [taglineIndex, setTaglineIndex] = useState(0)
+  const SUBLINE_WORDS = ['Event', 'Platform']
+  const [sublineWord, setSublineWord] = useState(0)
   const [taglineVisible, setTaglineVisible] = useState(false)
   const [textReady, setTextReady] = useState(false)
   const [transitioning, setTransitioning] = useState(false) // gold/blue fade between cycles
 
-  // Preload images
+  // Load manifest + preload first few images
+  const [imagesLoaded, setImagesLoaded] = useState(false)
   useEffect(() => {
-    ALL_IMAGES.forEach((src) => { new Image().src = src })
-    // Delay text reveal for dramatic entrance
+    fetch('/hero-manifest.json')
+      .then((r) => r.json())
+      .then((data) => {
+        // Build a fresh shuffled playlist: heritage every 3rd, modern randomized
+        ALL_IMAGES = buildPlaylist(data.heritage || [], data.modern || [])
+        setImagesLoaded(true)
+        // Preload first 5 immediately
+        ALL_IMAGES.slice(0, 5).forEach((src) => { new Image().src = src })
+        // Lazy preload the rest in batches
+        let i = 5
+        const preloadBatch = () => {
+          const batch = ALL_IMAGES.slice(i, i + 10)
+          batch.forEach((src) => { new Image().src = src })
+          i += 10
+          if (i < ALL_IMAGES.length) setTimeout(preloadBatch, 500)
+        }
+        setTimeout(preloadBatch, 2000)
+      })
     const t = setTimeout(() => setTextReady(true), 500)
     return () => clearTimeout(t)
   }, [])
 
-  // ── Fast image cycling ────────────────────────────────────────────────
+  // ── Fast image cycling (waits for manifest) ────────────────────────────
   useEffect(() => {
+    if (!imagesLoaded || ALL_IMAGES.length === 0) return
     const interval = setInterval(() => {
       setShowImage(false) // fade out
       setTimeout(() => {
@@ -333,10 +392,10 @@ export default function HeroSlideshow() {
         })
         setShowImage(true) // fade in new image
       }, 600) // wait for fade-out
-    }, 2500) // 2.5s per image — fast cycling through 38 images
+    }, 2500) // 2.5s per image — fast cycling through 304 images
 
     return () => clearInterval(interval)
-  }, [])
+  }, [imagesLoaded])
 
   // ── Rotating tagline cycle ────────────────────────────────────────────
   useEffect(() => {
@@ -353,6 +412,7 @@ export default function HeroSlideshow() {
         setTimeout(() => {
           // Step 1: render new letters (hidden)
           setTaglineIndex((prev) => (prev + 1) % TAGLINES.length)
+          setSublineWord((prev) => (prev + 1) % SUBLINE_WORDS.length)
           // Step 2: on next frame, trigger the cascade-in transition
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
@@ -370,7 +430,7 @@ export default function HeroSlideshow() {
       {/* Image layer — CSS transition driven */}
       <div
         className={`hero-image-layer ${showImage ? 'hero-img-visible' : 'hero-img-hidden'}`}
-        style={{ backgroundImage: `url(${ALL_IMAGES[currentImage]})` }}
+        style={{ backgroundImage: ALL_IMAGES.length ? `url(${ALL_IMAGES[currentImage]})` : 'none' }}
         aria-hidden="true"
       />
 
@@ -416,7 +476,7 @@ export default function HeroSlideshow() {
         {/* Subline */}
         <p className="hero-subline font-body text-white/45 leading-relaxed mt-6 mb-10"
           style={{ fontSize: 'clamp(0.8rem, 1.2vw, 0.95rem)', maxWidth: '500px', margin: '1.5rem auto 2.5rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          The World's Premier Football Business Event
+          The World's Premier Football Business Platform
         </p>
 
         {/* CTAs */}

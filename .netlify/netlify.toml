@@ -7,7 +7,7 @@ redirects = []
 [functions."*"]
 
 [build]
-publish = "/Users/maven/Documents/Soccerex/New Site/soccerex-site/dist"
+publish = "/Users/maven/Documents/Soccerex/SX KFG Sites/soccerex-site/dist"
 publishOrigin = "ui"
 commandOrigin = "ui"
 command = "npm run build"

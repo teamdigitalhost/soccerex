@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import gsap from 'gsap'
 
@@ -52,14 +53,14 @@ export default function Navbar() {
         borderBottom: scrolled ? '1px solid rgba(191,177,112,0.15)' : '1px solid transparent',
       }}>
         <div className="flex items-center justify-between px-6" style={{ maxWidth: '1200px', margin: '0 auto', height: '72px' }}>
-          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="flex items-center gap-2">
-            <span className="font-heading font-bold text-white tracking-[0.08em]" style={{ fontSize: '1.3rem' }}>SOCCEREX</span>
-          </a>
+          <Link to="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
+            <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '28px', width: 'auto' }} />
+          </Link>
 
-          <div className="hidden md:flex items-center gap-10">
+          <div className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
               <button key={link.to} onClick={() => scrollTo(link.to)}
-                className="font-body font-semibold text-sm uppercase tracking-[0.15em] transition-colors duration-200 text-white/85 hover:text-white bg-transparent border-none cursor-pointer"
+                className="font-body font-semibold text-xs uppercase tracking-[0.15em] transition-colors duration-200 text-white/85 hover:text-white bg-transparent border-none cursor-pointer whitespace-nowrap"
               >
                 {link.label}
               </button>
@@ -67,7 +68,7 @@ export default function Navbar() {
           </div>
 
           <button onClick={() => scrollTo('#partner')}
-            className="hidden md:inline-flex items-center gap-2 text-navy font-body font-semibold text-sm uppercase tracking-[0.15em] px-6 py-3 transition-all duration-300 cursor-pointer"
+            className="hidden lg:inline-flex items-center gap-2 text-navy font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
             style={{ background: '#bfb170', border: '1px solid #bfb170' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.borderColor = '#d4c78e' }}
             onMouseLeave={e => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.borderColor = '#bfb170' }}
@@ -75,7 +76,7 @@ export default function Navbar() {
             Get Involved
           </button>
 
-          <button onClick={() => setMenuOpen(true)} className="md:hidden w-11 h-11 flex items-center justify-center text-white bg-transparent border-none cursor-pointer" aria-label="Open menu">
+          <button onClick={() => setMenuOpen(true)} className="lg:hidden w-11 h-11 flex items-center justify-center text-white bg-transparent border-none cursor-pointer" aria-label="Open menu">
             <Menu size={22} />
           </button>
         </div>
@@ -84,7 +85,7 @@ export default function Navbar() {
       {menuOpen && (
         <div ref={overlayRef} className="fixed inset-0 z-50 flex flex-col" style={{ background: '#09203e', transform: 'translateX(100%)' }}>
           <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid rgba(191,177,112,0.2)' }}>
-            <span className="font-heading font-bold text-white tracking-[0.08em]" style={{ fontSize: '1.3rem' }}>SOCCEREX</span>
+            <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '28px', width: 'auto' }} />
             <button onClick={() => setMenuOpen(false)} className="w-11 h-11 flex items-center justify-center text-white bg-transparent border-none cursor-pointer" aria-label="Close menu">
               <X size={22} />
             </button>

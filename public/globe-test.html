@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Globe Test</title>
+  <style>
+    body { margin: 0; background: #050d1a; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    canvas { width: 600px; height: 600px; }
+  </style>
+</head>
+<body>
+  <canvas id="globe" width="1200" height="1200"></canvas>
+  <script type="module">
+    import createGlobe from '/node_modules/.vite/deps/cobe.js?v=15268d61';
+
+    // Fallback: load from CDN if vite deps don't work
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/cobe@0.6.3/dist/index.js';
+    script.onload = () => {
+      if (window.createGlobe) initGlobe(window.createGlobe);
+    };
+
+    function initGlobe(createGlobeFn) {
+      const canvas = document.getElementById('globe');
+      let phi = 0;
+
+      const globe = createGlobeFn(canvas, {
+        devicePixelRatio: 2,
+        width: 1200,
+        height: 1200,
+        phi: 0,
+        theta: 0.25,
+        dark: 1,
+        diffuse: 1.2,
+        mapSamples: 16000,
+        mapBrightness: 6,
+        baseColor: [0.3, 0.3, 0.6],
+        markerColor: [0.9, 0.75, 0.4],
+        glowColor: [0.1, 0.1, 0.3],
+        markers: [
+          { location: [25.7617 * Math.PI/180, -80.1918 * Math.PI/180], size: 0.08 },
+          { location: [51.5074 * Math.PI/180, -0.1278 * Math.PI/180], size: 0.05 },
+          { location: [52.3676 * Math.PI/180, 4.9041 * Math.PI/180], size: 0.05 },
+        ],
+        onRender: (state) => {
+          state.phi = phi;
+          phi += 0.005;
+        },
+      });
+    }
+
+    // Try ES module import first
+    try {
+      const mod = await import('https://esm.sh/cobe@0.6.3');
+      initGlobe(mod.default);
+    } catch(e) {
+      document.head.appendChild(script);
+    }
+  </script>
+</body>
+</html>

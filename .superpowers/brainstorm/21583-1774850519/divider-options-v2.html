@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soccerex Divider Options — Animated</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  h1 { text-align: center; padding: 40px 20px 10px; font-size: 1.6rem; font-weight: 600; letter-spacing: 0.02em; }
+  .subtitle { text-align: center; color: rgba(255,255,255,0.5); font-size: 0.9rem; padding: 0 20px 40px; }
+
+  .divider-demo {
+    margin: 0 auto 60px;
+    max-width: 1200px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .divider-demo:hover { transform: scale(1.01); }
+  .divider-demo.selected { outline: 2px solid #bfb170; outline-offset: 4px; border-radius: 8px; }
+
+  .demo-label {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 24px; margin-bottom: 12px;
+  }
+  .demo-letter {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(191,177,112,0.15); border: 1px solid rgba(191,177,112,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; color: #bfb170;
+  }
+  .demo-label h2 { font-size: 1.1rem; font-weight: 600; }
+  .demo-label p { color: rgba(255,255,255,0.45); font-size: 0.8rem; margin-left: auto; }
+
+  .demo-container {
+    border-radius: 8px; overflow: hidden;
+  }
+
+  .section-top {
+    padding: 40px 48px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .section-top h3 { font-size: 1.4rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+  .section-top .dots { display: flex; gap: 6px; }
+  .section-top .dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(191,177,112,0.3); }
+
+  .section-bottom {
+    padding: 40px 48px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+  }
+  .section-bottom h3 { font-size: 1.4rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+  .section-bottom .bar { width: 80px; height: 4px; border-radius: 2px; background: rgba(191,177,112,0.2); }
+
+  /* ===== B: GOLD LINE FADE ===== */
+  .goldline-divider {
+    position: relative;
+    height: 80px;
+    background: linear-gradient(to bottom, #09203e, #0e2a4f);
+    overflow: hidden;
+  }
+  .goldline-divider .line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #bfb170, transparent);
+    animation: goldline-expand 3s ease-out forwards;
+  }
+  .goldline-divider .line-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 20px;
+    width: 0%;
+    background: radial-gradient(ellipse at center, rgba(191,177,112,0.12) 0%, transparent 70%);
+    animation: goldline-expand 3s ease-out forwards;
+    animation-delay: 0.3s;
+  }
+  .goldline-divider .shimmer {
+    position: absolute;
+    top: calc(50% - 1px);
+    left: -100px;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(191,177,112,0.8), transparent);
+    animation: shimmer-slide 4s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+  @keyframes goldline-expand {
+    from { width: 0%; }
+    to { width: 65%; }
+  }
+  @keyframes shimmer-slide {
+    0% { left: -100px; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { left: calc(100% + 100px); opacity: 0; }
+  }
+
+  /* ===== C: NET PATTERN ===== */
+  .net-divider {
+    position: relative;
+    height: 100px;
+    overflow: hidden;
+  }
+  .net-divider canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .net-divider .fade-left,
+  .net-divider .fade-right,
+  .net-divider .fade-top,
+  .net-divider .fade-bottom {
+    position: absolute; z-index: 2;
+  }
+  .net-divider .fade-left { top: 0; left: 0; width: 15%; height: 100%; background: linear-gradient(to right, #09203e, transparent); }
+  .net-divider .fade-right { top: 0; right: 0; width: 15%; height: 100%; background: linear-gradient(to left, #0e2a4f, transparent); }
+  .net-divider .fade-top { top: 0; left: 0; width: 100%; height: 35%; background: linear-gradient(to bottom, #09203e, transparent); }
+  .net-divider .fade-bottom { bottom: 0; left: 0; width: 100%; height: 35%; background: linear-gradient(to top, #0e2a4f, transparent); }
+
+  /* ===== D: STAGGERED BARS ===== */
+  .bars-divider {
+    position: relative;
+    height: 80px;
+    background: linear-gradient(to bottom, #09203e, #0e2a4f);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .bars-divider .bar-line {
+    height: 1.5px;
+    border-radius: 1px;
+    transform: scaleX(0);
+    animation: bar-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .bars-divider .bar-line:nth-child(1) {
+    width: 30%; margin-left: -25%;
+    background: linear-gradient(90deg, transparent 5%, #bfb170 40%, #bfb170 60%, transparent 95%);
+    animation-delay: 0.1s;
+  }
+  .bars-divider .bar-line:nth-child(2) {
+    width: 45%; margin-left: 15%; height: 1px;
+    background: linear-gradient(90deg, transparent 5%, rgba(191,177,112,0.5) 30%, rgba(191,177,112,0.5) 70%, transparent 95%);
+    animation-delay: 0.3s;
+  }
+  .bars-divider .bar-line:nth-child(3) {
+    width: 20%; margin-left: 40%;
+    background: linear-gradient(90deg, transparent 5%, #bfb170 40%, #bfb170 60%, transparent 95%);
+    animation-delay: 0.5s;
+  }
+  .bars-divider .bar-line:nth-child(4) {
+    width: 35%; margin-left: -10%; height: 1px;
+    background: linear-gradient(90deg, transparent 5%, rgba(191,177,112,0.3) 30%, rgba(191,177,112,0.3) 70%, transparent 95%);
+    animation-delay: 0.7s;
+  }
+  .bars-divider .bar-pulse {
+    position: absolute;
+    height: 1.5px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, rgba(191,177,112,0.6), transparent);
+    animation: bar-pulse-move 6s ease-in-out infinite;
+    top: 50%;
+  }
+  @keyframes bar-in {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes bar-pulse-move {
+    0%, 100% { left: 10%; opacity: 0; }
+    20% { opacity: 0.8; }
+    80% { opacity: 0.8; }
+    50% { left: 80%; }
+  }
+
+  /* Selection indicator */
+  .selection-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,10,0.95); backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(191,177,112,0.3);
+    padding: 16px 24px; text-align: center;
+    transform: translateY(100%); transition: transform 0.3s;
+    z-index: 100; font-size: 0.9rem; color: #bfb170;
+  }
+  .selection-bar.visible { transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<h1>Soccerex Section Dividers — Animated</h1>
+<p class="subtitle">Each divider is shown between two mock sections. Click your favorite.</p>
+
+<!-- ===== OPTION B ===== -->
+<div class="divider-demo" data-choice="b" onclick="select(this)">
+  <div class="demo-label">
+    <div class="demo-letter">B</div>
+    <h2>Gold Line Fade</h2>
+    <p>Elegant, minimal, premium</p>
+  </div>
+  <div class="demo-container">
+    <div class="section-top" style="background:#09203e;">
+      <h3 style="color:rgba(255,255,255,0.7);">Section Above</h3>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+    <div class="goldline-divider">
+      <div class="line"></div>
+      <div class="line-glow"></div>
+      <div class="shimmer"></div>
+    </div>
+    <div class="section-bottom" style="background:#0e2a4f;">
+      <h3 style="color:rgba(255,255,255,0.7);">Section Below</h3>
+      <div class="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OPTION C ===== -->
+<div class="divider-demo" data-choice="c" onclick="select(this)">
+  <div class="demo-label">
+    <div class="demo-letter">C</div>
+    <h2>Net Pattern Band</h2>
+    <p>Football netting, animated wave ripple</p>
+  </div>
+  <div class="demo-container">
+    <div class="section-top" style="background:#09203e;">
+      <h3 style="color:rgba(255,255,255,0.7);">Section Above</h3>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+    <div class="net-divider" style="background:linear-gradient(to bottom,#09203e,#0e2a4f);">
+      <canvas id="netCanvas"></canvas>
+      <div class="fade-left"></div>
+      <div class="fade-right"></div>
+      <div class="fade-top"></div>
+      <div class="fade-bottom"></div>
+    </div>
+    <div class="section-bottom" style="background:#0e2a4f;">
+      <h3 style="color:rgba(255,255,255,0.7);">Section Below</h3>
+      <div class="bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OPTION D ===== -->
+<div class="divider-demo" data-choice="d" onclick="select(this)">
+  <div class="demo-label">
+    <div class="demo-letter">D</div>
+    <h2>Staggered Gold Bars</h2>
+    <p>Editorial, field markings, modern</p>
+  </div>
+  <div class="demo-container">
+    <div class="section-top" style="background:#09203e;">
+      <h3 style="color:rgba(255,255,255,0.7);">Section Above</h3>
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+    <div class="bars-divider">
+      <div class="bar-line"></div>
+      <div class="bar-line"></div>
+      <div class="bar-line"></div>
+      <div class="bar-line"></div>
+      <div class="bar-pulse"></div>
+    </div>
+    <div class="section-bottom" style="background:#0e2a4f;">
+      <h3 style="color:rgba(255,255,255,0.7);">Section Below</h3>
+      <div class="bar"></div>
+    </div>
+  </div>
+</div>
+
+<div class="selection-bar" id="selBar"></div>
+
+<script>
+// === Net Canvas Animation ===
+const canvas = document.getElementById('netCanvas');
+const ctx = canvas.getContext('2d');
+let time = 0;
+
+function resizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * 2;
+  canvas.height = rect.height * 2;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  ctx.scale(2, 2);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function drawNet() {
+  const w = canvas.width / 2;
+  const h = canvas.height / 2;
+  ctx.clearRect(0, 0, w, h);
+
+  const hexW = 36;
+  const hexH = 30;
+  const cols = Math.ceil(w / hexW) + 2;
+  const rows = Math.ceil(h / hexH) + 2;
+
+  for (let row = -1; row < rows; row++) {
+    for (let col = -1; col < cols; col++) {
+      const offset = (row % 2) * (hexW / 2);
+      const cx = col * hexW + offset;
+      const cy = row * hexH;
+
+      // Wave distortion
+      const wave = Math.sin(cx * 0.008 + time * 0.6) * 4 + Math.sin(cy * 0.015 + time * 0.4) * 3;
+      const pulse = (Math.sin(time * 0.3 + cx * 0.005 + cy * 0.005) + 1) / 2;
+
+      const alpha = 0.12 + pulse * 0.18;
+
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI / 3) * i - Math.PI / 6;
+        const r = 14;
+        const px = cx + Math.cos(angle) * r + wave * 0.3;
+        const py = cy + Math.sin(angle) * r + wave * 0.5;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(191,177,112,${alpha})`;
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+
+      // Node dots at vertices with glow
+      if (pulse > 0.6) {
+        const glowAngle = (Math.PI / 3) * Math.floor(time % 6) - Math.PI / 6;
+        const gx = cx + Math.cos(glowAngle) * 14 + wave * 0.3;
+        const gy = cy + Math.sin(glowAngle) * 14 + wave * 0.5;
+        ctx.beginPath();
+        ctx.arc(gx, gy, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(191,177,112,${pulse * 0.4})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  time += 0.02;
+  requestAnimationFrame(drawNet);
+}
+drawNet();
+
+// === Selection Logic ===
+const bar = document.getElementById('selBar');
+function select(el) {
+  document.querySelectorAll('.divider-demo').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  const choice = el.dataset.choice;
+  const labels = { b: 'Gold Line Fade', c: 'Net Pattern Band', d: 'Staggered Gold Bars' };
+  bar.textContent = '✓ Selected: ' + labels[choice];
+  bar.classList.add('visible');
+
+  // Report to companion
+  if (window.__sp_report) window.__sp_report(choice, labels[choice]);
+
+  // Write event for the brainstorm server
+  try {
+    const evt = JSON.stringify({type:'click', choice: choice, text: labels[choice], timestamp: Math.floor(Date.now()/1000)});
+    navigator.sendBeacon && navigator.sendBeacon('/__event', evt);
+  } catch(e) {}
+}
+</script>
+
+</body>
+</html>

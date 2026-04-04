@@ -1,0 +1,1842 @@
+[
+  {
+    "src": "/hero/01-TIER1-ronaldo.jpg",
+    "caption": "Ronaldo",
+    "event": "Where legends meet the business of football",
+    "categories": [
+      "heritage",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/02-TIER1-vieira-soccerex07.jpg",
+    "caption": "Patrick Vieira",
+    "event": "Champions shaping the next generation",
+    "categories": [
+      "heritage",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/03-TIER1-infantino-fifa-president.jpg",
+    "caption": "Gianni Infantino",
+    "event": "Global leadership, one conversation at a time",
+    "categories": [
+      "heritage",
+      "legends",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/04-TIER1-bobby-charlton-handprints.jpg",
+    "caption": "Sir Bobby Charlton",
+    "event": "A legend honored at Soccerex",
+    "categories": [
+      "heritage",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/05-TIER1-jordi-cruyff-14.jpg",
+    "caption": "Jordi Cruyff",
+    "event": "Legacy runs deep at Soccerex",
+    "categories": [
+      "heritage",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/06-TIER1-juan-mata-shirt.jpg",
+    "caption": "Juan Mata",
+    "event": "Players who care about the game beyond the pitch",
+    "categories": [
+      "heritage",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/07-TIER1-van-der-sar.jpg",
+    "caption": "Edwin van der Sar",
+    "event": "From the pitch to the boardroom",
+    "categories": [
+      "heritage",
+      "legends",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/08-TIER1-stadium-aerial-night.jpg",
+    "caption": "Pitchside",
+    "event": "Business happens where the game is played",
+    "categories": [
+      "miami",
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/09-TIER1-jenny-chiu-diverse-panel.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "heritage",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/10-TIER1-diverse-group-stadium.jpg",
+    "caption": "Together",
+    "event": "Every background, one shared passion",
+    "categories": [
+      "heritage",
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/11-TIER1-alexi-lalas.jpg",
+    "caption": "On Stage at Soccerex",
+    "event": "The conversations that shape football",
+    "categories": [
+      "heritage",
+      "legends",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/12-TIER1-packed-keynote.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "heritage",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/13-TIER2-woman-pink-blazer.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "heritage",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/130-MISC-falcao-press-conference-soccerex-festival.jpg",
+    "caption": "Soccerex Football Festival",
+    "event": "Stars at the Soccerex Football Festival",
+    "categories": [
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/131-MISC-patrick-vieira-signing-ball.jpg",
+    "caption": "Patrick Vieira",
+    "event": "Giving back to the Soccerex community",
+    "categories": [
+      "legends",
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/132-MISC-lucas-neill-panel-speaker.jpg",
+    "caption": "Lucas Neill",
+    "event": "From the pitch to the panel at Soccerex",
+    "categories": [
+      "on-stage",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/14-TIER2-woman-speaker.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "heritage",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/141-MISC-fifa-booth-soccerex-exhibition.jpg",
+    "caption": "The Soccerex Floor",
+    "event": "Innovation on display",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/142-MISC-sepp-blatter-crowd-20-centres.jpg",
+    "caption": "20 Centres for 2010",
+    "event": "Football as a force for good",
+    "categories": [
+      "networking",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/143-MISC-infantino-interview-fa-soccerex.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/144-MISC-fifa-world-cup-mascot-booth.jpg",
+    "caption": "FIFA at Soccerex",
+    "event": "Where the World Cup meets the industry",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/145-MISC-fireside-chat-soccerex-stage.jpg",
+    "caption": "Fireside Chat",
+    "event": "Intimate conversations that move the game",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/146-MISC-infantino-speaking-soccerex-panel.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/147-MISC-infantino-wide-shot-soccerex-branding.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "networking",
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/148-MISC-woman-speaker-soccerex-barbados.jpg",
+    "caption": "Soccerex Barbados",
+    "event": "Taking football business global",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/149-MISC-panel-three-speakers-soccerex-desk.jpg",
+    "caption": "Soccerex Panel",
+    "event": "Bringing diverse perspectives together",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/15-TIER2-asian-forum-panel.jpg",
+    "caption": "Soccerex Asian Forum",
+    "event": "Connecting football across continents",
+    "categories": [
+      "heritage",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/150-MISC-sunset-state-of-mind-neon-sign.jpg",
+    "caption": "Sunset Vibes",
+    "event": "Where the day's work becomes the night's conversation",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/151-MISC-rooftop-networking-neon-sign.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/152-MISC-rooftop-networking-wide-fairy-lights.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/153-MISC-rooftop-crowd-networking-string-lights.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/154-MISC-engaging-conversation-party.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/155-MISC-woman-conversation-rooftop-terrace.jpg",
+    "caption": "After Hours",
+    "event": "Where conversations continue under the stars",
+    "categories": [
+      "on-stage",
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/156-MISC-crowd-networking-neon-sign-wide.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/157-MISC-diverse-crowd-rooftop-networking.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "on-stage",
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/158-MISC-soccerex-global-keynote-packed-audience.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/16-TIER2-football-for-hope-youth.jpg",
+    "caption": "Football for Hope",
+    "event": "The game's power to change lives",
+    "categories": [
+      "heritage"
+    ]
+  },
+  {
+    "src": "/hero/160-NEW6-europe-packed-audience-soccerex-branding.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/161-NEW6-robbie-gilberto-ajax-arena-interview.jpg",
+    "caption": "Robbie Lyle and Gilberto Silva",
+    "event": "Two voices of the game meet at the Johan Cruyff Arena",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/162-NEW6-ronald-de-boer-speech-trophy-stage.jpg",
+    "caption": "Ronald de Boer",
+    "event": "A Champions League winner takes the Soccerex stage",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/163-NEW6-lili-cantero-signing-football-vip.jpg",
+    "caption": "Fan Moments",
+    "event": "Stars giving back to the community",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/164-NEW6-agents-panel-big-screen-blue-lighting.jpg",
+    "caption": "Special Agents",
+    "event": "Are they working for the player? Soccerex Europe 2024",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/165-NEW6-europe-opening-speech-massive-crowd.jpg",
+    "caption": "Soccerex Europe",
+    "event": "Where the industry convenes",
+    "categories": [
+      "europe",
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/166-NEW6-nedhum-gilberto-stage-conversation.jpg",
+    "caption": "Nedum Onuoha and Gilberto Silva",
+    "event": "Premier League voices on the Soccerex stage",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/167-NEW6-miami-stage-soccerex-branding-speakers.jpg",
+    "caption": "Soccerex Miami",
+    "event": "Football business under the sun",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/168-NEW6-miami-panel-big-screen-audience.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/169-NEW6-speaker-blue-blazer-charismatic.jpg",
+    "caption": "Alessandro Del Piero",
+    "event": "A legend bringing Italian flair to the Soccerex stage",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/17-TIER2-soccerex-logo-signage.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "heritage"
+    ]
+  },
+  {
+    "src": "/hero/170-NEW6-miami-two-speakers-soccerex-branding.jpg",
+    "caption": "Soccerex Miami",
+    "event": "Football business under the sun",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/171-NEW6-miami-stage-embrace-soccerex-logo.jpg",
+    "caption": "Community",
+    "event": "More than business. Family.",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/172-NEW6-miami-jersey-presentation-soccerex.jpg",
+    "caption": "Soccerex Miami",
+    "event": "Football business under the sun",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/173-NEW6-miami-speaker-purple-lighting-mic.jpg",
+    "caption": "Soccerex Miami",
+    "event": "Football business under the sun",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/174-NEW6-miami-networking-blue-purple-outdoor.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/175-NEW6-miami-messi-jersey-reveal-stage.jpg",
+    "caption": "Inter Miami Moment",
+    "event": "When the biggest names meet Soccerex",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/176-NEW6-miami-la-tropical-networking-blue.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/177-NEW6-miami-packed-diverse-audience.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/178-NEW6-miami-networking-exhibition-floor.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/179-NEW6-miami-group-photo-social-energy.jpg",
+    "caption": "The Soccerex Family",
+    "event": "People who make this community special",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/18-TIER2-cruyff-arena-team.jpg",
+    "caption": "Cruyff Legacy",
+    "event": "Standing on the shoulders of giants",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/180-NEW6-hardrock-dramatic-screen-globe-purple.jpg",
+    "caption": "Soccerex Social",
+    "event": "A vibrant culture of connection",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/181-NEW6-hardrock-blue-stage-lights-crowd-silhouettes.jpg",
+    "caption": "Soccerex Social",
+    "event": "A vibrant culture of connection",
+    "categories": [
+      "on-stage",
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/182-NEW6-hardrock-packed-networking-tvs-sports.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/183-NEW6-hardrock-networking-crowd-diversity.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/184-NEW6-hardrock-diverse-group-six-smiling.jpg",
+    "caption": "Together",
+    "event": "Every background, one shared passion",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/185-NEW6-hardrock-dancing-celebrating-energy.jpg",
+    "caption": "Soccerex Social",
+    "event": "A vibrant culture of connection",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/186-NEW6-hardrock-three-women-laughing.jpg",
+    "caption": "Women in Football",
+    "event": "Leading the conversation, shaping the future",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/187-NEW6-hardrock-stylish-hat-cigar-miami-vibe.jpg",
+    "caption": "Soccerex Social",
+    "event": "A vibrant culture of connection",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/188-NEW6-hardrock-purple-lit-networking.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/189-NEW6-hardrock-four-men-diverse-networking.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "on-stage",
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/19-NEW-packed-keynote-europe-2024.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/190-NEW6-hardrock-networking-diversity-atmosphere.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/190-NEW7-europe-packed-audience-keynote.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/191-NEW6-hardrock-genius-sports-blue-venue.jpg",
+    "caption": "Soccerex Social",
+    "event": "A vibrant culture of connection",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/191-NEW7-europe-soccerex-branding-audience.jpg",
+    "caption": "Full House",
+    "event": "When the football world gathers",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/192-NEW7-europe-stage-blue-lighting-podium.jpg",
+    "caption": "Soccerex Europe",
+    "event": "Where the industry convenes",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/193-NEW7-europe-newcastle-sela-panel.jpg",
+    "caption": "Newcastle United and Sela",
+    "event": "Partnering with purpose at Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/194-NEW7-europe-one-on-one-packed-house.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/195-NEW7-europe-next-big-thing-panel.jpg",
+    "caption": "The Next Big Thing",
+    "event": "Youth and academy player development, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/196-NEW7-europe-cruyff-statue-amsterdam.jpg",
+    "caption": "Cruyff Legacy",
+    "event": "Standing on the shoulders of giants",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/197-NEW7-europe-trust-process-panel-diversity.jpg",
+    "caption": "Trust the Process",
+    "event": "Football executives on planning and vision, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/198-NEW7-europe-financial-panel-intimate.jpg",
+    "caption": "Financial Foul Play",
+    "event": "The state of football's finances, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/199-NEW7-europe-onuoha-gilberto-silva-stage.jpg",
+    "caption": "Nedum Onuoha and Gilberto Silva",
+    "event": "Fighting on Too Many Fronts, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/20-NEW-vip-reception-stadium-aerial.jpg",
+    "caption": "Pitchside",
+    "event": "Business happens where the game is played",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/204-NEW7-miami-interactive-tech-display.jpg",
+    "caption": "Innovation",
+    "event": "Technology shaping football's tomorrow",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/205-NEW7-miami-indoor-pitch-networking.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/206-NEW7-miami-stadium-evening-pink-backdrop.jpg",
+    "caption": "Pitchside",
+    "event": "Business happens where the game is played",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/207-NEW7-miami-diverse-networking-laughing.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "on-stage",
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/208-NEW7-miami-stadium-ball-diverse-pair.jpg",
+    "caption": "Together",
+    "event": "Every background, one shared passion",
+    "categories": [
+      "on-stage",
+      "culture",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/209-NEW7-miami-content-king-panel-wide.jpg",
+    "caption": "Content is King",
+    "event": "Social media and content production, Soccerex Miami 2024",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/21-NEW-woman-football-headbalance.jpg",
+    "caption": "The Beautiful Game",
+    "event": "It always comes back to the ball",
+    "categories": [
+      "on-stage",
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/210-NEW7-miami-female-speaker-pink-backdrop.jpg",
+    "caption": "Soccerex Miami",
+    "event": "Football business under the sun",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/211-NEW7-miami-male-speaker-gradient-backdrop.jpg",
+    "caption": "Soccerex Miami",
+    "event": "Football business under the sun",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/212-NEW7-miami-futbol-infinito-broadcast.jpg",
+    "caption": "On Air",
+    "event": "Bringing the Soccerex story to the world",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/213-NEW7-miami-soccerex-branded-interview.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/214-NEW7-miami-women-panel-amanda-duffy.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/215-NEW7-miami-women-panelists-closeup.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/216-NEW7-miami-women-panel-green-outfit.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/217-NEW7-miami-mens-panel-laughing-branding.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/218-NEW7-miami-three-women-stage.jpg",
+    "caption": "Women in Football",
+    "event": "Leading the conversation, shaping the future",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/219-NEW7-miami-world-cup-94-nostalgia.jpg",
+    "caption": "Soccerex Miami",
+    "event": "Football business under the sun",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/22-NEW-soccerex-brasil-auditorium.jpg",
+    "caption": "Soccerex Global Convention",
+    "event": "Thousands gathering for the love of the game",
+    "categories": [
+      "heritage",
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/220-NEW7-miami-animated-panel-discussion.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/220-NEW8-art-display-pitchside-stadium.jpg",
+    "caption": "Pitchside",
+    "event": "Business happens where the game is played",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/221-NEW7-miami-womens-football-speaker.jpg",
+    "caption": "Women in Football",
+    "event": "Leading the conversation, shaping the future",
+    "categories": [
+      "on-stage",
+      "culture",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/221-NEW8-artist-painting-pitchside-dramatic.jpg",
+    "caption": "Live Art at Soccerex",
+    "event": "Where football meets culture",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/222-NEW7-miami-mixed-panel-soccerex-wide.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/222-NEW8-artist-painting-stadium-lights.jpg",
+    "caption": "Live Art at Soccerex",
+    "event": "Where football meets culture",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/223-NEW8-boot-display-join-the-planet.jpg",
+    "caption": "Football Culture",
+    "event": "The beautiful game, beautifully expressed",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/224-NEW8-wide-reception-stadium-pitch.jpg",
+    "caption": "Pitchside",
+    "event": "Business happens where the game is played",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/225-NEW8-elevated-reception-floodlights.jpg",
+    "caption": "VIP Reception",
+    "event": "An evening under the lights",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/226-NEW8-brasil-painted-football-closeup.jpg",
+    "caption": "The Art of Football",
+    "event": "Creativity thrives at Soccerex",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/227-NEW8-artist-painting-dramatic-angle.jpg",
+    "caption": "Live Art at Soccerex",
+    "event": "Where football meets culture",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/228-NEW8-wide-pitchside-reception-crowd.jpg",
+    "caption": "VIP Reception",
+    "event": "An evening under the lights",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/229-NEW8-wide-reception-floodlights-crowd.jpg",
+    "caption": "VIP Reception",
+    "event": "An evening under the lights",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/23-NEW-diversity-panel-europe-2024.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/230-NEW8-elevated-crowd-pitch-furniture.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/231-NEW8-widest-stadium-reception-goal.jpg",
+    "caption": "Pitchside",
+    "event": "Business happens where the game is played",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/232-NEW8-crowd-greatness-happens-here.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/233-NEW8-lounge-foreground-floodlights.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/234-NEW8-aerial-diverse-crowd-networking.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "on-stage",
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/235-NEW8-elevated-crowd-white-furniture.jpg",
+    "caption": "Soccerex",
+    "event": "30 years of connecting the game",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/236-NEW8-overhead-diverse-group-turf.jpg",
+    "caption": "Together",
+    "event": "Every background, one shared passion",
+    "categories": [
+      "on-stage",
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/237-NEW8-wide-pitch-networking-night.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/24-NEW-laughing-trio-hardrock.jpg",
+    "caption": "Soccerex Social",
+    "event": "A vibrant culture of connection",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/25-NEW-packed-keynote-miami.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/250-NEW9-getty-panel-soccerex-branding.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/251-NEW9-exhibition-floor-football-display.jpg",
+    "caption": "The Soccerex Floor",
+    "event": "Innovation on display",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/252-NEW9-woman-balancing-ball.jpg",
+    "caption": "The Beautiful Game",
+    "event": "It always comes back to the ball",
+    "categories": [
+      "on-stage",
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/253-NEW9-speaker-stage-bringing.jpg",
+    "caption": "Guillem Balague",
+    "event": "A voice that shapes how the world understands football",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/254-NEW9-networking-framed-jerseys.jpg",
+    "caption": "Robbie Lyle",
+    "event": "Voices that amplify the passion of football",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/255-NEW9-speaker-gesturing-soccerex.jpg",
+    "caption": "Guillem Balague",
+    "event": "A voice that shapes how the world understands football",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/256-NEW9-soccerex-logo-venue-entrance.jpg",
+    "caption": "Welcome to Soccerex",
+    "event": "Where the football world walks through one door",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/257-NEW9-concacaf-trophy-booth.jpg",
+    "caption": "Football Heritage",
+    "event": "Where history meets the future",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/258-NEW9-vr-soccer-booth.jpg",
+    "caption": "Football Culture",
+    "event": "The beautiful game, beautifully expressed",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/259-NEW9-packed-audience-speaker.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/26-NEW-elevator-pitch-panel-miami.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/260-NEW9-networking-lounge-crowd.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/261-NEW9-tv-interview-miami-branding.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/262-NEW9-soccerex-miami-ball.jpg",
+    "caption": "The Beautiful Game",
+    "event": "It always comes back to the ball",
+    "categories": [
+      "culture",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/263-NEW9-miami-podium-logo-screen.jpg",
+    "caption": "Soccerex Miami",
+    "event": "Football business under the sun",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/264-NEW9-miami-outdoor-banner-crowd.jpg",
+    "caption": "Miami Nights",
+    "event": "Where deals are sealed under palm trees",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/265-NEW9-miami-packed-audience.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/266-NEW9-miami-exhibition-floor-wide.jpg",
+    "caption": "The Soccerex Floor",
+    "event": "Innovation on display",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/267-NEW9-miami-networking-mascot.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/268-NEW9-miami-audience-session.jpg",
+    "caption": "Full House",
+    "event": "When the football world gathers",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/269-NEW9-miami-networking-dramatic-light.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/27-NEW-interview-ajax-arena-seats.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/270-NEW9-miami-exhibition-branding.jpg",
+    "caption": "The Soccerex Floor",
+    "event": "Innovation on display",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/271-NEW9-miami-networking-concacaf.jpg",
+    "caption": "Networking",
+    "event": "Relationships built at Soccerex last a lifetime",
+    "categories": [
+      "networking",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/272-NEW9-panel-two-speakers-diverse.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/273-NEW9-ajax-stadium-interior-night.jpg",
+    "caption": "Under the Lights",
+    "event": "Soccerex brings business to football's greatest stages",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/279-NEW9-cruyff-arena-interior-daylight.jpg",
+    "caption": "Johan Cruyff Arena",
+    "event": "World class venues for a world class community",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/28-NEW-content-is-king-panel-miami.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/282-NEW9-europe24-packed-audience-blue.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/283-NEW9-europe24-speaker-podium-screen.jpg",
+    "caption": "Soccerex Europe",
+    "event": "Where the industry convenes",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/284-NEW9-europe24-speaker-cl-trophy.jpg",
+    "caption": "Football Heritage",
+    "event": "Where history meets the future",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/285-NEW9-europe24-knvb-speaker-trophy.jpg",
+    "caption": "KNVB Keynote",
+    "event": "The voice of Dutch football at Soccerex Europe",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/286-NEW9-europe24-panel-diverse.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/287-NEW9-europe24-three-panelists-blue.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/288-NEW9-europe24-sports-law-panel.jpg",
+    "caption": "Sports Law",
+    "event": "Are the laws of the game keeping up? Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/289-NEW9-europe24-kitman-labs-panel.jpg",
+    "caption": "The Connected Club",
+    "event": "Kitman Labs on integrated data and tech, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/29-NEW-laughing-panel-miami-2024.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/291-NEW9-europe24-diversity-panel.jpg",
+    "caption": "Out of Many, We Are One",
+    "event": "Diversity in football, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/292-NEW9-europe24-tech-panel-neon.jpg",
+    "caption": "Providing Tech Support",
+    "event": "Innovation on and off the pitch, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/293-NEW9-europe24-tech-panel-close.jpg",
+    "caption": "Providing Tech Support",
+    "event": "Technology transforming performance, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/294-NEW9-europe24-interview-arena-seats.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/295-NEW9-europe24-interview-ajax-sign.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/296-NEW9-europe24-sell-panel-blue.jpg",
+    "caption": "Sell Sell Sell",
+    "event": "Commercial growth in football, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/297-NEW9-europe24-panel-discussion.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/298-NEW9-europe24-handshake-football.jpg",
+    "caption": "The Beautiful Game",
+    "event": "It always comes back to the ball",
+    "categories": [
+      "europe",
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/299-NEW9-europe24-three-interview-arena.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/30-NEW-artist-painting-stadium.jpg",
+    "caption": "Live Art at Soccerex",
+    "event": "Where football meets culture",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/300-NEW9-europe24-footballers-fans-panel.jpg",
+    "caption": "Footballers for Fans",
+    "event": "Players and the people who love the game, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe",
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/31-NEW-mixed-gender-panel-europe.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/312-NEW9-europe24-tebas-seated-arena.jpg",
+    "caption": "Javier Tebas",
+    "event": "The LaLiga President at Soccerex Europe",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/313-NEW9-europe24-three-interview-wide.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/314-NEW9-europe24-one-on-one-audience.jpg",
+    "caption": "Full House",
+    "event": "When the football world gathers",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/316-NEW9-europe24-outdoor-party-balloons.jpg",
+    "caption": "Miami Nights",
+    "event": "Where deals are sealed under palm trees",
+    "categories": [
+      "europe",
+      "culture",
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/317-NEW9-europe24-sponsor-backdrop-duo.jpg",
+    "caption": "Partners",
+    "event": "The brands that believe in football",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/318-NEW9-europe24-session-rear-view-scale.jpg",
+    "caption": "Soccerex Europe",
+    "event": "Where the industry convenes",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/319-NEW9-europe24-team-group-arena-vip.jpg",
+    "caption": "The Soccerex Family",
+    "event": "People who make this community special",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/32-NEW-packed-audience-soccerex-europe.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/321-NEW9-europe24-interview-red-seats.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/322-NEW9-europe24-two-panelists-may2024.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/323-NEW9-europe24-fighting-fronts-panel.jpg",
+    "caption": "Fighting on Too Many Fronts",
+    "event": "The European calendar debate, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/324-NEW9-europe24-team-photo-stage.jpg",
+    "caption": "Soccerex Europe",
+    "event": "Where the industry convenes",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/325-NEW9-europe24-financial-foulplay.jpg",
+    "caption": "Financial Foul Play",
+    "event": "Tackling football's financial challenges, Soccerex Europe 2024",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/326-NEW9-europe24-fighting-fronts-wide.jpg",
+    "caption": "Fighting on Too Many Fronts",
+    "event": "Nedum Onuoha and Gilberto Silva debate the calendar, Soccerex Europe 2024",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/327-NEW9-europe24-five-men-vip-arena.jpg",
+    "caption": "Soccerex Europe",
+    "event": "Where the industry convenes",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/328-NEW9-europe24-premier-league-trophy.jpg",
+    "caption": "Football Heritage",
+    "event": "Where history meets the future",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/329-NEW9-europe24-trust-process-panel.jpg",
+    "caption": "Trust the Process",
+    "event": "Football executives on vision and execution, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/33-NEW-tv-interview-soccerex-miami.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "miami"
+    ]
+  },
+  {
+    "src": "/hero/331-NEW9-europe24-laliga-one-on-one.jpg",
+    "caption": "Guillem Balague and Javier Tebas",
+    "event": "One-on-one with the LaLiga President, Soccerex Europe 2024",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/332-NEW9-europe24-group-vip-lanyards.jpg",
+    "caption": "The Soccerex Family",
+    "event": "People who make this community special",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/335-NEW9-europe24-panel-audience-logo.jpg",
+    "caption": "On Stage",
+    "event": "The conversations that drive the game forward",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/336-NEW9-europe24-speaker-big-logo-trophy.jpg",
+    "caption": "Football Heritage",
+    "event": "Where history meets the future",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/337-NEW9-europe24-knvb-speaker-podium.jpg",
+    "caption": "KNVB Keynote",
+    "event": "Dutch football leadership on the Soccerex stage",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/339-NEW9-europe24-speaker-touching-trophy.jpg",
+    "caption": "Football Heritage",
+    "event": "Where history meets the future",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/34-NEW-diverse-team-ajax-arena.jpg",
+    "caption": "Together",
+    "event": "Every background, one shared passion",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/340-NEW9-europe24-interview-stadium-red.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/341-NEW9-europe24-trust-process-audience.jpg",
+    "caption": "Full House",
+    "event": "When the football world gathers",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/342-NEW9-europe24-newcastle-sela-panel.jpg",
+    "caption": "Newcastle United and Sela",
+    "event": "Redefining commercial sponsorship, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/343-NEW9-europe24-packed-room-podium.jpg",
+    "caption": "Packed House",
+    "event": "The industry showing up, together",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/344-NEW9-europe24-audience-newcastle-screen.jpg",
+    "caption": "Full House",
+    "event": "When the football world gathers",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/345-NEW9-europe24-financial-panel-neon.jpg",
+    "caption": "Financial Foul Play",
+    "event": "The hard questions about football's money, Soccerex Europe 2024",
+    "categories": [
+      "on-stage",
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/346-NEW9-europe24-interview-stadium-wide.jpg",
+    "caption": "In Conversation",
+    "event": "Candid dialogue with football's decision makers",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/347-NEW9-europe24-conference-room-full.jpg",
+    "caption": "Soccerex Europe",
+    "event": "Where the industry convenes",
+    "categories": [
+      "europe"
+    ]
+  },
+  {
+    "src": "/hero/35-NEW-woman-signing-football-expo.jpg",
+    "caption": "Fan Moments",
+    "event": "Stars giving back to the community",
+    "categories": [
+      "on-stage",
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/36-NEW-speaker-champions-league-trophy.jpg",
+    "caption": "Football Heritage",
+    "event": "Where history meets the future",
+    "categories": [
+      "on-stage"
+    ]
+  },
+  {
+    "src": "/hero/37-NEW-artist-painting-football-closeup.jpg",
+    "caption": "Live Art at Soccerex",
+    "event": "Where football meets culture",
+    "categories": [
+      "culture"
+    ]
+  },
+  {
+    "src": "/hero/38-NEW-man-laughing-jersey-wall.jpg",
+    "caption": "Joy of Connection",
+    "event": "This is what 30 years feels like",
+    "categories": [
+      "networking"
+    ]
+  },
+  {
+    "src": "/hero/381-NEW9-legend-lucas-neill.jpg",
+    "caption": "Lucas Neill",
+    "event": "Soccerex legends, past and present",
+    "categories": [
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/388-NEW9-legend-patrick-vieira.jpg",
+    "caption": "Patrick Vieira",
+    "event": "Champions shaping the next generation",
+    "categories": [
+      "legends"
+    ]
+  },
+  {
+    "src": "/hero/391-NEW9-legend-radamel-falcao.jpg",
+    "caption": "Radamel Falcao",
+    "event": "World class talent at the Soccerex stage",
+    "categories": [
+      "legends"
+    ]
+  }
+]
