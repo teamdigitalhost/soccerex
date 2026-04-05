@@ -1,13 +1,14 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { Users, MessageSquare, Globe, KeyRound, MapPin, ArrowRight, Calendar, Ticket, FileText, ExternalLink } from 'lucide-react'
 import { feature } from 'topojson-client'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
 import ImageGrid from '../components/ImageGrid'
 import InteractiveGlobe from '../components/InteractiveGlobe'
+import { Player } from '@lottiefiles/react-lottie-player'
 
 // Intersection Observer for fade-up animations
 function useScrollAnimations() {
@@ -204,22 +205,32 @@ function MeetingPointSection() {
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div>
-          <p className="section-label mb-4" style={{ color: '#09203e', fontWeight: 600 }}>01 &middot; THE PLATFORM</p>
-          <h2 className="font-heading font-bold leading-tight mb-6" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
+          <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>01 &middot; THE PLATFORM</p>
+          <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
             The Meeting Point for Global Football Business
           </h2>
-          <div style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
+          <div className="fade-up" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
+
+          {/* Location map Lottie animation */}
+          <div className="fade-up" style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)', opacity: 0.15 }}>
+            <Player
+              autoplay
+              loop
+              src="/animations/location-map.json"
+              style={{ width: 'clamp(200px, 28vw, 320px)', height: 'auto' }}
+            />
+          </div>
         </div>
         <div>
-          <p className="font-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#333' }}>
+          <p className="font-body leading-relaxed mb-4 fade-up" style={{ fontSize: '1.05rem', color: '#333' }}>
             Soccerex connects the people who drive the game forward.
           </p>
-          <p className="font-body leading-relaxed mb-6" style={{ fontSize: '0.95rem', color: '#666' }}>
+          <p className="font-body leading-relaxed mb-6 fade-up" style={{ fontSize: '0.95rem', color: '#666' }}>
             Across every event, we bring together:
           </p>
           <div className="space-y-4 mb-8">
             {bullets.map((item, i) => (
-              <div key={i} className="flex items-center gap-4">
+              <div key={i} className="flex items-center gap-4 fade-up">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(9,32,62,0.08)', border: '1px solid rgba(9,32,62,0.12)' }}>
                   <item.icon size={18} style={{ color: '#09203e' }} />
                 </div>
@@ -227,7 +238,7 @@ function MeetingPointSection() {
               </div>
             ))}
           </div>
-          <p className="font-body leading-relaxed" style={{ fontSize: '0.95rem', color: '#555' }}>
+          <p className="font-body leading-relaxed fade-up" style={{ fontSize: '0.95rem', color: '#555' }}>
             Our role is simple: <span style={{ color: '#09203e', fontWeight: 600 }}>Create an environment where the right conversations happen.</span>
           </p>
         </div>
@@ -285,28 +296,33 @@ function EventsSection() {
   ]
 
   return (
-    <section id="events" className="relative overflow-hidden" style={{ background: '#061729' }}>
-      {/* Stadium-style gradient overlay */}
-      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center top, rgba(26,63,191,0.08) 0%, transparent 60%)' }} />
+    <section id="events" className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)' }}>
+      {/* Subtle grid texture */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(9,32,62,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.03) 1px, transparent 1px)',
+        backgroundSize: '60px 60px'
+      }} />
       {/* Section number watermark */}
-      <div className="absolute top-8 right-8 font-heading font-bold text-white/[0.03] pointer-events-none select-none" style={{ fontSize: 'clamp(8rem, 20vw, 16rem)', lineHeight: 1 }}>03</div>
+      <div className="absolute top-8 right-8 font-heading font-bold pointer-events-none select-none" style={{ fontSize: 'clamp(8rem, 20vw, 16rem)', lineHeight: 1, color: 'rgba(9,32,62,0.04)' }}>03</div>
 
       <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div className="text-center mb-16">
-          <p className="section-label text-gold mb-4 fade-up">03 &middot; EVENTS</p>
-          <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up gold-underline mx-auto" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
+          <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>03 &middot; EVENTS</p>
+          <h2 className="font-heading font-bold leading-tight mb-4 fade-up mx-auto" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
             Global Events. Real Industry Access.
           </h2>
-          <p className="font-body text-white/65 leading-relaxed fade-up mx-auto" style={{ fontSize: '1.05rem', maxWidth: '650px' }}>
+          <div className="mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
+          <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: '1.05rem', maxWidth: '650px', color: '#555' }}>
             Each Soccerex event is designed around a specific market and audience, bringing together the key stakeholders shaping football in that region.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {events.map((event, i) => (
-            <div key={i} className="card-hover fade-up group relative overflow-hidden rounded-sm" style={{
-              background: 'linear-gradient(135deg, rgba(14,42,79,0.8) 0%, rgba(9,32,62,0.9) 100%)',
-              border: '1px solid rgba(191,177,112,0.12)',
+            <div key={i} className="card-hover fade-up group relative overflow-hidden" style={{
+              background: '#09203e',
+              border: '1px solid rgba(9,32,62,0.15)',
+              borderRadius: '10px',
             }}>
               {/* Top accent bar */}
               <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, #bfb170, rgba(26,63,191,0.6))' }} />
@@ -316,17 +332,17 @@ function EventsSection() {
                   <span className="font-mono text-xs uppercase tracking-[0.2em] text-gold">{event.city}</span>
                 </div>
                 <h3 className="font-heading font-semibold text-white text-xl mb-4">{event.name}</h3>
-                <p className="font-body text-white/60 leading-relaxed" style={{ fontSize: '0.9rem' }}>{event.desc}</p>
+                <p className="font-body text-white/65 leading-relaxed" style={{ fontSize: '0.9rem' }}>{event.desc}</p>
               </div>
             </div>
           ))}
         </div>
 
         <div className="text-center mt-12 fade-up">
-          <button className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white border-none"
-            style={{ background: 'rgba(191,177,112,0.15)', border: '1px solid rgba(191,177,112,0.3)' }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.color = '#09203e' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(191,177,112,0.15)'; e.currentTarget.style.color = 'white' }}>
+          <button className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none"
+            style={{ background: '#09203e', color: '#fff', border: '1px solid #09203e' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#0e2a4f' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#09203e' }}>
             View All Events
             <ArrowRight size={16} />
           </button>
@@ -865,6 +881,19 @@ function Footer() {
 // ─── HOME PAGE ──────────────────────────────────────────────────────────────
 export default function Home() {
   useScrollAnimations()
+  const location = useLocation()
+
+  // If navigated from Navbar with a scroll target, scroll to it once mounted
+  useEffect(() => {
+    const target = location.state?.scrollTo
+    if (target) {
+      const t = setTimeout(() => {
+        const el = document.querySelector(target)
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+      return () => clearTimeout(t)
+    }
+  }, [location.state])
 
   return (
     <>

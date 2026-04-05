@@ -751,6 +751,156 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
+/* GLOBAL NETWORK PAGE                                                         */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.gn-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+.gn-marquee-track {
+  display: flex;
+  gap: 48px;
+  width: max-content;
+  animation: gn-marquee-scroll linear infinite;
+  align-items: center;
+}
+.gn-marquee-reverse {
+  animation-direction: reverse;
+}
+@keyframes gn-marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.gn-marquee-item {
+  flex-shrink: 0;
+  width: 140px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(9, 32, 62, 0.08);
+  border: 1px solid rgba(9, 32, 62, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+.gn-marquee-item:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(9, 32, 62, 0.18);
+  background: #ffffff;
+}
+.gn-marquee-item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(0.15);
+  transition: filter 0.3s;
+}
+.gn-marquee-item:hover img {
+  filter: grayscale(0);
+}
+
+/* Grid cells for full roster section */
+.gn-grid-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 10px;
+  border: 1px solid rgba(191, 177, 112, 0.1);
+  transition: transform 0.3s, background 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+.gn-grid-cell:hover {
+  transform: translateY(-4px) scale(1.04);
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  border-color: rgba(191, 177, 112, 0.5);
+}
+.gn-grid-cell img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(0.2);
+  transition: filter 0.3s;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* CONTACT FORM ENTRANCE                                                       */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.contact-form-wrap {
+  position: relative;
+  min-height: 200px;
+}
+
+@keyframes contact-form-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(48px) scale(0.96);
+    filter: blur(14px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes contact-form-glow {
+  0% { box-shadow: 0 20px 60px rgba(9,32,62,0.08), 0 0 0 0 rgba(191,177,112,0); }
+  40% { box-shadow: 0 20px 60px rgba(9,32,62,0.14), 0 0 0 6px rgba(191,177,112,0.28); }
+  100% { box-shadow: 0 20px 60px rgba(9,32,62,0.08), 0 0 0 0 rgba(191,177,112,0); }
+}
+
+.contact-form-panel {
+  animation: contact-form-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both,
+             contact-form-glow 1.4s ease-out 0.2s both;
+  transform-origin: top center;
+}
+
+/* Stagger the form fields as they come in */
+.contact-form-panel > * {
+  animation: contact-field-stagger 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.contact-form-panel > *:nth-child(1) { animation-delay: 0.18s; }
+.contact-form-panel > *:nth-child(2) { animation-delay: 0.24s; }
+.contact-form-panel > *:nth-child(3) { animation-delay: 0.30s; }
+.contact-form-panel > *:nth-child(4) { animation-delay: 0.36s; }
+.contact-form-panel > *:nth-child(5) { animation-delay: 0.42s; }
+.contact-form-panel > *:nth-child(6) { animation-delay: 0.48s; }
+
+@keyframes contact-field-stagger {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-empty-hint {
+  animation: contact-hint-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes contact-hint-pulse {
+  0%, 100% { border-color: rgba(9,32,62,0.12); }
+  50% { border-color: rgba(191,177,112,0.45); }
+}
+.gn-grid-cell:hover img {
+  filter: grayscale(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
 /* INTERACTIVE GLOBE                                                           */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
