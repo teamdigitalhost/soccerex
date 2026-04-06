@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Search, Calendar } from 'lucide-react'
+import { ArrowRight, Search, Calendar, Mail } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 
@@ -36,10 +36,10 @@ export default function InsightsList() {
   // Reset page when filter/search changes
   useEffect(() => { setPage(1) }, [activeCategory, searchQuery])
 
-  // Extract unique categories
+  // Extract unique categories (hide "Uncategorized")
   const categories = useMemo(() => {
     const cats = new Set()
-    articles.forEach((a) => a.categories.forEach((c) => cats.add(c)))
+    articles.forEach((a) => a.categories.forEach((c) => { if (c !== 'Uncategorized') cats.add(c) }))
     return ['All', ...Array.from(cats).sort()]
   }, [articles])
 
@@ -60,14 +60,15 @@ export default function InsightsList() {
     return result
   }, [articles, activeCategory, searchQuery])
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
-  const visible = filtered.slice(0, page * PAGE_SIZE)
-  const hasMore = page * PAGE_SIZE < filtered.length
+  // Featured article = first filtered article with a featured image
+  const featured = filtered.length > 0 ? (filtered.find((a) => a.featuredImage) || filtered[0]) : null
+
+  // Exclude the featured article from the grid so it doesn't show twice
+  const gridArticles = featured ? filtered.filter((a) => a.id !== featured.id) : filtered
+  const visible = gridArticles.slice(0, page * PAGE_SIZE)
+  const hasMore = page * PAGE_SIZE < gridArticles.length
 
   useScrollAnimations(visible.length)
-
-  // Featured article = first article with a featured image
-  const featured = articles.find((a) => a.featuredImage) || articles[0]
 
   if (!articles.length) {
     return <div style={{ minHeight: '100vh', background: '#050d1a' }} />
@@ -183,8 +184,8 @@ export default function InsightsList() {
           {/* Results count */}
           <p className="font-body mb-6 fade-up" style={{ fontSize: '0.85rem', color: '#888' }}>
             {filtered.length} article{filtered.length !== 1 ? 's' : ''}
-            {activeCategory !== 'All' && ` in ${activeCategory}`}
-            {searchQuery && ` matching "${searchQuery}"`}
+            {activeCategory !== 'All' ? ` in ${activeCategory}` : ''}
+            {searchQuery ? ` matching "${searchQuery}"` : ''}
           </p>
         </div>
       </section>
@@ -219,6 +220,33 @@ export default function InsightsList() {
               )}
             </>
           )}
+        </div>
+      </section>
+
+      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
+
+      {/* ═══ SOCCEREXPERT NEWSLETTER ════════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
+        <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
+        <div className="relative z-10 text-center" style={{ maxWidth: '700px', margin: '0 auto' }}>
+          <p className="section-label text-gold mb-4 fade-up">THE FOOTBALL BUSINESS E-NEWSLETTER</p>
+          <h2 className="font-heading font-bold text-white leading-tight mb-3 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+            SOCCER<span style={{ color: '#bfb170' }}>EXPERT</span>
+          </h2>
+          <div className="fade-up mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #bfb170, transparent)' }} />
+          <p className="font-body text-white/60 leading-relaxed mb-3 fade-up" style={{ fontSize: '1.1rem', fontWeight: 600 }}>
+            Tap in to three decades of connections.
+          </p>
+          <p className="font-body text-white/50 leading-relaxed mb-10 fade-up mx-auto" style={{ fontSize: '0.95rem', maxWidth: '520px' }}>
+            Subscribe to get the latest commercial details, groundbreaking interviews, and industry analysis, free, straight to your inbox.
+          </p>
+          <a href="mailto:enquiries@soccerex.com?subject=SoccerExpert%20Newsletter%20Subscription" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
+            style={{ background: '#bfb170', color: '#09203e', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#bfb170' }}
+          >
+            <Mail size={16} /> Subscribe Now
+          </a>
         </div>
       </section>
     </div>

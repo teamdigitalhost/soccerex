@@ -91,8 +91,10 @@ export default function Footer() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {[
                 { label: 'Home', to: '/' },
+                { label: 'Events', to: '/events' },
                 { label: 'About', to: '/about' },
                 { label: 'Global Network', to: '/global-network' },
+                { label: 'Insights', to: '/insights' },
                 { label: 'Europe 2026', to: '/europe-2026' },
                 { label: 'Gallery', to: '/gallery' },
               ].map(l => (

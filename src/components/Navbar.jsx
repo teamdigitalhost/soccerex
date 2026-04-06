@@ -6,6 +6,7 @@ const navLinks = [
   { label: 'Events', to: '/events', isRoute: true },
   { label: 'About', to: '/about', isRoute: true },
   { label: 'Network', to: '/global-network', isRoute: true },
+  { label: 'Insights', to: '/insights', isRoute: true },
 ]
 
 export default function Navbar() {
