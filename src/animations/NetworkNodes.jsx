@@ -8,10 +8,15 @@ export default function NetworkNodes({ color = '#1a3fbf', nodeCount = 30, opacit
     if (!canvas) return
     const ctx = canvas.getContext('2d')
 
+    // Halve node count on small screens (under 480px) to save CPU
+    const isSmallDevice = window.innerWidth < 480
+    const effectiveCount = isSmallDevice ? Math.max(6, Math.floor(nodeCount / 2)) : nodeCount
+
+    const dpr = isSmallDevice ? 1 : 2
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      canvas.width = canvas.offsetWidth * dpr
+      canvas.height = canvas.offsetHeight * dpr
+      ctx.scale(dpr, dpr)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -19,7 +24,7 @@ export default function NetworkNodes({ color = '#1a3fbf', nodeCount = 30, opacit
     const W = () => canvas.offsetWidth
     const H = () => canvas.offsetHeight
 
-    const nodes = Array.from({ length: nodeCount }, () => ({
+    const nodes = Array.from({ length: effectiveCount }, () => ({
       x: Math.random() * W(),
       y: Math.random() * H(),
       vx: (Math.random() - 0.5) * 0.3,
