@@ -10,6 +10,8 @@ const GlobalNetwork = lazy(() => import('./pages/GlobalNetwork'))
 const Events = lazy(() => import('./pages/Events'))
 const Contact = lazy(() => import('./pages/Contact'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
+const InsightsList = lazy(() => import('./pages/InsightsList'))
+const InsightArticle = lazy(() => import('./pages/InsightArticle'))
 const Gallery = lazy(() => import('./pages/Gallery'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
@@ -30,6 +32,8 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/contact" element={<Contact />} />
         <Route path="/app" element={<SoccerexApp />} />
+        <Route path="/insights" element={<InsightsList />} />
+        <Route path="/insights/:slug" element={<InsightArticle />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/europe-2026" element={<Europe2026 />} />
           <Route path="/press/:slug" element={<PressRelease />} />
