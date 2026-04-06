@@ -40,8 +40,18 @@ export default function NetworkNodes({ color = '#1a3fbf', nodeCount = 30, opacit
     const g = parseInt(color.slice(3,5), 16)
     const b = parseInt(color.slice(5,7), 16)
 
+    // On mobile (<768px), throttle to ~30fps to save battery + CPU
+    const isMobile = window.innerWidth < 768
+    const frameInterval = isMobile ? 33 : 0 // ~30fps vs uncapped
+    let lastFrame = 0
+
     let animId
-    function draw() {
+    function draw(now) {
+      if (isMobile && now - lastFrame < frameInterval) {
+        animId = requestAnimationFrame(draw)
+        return
+      }
+      lastFrame = now
       ctx.clearRect(0, 0, W(), H())
 
       nodes.forEach(n => {
@@ -88,6 +98,7 @@ export default function NetworkNodes({ color = '#1a3fbf', nodeCount = 30, opacit
 
     animId = requestAnimationFrame(draw)
     return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', resize) }
+    // eslint-disable-next-line
   }, [color, nodeCount, opacity])
 
   return (

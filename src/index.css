@@ -476,10 +476,12 @@
   to { transform: translate(2%, 4%) rotate(0.5deg); }
 }
 
-/* ─── Tablet ─────────────────────────────────────────────────────────────── */
+/* ─── Tablet + Phone performance ─────────────────────────────────────────── */
 @media (max-width: 768px) {
   .hero-image-layer {
     filter: saturate(0.25) sepia(0.15) brightness(0.75);
+    /* Kill ken burns on mobile, saves a continuous compositor layer */
+    animation: none !important;
   }
   .hero-overlay {
     background: linear-gradient(180deg, rgba(5,13,26,0.6) 0%, rgba(5,13,26,0.5) 40%, rgba(5,13,26,0.65) 70%, rgba(9,32,62,0.9) 100%);
@@ -494,6 +496,24 @@
     flex-direction: column;
     gap: 0.75rem;
   }
+
+  /* Remove the 3 oversized outline SVGs entirely on mobile (3 large layer repaints) */
+  .hero-outline-30s {
+    display: none !important;
+  }
+
+  /* Keep breathing on digits but simplify: no translate, just gentle scale */
+  .hero-text-visible .hero-digit-3 {
+    animation: breathe-mobile 8s ease-in-out 2s infinite;
+  }
+  .hero-text-visible .hero-digit-0 {
+    animation: breathe-mobile 10s ease-in-out 3s infinite;
+  }
+}
+
+@keyframes breathe-mobile {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
 }
 
 /* ─── Small mobile (≤ 420px) ─────────────────────────────────────────────── */
