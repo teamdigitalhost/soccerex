@@ -21,7 +21,7 @@ function useScrollAnimations() {
           }
         })
       },
-      { threshold: 0.05, rootMargin: '0px 0px 80px 0px' }
+      { threshold: 0.01, rootMargin: '0px 0px 200px 0px' }
     )
 
     document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal, .underline-grow, .section-divider').forEach((el) => {
@@ -97,20 +97,20 @@ function UpcomingEventSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: headline */}
           <div>
-            <div className="slide-left" style={{ marginBottom: '1.5rem' }}>
+            <div className="fade-up" style={{ marginBottom: '1.5rem' }}>
               <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-widest rounded-full" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff' }}>
                 <span className="w-2 h-2 rounded-full" style={{ background: '#c8302c', boxShadow: '0 0 12px #c8302c', animation: 'node-pulse 2s infinite' }} />
                 30th Anniversary Edition
               </span>
             </div>
-            <h2 className="font-heading font-bold text-white leading-[1.05] mb-4 slide-left" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)' }}>
+            <h2 className="font-heading font-bold text-white leading-[1.05] mb-4 fade-up" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)' }}>
               Total Football.{' '}<span style={{ color: '#c8302c' }}>Coming Home</span>{' '}for Business.
             </h2>
-            <p className="font-body text-white/50 uppercase tracking-widest text-sm mb-6 slide-left">Connect. Lead. Innovate.</p>
-            <p className="font-body text-white/70 leading-relaxed mb-8 slide-left" style={{ fontSize: '1.05rem', maxWidth: '520px' }}>
+            <p className="font-body text-white/50 uppercase tracking-widest text-sm mb-6 fade-up">Connect. Lead. Innovate.</p>
+            <p className="font-body text-white/70 leading-relaxed mb-8 fade-up" style={{ fontSize: '1.05rem', maxWidth: '520px' }}>
               In the year we celebrate our 30th birthday, Soccerex Europe returns to Amsterdam for its third consecutive edition, bringing together the world's most influential football executives, clubs, leagues, federations, brands, investors, and innovators to shape the future of the sport.
             </p>
-            <div className="flex flex-wrap gap-3 slide-left">
+            <div className="flex flex-wrap gap-3 fade-up">
               <a href="/events/europe/2026/agenda-concept.pdf" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 transition-all duration-300 cursor-pointer"
                 style={{ background: '#c8302c', border: 'none', color: '#fff', textDecoration: 'none' }}>
@@ -125,7 +125,7 @@ function UpcomingEventSection() {
           </div>
 
           {/* Right: event card */}
-          <div className="slide-right">
+          <div className="fade-up">
             <div style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
               backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)',
@@ -172,7 +172,7 @@ function UpcomingEventSection() {
         </div>
 
         {/* Stats bar */}
-        <div className="grid grid-cols-3 gap-8 mt-12 pt-10 scale-up" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="grid grid-cols-3 gap-8 mt-12 pt-10 fade-up" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           {[{ num: '55', label: 'Physical Events' }, { num: '79.3k+', label: 'Attendees' }, { num: '23', label: 'Cities' }].map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="font-heading font-bold" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', color: '#fff' }}>{stat.num}</p>
