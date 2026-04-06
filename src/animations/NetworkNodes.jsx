@@ -8,8 +8,9 @@ export default function NetworkNodes({ color = '#1a3fbf', nodeCount = 30, opacit
     if (!canvas) return
     const ctx = canvas.getContext('2d')
 
-    // Halve node count on small screens (under 480px) to save CPU
-    const isSmallDevice = window.innerWidth < 480
+    // Halve node count on the smallest phones (under 390px, e.g. iPhone SE/Mini)
+    // Pro Max (430px) and larger get the full effect
+    const isSmallDevice = window.innerWidth < 390
     const effectiveCount = isSmallDevice ? Math.max(6, Math.floor(nodeCount / 2)) : nodeCount
 
     const dpr = isSmallDevice ? 1 : 2
