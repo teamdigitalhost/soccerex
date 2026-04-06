@@ -266,11 +266,27 @@ export default function InsightsList() {
   )
 }
 
-// ─── Article row (text-forward, like the live site) ─────────────────────────
+// ─── Article row (image when available, text-forward otherwise) ─────────────
 function ArticleRow({ article, index }) {
   const displayCats = article.categories.filter((c) => c !== 'Uncategorized')
+  const hasImage = !!article.featuredImage
   return (
     <div className="fade-up" style={{ marginBottom: '40px', paddingBottom: '40px', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
+      <Link to={`/insights/${article.slug}`} className="block" style={{ textDecoration: 'none' }}>
+        {/* Show image when available */}
+        {hasImage && (
+          <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', marginBottom: '20px', aspectRatio: '16/8' }}>
+            <img src={article.featuredImage} alt="" loading="lazy" style={{
+              width: '100%', height: '100%', objectFit: 'cover', display: 'block',
+              transition: 'transform 0.5s, filter 0.3s', filter: 'saturate(0.9)',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.04)'; e.currentTarget.style.filter = 'saturate(1.1)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.filter = 'saturate(0.9)' }}
+            />
+          </div>
+        )}
+      </Link>
+
       {/* Category + date */}
       <div className="flex flex-wrap items-center gap-3 mb-3">
         {displayCats.map((cat) => (
