@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-import gsap from 'gsap'
 
 const navLinks = [
   { label: 'Events', to: '/events', isRoute: true },
@@ -12,12 +11,9 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const overlayRef = useRef(null)
-  const linksRef = useRef([])
   const location = useLocation()
   const navigate = useNavigate()
   const isHome = location.pathname === '/'
-  // Force opaque on inner pages so the nav is always clearly visible
   const solid = scrolled || !isHome
 
   useEffect(() => {
@@ -32,7 +28,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Scroll to top on route change unless a scroll target was requested via state
   useEffect(() => {
     if (!location.state?.scrollTo) window.scrollTo(0, 0)
   }, [location.pathname, location.state])
@@ -40,8 +35,6 @@ export default function Navbar() {
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden'
-      gsap.fromTo(overlayRef.current, { x: '100%' }, { x: '0%', duration: 0.45, ease: 'power3.out' })
-      gsap.fromTo(linksRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.09, delay: 0.2, ease: 'power2.out' })
     } else {
       document.body.style.overflow = ''
     }
@@ -54,7 +47,6 @@ export default function Navbar() {
       const el = document.querySelector(id)
       if (el) el.scrollIntoView({ behavior: 'smooth' })
     } else {
-      // On inner pages, route home then scroll to the section once it mounts
       navigate('/', { state: { scrollTo: id } })
     }
   }
@@ -73,18 +65,11 @@ export default function Navbar() {
 
           <div className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
-              link.isRoute ? (
-                <Link key={link.to} to={link.to}
-                  className="font-body font-semibold text-xs uppercase tracking-[0.15em] transition-colors duration-200 text-white/85 hover:text-white cursor-pointer whitespace-nowrap"
-                  style={{ textDecoration: 'none' }}>
-                  {link.label}
-                </Link>
-              ) : (
-                <button key={link.to} onClick={() => scrollTo(link.to)}
-                  className="font-body font-semibold text-xs uppercase tracking-[0.15em] transition-colors duration-200 text-white/85 hover:text-white bg-transparent border-none cursor-pointer whitespace-nowrap">
-                  {link.label}
-                </button>
-              )
+              <Link key={link.to} to={link.to}
+                className="font-body font-semibold text-xs uppercase tracking-[0.15em] transition-colors duration-200 text-white/85 hover:text-white cursor-pointer whitespace-nowrap"
+                style={{ textDecoration: 'none' }}>
+                {link.label}
+              </Link>
             ))}
           </div>
 
@@ -103,38 +88,29 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {menuOpen && (
-        <div ref={overlayRef} className="fixed inset-0 z-50 flex flex-col" style={{ background: '#09203e', transform: 'translateX(100%)' }}>
-          <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid rgba(191,177,112,0.2)' }}>
-            <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '28px', width: 'auto' }} />
-            <button onClick={() => setMenuOpen(false)} className="w-11 h-11 flex items-center justify-center text-white bg-transparent border-none cursor-pointer" aria-label="Close menu">
-              <X size={22} />
-            </button>
-          </div>
-          <div className="flex-1 flex flex-col items-start justify-center gap-1 px-8">
-            {navLinks.map((link, i) => (
-              link.isRoute ? (
-                <Link key={link.to} to={link.to} ref={el => linksRef.current[i] = el} onClick={() => setMenuOpen(false)}
-                  className="font-heading font-bold text-white opacity-0 py-3 uppercase tracking-[0.05em] hover:text-gold transition-colors cursor-pointer text-left"
-                  style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', textDecoration: 'none', display: 'block' }}>
-                  {link.label}
-                </Link>
-              ) : (
-                <button key={link.to} ref={el => linksRef.current[i] = el} onClick={() => scrollTo(link.to)}
-                  className="font-heading font-bold text-white opacity-0 py-3 uppercase tracking-[0.05em] hover:text-gold transition-colors bg-transparent border-none cursor-pointer text-left"
-                  style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)' }}>
-                  {link.label}
-                </button>
-              )
-            ))}
-            <Link ref={el => linksRef.current[navLinks.length] = el} to="/contact" onClick={() => setMenuOpen(false)}
-              className="inline-flex items-center gap-2 text-navy font-mono text-xs uppercase tracking-[0.2em] px-8 py-4 mt-6 opacity-0 transition-all duration-300 cursor-pointer border-none"
-              style={{ background: '#bfb170', textDecoration: 'none' }}>
-              Get in Touch
-            </Link>
-          </div>
+      {/* Mobile menu overlay, CSS-only animation (no GSAP) */}
+      <div className={`nav-mobile-overlay ${menuOpen ? 'nav-mobile-open' : ''}`} style={{ background: '#09203e' }}>
+        <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: '1px solid rgba(191,177,112,0.2)' }}>
+          <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '28px', width: 'auto' }} />
+          <button onClick={() => setMenuOpen(false)} className="w-11 h-11 flex items-center justify-center text-white bg-transparent border-none cursor-pointer" aria-label="Close menu">
+            <X size={22} />
+          </button>
         </div>
-      )}
+        <div className="flex-1 flex flex-col items-start justify-center gap-1 px-8">
+          {navLinks.map((link, i) => (
+            <Link key={link.to} to={link.to} onClick={() => setMenuOpen(false)}
+              className="nav-mobile-link font-heading font-bold text-white py-3 uppercase tracking-[0.05em] hover:text-gold transition-colors cursor-pointer text-left"
+              style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', textDecoration: 'none', display: 'block', transitionDelay: menuOpen ? `${150 + i * 80}ms` : '0ms' }}>
+              {link.label}
+            </Link>
+          ))}
+          <Link to="/contact" onClick={() => setMenuOpen(false)}
+            className="nav-mobile-link inline-flex items-center gap-2 text-navy font-mono text-xs uppercase tracking-[0.2em] px-8 py-4 mt-6 cursor-pointer border-none"
+            style={{ background: '#bfb170', textDecoration: 'none', transitionDelay: menuOpen ? `${150 + navLinks.length * 80}ms` : '0ms' }}>
+            Get in Touch
+          </Link>
+        </div>
+      </div>
     </>
   )
 }

@@ -7,8 +7,8 @@ import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
 import ImageGrid from '../components/ImageGrid'
-import InteractiveGlobe from '../components/InteractiveGlobe'
-import { Player } from '@lottiefiles/react-lottie-player'
+import { lazy, Suspense } from 'react'
+const InteractiveGlobe = lazy(() => import('../components/InteractiveGlobe'))
 
 // Intersection Observer for fade-up animations
 function useScrollAnimations() {
@@ -21,7 +21,7 @@ function useScrollAnimations() {
           }
         })
       },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.05, rootMargin: '0px 0px 80px 0px' }
     )
 
     document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal, .underline-grow, .section-divider').forEach((el) => {
@@ -97,20 +97,20 @@ function UpcomingEventSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: headline */}
           <div>
-            <div className="fade-up" style={{ marginBottom: '1.5rem' }}>
+            <div className="slide-left" style={{ marginBottom: '1.5rem' }}>
               <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-widest rounded-full" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff' }}>
                 <span className="w-2 h-2 rounded-full" style={{ background: '#c8302c', boxShadow: '0 0 12px #c8302c', animation: 'node-pulse 2s infinite' }} />
                 30th Anniversary Edition
               </span>
             </div>
-            <h2 className="font-heading font-bold text-white leading-[1.05] mb-4 fade-up" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)' }}>
+            <h2 className="font-heading font-bold text-white leading-[1.05] mb-4 slide-left" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)' }}>
               Total Football.{' '}<span style={{ color: '#c8302c' }}>Coming Home</span>{' '}for Business.
             </h2>
-            <p className="font-body text-white/50 uppercase tracking-widest text-sm mb-6 fade-up">Connect. Lead. Innovate.</p>
-            <p className="font-body text-white/70 leading-relaxed mb-8 fade-up" style={{ fontSize: '1.05rem', maxWidth: '520px' }}>
+            <p className="font-body text-white/50 uppercase tracking-widest text-sm mb-6 slide-left">Connect. Lead. Innovate.</p>
+            <p className="font-body text-white/70 leading-relaxed mb-8 slide-left" style={{ fontSize: '1.05rem', maxWidth: '520px' }}>
               In the year we celebrate our 30th birthday, Soccerex Europe returns to Amsterdam for its third consecutive edition, bringing together the world's most influential football executives, clubs, leagues, federations, brands, investors, and innovators to shape the future of the sport.
             </p>
-            <div className="flex flex-wrap gap-3 fade-up">
+            <div className="flex flex-wrap gap-3 slide-left">
               <a href="/events/europe/2026/agenda-concept.pdf" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 transition-all duration-300 cursor-pointer"
                 style={{ background: '#c8302c', border: 'none', color: '#fff', textDecoration: 'none' }}>
@@ -125,7 +125,7 @@ function UpcomingEventSection() {
           </div>
 
           {/* Right: event card */}
-          <div className="fade-up">
+          <div className="slide-right">
             <div style={{
               background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
               backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)',
@@ -172,7 +172,7 @@ function UpcomingEventSection() {
         </div>
 
         {/* Stats bar */}
-        <div className="grid grid-cols-3 gap-8 mt-12 pt-10 fade-up" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="grid grid-cols-3 gap-8 mt-12 pt-10 scale-up" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           {[{ num: '55', label: 'Physical Events' }, { num: '79.3k+', label: 'Attendees' }, { num: '23', label: 'Cities' }].map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="font-heading font-bold" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', color: '#fff' }}>{stat.num}</p>
@@ -211,14 +211,8 @@ function MeetingPointSection() {
           </h2>
           <div className="fade-up" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
 
-          {/* Location map Lottie animation */}
-          <div className="fade-up" style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)', opacity: 0.15 }}>
-            <Player
-              autoplay
-              loop
-              src="/animations/location-map.json"
-              style={{ width: 'clamp(200px, 28vw, 320px)', height: 'auto' }}
-            />
+          <div className="fade-up" style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
+            <Globe size={48} style={{ color: 'rgba(9,32,62,0.15)' }} />
           </div>
         </div>
         <div>
@@ -449,6 +443,7 @@ function SocialProofSection() {
               <img
                 src={logo.src}
                 alt={logo.alt}
+                loading="lazy"
                 style={{
                   height: '32px', width: 'auto', objectFit: 'contain',
                 }}
@@ -555,18 +550,24 @@ function TestimonialsSection() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-0 fade-up" style={{ borderRadius: '16px', overflow: 'hidden', minHeight: '400px' }}>
           {/* Photo side */}
           <div className="md:col-span-5 relative" style={{ minHeight: '300px' }}>
-            {TESTIMONIALS.map((item, i) => (
-              <img
-                key={item.author}
-                src={item.img}
-                alt={item.author}
-                style={{
-                  position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
-                  opacity: i === active ? 1 : 0,
-                  transition: 'opacity 0.8s ease',
-                }}
-              />
-            ))}
+            {TESTIMONIALS.map((item, i) => {
+              // Only render active + next for performance (2 instead of 8)
+              const next = (active + 1) % TESTIMONIALS.length
+              if (i !== active && i !== next) return null
+              return (
+                <img
+                  key={item.author}
+                  src={item.img}
+                  alt={item.author}
+                  loading="lazy"
+                  style={{
+                    position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
+                    opacity: i === active ? 1 : 0,
+                    transition: 'opacity 0.8s ease',
+                  }}
+                />
+              )
+            })}
           </div>
 
           {/* Quote side */}
@@ -720,7 +721,9 @@ function HeritageMapSection() {
       </div>
 
       <div className="fade-up" style={{ marginTop: '-6vw' }}>
-        <InteractiveGlobe />
+        <Suspense fallback={<div style={{ height: '600px' }} />}>
+          <InteractiveGlobe />
+        </Suspense>
       </div>
     </section>
   )

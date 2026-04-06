@@ -359,17 +359,8 @@ export default function HeroSlideshow() {
         // Build a fresh shuffled playlist: heritage every 3rd, modern randomized
         ALL_IMAGES = buildPlaylist(data.heritage || [], data.modern || [])
         setImagesLoaded(true)
-        // Preload first 5 immediately
-        ALL_IMAGES.slice(0, 5).forEach((src) => { new Image().src = src })
-        // Lazy preload the rest in batches
-        let i = 5
-        const preloadBatch = () => {
-          const batch = ALL_IMAGES.slice(i, i + 10)
-          batch.forEach((src) => { new Image().src = src })
-          i += 10
-          if (i < ALL_IMAGES.length) setTimeout(preloadBatch, 500)
-        }
-        setTimeout(preloadBatch, 2000)
+        // Only preload the first 3 images; the rest load via rolling window
+        ALL_IMAGES.slice(0, 3).forEach((src) => { new Image().src = src })
       })
     const t = setTimeout(() => setTextReady(true), 500)
     return () => clearTimeout(t)
@@ -383,6 +374,11 @@ export default function HeroSlideshow() {
       setTimeout(() => {
         setCurrentImage((prev) => {
           const next = (prev + 1) % ALL_IMAGES.length
+          // Rolling preload: preload the 2 images ahead
+          const ahead1 = (next + 1) % ALL_IMAGES.length
+          const ahead2 = (next + 2) % ALL_IMAGES.length
+          new Image().src = ALL_IMAGES[ahead1]
+          new Image().src = ALL_IMAGES[ahead2]
           // At loop boundary, trigger gold flash
           if (next === 0) {
             setTransitioning(true)

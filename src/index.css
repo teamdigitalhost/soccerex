@@ -1051,3 +1051,70 @@
     margin: -6vw auto -10vw;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* MOBILE NAV (CSS transitions, no GSAP)                                       */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.nav-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.nav-mobile-overlay.nav-mobile-open {
+  transform: translateX(0%);
+}
+
+.nav-mobile-link {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out, color 0.2s;
+}
+.nav-mobile-open .nav-mobile-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* REDUCED MOTION for older/low-power devices                                  */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Disable all scroll-triggered animations */
+  .fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  /* Disable marquee scroll */
+  .gn-marquee-track {
+    animation: none !important;
+  }
+  /* Disable NetworkNodes canvas (it still renders but no RAF loop) */
+  canvas {
+    animation: none !important;
+  }
+  /* Disable contact form entrance */
+  .contact-form-panel {
+    animation: none !important;
+  }
+  .contact-form-panel > * {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  /* Disable nav transitions */
+  .nav-mobile-overlay {
+    transition: none !important;
+  }
+  .nav-mobile-link {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
