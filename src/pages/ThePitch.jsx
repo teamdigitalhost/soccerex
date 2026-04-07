@@ -333,20 +333,17 @@ export default function ThePitch() {
         </div>
       </section>
 
-      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
+      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
 
       {/* ═══ INTEREST FORM ════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(9,32,62,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.03) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }} />
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+        <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '720px', margin: '0 auto' }}>
-          <p className="section-label mb-4 fade-up text-center" style={{ color: '#09203e', fontWeight: 600 }}>APPLY NOW</p>
-          <h2 className="font-heading font-bold leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
+          <p className="section-label text-gold mb-4 fade-up text-center">APPLY NOW</p>
+          <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-center text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             Apply to <span style={{ color: '#bfb170' }}>The Pitch</span>
           </h2>
-          <div className="fade-up mx-auto mb-10" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
+          <div className="fade-up mx-auto mb-10" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #bfb170, transparent)' }} />
 
           <form onSubmit={handleSubmit} className="fade-up" style={{
             background: '#fff',
@@ -432,9 +429,9 @@ export default function ThePitch() {
                 <span style={{ color: '#bfb170', fontWeight: 600 }}>partner@soccerex.com</span>.
               </p>
               <button type="submit" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
-                style={{ background: '#09203e', color: '#fff', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: 'pointer', transition: 'all 0.25s' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.color = '#09203e' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e'; e.currentTarget.style.color = '#fff' }}
+                style={{ background: '#bfb170', color: '#09203e', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: 'pointer', borderRadius: '8px', transition: 'all 0.25s' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#d4c78e' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#bfb170' }}
               >
                 {submitted ? <><Check size={16} /> Sent</> : <>Apply Now <ArrowRight size={16} /></>}
               </button>

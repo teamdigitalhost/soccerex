@@ -147,7 +147,7 @@ const SPEAKERS = [
   { name: 'Gijs de Jong', title: 'General Secretary, KNVB' },
   { name: 'Brad Friedel', title: 'Head of Strategic Partnerships, Goalkeeper' },
   { name: 'Anthony Taylor', title: 'Elite Referee, PGMOL' },
-  { name: 'Eric Wynalda', title: 'CEO, The Wynalda Group — Sports & Entertainment' },
+  { name: 'Eric Wynalda', title: 'CEO, The Wynalda Group , Sports & Entertainment' },
   { name: 'Oguchi Onyewu', title: 'Vice President of Sporting, U.S. Soccer Federation' },
   { name: 'Alexi Lalas', title: 'Broadcaster, FOX Sports' },
   { name: 'Marlo Sweatman', title: 'Professional Soccer Player, Brooklyn FC' },

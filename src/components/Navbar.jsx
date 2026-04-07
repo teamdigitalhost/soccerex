@@ -96,11 +96,12 @@ export default function Navbar() {
                   </button>
                   {/* Dropdown */}
                   <div className="nav-dropdown" style={{
-                    position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)',
+                    position: 'absolute', top: '100%', left: '50%',
                     paddingTop: '12px',
                     opacity: dropdownOpen ? 1 : 0,
+                    transform: `translateX(-50%) translateY(${dropdownOpen ? '0' : '-8px'})`,
                     pointerEvents: dropdownOpen ? 'auto' : 'none',
-                    transition: 'opacity 0.2s, transform 0.2s',
+                    transition: 'opacity 0.25s, transform 0.25s',
                   }}>
                     <div style={{
                       background: 'rgba(9,32,62,0.98)', backdropFilter: 'blur(20px)',

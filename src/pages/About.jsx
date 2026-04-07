@@ -143,7 +143,7 @@ export default function About() {
             <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.6rem)', color: '#09203e' }}>
               To Fuel The Global Growth of the{' '}
               <span style={{ color: '#bfb170' }}>Football Community</span>{' '}
-              Through World-Class Events, Insights, & Partnerships.
+              Through World-Class Events, Insights, and Partnerships.
             </h2>
             <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
             <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: '#444', maxWidth: '720px' }}>
@@ -209,7 +209,7 @@ export default function About() {
             </div>
             <div className="lg:col-span-2 slide-right">
               <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(9,32,62,0.2)' }}>
-                <img src="/images/about/discover-soccerex.jpg" alt="Soccerex event" style={{ width: '100%', display: 'block', filter: 'saturate(0.9)' }} />
+                <img src="/images/about/discover-soccerex.jpg" alt="Soccerex event" loading="lazy" style={{ width: '100%', display: 'block', filter: 'saturate(0.9)' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(9,32,62,0.1) 0%, transparent 100%)' }} />
               </div>
             </div>
@@ -426,7 +426,7 @@ export default function About() {
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(9,32,62,0.12)' }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(9,32,62,0.04)' }}>
                 <div style={{ width: '100%', height: '140px', overflow: 'hidden', position: 'relative' }}>
-                  <img src={c.img} alt={c.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />
+                  <img src={c.img} alt={c.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} onError={(e) => { e.currentTarget.style.display = 'none' }} />
                 </div>
                 <div style={{ padding: '14px 18px' }}>
                   <p className="font-body font-semibold text-sm leading-tight" style={{ color: '#09203e' }}>{c.name}</p>

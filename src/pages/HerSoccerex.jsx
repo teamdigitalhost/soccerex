@@ -212,19 +212,18 @@ export default function HerSoccerex() {
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
       {/* ═══ BIG QUOTE ═════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={15} opacity={0.08} />
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
         <div className="relative z-10 text-center fade-up" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div className="mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #bfb170, transparent)' }} />
-          <blockquote className="font-heading font-bold text-white leading-tight" style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)' }}>
+          <div className="mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
+          <blockquote className="font-heading font-bold leading-tight" style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', color: '#09203e' }}>
             "Not an initiative. Not a thematic track.{' '}
             <span style={{ color: '#bfb170' }}>A pillar.</span>"
           </blockquote>
-          <div className="mt-6 mx-auto" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #bfb170, transparent)' }} />
+          <div className="mt-6 mx-auto" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
         </div>
       </section>
 
-      <PixelDivider color="#0d2b52" layers={4} height={90} speed={0.5} />
+      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
       {/* ═══ FOUR PILLARS ═══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>

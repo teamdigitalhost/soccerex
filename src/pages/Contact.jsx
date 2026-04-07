@@ -215,7 +215,7 @@ export default function Contact() {
           {/* Step 1: Inquiry type picker */}
           <div className="mb-10">
             <p className="font-mono uppercase tracking-[0.15em] mb-5 fade-up" style={{ fontSize: '0.72rem', color: '#09203e', fontWeight: 600 }}>
-              Step 1 — What brings you here?
+              Step 1 : What brings you here?
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {INQUIRY_TYPES.map((t) => {
@@ -284,7 +284,7 @@ export default function Contact() {
               </div>
               <div>
                 <p className="font-mono uppercase tracking-[0.12em]" style={{ fontSize: '0.68rem', color: '#bfb170', fontWeight: 600, marginBottom: '4px' }}>
-                  Step 2 — Your Details
+                  Step 2 : Your Details
                 </p>
                 <h3 className="font-heading font-bold" style={{ fontSize: '1.25rem', color: '#09203e', marginBottom: '2px' }}>{inquiry.label}</h3>
                 <p className="font-body" style={{ fontSize: '0.88rem', color: '#666' }}>{inquiry.desc}</p>

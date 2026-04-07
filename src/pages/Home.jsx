@@ -979,7 +979,7 @@ function VerticalsShowcase() {
                   <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
                     <Icon size={26} color="#09203e" strokeWidth={2} />
                   </div>
-                  <span className="inline-block font-mono uppercase tracking-[0.15em] mb-4" style={{ fontSize: '0.6rem', color: '#bfb170', background: 'rgba(191,177,112,0.12)', padding: '4px 12px', borderRadius: '4px', fontWeight: 600 }}>Coming Soon</span>
+                  <span className="inline-block font-mono uppercase tracking-[0.15em] mb-4" style={{ fontSize: '0.6rem', color: '#bfb170', background: 'rgba(191,177,112,0.12)', padding: '4px 12px', borderRadius: '4px', fontWeight: 600 }}>New</span>
                   <h3 className="font-heading font-bold mb-3" style={{ fontSize: '1.4rem', color: '#fff' }}>{v.title}</h3>
                   <p className="font-body mb-6" style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>{v.tagline}</p>
                   <span className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.12em]" style={{ fontSize: '0.78rem', color: '#bfb170' }}>
@@ -1016,7 +1016,7 @@ export default function Home() {
     <>
       <HeroSlideshow />
       <UpcomingEventSection />
-      <PixelDivider color="#1a0000" layers={4} height={90} speed={0.6} />
+      <PixelDivider color="#09203e" layers={4} height={90} speed={0.6} />
       <PlatformSection />
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
       <VerticalsShowcase />
