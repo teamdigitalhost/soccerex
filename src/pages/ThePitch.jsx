@@ -333,7 +333,7 @@ export default function ThePitch() {
         </div>
       </section>
 
-      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
+      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
       {/* ═══ INTEREST FORM ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>

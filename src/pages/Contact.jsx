@@ -374,9 +374,9 @@ export default function Contact() {
                 <span style={{ color: '#bfb170', fontWeight: 600 }}>{inquiry.email}</span>.
               </p>
               <button type="submit" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
-                style={{ background: '#09203e', color: '#fff', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: 'pointer', transition: 'all 0.25s' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.color = '#09203e' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e'; e.currentTarget.style.color = '#fff' }}
+                style={{ background: '#bfb170', color: '#09203e', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: 'pointer', transition: 'all 0.25s' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#d4c78e' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#bfb170' }}
               >
                 {submitted ? <><Check size={16} /> Sent</> : <>Send Message <ArrowRight size={16} /></>}
               </button>

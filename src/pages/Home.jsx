@@ -843,43 +843,6 @@ function FinalCTASection() {
   )
 }
 
-// ─── FOOTER ─────────────────────────────────────────────────────────────────
-function Footer() {
-  const footerLinks = ['Events', 'About', 'Attend', 'Partner', 'Content']
-
-  return (
-    <footer className="relative" style={{ background: '#050d1a', borderTop: '1px solid rgba(191,177,112,0.1)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(48px,6vw,80px) clamp(24px,5vw,80px)' }}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
-          {/* Logo + tagline */}
-          <div>
-            <span className="font-heading font-bold text-white tracking-[0.08em] text-xl block mb-3">SOCCEREX</span>
-            <p className="font-mono text-xs text-white/40 uppercase tracking-[0.15em]">30 Years of Football Business</p>
-          </div>
-
-          {/* Nav links */}
-          <div className="flex flex-wrap gap-x-6 gap-y-2 md:justify-center">
-            {footerLinks.map((link) => (
-              <span key={link} className="font-body text-sm text-white/50 hover:text-white/80 transition-colors cursor-pointer">{link}</span>
-            ))}
-          </div>
-
-          {/* Social placeholders + copyright */}
-          <div className="md:text-right">
-            <div className="flex gap-3 mb-4 md:justify-end">
-              {['X', 'LI', 'IG'].map((s) => (
-                <div key={s} className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-mono text-white/30 cursor-pointer hover:text-white/60 transition-colors" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
-                  {s}
-                </div>
-              ))}
-            </div>
-            <p className="font-body text-xs text-white/30">&copy; 2026 Soccerex. All rights reserved.</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-  )
-}
 
 // ─── SOCCEREX 2.0 PLATFORM SECTION ──────────────────────────────────────────
 const PLATFORM_PILLARS = [
@@ -1016,17 +979,17 @@ export default function Home() {
     <>
       <HeroSlideshow />
       <UpcomingEventSection />
-      <PixelDivider color="#09203e" layers={4} height={90} speed={0.6} />
+      <PixelDivider color="#1a0000" layers={4} height={90} speed={0.6} />
       <PlatformSection />
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
       <VerticalsShowcase />
       <PixelDivider color="#0d2b52" layers={4} height={90} speed={0.5} />
       <MeetingPointSection />
-      <TopoDivider color="#0e2a4f" bgColor="#0c1a2e" lineOnly />
+      <PixelDivider color="#0e2a4f" layers={4} height={90} speed={0.5} />
       <ValuePillarsSection />
       <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
       <EventsSection />
-      <TopoDivider color="#09203e" bgColor="#061729" lineOnly />
+      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
       <SocialProofSection />
       <PixelDivider color="#09203e" layers={4} height={90} speed={0.7} />
       <ExhibitorsSection />
@@ -1035,11 +998,10 @@ export default function Home() {
       <TestimonialsSection />
       <HeritageMapSection />
       <WhySoccerexSection />
-      <TopoDivider color="#0c1a2e" bgColor="#061729" lineOnly />
+      <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <HeritageGallerySection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <FinalCTASection />
-      <Footer />
     </>
   )
 }
