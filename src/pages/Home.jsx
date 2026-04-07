@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { Users, MessageSquare, Globe, KeyRound, MapPin, ArrowRight, Calendar, Ticket, FileText, ExternalLink } from 'lucide-react'
+import { Users, MessageSquare, Globe, KeyRound, MapPin, ArrowRight, Calendar, Ticket, FileText, ExternalLink, Handshake, Heart, Rocket, Shield, Network, Brain, Target, Award } from 'lucide-react'
 import { feature } from 'topojson-client'
 import { Link, useLocation } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
@@ -881,6 +881,120 @@ function Footer() {
   )
 }
 
+// ─── SOCCEREX 2.0 PLATFORM SECTION ──────────────────────────────────────────
+const PLATFORM_PILLARS = [
+  { icon: Shield, title: 'Neutrality & Trust', desc: 'A platform where clubs, leagues, brands, and investors engage openly, without agenda or bias.' },
+  { icon: Network, title: 'Global Connectivity', desc: 'A single point of connection across markets, bringing together decision-makers from every part of the global football ecosystem.' },
+  { icon: Brain, title: 'Institutional Memory', desc: 'Long-standing relationships and accumulated insight ensure conversations and partnerships build over time, not from scratch.' },
+  { icon: Target, title: 'Commercial Gravity', desc: 'Soccerex attracts the industry\'s most relevant stakeholders, creating a concentrated environment where opportunities naturally emerge.' },
+  { icon: Award, title: 'Credibility Through Consistency', desc: 'A proven track record of delivery across global markets has established Soccerex as a trusted and reliable platform.' },
+]
+
+function PlatformSection() {
+  return (
+    <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(9,32,62,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.03) 1px, transparent 1px)',
+        backgroundSize: '60px 60px',
+      }} />
+      <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <div className="text-center mb-16">
+          <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>SOCCEREX 2.0</p>
+          <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', color: '#09203e' }}>
+            To Fuel The Global Growth of the{' '}
+            <span style={{ color: '#bfb170' }}>Football Community</span>
+          </h2>
+          <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
+          <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', color: '#444', maxWidth: '740px' }}>
+            On our 30th anniversary, Soccerex is evolving. From an events company to a year-round platform. From a place where relationships begin to a system that ensures results for our constituents. Through world-class events, insights, and partnerships.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
+          {PLATFORM_PILLARS.map((p, i) => {
+            const Icon = p.icon
+            return (
+              <div key={p.title} className="scale-up" style={{ transitionDelay: `${i * 60}ms` }}>
+                <div style={{
+                  background: '#fff', padding: '28px 22px', borderRadius: '14px',
+                  border: '1px solid rgba(9,32,62,0.06)',
+                  boxShadow: '0 8px 30px rgba(9,32,62,0.06)',
+                  height: '100%', transition: 'transform 0.3s, box-shadow 0.3s',
+                  textAlign: 'center',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(9,32,62,0.12)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(9,32,62,0.06)' }}
+                >
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                    <Icon size={22} color="#09203e" strokeWidth={2} />
+                  </div>
+                  <h3 className="font-heading font-bold mb-2" style={{ fontSize: '0.95rem', color: '#09203e' }}>{p.title}</h3>
+                  <p className="font-body" style={{ fontSize: '0.82rem', color: '#666', lineHeight: 1.5 }}>{p.desc}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── THREE VERTICALS SHOWCASE ───────────────────────────────────────────────
+const VERTICALS = [
+  { icon: Handshake, title: 'Deal Network', tagline: 'Structured dealmaking, not just networking.', to: '/deal-network' },
+  { icon: Heart, title: 'HerSoccerex', tagline: 'Women\'s football business vertical.', to: '/hersoccerex' },
+  { icon: Rocket, title: 'The Pitch', tagline: 'Football innovation meets institutional capital.', to: '/the-pitch' },
+]
+
+function VerticalsShowcase() {
+  return (
+    <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
+      <NetworkNodes color="#bfb170" nodeCount={25} opacity={0.1} />
+      <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <div className="text-center mb-14">
+          <p className="section-label text-gold mb-4 fade-up">NEW VERTICALS</p>
+          <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>
+            Introducing the{' '}
+            <span style={{ color: '#bfb170' }}>Soccerex Platform</span>
+          </h2>
+          <div className="fade-up mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #bfb170, transparent)' }} />
+          <p className="font-body text-white/65 leading-relaxed fade-up mx-auto" style={{ fontSize: '1rem', maxWidth: '640px' }}>
+            Four verticals transforming Soccerex from an events platform to a comprehensive business solution for the global football community.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {VERTICALS.map((v, i) => {
+            const Icon = v.icon
+            return (
+              <Link key={v.title} to={v.to} className="scale-up block" style={{ textDecoration: 'none', transitionDelay: `${i * 80}ms` }}>
+                <div style={{
+                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(191,177,112,0.2)',
+                  backdropFilter: 'blur(10px)', borderRadius: '16px', padding: '40px 32px',
+                  height: '100%', textAlign: 'center',
+                  transition: 'transform 0.3s, border-color 0.3s, background 0.3s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.borderColor = '#bfb170'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.2)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                    <Icon size={26} color="#09203e" strokeWidth={2} />
+                  </div>
+                  <span className="inline-block font-mono uppercase tracking-[0.15em] mb-4" style={{ fontSize: '0.6rem', color: '#bfb170', background: 'rgba(191,177,112,0.12)', padding: '4px 12px', borderRadius: '4px', fontWeight: 600 }}>Coming Soon</span>
+                  <h3 className="font-heading font-bold mb-3" style={{ fontSize: '1.4rem', color: '#fff' }}>{v.title}</h3>
+                  <p className="font-body mb-6" style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>{v.tagline}</p>
+                  <span className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.12em]" style={{ fontSize: '0.78rem', color: '#bfb170' }}>
+                    Learn more <ArrowRight size={14} />
+                  </span>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ─── HOME PAGE ──────────────────────────────────────────────────────────────
 export default function Home() {
   useScrollAnimations()
@@ -903,6 +1017,10 @@ export default function Home() {
       <HeroSlideshow />
       <UpcomingEventSection />
       <PixelDivider color="#1a0000" layers={4} height={90} speed={0.6} />
+      <PlatformSection />
+      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
+      <VerticalsShowcase />
+      <PixelDivider color="#0d2b52" layers={4} height={90} speed={0.5} />
       <MeetingPointSection />
       <TopoDivider color="#0e2a4f" bgColor="#0c1a2e" lineOnly />
       <ValuePillarsSection />

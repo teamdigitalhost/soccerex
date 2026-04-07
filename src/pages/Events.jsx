@@ -4,20 +4,8 @@ import { ArrowRight, Calendar, MapPin, Download, Quote } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 
-// ═══ UPCOMING EVENTS (2 featured) ════════════════════════════════════════════
+// ═══ UPCOMING EVENTS (3 featured) ════════════════════════════════════════════
 const UPCOMING = [
-  {
-    logo: '/images/events/logos/mena.webp',
-    label: 'SOCCEREX MENA',
-    dates: 'February 23rd - 26th, 2025',
-    city: 'Cairo, Egypt',
-    image: '/images/events/events/mena-2025-1.webp',
-    copy: [
-      'Following the success of Soccerex Europe and Miami in 2024, 2025 will see us host three large-scale events for the first time since 2019.',
-      'The football business industry\'s trifecta of major gatherings will begin with Soccerex MENA, in partnership with Sports Expo, from February 23-26. This event will be hosted in Cairo, Egypt, home of "The Pharaohs," the most successful national team in Africa Cup of Nations history.',
-    ],
-    link: 'https://soccerex.com/mena-2025/',
-  },
   {
     logo: '/images/events/logos/europe.webp',
     label: 'SOCCEREX EUROPE',
@@ -32,9 +20,27 @@ const UPCOMING = [
     link: '/europe-2026',
     internal: true,
   },
+  {
+    logo: '/images/events/logos/miami.webp',
+    label: 'SOCCEREX MIAMI',
+    dates: '2026',
+    city: 'Miami, USA',
+    image: '/images/events/events/miami-2025-1.jpg',
+    copy: 'Details coming soon.',
+    comingSoon: true,
+  },
+  {
+    logo: '/images/events/logos/mena.webp',
+    label: 'SOCCEREX RIYADH',
+    dates: '2027',
+    city: 'Riyadh, Saudi Arabia',
+    image: '/images/events/events/mena-2025-1.webp',
+    copy: 'Soccerex debuts in Riyadh, anchoring its Middle East expansion through institutional and strategic partnerships. Details coming soon.',
+    comingSoon: true,
+  },
 ]
 
-// ═══ RECENT EVENTS (6 past) ═══════════════════════════════════════════════════
+// ═══ RECENT EVENTS (7 past) ═══════════════════════════════════════════════════
 const RECENT = [
   {
     logo: '/images/events/logos/miami.webp',
@@ -224,7 +230,12 @@ function EventCard({ event, index, dark = false }) {
             {p}
           </p>
         ))}
-        {event.link && (
+        {event.comingSoon && (
+          <span className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.15em] fade-up mt-4" style={{ fontSize: '0.72rem', color: '#bfb170', background: 'rgba(191,177,112,0.1)', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
+            Coming Soon
+          </span>
+        )}
+        {event.link && !event.comingSoon && (
           event.internal ? (
             <Link to={event.link} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up mt-4"
               style={{ background: '#bfb170', color: '#09203e', padding: '16px 36px', fontSize: '0.8rem', textDecoration: 'none', transition: 'all 0.3s' }}

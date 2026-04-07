@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { ArrowRight, Globe, Users, Mic, Newspaper } from 'lucide-react'
+import { ArrowRight, Globe, Users, Mic, Newspaper, Shield, Network as NetworkIcon, Brain, Target, Award } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
@@ -128,8 +128,58 @@ export default function About() {
         </div>
       </section>
 
-      {/* Wave divider: hero → discover */}
-      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
+      {/* Wave divider: hero → mission */}
+      <PixelDivider color="#f4f3f0" layers={4} height={90} speed={0.5} />
+
+      {/* ═══ MISSION & PLATFORM PILLARS ════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'linear-gradient(rgba(9,32,62,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.03) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }} />
+        <div className="relative z-10" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div className="text-center mb-16">
+            <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>OUR MISSION</p>
+            <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.6rem)', color: '#09203e' }}>
+              To Fuel The Global Growth of the{' '}
+              <span style={{ color: '#bfb170' }}>Football Community</span>{' '}
+              Through World-Class Events, Insights, & Partnerships.
+            </h2>
+            <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
+            <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: '#444', maxWidth: '720px' }}>
+              Celebrating 30 years as the longest-running dedicated football business platform in the world, Soccerex has earned its position as the neutral ground where the global football community comes together. On our 30th anniversary, we continue to evolve. From an events company to a year-round platform. From a place where relationships begin to a system that ensures results.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              { icon: Shield, title: 'Neutrality & Trust', desc: 'Clubs, leagues, brands, and investors engage openly, without agenda or bias.' },
+              { icon: NetworkIcon, title: 'Global Connectivity', desc: 'Decision-makers from every part of the global football ecosystem, connected.' },
+              { icon: Brain, title: 'Institutional Memory', desc: 'Relationships and partnerships build over time, not from scratch.' },
+              { icon: Target, title: 'Commercial Gravity', desc: 'A concentrated environment where opportunities naturally emerge.' },
+              { icon: Award, title: 'Credibility', desc: 'A proven track record across global markets over three decades.' },
+            ].map((p, i) => {
+              const Icon = p.icon
+              return (
+                <div key={p.title} className="scale-up" style={{ transitionDelay: `${i * 50}ms` }}>
+                  <div style={{ background: '#fff', padding: '24px 18px', borderRadius: '12px', border: '1px solid rgba(9,32,62,0.06)', boxShadow: '0 6px 20px rgba(9,32,62,0.05)', height: '100%', textAlign: 'center', transition: 'transform 0.3s' }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
+                  >
+                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                      <Icon size={20} color="#09203e" strokeWidth={2} />
+                    </div>
+                    <h4 className="font-heading font-bold mb-2" style={{ fontSize: '0.85rem', color: '#09203e' }}>{p.title}</h4>
+                    <p className="font-body" style={{ fontSize: '0.78rem', color: '#666', lineHeight: 1.45 }}>{p.desc}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Wave divider: mission → discover */}
+      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
       {/* ═══ DISCOVER SOCCEREX ══════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>

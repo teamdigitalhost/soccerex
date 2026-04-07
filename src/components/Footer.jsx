@@ -95,6 +95,9 @@ export default function Footer() {
                 { label: 'About', to: '/about' },
                 { label: 'Global Network', to: '/global-network' },
                 { label: 'Insights', to: '/insights' },
+                { label: 'Deal Network', to: '/deal-network' },
+                { label: 'HerSoccerex', to: '/hersoccerex' },
+                { label: 'The Pitch', to: '/the-pitch' },
                 { label: 'Europe 2026', to: '/europe-2026' },
                 { label: 'Gallery', to: '/gallery' },
               ].map(l => (
