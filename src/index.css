@@ -938,6 +938,8 @@
   aspect-ratio: 1;
   margin: -12vw auto -16vw;
   z-index: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .globe-canvas {
@@ -1069,6 +1071,8 @@
   .globe-wrapper {
     width: clamp(400px, 120vw, 600px);
     margin: -6vw auto -10vw;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
