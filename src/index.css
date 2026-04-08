@@ -1217,7 +1217,7 @@
   /* Disable events animations */
   .ev-orb { animation: none !important; }
   .ev-ticker-track { animation: none !important; }
-  .ev-card-glow::before { animation: none !important; }
+  .ev-card-glow::after { animation: none !important; }
   .ev-ring-pulse { animation: none !important; }
   /* Disable nav transitions */
   .nav-mobile-overlay {

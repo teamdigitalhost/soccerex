@@ -242,8 +242,56 @@ export default function About() {
         </div>
       </section>
 
-      {/* Wave divider: stats → timeline */}
+      {/* Wave divider: stats → audience reach */}
       <PixelDivider color="#09203e" layers={4} height={90} speed={0.6} />
+
+      {/* ═══ AUDIENCE REACH ════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'linear-gradient(rgba(9,32,62,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.03) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }} />
+        <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div className="text-center mb-14">
+            <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>WHO WE REACH</p>
+            <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
+              Audience{' '}
+              <span style={{ color: '#bfb170' }}>Reach</span>
+            </h2>
+            <div className="fade-up mx-auto" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { title: 'Global Football Institutional Partners', desc: 'FIFA, LaLiga, CONCACAF, Premier League, Serie A, UEFA, MLS, and National Football Federations (U.S. Soccer, CBF, FA, and more).', icon: Globe },
+              { title: 'Industry Operators and Commercial Drivers', desc: 'Clubs across Europe, the Americas, Africa, and Asia. League executives and rightsholders. Major sponsors (Adidas, Puma, Coca-Cola). Broadcasters and media platforms (Sky, ESPN, Globo). Event managers, consultants, and agents.', icon: Users },
+              { title: 'Emerging Players and Economy Builders', desc: 'Sports tech startups. Investors and fund managers. Commercial advisors and dealmakers. Digital platforms and fan engagement apps. Academies, grassroots organizers, and NGO programs.', icon: ArrowRight },
+            ].map((item, i) => {
+              const Icon = item.icon
+              return (
+                <div key={item.title} className="scale-up" style={{ transitionDelay: `${i * 60}ms` }}>
+                  <div style={{
+                    background: '#fff', padding: '32px 26px', borderRadius: '14px',
+                    border: '1px solid rgba(9,32,62,0.06)',
+                    boxShadow: '0 8px 28px rgba(9,32,62,0.06)',
+                    height: '100%', transition: 'transform 0.3s, box-shadow 0.3s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(9,32,62,0.12)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(9,32,62,0.06)' }}
+                  >
+                    <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                      <Icon size={20} color="#09203e" strokeWidth={2} />
+                    </div>
+                    <h3 className="font-heading font-bold mb-3" style={{ fontSize: '1.05rem', color: '#09203e' }}>{item.title}</h3>
+                    <p className="font-body leading-relaxed" style={{ fontSize: '0.9rem', color: '#555' }}>{item.desc}</p>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
       {/* ═══ TIMELINE ══════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>

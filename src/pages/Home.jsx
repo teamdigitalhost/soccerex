@@ -108,7 +108,7 @@ function UpcomingEventSection() {
             </h2>
             <p className="font-body text-white/50 uppercase tracking-widest text-sm mb-6 fade-up">Connect. Lead. Innovate.</p>
             <p className="font-body text-white/70 leading-relaxed mb-8 fade-up" style={{ fontSize: '1.05rem', maxWidth: '520px' }}>
-              In the year we celebrate our 30th birthday, Soccerex Europe returns to Amsterdam for its third consecutive edition, bringing together the world's most influential football executives, clubs, leagues, federations, brands, investors, and innovators to shape the future of the sport.
+              Celebrating 30 years as the longest-running dedicated football business platform in the world, Soccerex has earned its position as the neutral ground where the global football community comes together. Soccerex Europe returns to Amsterdam for its third consecutive edition at the Johan Cruijff ArenA, May 2026.
             </p>
             <div className="flex flex-wrap gap-3 fade-up">
               <a href="/events/europe/2026/agenda-concept.pdf" target="_blank" rel="noopener noreferrer"
@@ -404,6 +404,12 @@ const SPONSOR_LOGOS = [
   { src: '/images/sponsors/soccer5s.png', alt: 'Soccer5s' },
   { src: '/images/sponsors/sun-global.png', alt: 'Sun Global Transportation' },
   { src: '/images/sponsors/grenada-fa.png', alt: 'Grenada Football Association' },
+  { src: '/images/global-network/nike.jpg', alt: 'Nike' },
+  { src: '/images/global-network/Adidas.jpg', alt: 'Adidas' },
+  { src: '/images/global-network/paramount_plus_logo_1_1.png', alt: 'Paramount+' },
+  { src: '/images/global-network/The_Economist_Logo_svg_1_1.png', alt: 'The Economist' },
+  { src: '/images/global-network/Forbes_Logo_1.png', alt: 'Forbes' },
+  { src: '/images/global-network/Yahoo_Sports_New_Logo_1.png', alt: 'Yahoo Sports' },
 ]
 
 const EXHIBITOR_LOGOS = [

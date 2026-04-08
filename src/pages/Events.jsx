@@ -47,7 +47,7 @@ const RECENT = [
     label: 'SOCCEREX EUROPE 2025',
     dates: 'May 19th - 21st, 2025',
     city: 'Johan Cruijff ArenA, Amsterdam',
-    image: '/images/events/events/europe-2025-2.webp', // verified: pitchside networking at stadium
+    image: '/images/events/events/europe-2025-2.webp', // VERIFIED: pitchside networking at Johan Cruijff ArenA
     copy: 'Building on the success of Soccerex Europe 2024, which featured an insightful session on how AI was transforming football and standout discussions with speakers from TikTok, Ajax, and LALIGA, the football industry\'s premier European event returned to Amsterdam in 2025. Amsterdam, full of football innovation and rich history, provided the perfect backdrop for Soccerex Europe 2025. The renowned Johan Cruijff ArenA, an international leader in sustainability and fan experience, was the ideal venue for an event that celebrated and shaped the future of the beautiful game. Having previously staged Champions League finals and UEFA Euro 2000, this year\'s event proved to be a landmark gathering for federations, leagues, clubs, brands, media, governing bodies, and legends from across the globe.',
     link: 'https://soccerex.com/europe-2025/',
   },
@@ -56,7 +56,7 @@ const RECENT = [
     label: 'SOCCEREX MIAMI 2024',
     dates: 'November 13th - 14th, 2024',
     city: 'Miami, USA',
-    image: '/images/events/events/miami-2024-keynote.jpg', // verified: Messi jersey reveal at Miami stage
+    image: '/images/events/events/miami-2024-verified.jpg', // VERIFIED: packed keynote in hotel ballroom, Miami
     copy: 'After our fourth and most recent instalment in the magic city in November 2023 which saw 29-year-old Soccerex records shattered, it was confirmed that the USA is truly the beautiful games\' adopted home. With a World Cup to look forward to in under two years (by the time of the event), broadcasting figures at an all-time high and the MLS becoming a truly global product (even being home to arguably the greatest player in history), it is a remarkably exciting time for Soccer in the Americas.',
     link: 'https://soccerex.com/miami-2024/',
   },
@@ -65,7 +65,7 @@ const RECENT = [
     label: 'SOCCEREX EUROPE 2024',
     dates: 'May 30th - 31st, 2024',
     city: 'Johan Cruijff ArenA, Amsterdam',
-    image: '/images/events/events/europe-ajax-arena.webp', // verified: Ajax arena interior
+    image: '/images/events/events/europe-2025-verified.jpg', // VERIFIED: packed keynote, blue lit venue, Europe
     copy: 'It was a memorable occasion as football returned to European soil for the first time since 2019, hosted at the iconic home of AFC Ajax. After nearly 5 years, Soccerex brought the football business community together again in Amsterdam, just before the start of the European Championships in Germany.',
     link: 'https://soccerex.com/europe-2024/',
   },
@@ -74,7 +74,7 @@ const RECENT = [
     label: 'SOCCEREX MIAMI 2023',
     dates: 'November 14th - 15th, 2023',
     city: 'Mana Wynwood Convention Center, Miami',
-    image: '/images/events/events/miami-2023-audience.jpg', // verified: packed diverse Miami audience
+    image: '/images/events/events/miami-2023-verified.jpg', // VERIFIED: outdoor "SOCCEREX MIAMI" banner with crowd
     copy: 'Soccerex Miami will be held at the wonderful Mana Wynwood Convention Center, a venue that has been leading the way in the entertainment and arts industries since 2010. 70+ speakers will take the main stage, providing insight on a myriad of topics including but not limited to, performance, broadcasting, good governance, fan engagement, athlete development, technology, analytics, and major tournaments.',
     link: 'https://soccerex.com/miami-2023/',
   },
