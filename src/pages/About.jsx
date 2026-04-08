@@ -339,51 +339,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Wave divider: timeline → pillars */}
-      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
-
-      {/* ═══ WHAT WE OFFER (4 pillars) ════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(9,32,62,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.025) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }} />
-        <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <p className="section-label mb-4 fade-up text-center" style={{ color: '#09203e', fontWeight: 600 }}>WHAT WE OFFER</p>
-          <h2 className="font-heading font-bold leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
-            Four Pillars of the <span style={{ color: '#bfb170' }}>Soccerex Experience</span>
-          </h2>
-          <div className="fade-up mx-auto mb-14" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Users, title: 'Social and Networking', desc: 'From VIP receptions to Happy Hours, iconic social evenings, and a dedicated Luna Lounge, our social platforms provide the perfect opportunity to connect.' },
-              { icon: Mic, title: 'Insight Conference', desc: 'Conference programmes packed with insight sessions delivered by thought leaders, designed to give your business a competitive edge.' },
-              { icon: Newspaper, title: 'Market Insight', desc: 'In-depth market insight on the game\'s hottest topics, spotlight interviews with industry figures, and daily football business news.' },
-              { icon: Globe, title: 'Social Media', desc: 'Follow the Soccerex social media channels for updates and weekly analysis of the latest football business news.' },
-            ].map((pillar, i) => {
-              const Icon = pillar.icon
-              return (
-                <div key={pillar.title} className="scale-up transition-all duration-300" style={{
-                  background: '#fff', borderRadius: '14px', padding: '32px 28px',
-                  border: '1px solid #e8e5e0', transitionDelay: `${i * 80}ms`,
-                  boxShadow: '0 4px 20px rgba(9,32,62,0.04)',
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(9,32,62,0.12)' }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(9,32,62,0.04)' }}>
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center mb-5" style={{ background: 'linear-gradient(135deg, rgba(191,177,112,0.15), rgba(9,32,62,0.1))', border: '1px solid rgba(191,177,112,0.3)' }}>
-                    <Icon size={24} style={{ color: '#09203e' }} />
-                  </div>
-                  <h3 className="font-heading font-semibold mb-3" style={{ color: '#09203e', fontSize: '1.15rem' }}>{pillar.title}</h3>
-                  <p className="font-body leading-relaxed" style={{ color: '#666', fontSize: '0.92rem' }}>{pillar.desc}</p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Wave divider: pillars → ethos */}
+      {/* Wave divider: timeline → ethos */}
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
       {/* ═══ ETHOS QUOTE ═══════════════════════════════════════════════════ */}
