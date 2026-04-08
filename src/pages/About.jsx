@@ -23,6 +23,7 @@ const TIMELINE = [
   { year: '2022', title: 'The Return', desc: 'Back to Miami Beach Convention Center with 2,000+ delegates, 650 rightsholders, and 100+ speakers.' },
   { year: '2024', title: 'Amsterdam and Miami', desc: 'Record-breaking events in both cities. Soccerex Europe launches at the Johan Cruyff Arena.' },
   { year: '2025', title: 'Three Continents', desc: 'MENA in Cairo, Europe in Amsterdam, Americas in Miami. The most ambitious year yet.' },
+  { year: '2026', title: '30th Anniversary', desc: 'Soccerex celebrates 30 years. Europe returns to the Johan Cruijff ArenA. The platform evolves beyond events into a year-round business solution.' },
 ]
 
 // ─── ROI case studies ───────────────────────────────────────────────────────
@@ -223,18 +224,19 @@ export default function About() {
       {/* ═══ STATS BAR ═════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#09203e', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px)' }}>
         <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
-        <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {[
-            { num: '30', label: 'Years' },
-            { num: '55', label: 'Events' },
-            { num: '24', label: 'Cities' },
-            { num: '75k+', label: 'Delegates' },
+            { num: '75000+', display: '75,000+', label: 'Attendees', sub: 'Industry professionals across six continents' },
+            { num: '54', display: '54', label: 'Events', sub: 'In major football markets worldwide' },
+            { num: '23', display: '23', label: 'Cities', sub: 'Global footprint from Miami to Macau' },
+            { num: '6', display: '6', label: 'Continents', sub: 'Engaging every major football region' },
           ].map((s) => (
             <div key={s.label} className="text-center scale-up">
-              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1 }}>
-                <AnimatedCounter target={s.num} />
+              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1 }}>
+                <AnimatedCounter target={s.display || s.num} />
               </p>
-              <p className="font-body text-white/50 text-xs uppercase tracking-widest mt-2">{s.label}</p>
+              <p className="font-heading font-bold text-white text-sm uppercase tracking-widest mt-3">{s.label}</p>
+              <p className="font-body text-white/40 text-xs mt-1" style={{ lineHeight: 1.4 }}>{s.sub}</p>
             </div>
           ))}
         </div>

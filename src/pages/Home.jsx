@@ -172,11 +172,11 @@ function UpcomingEventSection() {
         </div>
 
         {/* Stats bar */}
-        <div className="grid grid-cols-3 gap-8 mt-12 pt-10 fade-up" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          {[{ num: '55', label: 'Physical Events' }, { num: '79.3k+', label: 'Attendees' }, { num: '23', label: 'Cities' }].map((stat) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12 pt-10 fade-up" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          {[{ num: '75,000+', label: 'Attendees' }, { num: '54', label: 'Events' }, { num: '23', label: 'Cities' }, { num: '6', label: 'Continents' }].map((stat) => (
             <div key={stat.label} className="text-center">
-              <p className="font-heading font-bold" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', color: '#fff' }}>{stat.num}</p>
-              <p className="font-body text-white/50 text-xs uppercase tracking-widest">{stat.label}</p>
+              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)' }}>{stat.num}</p>
+              <p className="font-body text-white/50 text-xs uppercase tracking-widest mt-1">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -571,10 +571,10 @@ function TestimonialsSection() {
           </div>
 
           {/* Quote side */}
-          <div className="md:col-span-7 relative" style={{ background: '#bfb170', padding: 'clamp(32px, 5vw, 56px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            {/* Decorative quote marks */}
-            <span className="font-heading font-bold absolute" style={{ top: 'clamp(16px, 3vw, 32px)', left: 'clamp(24px, 4vw, 48px)', fontSize: 'clamp(3rem, 5vw, 5rem)', color: 'rgba(9,32,62,0.15)', lineHeight: 1 }}>"</span>
-            <span className="font-heading font-bold absolute" style={{ bottom: 'clamp(16px, 3vw, 32px)', right: 'clamp(24px, 4vw, 48px)', fontSize: 'clamp(3rem, 5vw, 5rem)', color: 'rgba(9,32,62,0.15)', lineHeight: 1 }}>"</span>
+          <div className="md:col-span-7 relative" style={{ background: '#bfb170', padding: 'clamp(40px, 6vw, 72px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            {/* Decorative quote marks (pushed to corners, behind text) */}
+            <span className="font-heading font-bold absolute pointer-events-none" style={{ top: '10px', left: '16px', fontSize: 'clamp(4rem, 6vw, 6rem)', color: 'rgba(9,32,62,0.08)', lineHeight: 1 }}>"</span>
+            <span className="font-heading font-bold absolute pointer-events-none" style={{ bottom: '10px', right: '16px', fontSize: 'clamp(4rem, 6vw, 6rem)', color: 'rgba(9,32,62,0.08)', lineHeight: 1 }}>"</span>
 
             <div style={{ position: 'relative', zIndex: 1 }}>
               <p className="font-body leading-relaxed mb-8" style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)', color: '#1a1a1a' }}>
@@ -713,7 +713,7 @@ function HeritageMapSection() {
       <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px) 0', position: 'relative', zIndex: 3 }}>
         <p className="section-label text-gold mb-4 fade-up">GLOBAL REACH</p>
         <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up gold-underline mx-auto" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
-          55 Events. 21 Cities. 30 Years.
+          54 Events. 23 Cities. 30 Years.
         </h2>
         <p className="font-body text-white/60 leading-relaxed fade-up mx-auto" style={{ fontSize: '1.05rem', maxWidth: '650px' }}>
           Since 1996, Soccerex has brought the football business world together across six continents. From Wembley to the Maracana, from Amsterdam to Miami, the game's leaders gather wherever Soccerex goes.
@@ -980,12 +980,10 @@ export default function Home() {
       <HeroSlideshow />
       <UpcomingEventSection />
       <PixelDivider color="#1a0000" layers={4} height={90} speed={0.6} />
-      <PlatformSection />
-      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
-      <VerticalsShowcase />
-      <PixelDivider color="#0d2b52" layers={4} height={90} speed={0.5} />
       <MeetingPointSection />
       <PixelDivider color="#0e2a4f" layers={4} height={90} speed={0.5} />
+      <HeritageMapSection />
+      <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <ValuePillarsSection />
       <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
       <EventsSection />
@@ -996,8 +994,6 @@ export default function Home() {
       <OrganisationsSection />
       <ProudSponsorSection />
       <TestimonialsSection />
-      <HeritageMapSection />
-      <WhySoccerexSection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <HeritageGallerySection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
