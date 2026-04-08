@@ -934,12 +934,13 @@
 
 .globe-wrapper {
   position: relative;
-  width: clamp(600px, 110vw, 1400px);
+  width: clamp(600px, 80vw, 1000px);
   aspect-ratio: 1;
-  margin: -12vw auto -16vw;
+  margin: -8vw auto -12vw;
   z-index: 0;
-  left: calc(50% + 200px);
-  transform: translateX(-50%) translateY(200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .globe-canvas {
@@ -1017,7 +1018,7 @@
   gap: clamp(1.5rem, 4vw, 3rem);
   position: relative;
   z-index: 2;
-  margin-top: calc(-10vw - 100px);
+  margin-top: -10vw;
 }
 .globe-stat {
   text-align: center;
@@ -1071,8 +1072,6 @@
   .globe-wrapper {
     width: clamp(400px, 120vw, 600px);
     margin: -6vw auto -10vw;
-    left: 50%;
-    transform: translateX(-50%);
   }
 }
 

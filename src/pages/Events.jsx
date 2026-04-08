@@ -387,7 +387,7 @@ export default function Events() {
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {[
             { num: '75,000+', label: 'Attendees' },
-            { num: '54', label: 'Events' },
+            { num: '57', label: 'Events' },
             { num: '100+', label: 'Speakers Per Event' },
             { num: '6', label: 'Continents' },
           ].map((s, i) => (

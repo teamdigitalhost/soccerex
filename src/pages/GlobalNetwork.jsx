@@ -269,9 +269,9 @@ const PILLARS = [
 // Stats bar numbers
 const NETWORK_STATS = [
   { num: '228', label: 'Global Partners' },
-  { num: '55', label: 'Physical Events' },
-  { num: '79k+', label: 'Delegates' },
-  { num: '24', label: 'Host Cities' },
+  { num: '57', label: 'Events' },
+  { num: '75k+', label: 'Delegates' },
+  { num: '24', label: 'Cities' },
 ]
 
 // ─── Animated counter ──────────────────────────────────────────────────────

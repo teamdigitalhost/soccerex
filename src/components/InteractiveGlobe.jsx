@@ -15,9 +15,9 @@ const CITIES = [
   { city: 'Lagos', country: 'Nigeria', lat: 6.5244, lng: 3.3792, years: '2012', label: 'West Africa Seminar' },
   { city: 'Durban', country: 'South Africa', lat: -29.8587, lng: 31.0218, years: '2012-2014', label: 'African Forum' },
   { city: 'Barbados', country: 'Barbados', lat: 13.1939, lng: -59.5432, years: '2014', label: 'Americas Forum Launch' },
-  { city: 'Dead Sea', country: 'Jordan', lat: 31.5, lng: 35.5, years: '2014-2015', label: 'Asian Forum, Middle East' },
+  { city: 'Jordan', country: 'Jordan', lat: 31.5, lng: 35.5, years: '2014-2015', label: 'Asian Forum, Middle East' },
   { city: 'Mexico City', country: 'Mexico', lat: 19.4326, lng: -99.1332, years: '2016', label: 'Americas Forum' },
-  { city: 'Doha', country: 'Qatar', lat: 25.2854, lng: 51.531, years: '2016', label: 'Asian Forum, Qatar' },
+  { city: 'Riyadh', country: 'Saudi Arabia', lat: 24.7136, lng: 46.6753, years: '2027', label: 'Soccerex Middle East Expansion' },
   { city: 'Miami', country: 'USA', lat: 25.7617, lng: -80.1918, years: '2018-2025', label: 'Soccerex Americas, Home Base', homeBase: true },
   { city: 'Zhuhai', country: 'China', lat: 22.271, lng: 113.5767, years: '2018-2019', label: 'Soccerex China' },
   { city: 'Lisbon', country: 'Portugal', lat: 38.7223, lng: -9.1393, years: '2019', label: 'European Event' },
@@ -38,6 +38,21 @@ export default function InteractiveGlobe() {
   const [isVisible, setIsVisible] = useState(false)
   const [globeSize, setGlobeSize] = useState(600)
   const [selectedCity, setSelectedCity] = useState(null)
+  const [listOpen, setListOpen] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Track screen size for collapsible behavior
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  // Default collapsed on mobile
+  useEffect(() => {
+    setListOpen(!isMobile)
+  }, [isMobile])
 
   useEffect(() => {
     const updateSize = () => {
@@ -84,6 +99,7 @@ export default function InteractiveGlobe() {
   const flyToCity = (city) => {
     if (!globeRef.current) return
     setSelectedCity(city.city)
+    if (isMobile) setListOpen(false)
     const controls = globeRef.current.controls()
     controls.autoRotate = false
     globeRef.current.pointOfView({ lat: city.lat, lng: city.lng, altitude: 1.8 }, 1200)
@@ -133,6 +149,7 @@ export default function InteractiveGlobe() {
             pointAltitude={(d) => d.homeBase ? 0.06 : (d.city === selectedCity ? 0.05 : 0.02)}
             pointRadius={(d) => d.homeBase ? 1.2 : (d.city === selectedCity ? 1.0 : 0.7)}
             pointLabel={pointLabel}
+            onPointClick={(point) => flyToCity(point)}
             labelsData={CITIES}
             labelLat="lat"
             labelLng="lng"
@@ -143,6 +160,7 @@ export default function InteractiveGlobe() {
             labelResolution={2}
             labelAltitude={(d) => d.homeBase ? 0.07 : 0.03}
             labelLabel={pointLabel}
+            onLabelClick={(label) => flyToCity(label)}
             arcsData={ARCS}
             arcStartLat="startLat"
             arcStartLng="startLng"
@@ -158,112 +176,138 @@ export default function InteractiveGlobe() {
         )}
       </div>
 
-      {/* City Directory: overlaid on the right half of the globe */}
-      <div className="hidden lg:block" style={{
+      {/* City Directory: overlaid on the right side */}
+      <div style={{
         position: 'absolute',
-        top: 'calc(50% - 100px)',
-        right: 'clamp(24px, 5vw, 80px)',
+        top: '50%',
+        right: 'clamp(16px, 3vw, 60px)',
         transform: 'translateY(-50%)',
-        width: '340px',
+        width: 'clamp(260px, 28vw, 340px)',
         zIndex: 20,
       }}>
-        {/* Selected city detail */}
-        {sel ? (
+        {/* Selected city detail (always visible, even when list collapsed) */}
+        {sel && (
           <div style={{
-            background: 'rgba(9,32,62,0.92)',
-            backdropFilter: 'blur(16px)',
+            background: 'rgba(9,32,62,0.65)',
             border: '1px solid rgba(191,177,112,0.3)',
             borderRadius: '14px',
-            padding: '18px 20px',
-            marginBottom: '10px',
+            padding: '16px 18px',
+            marginBottom: '8px',
+            animation: 'contact-field-stagger 0.3s ease both',
           }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
-              <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>{sel.city}</span>
-              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)' }}>{sel.country}</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+              <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.05rem', fontWeight: 700, color: '#fff' }}>{sel.city}</span>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)' }}>{sel.country}</span>
               {sel.homeBase && <span style={{ fontSize: '0.5rem', fontFamily: '"IBM Plex Mono", monospace', color: '#bfb170', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(191,177,112,0.15)', padding: '2px 8px', borderRadius: '100px', border: '1px solid rgba(191,177,112,0.25)' }}>HQ</span>}
             </div>
-            <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.65rem', color: '#bfb170', letterSpacing: '0.08em', marginBottom: '4px' }}>{sel.years}</p>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{sel.label}</p>
-          </div>
-        ) : (
-          <div style={{
-            background: 'rgba(9,32,62,0.85)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(191,177,112,0.2)',
-            borderRadius: '14px',
-            padding: '14px 18px',
-            marginBottom: '10px',
-            textAlign: 'center',
-          }}>
-            <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#bfb170', fontWeight: 600 }}>
-              {CITIES.length} Event Cities
-            </p>
+            <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.62rem', color: '#bfb170', letterSpacing: '0.08em', marginBottom: '4px' }}>{sel.years}</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{sel.label}</p>
           </div>
         )}
 
-        {/* Scrollable list */}
+        {/* Header / Toggle */}
+        <button
+          onClick={() => { if (isMobile) setListOpen(!listOpen) }}
+          style={{
+            width: '100%',
+            background: 'rgba(9,32,62,0.65)',
+            border: '1px solid rgba(191,177,112,0.2)',
+            borderRadius: '14px',
+            padding: '12px 18px',
+            marginBottom: listOpen ? (sel ? '8px' : '10px') : '0',
+            textAlign: 'center',
+            cursor: isMobile ? 'pointer' : 'default',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            transition: 'border-color 0.2s',
+          }}
+          onMouseEnter={(e) => { if (isMobile) e.currentTarget.style.borderColor = 'rgba(191,177,112,0.4)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.2)' }}
+        >
+          <span style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#bfb170', fontWeight: 600 }}>
+            {CITIES.length} Event Cities
+          </span>
+          {isMobile && (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#bfb170" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+              style={{ transition: 'transform 0.25s', transform: listOpen ? 'rotate(180deg)' : 'rotate(0)' }}>
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          )}
+        </button>
+
+        {/* Collapsible body (always open on desktop, toggle on mobile) */}
         <div style={{
-          overflowY: 'auto',
-          maxHeight: '360px',
-          borderRadius: '14px',
-          background: 'rgba(9,32,62,0.88)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(191,177,112,0.15)',
-          padding: '6px',
+          maxHeight: listOpen ? '600px' : '0',
+          overflow: 'hidden',
+          transition: isMobile ? 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease' : 'none',
+          opacity: listOpen ? 1 : 0,
         }}>
-          {CITIES_SORTED.map((c) => {
-            const isActive = selectedCity === c.city
-            return (
-              <button
-                key={c.city}
-                onClick={() => flyToCity(c)}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  width: '100%', padding: '9px 12px', borderRadius: '6px',
-                  border: 'none', cursor: 'pointer', textAlign: 'left',
-                  transition: 'all 0.15s',
-                  background: isActive ? 'rgba(191,177,112,0.15)' : 'transparent',
-                  borderLeft: isActive ? '2px solid #bfb170' : '2px solid transparent',
-                  marginBottom: '1px',
-                }}
-                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = isActive ? 'rgba(191,177,112,0.15)' : 'transparent' }}
-              >
-                <div>
+          {/* Scrollable list */}
+          <div style={{
+            overflowY: 'auto',
+            maxHeight: '360px',
+            borderRadius: '14px',
+            background: 'rgba(9,32,62,0.65)',
+            border: '1px solid rgba(191,177,112,0.15)',
+            padding: '6px',
+            marginTop: sel ? '0' : '8px',
+          }}>
+            {CITIES_SORTED.map((c) => {
+              const isActive = selectedCity === c.city
+              return (
+                <button
+                  key={c.city}
+                  onClick={() => flyToCity(c)}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    width: '100%', padding: '9px 12px', borderRadius: '6px',
+                    border: 'none', cursor: 'pointer', textAlign: 'left',
+                    transition: 'all 0.15s',
+                    background: isActive ? 'rgba(191,177,112,0.15)' : 'transparent',
+                    borderLeft: isActive ? '2px solid #bfb170' : '2px solid transparent',
+                    marginBottom: '1px',
+                  }}
+                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = isActive ? 'rgba(191,177,112,0.15)' : 'transparent' }}
+                >
+                  <div>
+                    <span style={{
+                      fontFamily: '"Space Grotesk", sans-serif', fontSize: '0.82rem',
+                      fontWeight: isActive ? 700 : 500, color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
+                    }}>
+                      {c.city}
+                    </span>
+                    <span style={{
+                      fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.55rem',
+                      color: isActive ? '#bfb170' : 'rgba(255,255,255,0.25)',
+                      marginLeft: '8px',
+                    }}>
+                      {c.years}
+                    </span>
+                  </div>
                   <span style={{
-                    fontFamily: '"Space Grotesk", sans-serif', fontSize: '0.82rem',
-                    fontWeight: isActive ? 700 : 500, color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
-                  }}>
-                    {c.city}
-                  </span>
-                  <span style={{
-                    fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.55rem',
-                    color: isActive ? '#bfb170' : 'rgba(255,255,255,0.25)',
-                    marginLeft: '8px',
-                  }}>
-                    {c.years}
-                  </span>
-                </div>
-                <span style={{
-                  width: '4px', height: '4px', borderRadius: '50%', flexShrink: 0,
-                  background: isActive ? '#bfb170' : 'rgba(255,255,255,0.1)',
-                  boxShadow: isActive ? '0 0 6px rgba(191,177,112,0.5)' : 'none',
-                }} />
-              </button>
-            )
-          })}
+                    width: '4px', height: '4px', borderRadius: '50%', flexShrink: 0,
+                    background: isActive ? '#bfb170' : 'rgba(255,255,255,0.1)',
+                    boxShadow: isActive ? '0 0 6px rgba(191,177,112,0.5)' : 'none',
+                  }} />
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
 
       {/* Stats (original position) */}
       <div className="globe-stats">
         <div className="globe-stat">
-          <span className="globe-stat-number">54</span>
+          <span className="globe-stat-number">57</span>
           <span className="globe-stat-label">Events</span>
         </div>
         <div className="globe-stat-divider" />
         <div className="globe-stat">
-          <span className="globe-stat-number">23</span>
+          <span className="globe-stat-number">24</span>
           <span className="globe-stat-label">Cities</span>
         </div>
         <div className="globe-stat-divider" />

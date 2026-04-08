@@ -387,8 +387,8 @@ export default function HeroSlideshow() {
           return next
         })
         setShowImage(true) // fade in new image
-      }, 600) // wait for fade-out
-    }, 2500) // 2.5s per image — fast cycling through 304 images
+      }, 800) // wait for fade-out
+    }, 4000) // 4s per image — fast cycling through 304 images
 
     return () => clearInterval(interval)
   }, [imagesLoaded])
@@ -481,10 +481,11 @@ export default function HeroSlideshow() {
             className="hero-cta-gold inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none">
             Explore Events <ArrowRight size={16} />
           </button>
-          <button onClick={() => document.querySelector('#partner')?.scrollIntoView({ behavior: 'smooth' })}
-            className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white">
+          <a href="/contact"
+            className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
+            style={{ textDecoration: 'none' }}>
             Partner with Soccerex
-          </button>
+          </a>
         </div>
       </div>
     </section>

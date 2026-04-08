@@ -61,13 +61,13 @@ function HeroSection() {
             Explore Events
             <ArrowRight size={16} />
           </button>
-          <button onClick={() => document.querySelector('#partner')?.scrollIntoView({ behavior: 'smooth' })}
+          <Link to="/contact"
             className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
-            style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)' }}
+            style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#bfb170'; e.currentTarget.style.color = '#bfb170' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = 'white' }}>
             Partner with Soccerex
-          </button>
+          </Link>
         </div>
       </div>
     </section>
@@ -171,15 +171,6 @@ function UpcomingEventSection() {
           </div>
         </div>
 
-        {/* Stats bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12 pt-10 fade-up" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          {[{ num: '75,000+', label: 'Attendees' }, { num: '54', label: 'Events' }, { num: '23', label: 'Cities' }, { num: '6', label: 'Continents' }].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)' }}>{stat.num}</p>
-              <p className="font-body text-white/50 text-xs uppercase tracking-widest mt-1">{stat.label}</p>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   )
@@ -201,12 +192,12 @@ function ByTheNumbersSection() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8">
           {[
-            { num: '75,000+', label: 'Attendees', sub: 'Industry professionals across six continents' },
-            { num: '54', label: 'Events', sub: 'In major football markets worldwide' },
-            { num: '23', label: 'Cities', sub: 'From Miami to Macau' },
-            { num: '6', label: 'Continents', sub: 'Engaging every major football region' },
+            { num: '75k+', label: 'Attendees', sub: 'Industry professionals across six continents' },
+            { num: '57', label: 'Events', sub: 'In major football markets worldwide' },
+            { num: '24', label: 'Cities', sub: 'From Miami to Macau' },
+            { num: '5k+', label: 'Brands', sub: 'Spanning across sport, media, and technology' },
             { num: '30', label: 'Years', sub: 'Three decades shaping football business' },
-            { num: '2,000+', label: 'Avg Delegates', sub: 'High-level attendance per flagship event' },
+            { num: '2k+', label: 'Avg Delegates', sub: 'High-level attendance per flagship event' },
             { num: '100+', label: 'Countries', sub: 'Diverse, cross-border participation' },
             { num: '100+', label: 'Speakers Annually', sub: 'Leaders from clubs, leagues, and brands' },
           ].map((s, i) => (
@@ -586,7 +577,7 @@ function SpeakersShowcase() {
             onMouseEnter={e => { e.currentTarget.style.background = '#0d2b52' }}
             onMouseLeave={e => { e.currentTarget.style.background = '#09203e' }}
           >
-            See all speakers <ArrowRight size={14} />
+            View all past speakers <ArrowRight size={14} />
           </Link>
         </div>
       </div>
@@ -850,10 +841,10 @@ function HeritageMapSection() {
       <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px) 0', position: 'relative', zIndex: 3 }}>
         <p className="section-label text-gold mb-4 fade-up">GLOBAL REACH</p>
         <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up gold-underline mx-auto" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
-          54 Events. 23 Cities. 30 Years.
+          57 Events. 24 Cities. 30 Years.
         </h2>
         <p className="font-body text-white/60 leading-relaxed fade-up mx-auto" style={{ fontSize: '1.05rem', maxWidth: '650px' }}>
-          Since 1996, Soccerex has brought the football business world together across six continents. From Wembley to the Maracana, from Amsterdam to Miami, the game's leaders gather wherever Soccerex goes.
+          Since 1996, Soccerex has brought the global football business community together. From Wembley to the Maracana, from Amsterdam to Miami, the game's leaders gather wherever Soccerex goes.
         </p>
       </div>
 
@@ -967,13 +958,13 @@ function FinalCTASection() {
           Be Part of What's Next in Football
         </h2>
         <div className="fade-up">
-          <button className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-10 py-5 transition-all duration-300 cursor-pointer border-none"
-            style={{ background: '#bfb170', color: '#09203e', fontSize: '0.95rem' }}
+          <Link to="/contact" className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-10 py-5 transition-all duration-300 cursor-pointer border-none"
+            style={{ background: '#bfb170', color: '#09203e', fontSize: '0.95rem', textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={e => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.transform = 'translateY(0)' }}>
             Join Soccerex
             <ArrowRight size={18} />
-          </button>
+          </Link>
         </div>
       </div>
     </section>
@@ -1119,22 +1110,15 @@ export default function Home() {
       <PixelDivider color="#1a0000" layers={4} height={90} speed={0.5} />
       <ByTheNumbersSection />
       <PixelDivider color="#050d1a" layers={4} height={90} speed={0.6} />
-      <MeetingPointSection />
-      <PixelDivider color="#0e2a4f" layers={4} height={90} speed={0.5} />
       <HeritageMapSection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
-      <ValuePillarsSection />
-      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
-      <EventsSection />
-      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
-      <SocialProofSection />
-      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
       <SpeakersShowcase />
-      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.7} />
+      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
+      <TestimonialsSection />
+      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
       <ExhibitorsSection />
       <OrganisationsSection />
       <ProudSponsorSection />
-      <TestimonialsSection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <HeritageGallerySection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />

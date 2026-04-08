@@ -227,8 +227,8 @@ export default function About() {
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {[
             { num: '75000+', display: '75,000+', label: 'Attendees', sub: 'Industry professionals across six continents' },
-            { num: '54', display: '54', label: 'Events', sub: 'In major football markets worldwide' },
-            { num: '23', display: '23', label: 'Cities', sub: 'Global footprint from Miami to Macau' },
+            { num: '57', display: '57', label: 'Events', sub: 'In major football markets worldwide' },
+            { num: '24', display: '24', label: 'Cities', sub: 'Global footprint from Miami to Macau' },
             { num: '6', display: '6', label: 'Continents', sub: 'Engaging every major football region' },
           ].map((s) => (
             <div key={s.label} className="text-center scale-up">
@@ -442,7 +442,7 @@ export default function About() {
             It is this ethos, implemented for the first time in 1996 and carried since, that has ensured Soccerex kept its position as the number one global football business event.
           </p>
           <p className="font-body text-white/60 leading-relaxed fade-up mx-auto" style={{ fontSize: '1rem', maxWidth: '720px' }}>
-            Now entering our 30th year of operations, we have hosted 55 events in 24 cities around the world, welcoming over 75,000 delegates.
+            Now entering our 30th year of operations, we have hosted 57 events in 24 cities around the world, welcoming over 75,000 delegates.
           </p>
         </div>
       </section>
