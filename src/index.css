@@ -939,7 +939,7 @@
   margin: -12vw auto -16vw;
   z-index: 0;
   left: calc(50% + 200px);
-  transform: translateX(-50%) translateY(100px);
+  transform: translateX(-50%) translateY(200px);
 }
 
 .globe-canvas {
@@ -1017,7 +1017,7 @@
   gap: clamp(1.5rem, 4vw, 3rem);
   position: relative;
   z-index: 2;
-  margin-top: -10vw;
+  margin-top: calc(-10vw - 100px);
 }
 .globe-stat {
   text-align: center;

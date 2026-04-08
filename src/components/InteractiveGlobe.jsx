@@ -161,7 +161,7 @@ export default function InteractiveGlobe() {
       {/* City Directory: overlaid on the right half of the globe */}
       <div className="hidden lg:block" style={{
         position: 'absolute',
-        top: 'calc(50% - 200px)',
+        top: 'calc(50% - 100px)',
         right: 'clamp(24px, 5vw, 80px)',
         transform: 'translateY(-50%)',
         width: '340px',
