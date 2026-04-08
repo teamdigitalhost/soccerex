@@ -457,6 +457,79 @@ function SocialProofSection() {
   )
 }
 
+// ─── SPEAKERS SHOWCASE (Home page highlight) ────────────────────────────────
+const HOME_SPEAKERS = [
+  { name: 'Gianni Infantino', title: 'President, FIFA', img: '/images/events/speakers/speaker1.webp' },
+  { name: 'Javier Tebas', title: 'President, LaLiga', img: '/images/events/speakers/speaker2.webp' },
+  { name: 'Don Garber', title: 'Commissioner, MLS', img: '/images/events/speakers/speaker4.webp' },
+  { name: 'Alessandro Del Piero', title: 'Former Footballer, Italy', img: '/images/events/speakers/speaker5.webp' },
+  { name: 'Kate Abdo', title: 'Broadcaster, CBS Sports', img: '/images/events/speakers/speaker22.webp' },
+  { name: 'Jorge Mas', title: 'Managing Owner, Inter Miami CF', img: '/images/events/speakers/speaker7.webp' },
+  { name: 'Alexi Lalas', title: 'Broadcaster, FOX Sports', img: '/images/events/speakers/speaker29.webp' },
+  { name: 'Eddy Cue', title: 'SVP of Services, Apple', img: '/images/events/speakers/speaker38.webp' },
+  { name: 'Julie Uhrman', title: 'CEO, Angel City FC', img: '/images/events/speakers/speaker41.webp' },
+  { name: 'Jill Ellis', title: 'Chief Football Officer, FIFA', img: '/images/events/speakers/speaker53.webp' },
+  { name: 'Paul Barber OBE', title: 'Chief Executive, Brighton & Hove Albion', img: '/images/events/speakers/speaker21.webp' },
+  { name: 'Victor Montagliani', title: 'President, CONCACAF', img: '/images/events/speakers/speaker3.webp' },
+]
+
+function SpeakersShowcase() {
+  return (
+    <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(9,32,62,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.03) 1px, transparent 1px)',
+        backgroundSize: '60px 60px',
+      }} />
+      <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="text-center mb-16">
+          <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>THE VOICES OF THE GAME</p>
+          <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: '#09203e' }}>
+            Soccerex{' '}
+            <span style={{ color: '#bfb170' }}>Speakers</span>
+          </h2>
+          <div className="fade-up mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
+          <p className="font-body fade-up mx-auto" style={{ fontSize: '1.05rem', color: '#555', maxWidth: '680px' }}>
+            Presidents, commissioners, legends, operators, and innovators. The people shaping the future of football share the Soccerex stage.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {HOME_SPEAKERS.map((s, i) => (
+            <div key={s.name} className="scale-up" style={{ transitionDelay: `${i * 40}ms` }}>
+              <div style={{
+                position: 'relative', borderRadius: '12px', overflow: 'hidden', aspectRatio: '3/4',
+                boxShadow: '0 10px 30px rgba(9,32,62,0.1)',
+                transition: 'transform 0.3s, box-shadow 0.3s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 20px 50px rgba(9,32,62,0.2)' }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(9,32,62,0.1)' }}
+              >
+                <img src={s.img} alt={s.name} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.06)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)' }}
+                />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 45%, rgba(9,32,62,0.95) 100%)' }} />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '14px 12px' }}>
+                  <p className="font-heading font-bold" style={{ fontSize: '0.88rem', color: '#fff', lineHeight: 1.2, marginBottom: '2px' }}>{s.name}</p>
+                  <p className="font-body" style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.3 }}>{s.title}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-10 fade-up">
+          <Link to="/events" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            style={{ background: '#09203e', color: '#fff', padding: '14px 32px', fontSize: '0.82rem', textDecoration: 'none', transition: 'all 0.3s' }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#0d2b52' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#09203e' }}
+          >
+            See all speakers <ArrowRight size={14} />
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ─── EXHIBITORS (White section) ──────────────────────────────────────────────
 function ExhibitorsSection() {
   return (
@@ -989,7 +1062,9 @@ export default function Home() {
       <EventsSection />
       <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
       <SocialProofSection />
-      <PixelDivider color="#09203e" layers={4} height={90} speed={0.7} />
+      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
+      <SpeakersShowcase />
+      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.7} />
       <ExhibitorsSection />
       <OrganisationsSection />
       <ProudSponsorSection />
