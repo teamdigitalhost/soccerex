@@ -139,7 +139,7 @@ export default function InteractiveGlobe() {
             labelLat="lat"
             labelLng="lng"
             labelText={(d) => `${d.city} (${d.years})`}
-            labelSize={(d) => d.homeBase ? 1.4 : 0.8}
+            labelSize={(d) => d.homeBase ? 1.8 : 1.2}
             labelDotRadius={0}
             labelColor={() => 'rgba(255,255,255,0.85)'}
             labelResolution={2}

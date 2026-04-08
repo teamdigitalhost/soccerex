@@ -185,6 +185,45 @@ function UpcomingEventSection() {
   )
 }
 
+// ─── BY THE NUMBERS (standalone prominent stats section) ─────────────────────
+function ByTheNumbersSection() {
+  return (
+    <section className="relative overflow-hidden" style={{ background: '#050d1a', padding: 'clamp(80px,10vw,130px) clamp(24px,5vw,80px)' }}>
+      <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.12} />
+      <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.08) 0%, transparent 60%)' }} />
+      <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="text-center mb-14">
+          <p className="section-label text-gold mb-4 fade-up">SOCCEREX BY THE NUMBERS</p>
+          <h2 className="font-heading font-bold text-white leading-tight fade-up text-glow" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>
+            30 Years of{' '}
+            <span style={{ color: '#bfb170' }}>Global Impact</span>
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8">
+          {[
+            { num: '75,000+', label: 'Attendees', sub: 'Industry professionals across six continents' },
+            { num: '54', label: 'Events', sub: 'In major football markets worldwide' },
+            { num: '23', label: 'Cities', sub: 'From Miami to Macau' },
+            { num: '6', label: 'Continents', sub: 'Engaging every major football region' },
+            { num: '30', label: 'Years', sub: 'Three decades shaping football business' },
+            { num: '2,000+', label: 'Avg Delegates', sub: 'High-level attendance per flagship event' },
+            { num: '100+', label: 'Countries', sub: 'Diverse, cross-border participation' },
+            { num: '100+', label: 'Speakers Annually', sub: 'Leaders from clubs, leagues, and brands' },
+          ].map((s, i) => (
+            <div key={s.label} className="text-center scale-up" style={{ transitionDelay: `${i * 50}ms` }}>
+              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', lineHeight: 1 }}>
+                {s.num}
+              </p>
+              <p className="font-heading font-bold text-white uppercase tracking-widest mt-3" style={{ fontSize: '0.78rem' }}>{s.label}</p>
+              <p className="font-body text-white/35 mt-1" style={{ fontSize: '0.72rem', lineHeight: 1.4 }}>{s.sub}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ─── SECTION 2: MEETING POINT ────────────────────────────────────────────────
 function MeetingPointSection() {
   const bullets = [
@@ -563,7 +602,7 @@ function ProudSponsorSection() {
           Proud Sponsor of Soccerex
         </h2>
         <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: '1.05rem', color: '#555', maxWidth: '700px' }}>
-          <span style={{ color: '#c8302c', fontWeight: 700 }}>SPORTS.COM</span> is proud to be an official sponsor of three major Soccerex events in 2025, supporting the global sports business community through innovation, media, and strategic partnerships.
+          <span style={{ color: '#c8302c', fontWeight: 700 }}>SPORTS.COM</span> is proud to be an official sponsor of Soccerex events in 2026, supporting the global sports business community through innovation, media, and strategic partnerships.
         </p>
       </div>
       {/* Full-width video banner */}
@@ -1052,7 +1091,9 @@ export default function Home() {
     <>
       <HeroSlideshow />
       <UpcomingEventSection />
-      <PixelDivider color="#1a0000" layers={4} height={90} speed={0.6} />
+      <PixelDivider color="#1a0000" layers={4} height={90} speed={0.5} />
+      <ByTheNumbersSection />
+      <PixelDivider color="#050d1a" layers={4} height={90} speed={0.6} />
       <MeetingPointSection />
       <PixelDivider color="#0e2a4f" layers={4} height={90} speed={0.5} />
       <HeritageMapSection />

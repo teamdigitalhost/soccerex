@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Calendar, MapPin, Download, Quote } from 'lucide-react'
+import { ArrowRight, Calendar, MapPin, Download, Quote, Globe } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 
@@ -312,12 +312,46 @@ export default function Events() {
           </h1>
           <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
           <p className="font-body text-white/75 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', maxWidth: '740px' }}>
-            Three continents. Flagship gatherings. One unrivaled community. Soccerex events bring the business of football together across MENA, Europe, and the Americas.
+            Each Soccerex event is built as a global gateway, connecting international stakeholders to key markets and the people shaping the future of football within them.
           </p>
         </div>
       </section>
 
-      <PixelDivider color="#f4f3f0" layers={4} height={90} speed={0.5} />
+      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
+
+      {/* ═══ GLOBAL GATEWAYS ═══════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
+        <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          {[
+            { label: 'Soccerex Europe', desc: 'A global meeting point for stakeholders looking to access and engage with the European football market, one of the most mature and competitive in the world.', icon: Globe },
+            { label: 'Soccerex Miami', desc: 'A strategic gateway connecting global stakeholders to opportunities across North America, Latin America, and the wider international football ecosystem.', icon: MapPin },
+            { label: 'Soccerex Middle East', desc: 'A high-growth hub bringing together global leaders to access one of the fastest-evolving regions in world football, driven by investment, infrastructure, and innovation.', icon: Calendar },
+          ].map((g, i) => {
+            const Icon = g.icon
+            return (
+              <div key={g.label} className="scale-up" style={{ transitionDelay: `${i * 80}ms` }}>
+                <div style={{
+                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(191,177,112,0.2)',
+                  backdropFilter: 'blur(10px)', borderRadius: '16px', padding: '36px 28px',
+                  height: '100%', transition: 'transform 0.3s, border-color 0.3s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.borderColor = '#bfb170' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.2)' }}
+                >
+                  <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                    <Icon size={24} color="#09203e" strokeWidth={2} />
+                  </div>
+                  <h3 className="font-heading font-bold text-white mb-3" style={{ fontSize: '1.3rem' }}>{g.label}</h3>
+                  <p className="font-body leading-relaxed" style={{ fontSize: '0.92rem', color: 'rgba(255,255,255,0.7)' }}>{g.desc}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
+      <PixelDivider color="#0d2b52" layers={4} height={90} speed={0.5} />
 
       {/* ═══ UPCOMING EVENTS ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
