@@ -16,15 +16,7 @@ const INQUIRY_TYPES = [
     icon: Handshake,
     email: 'partner@soccerex.com',
     desc: 'Sponsorship, strategic partnerships, and commercial opportunities.',
-    fields: ['organization', 'role', 'country', 'partnershipType', 'budget'],
-  },
-  {
-    id: 'event',
-    label: 'Event Info',
-    icon: Calendar,
-    email: 'enquiries@soccerex.com',
-    desc: 'Questions about attending, tickets, registration, and venue details.',
-    fields: ['event', 'attendeeCount'],
+    fields: ['organization', 'country'],
   },
   {
     id: 'speaker',
@@ -32,7 +24,7 @@ const INQUIRY_TYPES = [
     icon: Mic,
     email: 'talks@soccerex.com',
     desc: 'Propose yourself or someone you represent as a Soccerex speaker.',
-    fields: ['organization', 'role', 'topicArea', 'speakerBio', 'linkedin'],
+    fields: ['organization', 'speakerBio', 'linkedin'],
   },
   {
     id: 'press',

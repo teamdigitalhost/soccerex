@@ -299,23 +299,6 @@ export default function InteractiveGlobe() {
         </div>
       </div>
 
-      {/* Stats (original position) */}
-      <div className="globe-stats">
-        <div className="globe-stat">
-          <span className="globe-stat-number">57</span>
-          <span className="globe-stat-label">Events</span>
-        </div>
-        <div className="globe-stat-divider" />
-        <div className="globe-stat">
-          <span className="globe-stat-number">24</span>
-          <span className="globe-stat-label">Cities</span>
-        </div>
-        <div className="globe-stat-divider" />
-        <div className="globe-stat">
-          <span className="globe-stat-number">30</span>
-          <span className="globe-stat-label">Years</span>
-        </div>
-      </div>
 
       <p className="globe-hint">Click a city or hover over markers to explore. Drag to rotate.</p>
 

@@ -554,13 +554,13 @@ export default function GlobalNetwork() {
               <p className="font-body leading-relaxed mb-8 fade-up" style={{ fontSize: '1rem', color: '#555' }}>
                 Subscribe to get the latest commercial details, groundbreaking interviews, and industry analysis, free, straight to your inbox.
               </p>
-              <a href="mailto:enquiries@soccerex.com?subject=SoccerExpert%20Newsletter" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
+              <Link to="/contact" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
                 style={{ background: '#09203e', color: '#fff', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', border: '2px solid #09203e', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.borderColor = '#bfb170'; e.currentTarget.style.color = '#09203e' }}
                 onMouseLeave={e => { e.currentTarget.style.background = '#09203e'; e.currentTarget.style.borderColor = '#09203e'; e.currentTarget.style.color = '#fff' }}
               >
                 <Mail size={16} /> Subscribe Now
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -587,13 +587,13 @@ export default function GlobalNetwork() {
               <p className="font-body leading-relaxed mb-8 fade-up" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.75)' }}>
                 Keeping abreast of the rapidly changing football business environment is key. Our comprehensive newsfeed provides the latest trends and updates from influential industry players. Consider it your one-stop solution for all football industry news.
               </p>
-              <a href="https://soccerex.com/insights/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
+              <Link to="/insights" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
                 style={{ background: '#bfb170', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
                 onMouseLeave={e => { e.currentTarget.style.background = '#bfb170' }}
               >
                 <Newspaper size={16} /> Read Soccerex Articles
-              </a>
+              </Link>
             </div>
           </div>
           {/* Image */}
@@ -608,63 +608,7 @@ export default function GlobalNetwork() {
         </div>
       </section>
 
-      {/* Wave divider: insights → affiliate */}
-      <PixelDivider color="#050d1a" layers={4} height={90} speed={0.5} />
-
-      {/* ═══ AFFILIATE PROGRAM ══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(9,32,62,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.03) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }} />
-        <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div className="text-center mb-12">
-            <div className="fade-up" style={{ display: 'inline-flex', width: '60px', height: '60px', borderRadius: '14px', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
-              <TrendingUp size={28} color="#09203e" strokeWidth={2.2} />
-            </div>
-            <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>THE SOCCEREX AFFILIATE PROGRAM</p>
-            <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(2rem, 4.2vw, 3.2rem)', color: '#09203e' }}>
-              Elevate Your Industry{' '}
-              <span style={{ color: '#bfb170' }}>Impact &amp; Influence</span>
-            </h2>
-            <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
-            <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', color: '#555', maxWidth: '720px' }}>
-              Transform your passion into profit. Earn commissions on ticket sales and exhibitor deals, enjoy VIP event access, and tap into exclusive industry insights.
-            </p>
-          </div>
-          {/* 3 benefit cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
-            {[
-              { title: 'Earn Commissions', desc: 'Receive a share on every ticket sale and exhibitor deal you refer.' },
-              { title: 'VIP Access', desc: 'Unlock exclusive access to Soccerex events and networking zones.' },
-              { title: 'Exclusive Insights', desc: 'Get privileged access to industry intelligence and commercial data.' },
-            ].map((b, i) => (
-              <div key={b.title} className="scale-up" style={{ transitionDelay: `${i * 60}ms`, background: '#fff', padding: '32px 28px', borderRadius: '14px', border: '1px solid rgba(9,32,62,0.06)', boxShadow: '0 10px 30px rgba(9,32,62,0.06)' }}>
-                <h4 className="font-heading font-bold mb-2" style={{ fontSize: '1.2rem', color: '#09203e' }}>{b.title}</h4>
-                <p className="font-body" style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.6 }}>{b.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
-            <a href="https://soccerex.com/affiliate-program/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: '#09203e', color: '#fff', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#0d2b52' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#09203e' }}
-            >
-              Learn More
-            </a>
-            <a href="https://soccerex.com/affiliate-program/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: '#bfb170', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#bfb170' }}
-            >
-              Apply Now <ArrowRight size={16} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Wave divider: affiliate → host CTA */}
+      {/* Wave divider: insights → host CTA */}
       <PixelDivider color="#050d1a" layers={4} height={90} speed={0.5} />
 
       {/* ═══ HOST AN EVENT CTA ══════════════════════════════════════════════ */}

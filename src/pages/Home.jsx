@@ -53,14 +53,14 @@ function HeroSection() {
           What started as an event has become a global meeting point for the football industry, where relationships are built, ideas are tested, and opportunities take shape.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
-          <button onClick={() => document.querySelector('#events')?.scrollIntoView({ behavior: 'smooth' })}
+          <Link to="/events"
             className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none"
-            style={{ background: '#bfb170', color: '#09203e' }}
+            style={{ background: '#bfb170', color: '#09203e', textDecoration: 'none' }}
             onMouseEnter={e => e.currentTarget.style.background = '#d4c78e'}
             onMouseLeave={e => e.currentTarget.style.background = '#bfb170'}>
             Explore Events
             <ArrowRight size={16} />
-          </button>
+          </Link>
           <Link to="/contact"
             className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
             style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', textDecoration: 'none' }}
@@ -137,7 +137,7 @@ function UpcomingEventSection() {
                 Upcoming Event
               </span>
               <h3 className="font-heading font-bold text-white mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>11-13th May 2026</h3>
-              <p className="font-heading font-semibold text-white/90 text-lg mb-4">Johan Cruyff Arena</p>
+              <p className="font-heading font-semibold text-white/90 text-lg mb-4">Johan Cruijff ArenA</p>
               <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-6" style={{ background: 'rgba(200,48,44,0.1)', border: '1px solid rgba(200,48,44,0.2)' }}>
                 <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #a02020, #c8302c)' }}>
                   <MapPin size={18} color="#fff" />
@@ -612,7 +612,7 @@ function OrganisationsSection() {
 // ─── PROUD SPONSOR (Video banner) ────────────────────────────────────────────
 function ProudSponsorSection() {
   return (
-    <section style={{ background: '#fff', borderTop: '1px solid #eee', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px) 0' }}>
+    <section style={{ background: '#fff', borderTop: '1px solid #eee', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
         <h2 className="font-heading font-bold uppercase leading-tight mb-4 fade-up" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', color: '#09203e', letterSpacing: '0.02em' }}>
           Proud Sponsor of Soccerex
@@ -648,7 +648,7 @@ const TESTIMONIALS = [
   { quote: 'Soccerex to me is about exchange, an exchange of ideas, an exchange of opportunities.', author: 'Jason Roberts MBE', role: 'CONCACAF Director of Development', img: '/images/testimonials/jason-roberts.webp' },
   { quote: 'For LaLiga, being at Soccerex, it is not only important, it is essential.', author: 'Javier Tebas', role: 'LaLiga President', img: '/images/testimonials/javier-tebas.webp' },
   { quote: "To come here and meet the people and learn the things that I've learnt in the sessions, in networking moments, and even in the cafe, it's absolutely blown me away.", author: 'Amanda Vandervort', role: 'USL Super League President', img: '/images/testimonials/amanda-vandervort.webp' },
-  { quote: "Any time I get to be surrounded by people who have the same passion for the game that I do, the conversations that teach you and help you grow and learn, that's why I love it.", author: 'Karina La Blanc', role: 'Portland Thorns GM', img: '/images/testimonials/karina-la-blanc.webp' },
+  { quote: "Any time I get to be surrounded by people who have the same passion for the game that I do, the conversations that teach you and help you grow and learn, that's why I love it.", author: 'Karina LeBlanc', role: 'Portland Thorns GM', img: '/images/testimonials/karina-la-blanc.webp' },
 ]
 
 function TestimonialsSection() {
@@ -1115,7 +1115,6 @@ export default function Home() {
       <SpeakersShowcase />
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
       <TestimonialsSection />
-      <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
       <ExhibitorsSection />
       <OrganisationsSection />
       <ProudSponsorSection />

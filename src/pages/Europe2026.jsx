@@ -140,7 +140,7 @@ export default function Europe2026() {
                 What Is <span style={{ color: 'var(--event-primary)' }}>Soccerex Europe</span>?
               </h2>
               <p className="font-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#444' }}>
-                Soccerex Europe is the premier global event for football's commercial and strategic community. A two-day convergence of high-impact content, executive networking, brand activations, and industry insight at the iconic Johan Cruyff Arena.
+                Soccerex Europe is the premier global event for football's commercial and strategic community. A two-day convergence of high-impact content, executive networking, brand activations, and industry insight at the iconic Johan Cruijff ArenA.
               </p>
               <p className="font-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#444' }}>
                 From thought-leadership sessions and forward-thinking panel discussions, to curated networking experiences and international exhibitor showcases, Soccerex Europe unites the leaders powering the sport's evolution.

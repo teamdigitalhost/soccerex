@@ -52,6 +52,15 @@ const RECENT = [
     link: 'https://soccerex.com/europe-2025/',
   },
   {
+    logo: '/images/events/logos/mena.webp',
+    label: 'SOCCEREX MENA 2025',
+    dates: 'February 23rd - 26th, 2025',
+    city: 'Cairo, Egypt',
+    image: '/images/events/events/mena-2025-2.webp',
+    copy: 'Following the success of Soccerex Europe and Miami in 2024, 2025 saw us host three large-scale events for the first time since 2019. The football business industry\'s trifecta of major gatherings began with Soccerex MENA, in partnership with Sports Expo, held from February 23-26. This event was hosted in Cairo, Egypt, home of "The Pharaohs," the most successful national team in Africa Cup of Nations history.',
+    link: 'https://soccerex.com/mena-2025/',
+  },
+  {
     logo: '/images/events/logos/miami.webp',
     label: 'SOCCEREX MIAMI 2024',
     dates: 'November 13th - 14th, 2024',
@@ -354,7 +363,7 @@ export default function Events() {
           {[
             { label: 'Soccerex Europe', desc: 'A global meeting point for stakeholders looking to access and engage with the European football market, one of the most mature and competitive in the world.', icon: Globe },
             { label: 'Soccerex Miami', desc: 'A strategic gateway connecting global stakeholders to opportunities across North America, Latin America, and the wider international football ecosystem.', icon: MapPin },
-            { label: 'Soccerex Middle East', desc: 'A high-growth hub bringing together global leaders to access one of the fastest-evolving regions in world football, driven by investment, infrastructure, and innovation.', icon: Calendar },
+            { label: 'Soccerex Riyadh', desc: 'A high-growth hub bringing together global leaders to access one of the fastest-evolving regions in world football, driven by investment, infrastructure, and innovation.', icon: Calendar },
           ].map((g, i) => {
             const Icon = g.icon
             return (
@@ -380,26 +389,6 @@ export default function Events() {
       </section>
 
       <PixelDivider color="#0d2b52" layers={4} height={90} speed={0.5} />
-
-      {/* ═══ EVENT STATS BAR ═══════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: '#050d1a', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={15} opacity={0.1} />
-        <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          {[
-            { num: '75,000+', label: 'Attendees' },
-            { num: '57', label: 'Events' },
-            { num: '100+', label: 'Speakers Per Event' },
-            { num: '6', label: 'Continents' },
-          ].map((s, i) => (
-            <div key={s.label} className="text-center scale-up" style={{ transitionDelay: `${i * 60}ms` }}>
-              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1 }}>{s.num}</p>
-              <p className="font-heading font-bold text-white uppercase tracking-widest mt-3" style={{ fontSize: '0.72rem' }}>{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <PixelDivider color="#050d1a" layers={4} height={90} speed={0.5} />
 
       {/* ═══ UPCOMING EVENTS ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
@@ -619,36 +608,36 @@ export default function Events() {
 
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
-      {/* ═══ CTA ════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #09203e 0%, #0d2b52 50%, #09203e 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={35} opacity={0.15} />
-        <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
+      {/* ═══ CTA (Amsterdam red theme) ═══════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0000 0%, #3a0a0a 50%, #1a0000 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
+        <NetworkNodes color="#c8302c" nodeCount={35} opacity={0.12} />
+        <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(200,48,44,0.1) 0%, transparent 60%)' }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <Calendar size={40} color="#bfb170" strokeWidth={2} className="mx-auto mb-6 fade-up" />
-          <p className="section-label text-gold mb-4 fade-up">JOIN US IN AMSTERDAM</p>
+          <Calendar size={40} color="#c8302c" strokeWidth={2} className="mx-auto mb-6 fade-up" />
+          <p className="section-label mb-4 fade-up" style={{ color: '#c8302c' }}>JOIN US IN AMSTERDAM</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
             Soccerex Europe 2026{' '}
-            <span style={{ color: '#bfb170' }}>Awaits</span>
+            <span style={{ color: '#c8302c' }}>Awaits</span>
           </h2>
-          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, #c8302c, transparent)' }} />
           <p className="font-body text-white/75 leading-relaxed fade-up mb-10 mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.2rem)', maxWidth: '720px' }}>
             May 11 to 13, 2026. Johan Cruijff ArenA. Federations, leagues, clubs, brands, media, and football legends, together.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
             <Link to="/europe-2026" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: '#bfb170', color: '#09203e', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#bfb170' }}
+              style={{ background: '#c8302c', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#e04040' }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#c8302c' }}
             >
               Event Details <ArrowRight size={16} />
             </Link>
-            <a href="mailto:partner@soccerex.com" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            <Link to="/contact" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#bfb170'; e.currentTarget.style.color = '#bfb170' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#c8302c'; e.currentTarget.style.color = '#c8302c' }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = '#fff' }}
             >
-              Partner With Us
-            </a>
+              Get in Touch
+            </Link>
           </div>
         </div>
       </section>

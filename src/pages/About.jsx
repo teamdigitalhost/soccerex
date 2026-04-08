@@ -21,7 +21,7 @@ const TIMELINE = [
   { year: '2018', title: 'Miami and China', desc: 'Soccerex Americas launches at Marlins Park in Miami. Soccerex China debuts in Zhuhai.' },
   { year: '2020', title: 'Digital Innovation', desc: 'Soccerex Connected launches as a digital event trilogy, reaching 2,000+ delegates across 100+ countries.' },
   { year: '2022', title: 'The Return', desc: 'Back to Miami Beach Convention Center with 2,000+ delegates, 650 rightsholders, and 100+ speakers.' },
-  { year: '2024', title: 'Amsterdam and Miami', desc: 'Record-breaking events in both cities. Soccerex Europe launches at the Johan Cruyff Arena.' },
+  { year: '2024', title: 'Amsterdam and Miami', desc: 'Record-breaking events in both cities. Soccerex Europe launches at the Johan Cruijff ArenA.' },
   { year: '2025', title: 'Three Continents', desc: 'MENA in Cairo, Europe in Amsterdam, Americas in Miami. The most ambitious year yet.' },
   { year: '2026', title: '30th Anniversary', desc: 'Soccerex celebrates 30 years. Europe returns to the Johan Cruijff ArenA. The platform evolves beyond events into a year-round business solution.' },
 ]
@@ -336,44 +336,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* Wave divider: timeline → network */}
+      {/* Wave divider: timeline → pillars */}
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
-
-      {/* ═══ GLOBAL NETWORK ════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #061729 0%, #09203e 50%, #0e2a4f 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={40} opacity={0.12} />
-        {/* Radial glow */}
-        <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.06) 0%, transparent 70%)' }} />
-
-        <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <p className="section-label text-gold mb-4 fade-up text-center">OUR GLOBAL NETWORK</p>
-          <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            You Can Network With...
-          </h2>
-          <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
-          <p className="font-body text-white/60 leading-relaxed mb-14 fade-up text-center mx-auto" style={{ maxWidth: '650px', fontSize: '1.02rem' }}>
-            Soccerex events provide the industry's leading professionals with formal and informal networking platforms to build and strengthen relationships.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {NETWORK.map((item, i) => (
-              <div key={item} className="scale-up px-4 py-5 rounded-lg text-center transition-all duration-300" style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(191,177,112,0.12)',
-                backdropFilter: 'blur(10px)',
-                transitionDelay: `${i * 40}ms`,
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(191,177,112,0.08)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.3)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.12)' }}>
-                <p className="font-body text-white/80 text-sm">{item}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Wave divider: network → pillars */}
-      <PixelDivider color="#061729" layers={4} height={90} speed={0.6} />
 
       {/* ═══ WHAT WE OFFER (4 pillars) ════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
@@ -434,7 +398,7 @@ export default function About() {
           <div className="fade-up mb-6" style={{ fontSize: '5rem', color: 'rgba(191,177,112,0.3)', lineHeight: 0.5, fontFamily: 'Space Grotesk', fontWeight: 800 }}>"</div>
           <blockquote className="fade-up">
             <p className="font-heading font-bold text-white leading-snug mb-6 text-glow" style={{ fontSize: 'clamp(1.6rem, 3.2vw, 2.5rem)' }}>
-              Take care of the game and the business takes care of itself
+              "Take care of the game and the business takes care of itself."
             </p>
             <div style={{ width: '60px', height: '2px', background: 'var(--color-gold)', margin: '0 auto 2rem' }} />
           </blockquote>
@@ -510,12 +474,12 @@ export default function About() {
               onMouseLeave={e => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.transform = 'translateY(0)' }}>
               Next Event <ArrowRight size={16} />
             </Link>
-            <a href="mailto:enquiries@soccerex.com" className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
+            <Link to="/contact" className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
               style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)' }}>
-              Contact Us
-            </a>
+              Get in Touch
+            </Link>
           </div>
         </div>
       </section>

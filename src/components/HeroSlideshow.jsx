@@ -477,10 +477,10 @@ export default function HeroSlideshow() {
 
         {/* CTAs */}
         <div className="hero-ctas flex flex-wrap items-center justify-center gap-4">
-          <button onClick={() => document.querySelector('#events')?.scrollIntoView({ behavior: 'smooth' })}
+          <a href="/events" style={{ textDecoration: "none" }}
             className="hero-cta-gold inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none">
             Explore Events <ArrowRight size={16} />
-          </button>
+          </a>
           <a href="/contact"
             className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
             style={{ textDecoration: 'none' }}>
