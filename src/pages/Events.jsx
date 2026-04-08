@@ -182,11 +182,18 @@ function EventCard({ event, index, dark = false }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center mb-20 lg:mb-28">
       <div className={`${isEven ? 'lg:order-1 slide-left' : 'lg:order-2 slide-right'}`}>
-        <div style={{ position: 'relative', borderRadius: '14px', overflow: 'hidden', boxShadow: dark ? '0 25px 70px rgba(0,0,0,0.5)' : '0 25px 70px rgba(9,32,62,0.25)' }}>
-          <img src={event.image} alt={event.label} style={{ width: '100%', display: 'block', aspectRatio: '4/3', objectFit: 'cover' }} loading="lazy" />
+        <div className="ev-card-glow" style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', boxShadow: dark ? '0 25px 70px rgba(0,0,0,0.5)' : '0 25px 70px rgba(9,32,62,0.2)', transition: 'box-shadow 0.4s' }}
+          onMouseEnter={e => { e.currentTarget.style.boxShadow = dark ? '0 35px 90px rgba(0,0,0,0.6)' : '0 35px 90px rgba(9,32,62,0.3)' }}
+          onMouseLeave={e => { e.currentTarget.style.boxShadow = dark ? '0 25px 70px rgba(0,0,0,0.5)' : '0 25px 70px rgba(9,32,62,0.2)' }}
+        >
+          <img src={event.image} alt={event.label} style={{ width: '100%', display: 'block', aspectRatio: '4/3', objectFit: 'cover', transition: 'transform 0.6s' }}
+            loading="lazy"
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)' }}
+          />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(9,32,62,0.15) 0%, transparent 50%, rgba(9,32,62,0.35) 100%)' }} />
           {event.logo && (
-            <div style={{ position: 'absolute', top: '20px', left: '20px', background: 'rgba(255,255,255,0.92)', padding: '10px 16px', borderRadius: '8px', backdropFilter: 'blur(8px)' }}>
+            <div style={{ position: 'absolute', top: '20px', left: '20px', background: 'rgba(255,255,255,0.95)', padding: '10px 16px', borderRadius: '8px', backdropFilter: 'blur(8px)', boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}>
               <img src={event.logo} alt="" style={{ height: '32px', width: 'auto', display: 'block' }} />
             </div>
           )}
@@ -291,18 +298,21 @@ export default function Events() {
   return (
     <div style={{ background: '#050d1a' }}>
 
-      {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
+      {/* ═══ HERO (with floating orbs) ═══════════════════════════════════ */}
       <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '85vh' }}>
         <div className="absolute inset-0" style={{
           backgroundImage: 'url(/hero/12-TIER1-packed-keynote.jpg)',
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'saturate(0.55) brightness(0.35)',
+          filter: 'saturate(0.55) brightness(0.3)',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,13,26,0.65) 0%, rgba(9,32,62,0.75) 40%, rgba(5,13,26,0.95) 100%)',
+          background: 'linear-gradient(180deg, rgba(5,13,26,0.6) 0%, rgba(9,32,62,0.7) 40%, rgba(5,13,26,0.95) 100%)',
         }} />
         <NetworkNodes color="#bfb170" nodeCount={45} opacity={0.18} />
-        <div className="absolute pointer-events-none" style={{ top: '15%', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
+        {/* Floating color orbs (unique to Events) */}
+        <div className="ev-orb" style={{ top: '10%', left: '15%', width: '400px', height: '400px', background: 'rgba(191,177,112,0.12)', animationDelay: '0s' }} />
+        <div className="ev-orb" style={{ top: '50%', right: '10%', width: '350px', height: '350px', background: 'rgba(200,48,44,0.08)', animationDelay: '-7s' }} />
+        <div className="ev-orb" style={{ bottom: '5%', left: '40%', width: '300px', height: '300px', background: 'rgba(26,63,191,0.07)', animationDelay: '-13s' }} />
 
         <div className="relative z-10 text-center" style={{ maxWidth: '1000px', padding: 'clamp(140px,15vw,200px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
           <p className="section-label text-gold mb-6 fade-up">OUR EVENTS</p>
@@ -314,6 +324,24 @@ export default function Events() {
           <p className="font-body text-white/75 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', maxWidth: '740px' }}>
             Each Soccerex event is built as a global gateway, connecting international stakeholders to key markets and the people shaping the future of football within them.
           </p>
+          {/* Live event pill */}
+          <div className="fade-up mt-10">
+            <Link to="/europe-2026" style={{ textDecoration: 'none' }}>
+              <div className="ev-ring-pulse inline-flex items-center gap-3 px-6 py-3 rounded-full" style={{
+                background: 'rgba(200,48,44,0.15)', border: '1px solid rgba(200,48,44,0.5)',
+                transition: 'all 0.3s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(200,48,44,0.25)' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(200,48,44,0.15)' }}
+              >
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#c8302c', boxShadow: '0 0 12px #c8302c', animation: 'node-pulse 2s infinite' }} />
+                <span className="font-mono uppercase tracking-[0.15em] text-white" style={{ fontSize: '0.72rem', fontWeight: 600 }}>
+                  Next: Amsterdam, May 11-13 2026
+                </span>
+                <ArrowRight size={14} color="#c8302c" />
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -375,6 +403,8 @@ export default function Events() {
 
       {/* ═══ UPCOMING EVENTS ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
+        {/* Diagonal stripe accent (unique to Events) */}
+        <div className="ev-stripe-accent" />
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: 'linear-gradient(rgba(9,32,62,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(9,32,62,0.03) 1px, transparent 1px)',
           backgroundSize: '60px 60px',
@@ -459,11 +489,14 @@ export default function Events() {
 
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
-      {/* ═══ TESTIMONIALS ═══════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={30} opacity={0.12} />
-        <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
-          <div className="text-center mb-16">
+      {/* ═══ TESTIMONIALS (scrolling ticker) ═════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)', padding: 'clamp(80px,10vw,120px) 0' }}>
+        <NetworkNodes color="#bfb170" nodeCount={25} opacity={0.1} />
+        {/* Floating orbs for testimonial section */}
+        <div className="ev-orb" style={{ top: '20%', right: '5%', width: '250px', height: '250px', background: 'rgba(191,177,112,0.08)', animationDelay: '-5s' }} />
+        <div className="ev-orb" style={{ bottom: '10%', left: '10%', width: '200px', height: '200px', background: 'rgba(200,48,44,0.06)', animationDelay: '-12s' }} />
+        <div className="relative z-10">
+          <div className="text-center mb-14 px-6">
             <p className="section-label text-gold mb-4 fade-up">TESTIMONIALS</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               What the Industry{' '}
@@ -471,8 +504,28 @@ export default function Events() {
             </h2>
             <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #bfb170, transparent)' }} />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t, i) => <TestimonialCard key={t.name} t={t} delay={i * 60} />)}
+          {/* Horizontal ticker */}
+          <div className="fade-up" style={{ overflow: 'hidden', maskImage: 'linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%)' }}>
+            <div className="ev-ticker-track" style={{ animationDuration: '60s' }}>
+              {[...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
+                <div key={`${t.name}-${i}`} style={{
+                  flexShrink: 0, width: '420px', maxWidth: '85vw',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(191,177,112,0.18)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: '16px', padding: '32px 28px',
+                }}>
+                  <Quote size={24} style={{ color: '#bfb170', marginBottom: '14px' }} strokeWidth={2} />
+                  <p className="font-body leading-relaxed mb-5" style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.85)', fontStyle: 'italic' }}>
+                    "{t.quote}"
+                  </p>
+                  <div style={{ borderTop: '1px solid rgba(191,177,112,0.12)', paddingTop: '14px' }}>
+                    <p className="font-heading font-bold" style={{ fontSize: '0.95rem', color: '#fff' }}>{t.name}</p>
+                    <p className="font-body" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)' }}>{t.title}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
