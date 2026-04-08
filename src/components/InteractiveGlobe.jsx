@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 import Globe from 'react-globe.gl'
 
-// ─── Event city data ────────────────────────────────────────────────────────
 const CITIES = [
   { city: 'London', country: 'UK', lat: 51.5074, lng: -0.1278, years: '1996, 1997, 2005', label: 'Soccerex Launch and European Events' },
   { city: 'Paris', country: 'France', lat: 48.8566, lng: 2.3522, years: '1998', label: 'European Expansion' },
@@ -26,19 +25,11 @@ const CITIES = [
   { city: 'Cairo', country: 'Egypt', lat: 30.0444, lng: 31.2357, years: '2025', label: 'Soccerex MENA' },
 ]
 
-// Alphabetically sorted for the directory
 const CITIES_SORTED = [...CITIES].sort((a, b) => a.city.localeCompare(b.city))
-
-// Miami hub for arcs
 const MIAMI = CITIES.find((c) => c.homeBase)
-
-// Generate arcs from Miami to every other city
 const ARCS = CITIES.filter((c) => !c.homeBase).map((c) => ({
-  startLat: MIAMI.lat,
-  startLng: MIAMI.lng,
-  endLat: c.lat,
-  endLng: c.lng,
-  city: c.city,
+  startLat: MIAMI.lat, startLng: MIAMI.lng,
+  endLat: c.lat, endLng: c.lng, city: c.city,
 }))
 
 export default function InteractiveGlobe() {
@@ -48,7 +39,6 @@ export default function InteractiveGlobe() {
   const [globeSize, setGlobeSize] = useState(600)
   const [selectedCity, setSelectedCity] = useState(null)
 
-  // Responsive sizing
   useEffect(() => {
     const updateSize = () => {
       if (containerRef.current) {
@@ -61,7 +51,6 @@ export default function InteractiveGlobe() {
     return () => window.removeEventListener('resize', updateSize)
   }, [])
 
-  // Fade in on scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setIsVisible(true) },
@@ -71,25 +60,20 @@ export default function InteractiveGlobe() {
     return () => observer.disconnect()
   }, [])
 
-  // Auto-rotation + start centered on Miami
   useEffect(() => {
     if (!globeRef.current || !isVisible) return
     const controls = globeRef.current.controls()
     controls.autoRotate = true
     controls.autoRotateSpeed = 0.3
     controls.enableZoom = false
-
-    // Center on Miami at start
     globeRef.current.pointOfView({ lat: MIAMI.lat, lng: MIAMI.lng, altitude: 2.2 }, 0)
 
-    // Pause rotation on hover/touch, resume after
     const el = globeRef.current.renderer().domElement
     const pause = () => { controls.autoRotate = false }
     const resume = () => { setTimeout(() => { controls.autoRotate = true }, 2000) }
     el.addEventListener('pointerdown', pause)
     el.addEventListener('pointerup', resume)
     el.addEventListener('pointerleave', resume)
-
     return () => {
       el.removeEventListener('pointerdown', pause)
       el.removeEventListener('pointerup', resume)
@@ -97,18 +81,15 @@ export default function InteractiveGlobe() {
     }
   }, [isVisible])
 
-  // Fly to city when selected
   const flyToCity = (city) => {
     if (!globeRef.current) return
     setSelectedCity(city.city)
     const controls = globeRef.current.controls()
     controls.autoRotate = false
     globeRef.current.pointOfView({ lat: city.lat, lng: city.lng, altitude: 1.8 }, 1200)
-    // Resume auto-rotate after a pause
     setTimeout(() => { if (controls) controls.autoRotate = true }, 5000)
   }
 
-  // Custom tooltip HTML
   const pointLabel = useMemo(() => (d) => `
     <div style="background:rgba(11,33,61,0.95);backdrop-filter:blur(12px);border:1px solid rgba(145,123,76,0.3);border-radius:10px;padding:14px 18px;min-width:180px;font-family:Inter,sans-serif;">
       <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
@@ -121,6 +102,8 @@ export default function InteractiveGlobe() {
     </div>
   `, [])
 
+  const sel = selectedCity ? CITIES.find(x => x.city === selectedCity) : null
+
   return (
     <div
       ref={containerRef}
@@ -131,171 +114,47 @@ export default function InteractiveGlobe() {
         transition: 'opacity 1s ease, transform 1s ease',
       }}
     >
-      {/* Globe + City Directory side by side on desktop */}
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', gap: '0', maxWidth: '1300px', margin: '0 auto', flexWrap: 'wrap' }}>
-        {/* Globe */}
-        <div className="globe-wrapper" style={{ flex: '1 1 60%', minWidth: '300px' }}>
-          {isVisible && (
-            <Globe
-              ref={globeRef}
-              width={globeSize * 0.65}
-              height={globeSize * 0.65}
-              backgroundColor="rgba(0,0,0,0)"
-              globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-              atmosphereColor="rgba(100,140,200,0.3)"
-              atmosphereAltitude={0.15}
-
-              pointsData={CITIES}
-              pointLat="lat"
-              pointLng="lng"
-              pointColor={(d) => d.homeBase ? '#d4a853' : (d.city === selectedCity ? '#fff' : '#917B4C')}
-              pointAltitude={(d) => d.homeBase ? 0.06 : (d.city === selectedCity ? 0.05 : 0.02)}
-              pointRadius={(d) => d.homeBase ? 1.2 : (d.city === selectedCity ? 1.0 : 0.7)}
-              pointLabel={pointLabel}
-
-              labelsData={CITIES}
-              labelLat="lat"
-              labelLng="lng"
-              labelText={(d) => `${d.city} (${d.years})`}
-              labelSize={(d) => d.homeBase ? 1.8 : (d.city === selectedCity ? 1.6 : 1.2)}
-              labelDotRadius={0}
-              labelColor={() => 'rgba(255,255,255,0.85)'}
-              labelResolution={2}
-              labelAltitude={(d) => d.homeBase ? 0.07 : 0.03}
-              labelLabel={pointLabel}
-
-              arcsData={ARCS}
-              arcStartLat="startLat"
-              arcStartLng="startLng"
-              arcEndLat="endLat"
-              arcEndLng="endLng"
-              arcColor={() => ['rgba(145,123,76,0.5)', 'rgba(145,123,76,0.1)']}
-              arcAltitudeAutoScale={0.3}
-              arcStroke={0.3}
-              arcDashLength={0.5}
-              arcDashGap={0.3}
-              arcDashAnimateTime={4000}
-            />
-          )}
-        </div>
-
-        {/* City Directory */}
-        <div style={{
-          flex: '1 1 35%', minWidth: '280px', maxWidth: '400px',
-          display: 'flex', flexDirection: 'column',
-          padding: 'clamp(16px, 2vw, 32px)',
-        }}>
-          {/* Selected city detail card */}
-          {selectedCity ? (() => {
-            const c = CITIES.find(x => x.city === selectedCity)
-            return c ? (
-              <div style={{
-                background: 'rgba(191,177,112,0.08)',
-                border: '1px solid rgba(191,177,112,0.25)',
-                borderRadius: '12px',
-                padding: '18px 16px',
-                marginBottom: '16px',
-                transition: 'all 0.3s',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>{c.city}</span>
-                  <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>{c.country}</span>
-                </div>
-                <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.7rem', color: '#bfb170', letterSpacing: '0.08em', marginBottom: '6px' }}>{c.years}</p>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{c.label}</p>
-                {c.homeBase && (
-                  <span style={{ display: 'inline-block', marginTop: '8px', padding: '3px 10px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: '"IBM Plex Mono", monospace', color: '#bfb170', background: 'rgba(191,177,112,0.12)', border: '1px solid rgba(191,177,112,0.25)', borderRadius: '100px' }}>
-                    Home Base
-                  </span>
-                )}
-              </div>
-            ) : null
-          })() : (
-            <div style={{ marginBottom: '16px' }}>
-              <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#bfb170', fontWeight: 600, marginBottom: '8px' }}>
-                {CITIES.length} Cities Worldwide
-              </p>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>
-                Click any city to explore it on the globe.
-              </p>
-            </div>
-          )}
-
-          {/* Scrollable city list */}
-          <div style={{
-            flex: 1,
-            overflowY: 'auto',
-            maxHeight: '420px',
-            borderRadius: '12px',
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(191,177,112,0.12)',
-            padding: '8px',
-          }}>
-            {CITIES_SORTED.map((c) => {
-              const isActive = selectedCity === c.city
-              return (
-                <button
-                  key={c.city}
-                  onClick={() => flyToCity(c)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    padding: '12px 14px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all 0.2s',
-                    background: isActive ? 'rgba(191,177,112,0.15)' : 'transparent',
-                    borderLeft: isActive ? '3px solid #bfb170' : '3px solid transparent',
-                    marginBottom: '2px',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) e.currentTarget.style.background = 'transparent'
-                  }}
-                >
-                  <div>
-                    <span style={{
-                      fontFamily: '"Space Grotesk", sans-serif',
-                      fontSize: '0.9rem',
-                      fontWeight: isActive ? 700 : 500,
-                      color: isActive ? '#fff' : 'rgba(255,255,255,0.8)',
-                      display: 'block',
-                      marginBottom: '2px',
-                    }}>
-                      {c.city}
-                      {c.homeBase && (
-                        <span style={{ marginLeft: '8px', fontSize: '0.55rem', color: '#bfb170', fontFamily: '"IBM Plex Mono", monospace', textTransform: 'uppercase', letterSpacing: '0.1em', verticalAlign: 'middle' }}>
-                          Home Base
-                        </span>
-                      )}
-                    </span>
-                    <span style={{
-                      fontFamily: '"IBM Plex Mono", monospace',
-                      fontSize: '0.65rem',
-                      color: isActive ? '#bfb170' : 'rgba(255,255,255,0.35)',
-                      letterSpacing: '0.05em',
-                    }}>
-                      {c.country} · {c.years}
-                    </span>
-                  </div>
-                  {/* Gold dot indicator */}
-                  <span style={{
-                    width: '6px', height: '6px', borderRadius: '50%', flexShrink: 0,
-                    background: isActive ? '#bfb170' : 'rgba(255,255,255,0.15)',
-                    boxShadow: isActive ? '0 0 8px rgba(191,177,112,0.5)' : 'none',
-                    transition: 'all 0.2s',
-                  }} />
-                </button>
-              )
-            })}
-          </div>
-        </div>
+      {/* Globe (centered, original sizing) */}
+      <div className="globe-wrapper" style={{ margin: '0 auto' }}>
+        {isVisible && (
+          <Globe
+            ref={globeRef}
+            width={globeSize}
+            height={globeSize}
+            backgroundColor="rgba(0,0,0,0)"
+            globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+            atmosphereColor="rgba(100,140,200,0.3)"
+            atmosphereAltitude={0.15}
+            pointsData={CITIES}
+            pointLat="lat"
+            pointLng="lng"
+            pointColor={(d) => d.homeBase ? '#d4a853' : (d.city === selectedCity ? '#fff' : '#917B4C')}
+            pointAltitude={(d) => d.homeBase ? 0.06 : (d.city === selectedCity ? 0.05 : 0.02)}
+            pointRadius={(d) => d.homeBase ? 1.2 : (d.city === selectedCity ? 1.0 : 0.7)}
+            pointLabel={pointLabel}
+            labelsData={CITIES}
+            labelLat="lat"
+            labelLng="lng"
+            labelText={(d) => `${d.city} (${d.years})`}
+            labelSize={(d) => d.homeBase ? 1.8 : (d.city === selectedCity ? 1.6 : 1.2)}
+            labelDotRadius={0}
+            labelColor={() => 'rgba(255,255,255,0.85)'}
+            labelResolution={2}
+            labelAltitude={(d) => d.homeBase ? 0.07 : 0.03}
+            labelLabel={pointLabel}
+            arcsData={ARCS}
+            arcStartLat="startLat"
+            arcStartLng="startLng"
+            arcEndLat="endLat"
+            arcEndLng="endLng"
+            arcColor={() => ['rgba(145,123,76,0.5)', 'rgba(145,123,76,0.1)']}
+            arcAltitudeAutoScale={0.3}
+            arcStroke={0.3}
+            arcDashLength={0.5}
+            arcDashGap={0.3}
+            arcDashAnimateTime={4000}
+          />
+        )}
       </div>
 
       {/* Stats */}
@@ -316,7 +175,100 @@ export default function InteractiveGlobe() {
         </div>
       </div>
 
-      <p className="globe-hint">Click a city from the list or hover over markers to explore. Drag to rotate.</p>
+      {/* City Directory (below globe, centered) */}
+      <div style={{ maxWidth: '900px', margin: '24px auto 0', padding: '0 clamp(16px, 3vw, 40px)' }}>
+        {/* Selected city detail */}
+        {sel && (
+          <div style={{
+            background: 'rgba(191,177,112,0.08)',
+            border: '1px solid rgba(191,177,112,0.25)',
+            borderRadius: '12px',
+            padding: '18px 20px',
+            marginBottom: '16px',
+            transition: 'all 0.3s',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '6px' }}>
+              <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.15rem', fontWeight: 700, color: '#fff' }}>{sel.city}</span>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)' }}>{sel.country}</span>
+            </div>
+            <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.72rem', color: '#bfb170', letterSpacing: '0.08em', marginBottom: '6px' }}>{sel.years}</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{sel.label}</p>
+            {sel.homeBase && (
+              <span style={{ display: 'inline-block', marginTop: '8px', padding: '3px 10px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: '"IBM Plex Mono", monospace', color: '#bfb170', background: 'rgba(191,177,112,0.12)', border: '1px solid rgba(191,177,112,0.25)', borderRadius: '100px' }}>
+                Home Base
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Scrollable city list */}
+        <div style={{
+          overflowY: 'auto',
+          maxHeight: '260px',
+          borderRadius: '12px',
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(191,177,112,0.12)',
+          padding: '6px',
+        }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '2px' }}>
+            {CITIES_SORTED.map((c) => {
+              const isActive = selectedCity === c.city
+              return (
+                <button
+                  key={c.city}
+                  onClick={() => flyToCity(c)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'all 0.2s',
+                    background: isActive ? 'rgba(191,177,112,0.15)' : 'transparent',
+                    borderLeft: isActive ? '3px solid #bfb170' : '3px solid transparent',
+                  }}
+                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
+                  onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent' }}
+                >
+                  <div>
+                    <span style={{
+                      fontFamily: '"Space Grotesk", sans-serif',
+                      fontSize: '0.85rem',
+                      fontWeight: isActive ? 700 : 500,
+                      color: isActive ? '#fff' : 'rgba(255,255,255,0.75)',
+                      display: 'block',
+                    }}>
+                      {c.city}
+                      {c.homeBase && <span style={{ marginLeft: '6px', fontSize: '0.5rem', color: '#bfb170', fontFamily: '"IBM Plex Mono", monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>HQ</span>}
+                    </span>
+                    <span style={{
+                      fontFamily: '"IBM Plex Mono", monospace',
+                      fontSize: '0.6rem',
+                      color: isActive ? '#bfb170' : 'rgba(255,255,255,0.3)',
+                      letterSpacing: '0.05em',
+                    }}>
+                      {c.country} · {c.years}
+                    </span>
+                  </div>
+                  <span style={{
+                    width: '5px', height: '5px', borderRadius: '50%', flexShrink: 0,
+                    background: isActive ? '#bfb170' : 'rgba(255,255,255,0.12)',
+                    boxShadow: isActive ? '0 0 8px rgba(191,177,112,0.5)' : 'none',
+                    transition: 'all 0.2s',
+                  }} />
+                </button>
+              )
+            })}
+          </div>
+        </div>
+        <p style={{ textAlign: 'center', fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', marginTop: '12px' }}>
+          Click a city to rotate the globe. Drag to explore freely.
+        </p>
+      </div>
 
       {/* Screen reader accessible list */}
       <div className="sr-only" role="list" aria-label="Soccerex event cities">
