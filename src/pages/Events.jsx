@@ -353,6 +353,26 @@ export default function Events() {
 
       <PixelDivider color="#0d2b52" layers={4} height={90} speed={0.5} />
 
+      {/* ═══ EVENT STATS BAR ═══════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: '#050d1a', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px)' }}>
+        <NetworkNodes color="#bfb170" nodeCount={15} opacity={0.1} />
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          {[
+            { num: '75,000+', label: 'Attendees' },
+            { num: '54', label: 'Events' },
+            { num: '100+', label: 'Speakers Per Event' },
+            { num: '6', label: 'Continents' },
+          ].map((s, i) => (
+            <div key={s.label} className="text-center scale-up" style={{ transitionDelay: `${i * 60}ms` }}>
+              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1 }}>{s.num}</p>
+              <p className="font-heading font-bold text-white uppercase tracking-widest mt-3" style={{ fontSize: '0.72rem' }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <PixelDivider color="#050d1a" layers={4} height={90} speed={0.5} />
+
       {/* ═══ UPCOMING EVENTS ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div className="absolute inset-0 pointer-events-none" style={{

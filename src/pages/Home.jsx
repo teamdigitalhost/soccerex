@@ -412,14 +412,33 @@ const EXHIBITOR_LOGOS = [
   { src: '/images/exhibitors/sofascore.png', alt: 'Sofascore' },
   { src: '/images/exhibitors/balancebox.png', alt: 'BalanceBox' },
   { src: '/images/exhibitors/wicket.webp', alt: 'Wicket' },
+  { src: '/images/global-network/Sportfive_logo_2021_svg_1.png', alt: 'Sportfive' },
+  { src: '/images/global-network/OneFootball.png', alt: 'OneFootball' },
+  { src: '/images/global-network/electronic_arts_1_logo_png_transparent_1.png', alt: 'EA Sports' },
+  { src: '/images/global-network/TikTok_logo_svg_1.png', alt: 'TikTok' },
+  { src: '/images/global-network/Sport_Business_1.png', alt: 'SportBusiness' },
+  { src: '/images/global-network/IMG_GradLogo_Black_RGB_1.png', alt: 'IMG' },
+  { src: '/images/global-network/Samba_Digital_1.png', alt: 'Samba Digital' },
+  { src: '/images/global-network/Rezzil_Logo_1.png', alt: 'Rezzil' },
+  { src: '/images/global-network/Sponsor_United_Logo_1.png', alt: 'SponsorUnited' },
 ]
 
 const ORG_LOGOS = [
   { src: '/images/organisations/img.webp', alt: 'IMG' },
   { src: '/images/organisations/livescore.webp', alt: 'LiveScore' },
-  { src: '/images/organisations/elite-football-academy.webp', alt: 'Elite Football Academy Ghana' },
+  { src: '/images/organisations/elite-football-academy.webp', alt: 'Elite Football Academy' },
   { src: '/images/organisations/challenger-sports.webp', alt: 'Challenger Sports' },
   { src: '/images/organisations/cbf-usa.webp', alt: 'CBF USA' },
+  { src: '/images/global-network/FIFA_logo_without_slogan_svg_1.png', alt: 'FIFA' },
+  { src: '/images/global-network/La_liga_new_logo_1.png', alt: 'LaLiga' },
+  { src: '/images/global-network/UEFA_logo_1.png', alt: 'UEFA' },
+  { src: '/images/global-network/mls_logo_png_transparent_1.png', alt: 'MLS' },
+  { src: '/images/global-network/Concacaf_1.png', alt: 'CONCACAF' },
+  { src: '/images/global-network/commebol.png', alt: 'CONMEBOL' },
+  { src: '/images/global-network/NWSL.png', alt: 'NWSL' },
+  { src: '/images/global-network/Fox_SportsLogo_1.png', alt: 'Fox Sports' },
+  { src: '/images/global-network/CBS_1.png', alt: 'CBS Sports' },
+  { src: '/images/global-network/Bein_mediagroup_logo_1.png', alt: 'beIN Media' },
 ]
 
 function LogoMarquee({ logos, direction = 'left', speed = 30, invert = true, height = 50 }) {
