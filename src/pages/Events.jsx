@@ -361,23 +361,25 @@ export default function Events() {
         <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {[
-            { label: 'Soccerex Europe', desc: 'A global meeting point for stakeholders looking to access and engage with the European football market, one of the most mature and competitive in the world.', icon: Globe },
-            { label: 'Soccerex Miami', desc: 'A strategic gateway connecting global stakeholders to opportunities across North America, Latin America, and the wider international football ecosystem.', icon: MapPin },
-            { label: 'Soccerex Riyadh', desc: 'A high-growth hub bringing together global leaders to access one of the fastest-evolving regions in world football, driven by investment, infrastructure, and innovation.', icon: Calendar },
+            { label: 'Soccerex Europe', desc: 'A global meeting point for stakeholders looking to access and engage with the European football market, one of the most mature and competitive in the world.', icon: Globe, color: '#c8302c', logo: '/images/events/logos/europe.webp' },
+            { label: 'Soccerex Miami', desc: 'A strategic gateway connecting global stakeholders to opportunities across North America, Latin America, and the wider international football ecosystem.', icon: MapPin, color: '#1a7fb5', logo: '/images/events/logos/miami.webp' },
+            { label: 'Soccerex Riyadh', desc: 'A high-growth hub bringing together global leaders to access one of the fastest-evolving regions in world football, driven by investment, infrastructure, and innovation.', icon: Calendar, color: '#1a6b3c', logo: '/images/events/logos/mena.webp' },
           ].map((g, i) => {
             const Icon = g.icon
             return (
               <div key={g.label} className="scale-up" style={{ transitionDelay: `${i * 80}ms` }}>
                 <div style={{
-                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(191,177,112,0.2)',
+                  background: 'rgba(255,255,255,0.04)', border: `1px solid ${g.color}30`,
+                  borderTop: `3px solid ${g.color}`,
                   backdropFilter: 'blur(10px)', borderRadius: '16px', padding: '36px 28px',
-                  height: '100%', transition: 'transform 0.3s, border-color 0.3s',
+                  height: '100%', transition: 'transform 0.3s, border-color 0.3s, box-shadow 0.3s',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.borderColor = '#bfb170' }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.2)' }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = `0 20px 50px ${g.color}20` }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
                 >
-                  <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                    <Icon size={24} color="#09203e" strokeWidth={2} />
+                  {g.logo && <img src={g.logo} alt="" style={{ height: '28px', width: 'auto', marginBottom: '16px', opacity: 0.9 }} />}
+                  <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: g.color, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                    <Icon size={24} color="#fff" strokeWidth={2} />
                   </div>
                   <h3 className="font-heading font-bold text-white mb-3" style={{ fontSize: '1.3rem' }}>{g.label}</h3>
                   <p className="font-body leading-relaxed" style={{ fontSize: '0.92rem', color: 'rgba(255,255,255,0.7)' }}>{g.desc}</p>

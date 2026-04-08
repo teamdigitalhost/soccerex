@@ -1119,8 +1119,6 @@ export default function Home() {
       <OrganisationsSection />
       <ProudSponsorSection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
-      <HeritageGallerySection />
-      <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <FinalCTASection />
     </>
   )

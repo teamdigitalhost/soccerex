@@ -151,7 +151,10 @@ export default function About() {
               Celebrating 30 years as the longest-running dedicated football business platform in the world, Soccerex has earned its position as the neutral ground where the global football community comes together. On our 30th anniversary, we continue to evolve. From an events company to a year-round platform. From a place where relationships begin to a system that ensures results.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <p className="font-mono uppercase tracking-[0.15em] text-center mb-6 fade-up" style={{ fontSize: '0.72rem', color: '#bfb170', fontWeight: 600 }}>
+            Core Values
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {[
               { icon: Shield, title: 'Neutrality & Trust', desc: 'Clubs, leagues, brands, and investors engage openly, without agenda or bias.' },
               { icon: NetworkIcon, title: 'Global Connectivity', desc: 'Decision-makers from every part of the global football ecosystem, connected.' },
@@ -162,15 +165,15 @@ export default function About() {
               const Icon = p.icon
               return (
                 <div key={p.title} className="scale-up" style={{ transitionDelay: `${i * 50}ms` }}>
-                  <div style={{ background: '#fff', padding: '24px 18px', borderRadius: '12px', border: '1px solid rgba(9,32,62,0.06)', boxShadow: '0 6px 20px rgba(9,32,62,0.05)', height: '100%', textAlign: 'center', transition: 'transform 0.3s' }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)' }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
+                  <div style={{ background: '#fff', padding: '32px 24px', borderRadius: '14px', border: '1px solid rgba(9,32,62,0.06)', boxShadow: '0 8px 28px rgba(9,32,62,0.06)', height: '100%', textAlign: 'center', transition: 'transform 0.3s, box-shadow 0.3s' }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(9,32,62,0.12)' }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(9,32,62,0.06)' }}
                   >
-                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-                      <Icon size={20} color="#09203e" strokeWidth={2} />
+                    <div style={{ width: '52px', height: '52px', borderRadius: '12px', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                      <Icon size={24} color="#09203e" strokeWidth={2} />
                     </div>
-                    <h4 className="font-heading font-bold mb-2" style={{ fontSize: '0.85rem', color: '#09203e' }}>{p.title}</h4>
-                    <p className="font-body" style={{ fontSize: '0.78rem', color: '#666', lineHeight: 1.45 }}>{p.desc}</p>
+                    <h4 className="font-heading font-bold mb-3" style={{ fontSize: '0.95rem', color: '#09203e' }}>{p.title}</h4>
+                    <p className="font-body" style={{ fontSize: '0.82rem', color: '#555', lineHeight: 1.5 }}>{p.desc}</p>
                   </div>
                 </div>
               )
@@ -222,9 +225,9 @@ export default function About() {
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
       {/* ═══ STATS BAR ═════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: '#09203e', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px)' }}>
+      <section className="relative overflow-hidden flex items-center" style={{ background: '#09203e', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
         <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
-        <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8 w-full" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {[
             { num: '75000+', display: '75,000+', label: 'Attendees', sub: 'Industry professionals across six continents' },
             { num: '57', display: '57', label: 'Events', sub: 'In major football markets worldwide' },
