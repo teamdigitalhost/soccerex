@@ -114,8 +114,8 @@ export default function InteractiveGlobe() {
         transition: 'opacity 1s ease, transform 1s ease',
       }}
     >
-      {/* Globe (centered, original sizing) */}
-      <div className="globe-wrapper" style={{ margin: '0 auto' }}>
+      {/* Globe: original dramatic oversized presentation */}
+      <div className="globe-wrapper">
         {isVisible && (
           <Globe
             ref={globeRef}
@@ -175,42 +175,37 @@ export default function InteractiveGlobe() {
         </div>
       </div>
 
-      {/* City Directory (below globe, centered) */}
-      <div style={{ maxWidth: '900px', margin: '24px auto 0', padding: '0 clamp(16px, 3vw, 40px)' }}>
+      {/* City Directory */}
+      <div style={{ position: 'relative', zIndex: 10, maxWidth: '1000px', width: '100%', margin: '0 auto', padding: '0 clamp(16px, 3vw, 40px)' }}>
         {/* Selected city detail */}
         {sel && (
           <div style={{
             background: 'rgba(191,177,112,0.08)',
             border: '1px solid rgba(191,177,112,0.25)',
             borderRadius: '12px',
-            padding: '18px 20px',
-            marginBottom: '16px',
-            transition: 'all 0.3s',
+            padding: '16px 20px',
+            marginBottom: '12px',
           }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '6px' }}>
-              <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.15rem', fontWeight: 700, color: '#fff' }}>{sel.city}</span>
-              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.78rem', color: 'rgba(255,255,255,0.5)' }}>{sel.country}</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
+              <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>{sel.city}</span>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>{sel.country}</span>
+              {sel.homeBase && <span style={{ fontSize: '0.55rem', fontFamily: '"IBM Plex Mono", monospace', color: '#bfb170', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(191,177,112,0.12)', padding: '2px 8px', borderRadius: '100px' }}>HQ</span>}
             </div>
-            <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.72rem', color: '#bfb170', letterSpacing: '0.08em', marginBottom: '6px' }}>{sel.years}</p>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{sel.label}</p>
-            {sel.homeBase && (
-              <span style={{ display: 'inline-block', marginTop: '8px', padding: '3px 10px', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: '"IBM Plex Mono", monospace', color: '#bfb170', background: 'rgba(191,177,112,0.12)', border: '1px solid rgba(191,177,112,0.25)', borderRadius: '100px' }}>
-                Home Base
-              </span>
-            )}
+            <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.68rem', color: '#bfb170', letterSpacing: '0.08em', marginBottom: '4px' }}>{sel.years}</p>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{sel.label}</p>
           </div>
         )}
 
-        {/* Scrollable city list */}
+        {/* Scrollable grid list */}
         <div style={{
           overflowY: 'auto',
-          maxHeight: '260px',
+          maxHeight: '220px',
           borderRadius: '12px',
           background: 'rgba(255,255,255,0.03)',
           border: '1px solid rgba(191,177,112,0.12)',
           padding: '6px',
         }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '2px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '2px' }}>
             {CITIES_SORTED.map((c) => {
               const isActive = selectedCity === c.city
               return (
@@ -218,59 +213,47 @@ export default function InteractiveGlobe() {
                   key={c.city}
                   onClick={() => flyToCity(c)}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    padding: '10px 12px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    textAlign: 'left',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    width: '100%', padding: '9px 12px', borderRadius: '6px',
+                    border: 'none', cursor: 'pointer', textAlign: 'left',
                     transition: 'all 0.2s',
                     background: isActive ? 'rgba(191,177,112,0.15)' : 'transparent',
-                    borderLeft: isActive ? '3px solid #bfb170' : '3px solid transparent',
+                    borderLeft: isActive ? '2px solid #bfb170' : '2px solid transparent',
                   }}
                   onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
-                  onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent' }}
+                  onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = isActive ? 'rgba(191,177,112,0.15)' : 'transparent' }}
                 >
                   <div>
                     <span style={{
-                      fontFamily: '"Space Grotesk", sans-serif',
-                      fontSize: '0.85rem',
-                      fontWeight: isActive ? 700 : 500,
-                      color: isActive ? '#fff' : 'rgba(255,255,255,0.75)',
-                      display: 'block',
+                      fontFamily: '"Space Grotesk", sans-serif', fontSize: '0.82rem',
+                      fontWeight: isActive ? 700 : 500, color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
                     }}>
                       {c.city}
-                      {c.homeBase && <span style={{ marginLeft: '6px', fontSize: '0.5rem', color: '#bfb170', fontFamily: '"IBM Plex Mono", monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>HQ</span>}
                     </span>
                     <span style={{
-                      fontFamily: '"IBM Plex Mono", monospace',
-                      fontSize: '0.6rem',
+                      fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.58rem',
                       color: isActive ? '#bfb170' : 'rgba(255,255,255,0.3)',
-                      letterSpacing: '0.05em',
+                      marginLeft: '8px', letterSpacing: '0.04em',
                     }}>
-                      {c.country} · {c.years}
+                      {c.years}
                     </span>
                   </div>
                   <span style={{
                     width: '5px', height: '5px', borderRadius: '50%', flexShrink: 0,
-                    background: isActive ? '#bfb170' : 'rgba(255,255,255,0.12)',
+                    background: isActive ? '#bfb170' : 'rgba(255,255,255,0.1)',
                     boxShadow: isActive ? '0 0 8px rgba(191,177,112,0.5)' : 'none',
-                    transition: 'all 0.2s',
                   }} />
                 </button>
               )
             })}
           </div>
         </div>
-        <p style={{ textAlign: 'center', fontFamily: 'Inter, sans-serif', fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', marginTop: '12px' }}>
+        <p style={{ textAlign: 'center', fontFamily: 'Inter, sans-serif', fontSize: '0.72rem', color: 'rgba(255,255,255,0.3)', marginTop: '10px' }}>
           Click a city to rotate the globe. Drag to explore freely.
         </p>
       </div>
 
-      {/* Screen reader accessible list */}
+      {/* Screen reader list */}
       <div className="sr-only" role="list" aria-label="Soccerex event cities">
         {CITIES.map((c) => (
           <div key={c.city} role="listitem">{c.city}, {c.country}: {c.years}. {c.label}</div>
