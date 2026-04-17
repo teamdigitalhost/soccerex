@@ -47,20 +47,28 @@ export default function InteractiveGlobe() {
   const [selectedCity, setSelectedCity] = useState(null)
   const [listOpen, setListOpen] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
-  const [panelVisible, setPanelVisible] = useState(true)
+  // Panel starts hidden until we know viewport size; set in the effect below.
+  // (Per Ivan's feedback: on mobile, default the whole panel to hidden and
+  // expose a "Cities" button; on desktop keep the panel visible as before.)
+  const [panelVisible, setPanelVisible] = useState(false)
+  const [hasMeasuredViewport, setHasMeasuredViewport] = useState(false)
 
   // Track screen size for collapsible behavior
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640)
     check()
+    setHasMeasuredViewport(true)
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  // Default collapsed on mobile
+  // Once we know the viewport, set panel + list defaults. Only fires when
+  // isMobile crosses a breakpoint so we don't clobber the user's open/close.
   useEffect(() => {
+    if (!hasMeasuredViewport) return
+    setPanelVisible(!isMobile)
     setListOpen(!isMobile)
-  }, [isMobile])
+  }, [isMobile, hasMeasuredViewport])
 
   useEffect(() => {
     const updateSize = () => {
