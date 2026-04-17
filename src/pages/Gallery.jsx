@@ -31,14 +31,13 @@ export default function Gallery() {
   return (
     <div className="gallery-page" style={{ background: '#050d1a', minHeight: '100vh' }}>
       {/* Hero banner */}
-      <section className="gallery-hero" style={{
-        minHeight: '45vh',
+      <section className="gallery-hero inner-hero" style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)',
+        padding: 'clamp(50px,6vw,90px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)',
         background: 'linear-gradient(135deg, #050d1a 0%, #09203e 50%, #061729 100%)',
         position: 'relative',
       }}>
@@ -50,6 +49,10 @@ export default function Gallery() {
         }}>
           <ArrowLeft size={16} /> Back to Home
         </Link>
+        <div className="inner-hero-crest flex justify-center" style={{ position: 'relative', zIndex: 1 }}>
+          <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
+            style={{ filter: 'drop-shadow(0 8px 40px rgba(255,107,53,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
+        </div>
         <p className="section-label text-gold mb-4" style={{ position: 'relative', zIndex: 1 }}>
           THE SOCCEREX GALLERY
         </p>

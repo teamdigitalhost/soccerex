@@ -6,8 +6,11 @@
   --color-navy: #09203e;
   --color-navy-light: #0e2a4f;
   --color-navy-dark: #061729;
-  --color-gold: #bfb170;
-  --color-gold-light: #d4c78e;
+  /* Ember palette — primary ember orange, secondary golden yellow */
+  --color-gold: #ff6b35;
+  --color-gold-light: #ff8a5f;
+  --color-red: #ffb703;
+  --color-red-light: #ffd166;
   --color-blue-accent: #1a3fbf;
   --color-midnight: #050d1a;
   --color-charcoal: #0c1a2e;
@@ -22,6 +25,9 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
 }
+
+/* Prevent accidental horizontal scroll on mobile from hero particle effects */
+html, body { overflow-x: hidden; max-width: 100vw; }
 
 /* Fade-up animation via IntersectionObserver */
 .fade-up {
@@ -84,7 +90,7 @@
 /* Section divider line */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, #bfb170, transparent);
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
   transform: scaleX(0);
   transition: transform 1s ease;
 }
@@ -118,7 +124,7 @@
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, #bfb170, #1a3fbf);
+  background: linear-gradient(90deg, var(--color-gold), #1a3fbf);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.8s ease;
@@ -183,7 +189,7 @@
   left: 0;
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #bfb170, rgba(191, 177, 112, 0.3));
+  background: linear-gradient(90deg, var(--color-gold), rgba(191, 177, 112, 0.3));
 }
 
 /* ─── Hero Slideshow ─────────────────────────────────────────────────────── */
@@ -254,6 +260,72 @@
   height: calc(100% + 400px);
   pointer-events: none;
   z-index: 0;
+}
+
+/* 30-year anniversary crest — entrance animation + ember glow halo */
+.hero-crest-wrap {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: scale(0.88) translateY(8px);
+  transition: opacity 1.2s ease, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 8px 40px rgba(255, 107, 53, 0.35)) drop-shadow(0 0 90px rgba(255, 183, 3, 0.18));
+  /* Aggressive negative margins claw back the SVG's intrinsic whitespace
+     (the viewBox has ~20% empty space above and below the visible content). */
+  margin-top: clamp(-140px, -13vh, -40px);
+  margin-bottom: clamp(-140px, -13vh, -40px);
+}
+.hero-text-visible .hero-crest-wrap {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.hero-crest-wrap img {
+  /* Responsive to both width AND height. Larger floor so mobile doesn't look
+     tiny, and the ideal scales generously on narrow viewports. */
+  height: clamp(380px, min(95vw, 72dvh), 820px) !important;
+  width: auto !important;
+  /* Clip ~18% off top and bottom to remove SVG viewBox whitespace */
+  clip-path: inset(18% 0 18% 0);
+}
+
+/* Narrow viewports: don't force a full 100dvh hero. That wastes vertical space
+   and makes the crest feel "lost" in an empty container. Let the content drive
+   the height with a comfortable minimum. */
+@media (max-width: 640px) {
+  .hero-slideshow {
+    min-height: 82dvh !important;
+  }
+}
+
+/* ═══ Inner-page hero (shared) ═══════════════════════════════════════════
+   Used on About, App, Contact, Gallery, Insights, Network, Events, Europe.
+   Mirrors the home hero approach: dvh-based sizing so short/landscape
+   windows don't get a huge empty hero, crest height constrained by BOTH
+   viewport width AND height via min(), and negative margins reclaim the
+   SVG viewBox whitespace (clipped by clip-path). */
+.inner-hero {
+  min-height: clamp(440px, 62dvh, 780px);
+}
+@media (max-height: 720px) {
+  .inner-hero { min-height: clamp(380px, 78dvh, 560px); }
+}
+@media (max-width: 640px) {
+  .inner-hero { min-height: 70dvh; }
+}
+.inner-hero-crest {
+  margin-top: clamp(-130px, -12vh, -40px);
+  margin-bottom: clamp(-130px, -12vh, -40px);
+}
+.inner-hero-crest img {
+  height: clamp(240px, min(62vw, 46dvh), 520px) !important;
+  width: auto !important;
+  clip-path: inset(18% 0 18% 0);
+}
+.inner-hero-crest--lg img {
+  height: clamp(280px, min(70vw, 54dvh), 620px) !important;
+}
+.inner-hero-crest--xl img {
+  height: clamp(300px, min(78vw, 60dvh), 720px) !important;
 }
 
 .hero-30-container {
@@ -339,6 +411,10 @@
   margin: 0.8rem auto 1rem;
   background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
   transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Short viewports: drop the divider so the tagline gets the space instead */
+@media (max-width: 480px), (max-height: 720px) {
+  .hero-divider { display: none !important; }
 }
 
 /* ─── Letter-by-letter cascading text ────────────────────────────────────── */
@@ -770,6 +846,43 @@
   100% { transform: translateX(0); }
 }
 
+/* ═══ Flip card (hover = 3D rotate-Y, image on back) ════════════════════════ */
+.sx-flip { cursor: pointer; }
+.sx-flip:hover .sx-flip-inner,
+.sx-flip:focus-within .sx-flip-inner {
+  transform: rotateY(180deg);
+}
+@media (hover: none) {
+  /* Touch: tap-to-flip via :focus-within on inner button */
+  .sx-flip .sx-flip-inner { transform: none; }
+}
+
+/* ═══ Brand Ecosystem rows (responsive) ═════════════════════════════════════ */
+.sx-ecosystem-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) 1fr;
+}
+.sx-ecosystem-left { border-right: 1px solid rgba(9,32,62,0.08); }
+@media (max-width: 720px) {
+  .sx-ecosystem-row { grid-template-columns: 1fr; }
+  .sx-ecosystem-left {
+    border-right: none;
+    border-bottom: 1px solid rgba(9,32,62,0.08);
+    padding: 14px 18px !important;
+  }
+  .sx-ecosystem-carousel { min-height: 78px; }
+  /* On mobile: smaller logos + faster animation so more cycle through per second */
+  .sx-ecosystem-carousel img {
+    height: 28px !important;
+    max-width: 90px !important;
+  }
+  .sx-ecosystem-carousel > div {
+    animation-duration: 16s !important;
+    gap: 26px !important;
+    padding: 0 20px !important;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* GLOBAL NETWORK PAGE                                                         */
 /* ═══════════════════════════════════════════════════════════════════════════ */
@@ -1118,7 +1231,7 @@
   position: absolute;
   inset: -3px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #bfb170, #09203e, #bfb170, #c8302c, #bfb170);
+  background: linear-gradient(135deg, var(--color-gold), #09203e, var(--color-gold), var(--color-red), var(--color-gold));
   background-size: 300% 300%;
   animation: ev-border-sweep 8s ease infinite;
   z-index: -1;

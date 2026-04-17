@@ -117,7 +117,7 @@ export default function HerSoccerex() {
         <div className="absolute inset-0" style={{
           background: 'linear-gradient(180deg, rgba(5,13,26,0.6) 0%, rgba(9,32,62,0.8) 40%, rgba(5,13,26,0.95) 100%)',
         }} />
-        <NetworkNodes color="#bfb170" nodeCount={30} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.15} />
         <div className="absolute pointer-events-none" style={{
           top: '15%', left: '50%', transform: 'translateX(-50%)',
           width: '800px', height: '800px', borderRadius: '50%',
@@ -227,7 +227,7 @@ export default function HerSoccerex() {
 
       {/* ═══ FOUR PILLARS ═══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div className="text-center mb-16">
             <p className="section-label text-gold mb-4 fade-up">WHAT WE DO</p>
@@ -326,7 +326,7 @@ export default function HerSoccerex() {
 
       {/* ═══ LONG-TERM VISION ══════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div className="text-center mb-16">
             <p className="section-label text-gold mb-4 fade-up">LONG-TERM VISION</p>
@@ -479,7 +479,7 @@ export default function HerSoccerex() {
 
       {/* ═══ LAUNCH NOTE ═══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={15} opacity={0.08} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={15} opacity={0.08} />
         <div className="relative z-10 text-center fade-up" style={{ maxWidth: '700px', margin: '0 auto' }}>
           <p className="section-label text-gold mb-6">COMING SOON</p>
           <p className="font-body text-white/80 leading-relaxed mb-4" style={{ fontSize: '1.1rem' }}>

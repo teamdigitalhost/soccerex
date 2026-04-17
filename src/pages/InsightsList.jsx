@@ -25,7 +25,17 @@ export default function InsightsList() {
   const [searchQuery, setSearchQuery] = useState('')
   const [page, setPage] = useState(1)
 
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => {
+    // Respect anchor hash (#soccerexpert-subscribe) otherwise scroll to top
+    if (window.location.hash) {
+      const t = setTimeout(() => {
+        const el = document.querySelector(window.location.hash)
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      }, 200)
+      return () => clearTimeout(t)
+    }
+    window.scrollTo(0, 0)
+  }, [])
 
   useEffect(() => {
     fetch('/insights-manifest.json')
@@ -72,12 +82,16 @@ export default function InsightsList() {
     <div style={{ background: '#050d1a' }}>
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '50vh' }}>
+      <section className="inner-hero relative overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
-        <NetworkNodes color="#bfb170" nodeCount={30} opacity={0.15} />
-        <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(140px,15vw,200px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.15} />
+        <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)' }}>
+          <div className="inner-hero-crest inner-hero-crest--lg flex justify-center fade-up">
+            <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
+              style={{ filter: 'drop-shadow(0 8px 40px rgba(255,107,53,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
+          </div>
           <p className="section-label text-gold mb-5 fade-up">INSIGHTS</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             The Football Industry's{' '}
@@ -138,7 +152,7 @@ export default function InsightsList() {
               {/* Search */}
               <div className="mb-8 fade-up">
                 <div style={{ position: 'relative' }}>
-                  <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#bfb170', pointerEvents: 'none' }} />
+                  <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-gold)', pointerEvents: 'none' }} />
                   <input
                     type="text"
                     placeholder="Search articles..."
@@ -151,21 +165,22 @@ export default function InsightsList() {
                       borderRadius: '10px', color: '#09203e', outline: 'none',
                       transition: 'border-color 0.2s',
                     }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = '#bfb170' }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
                   />
                 </div>
               </div>
 
               {/* SoccerExpert Subscribe */}
-              <div className="fade-up" style={{
+              <div id="soccerexpert-subscribe" className="fade-up" style={{
                 background: '#09203e',
                 borderRadius: '16px',
                 padding: '32px 28px',
                 marginBottom: '32px',
+                scrollMarginTop: '120px',
               }}>
                 <h3 className="font-heading font-bold text-white mb-2" style={{ fontSize: '1.5rem', letterSpacing: '-0.01em' }}>
-                  SOCCER<span style={{ color: '#bfb170' }}>EXPERT</span>
+                  SOCCER<span style={{ color: 'var(--color-gold)' }}>EXPERT</span>
                 </h3>
                 <p className="font-mono uppercase tracking-[0.12em] mb-4" style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.45)' }}>
                   THE FOOTBALL BUSINESS E-NEWSLETTER
@@ -187,13 +202,13 @@ export default function InsightsList() {
                       borderRadius: '8px', color: '#fff', outline: 'none',
                       marginBottom: '12px', transition: 'border-color 0.2s',
                     }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = '#bfb170' }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.25)' }}
                   />
                   <button type="submit" className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] w-full cursor-pointer border-none"
-                    style={{ background: '#bfb170', color: '#09203e', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s' }}
+                    style={{ background: 'var(--color-gold)', color: '#09203e', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s' }}
                     onMouseEnter={(e) => { e.currentTarget.style.background = '#d4c78e' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = '#bfb170' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-gold)' }}
                   >
                     <Mail size={15} /> Subscribe
                   </button>
@@ -229,7 +244,7 @@ export default function InsightsList() {
                       onMouseLeave={(e) => { if (cat !== activeCategory) e.currentTarget.style.background = 'transparent' }}
                     >
                       {cat}
-                      {cat === activeCategory && <ChevronRight size={14} style={{ color: '#bfb170' }} />}
+                      {cat === activeCategory && <ChevronRight size={14} style={{ color: 'var(--color-gold)' }} />}
                     </button>
                   ))}
                 </div>
@@ -247,9 +262,9 @@ export default function InsightsList() {
                 <div className="flex flex-col gap-4">
                   {articles.slice(0, 5).map((a) => (
                     <Link key={a.id} to={`/insights/${a.slug}`} className="group block" style={{ textDecoration: 'none' }}>
-                      <p className="font-mono uppercase" style={{ fontSize: '0.62rem', color: '#bfb170', letterSpacing: '0.1em', marginBottom: '4px' }}>{a.date}</p>
+                      <p className="font-mono uppercase" style={{ fontSize: '0.62rem', color: 'var(--color-gold)', letterSpacing: '0.1em', marginBottom: '4px' }}>{a.date}</p>
                       <p className="font-heading font-bold leading-snug transition-colors duration-200" style={{ fontSize: '0.88rem', color: '#09203e' }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = '#bfb170' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
                         onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
                       >
                         {a.title}
@@ -291,7 +306,7 @@ function ArticleRow({ article, index }) {
       <div className="flex flex-wrap items-center gap-3 mb-3">
         {displayCats.map((cat) => (
           <span key={cat} className="font-mono uppercase tracking-[0.12em]" style={{
-            fontSize: '0.62rem', color: '#bfb170', fontWeight: 600,
+            fontSize: '0.62rem', color: 'var(--color-gold)', fontWeight: 600,
             background: 'rgba(191,177,112,0.1)', padding: '4px 10px', borderRadius: '4px',
           }}>
             {cat}
@@ -305,7 +320,7 @@ function ArticleRow({ article, index }) {
       {/* Title */}
       <Link to={`/insights/${article.slug}`} style={{ textDecoration: 'none' }}>
         <h2 className="font-heading font-bold leading-snug mb-3 transition-colors duration-200" style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)', color: '#09203e' }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = '#bfb170' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
           onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
         >
           {article.title}
@@ -319,9 +334,9 @@ function ArticleRow({ article, index }) {
 
       {/* Read link */}
       <Link to={`/insights/${article.slug}`} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ fontSize: '0.78rem', color: '#bfb170', textDecoration: 'none', transition: 'color 0.2s' }}
+        style={{ fontSize: '0.78rem', color: 'var(--color-gold)', textDecoration: 'none', transition: 'color 0.2s' }}
         onMouseEnter={(e) => { e.currentTarget.style.color = '#09203e' }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = '#bfb170' }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
       >
         Continue Reading <ArrowRight size={14} />
       </Link>

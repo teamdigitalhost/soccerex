@@ -57,25 +57,43 @@ export default function Footer() {
   return (
     <footer className="relative overflow-hidden" style={{ background: '#050d1a', color: '#fff' }}>
       {/* Gold top border */}
-      <div style={{ height: '3px', background: 'linear-gradient(90deg, transparent, #bfb170 20%, #bfb170 80%, transparent)' }} />
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold) 20%, var(--color-gold) 80%, transparent)' }} />
 
       {/* Main footer content */}
       <div style={{ maxWidth: '1300px', margin: '0 auto', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,60px) 40px' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
 
-          {/* Column 1: Logo + About */}
-          <div>
-            <Link to="/" style={{ display: 'inline-block', textDecoration: 'none', marginBottom: '24px' }}>
-              <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '32px', width: 'auto' }} />
+          {/* Column 1: Heritage crest + Logo + About.
+              Crest container clips its intrinsic 14% top/bottom whitespace and
+              uses negative margins to reclaim the layout space, matching the
+              approach used on event cards. Centered inside the column. */}
+          <div style={{ containerType: 'inline-size' }}>
+            <Link to="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', textDecoration: 'none', marginBottom: '28px' }}>
+              <img
+                src="/brand/crests/crest-main-white.svg"
+                alt=""
+                aria-hidden="true"
+                style={{
+                  /* Dominates the column. Height-driven aspect keeps the width in check. */
+                  height: 'clamp(340px, 140cqw, 560px)',
+                  maxWidth: '100%',
+                  width: 'auto',
+                  flexShrink: 0,
+                  clipPath: 'inset(14% 0 14% 0)',
+                  marginTop: 'clamp(-80px, -19cqw, -28px)',
+                  marginBottom: 'clamp(-80px, -19cqw, -28px)',
+                }}
+              />
+              <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '30px', width: 'auto' }} />
             </Link>
             <p className="font-body leading-relaxed" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', marginBottom: '24px' }}>
               The global leader in the business of football since 1996. Connecting the industry across three continents.
             </p>
             <div className="flex items-start gap-2" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.85rem' }}>
-              <MapPin size={16} style={{ flexShrink: 0, marginTop: '2px', color: '#bfb170' }} />
+              <MapPin size={16} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--color-gold)' }} />
               <a href="https://maps.app.goo.gl/j51i1u3YtsbJuopm8" target="_blank" rel="noopener noreferrer"
                  style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', lineHeight: 1.6, transition: 'color 0.2s' }}
-                 onMouseEnter={e => { e.currentTarget.style.color = '#bfb170' }}
+                 onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}
               >
                 Soccerex LLC<br />
@@ -87,7 +105,7 @@ export default function Footer() {
 
           {/* Column 2: Explore */}
           <div>
-            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: '#bfb170', fontWeight: 600 }}>Explore</h4>
+            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--color-gold)', fontWeight: 600 }}>Explore</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {[
                 { label: 'Home', to: '/' },
@@ -95,9 +113,6 @@ export default function Footer() {
                 { label: 'About', to: '/about' },
                 { label: 'Global Network', to: '/global-network' },
                 { label: 'Insights', to: '/insights' },
-                { label: 'Deal Network', to: '/deal-network' },
-                { label: 'HerSoccerex', to: '/hersoccerex' },
-                { label: 'The Pitch', to: '/the-pitch' },
                 { label: 'Europe 2026', to: '/europe-2026' },
                 { label: 'Gallery', to: '/gallery' },
               ].map(l => (
@@ -109,7 +124,7 @@ export default function Footer() {
                     fontFamily: 'Inter, sans-serif',
                     transition: 'color 0.2s',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.color = '#bfb170' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
                   onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}
                   >{l.label}</Link>
                 </li>
@@ -119,7 +134,7 @@ export default function Footer() {
 
           {/* Column 3: Contact */}
           <div>
-            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: '#bfb170', fontWeight: 600 }}>Get in Touch</h4>
+            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--color-gold)', fontWeight: 600 }}>Get in Touch</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {CONTACTS.map(c => (
                 <li key={c.email} style={{ marginBottom: '16px' }}>
@@ -128,7 +143,7 @@ export default function Footer() {
                   </p>
                   <a href={`mailto:${c.email}`} className="inline-flex items-center gap-2"
                      style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
-                     onMouseEnter={e => { e.currentTarget.style.color = '#bfb170' }}
+                     onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
                   >
                     <Mail size={13} /> {c.email}
@@ -140,7 +155,7 @@ export default function Footer() {
 
           {/* Column 4: Connect/Socials */}
           <div>
-            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: '#bfb170', fontWeight: 600 }}>Connect</h4>
+            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--color-gold)', fontWeight: 600 }}>Connect</h4>
             <p className="font-body leading-relaxed mb-5" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)' }}>
               Follow us for the latest from the business of football.
             </p>
@@ -157,7 +172,7 @@ export default function Footer() {
                       color: 'rgba(255,255,255,0.75)',
                       transition: 'all 0.25s',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.borderColor = '#bfb170'; e.currentTarget.style.color = '#09203e' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.color = '#09203e' }}
                     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.2)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
                   >
                     <Icon />
@@ -175,9 +190,9 @@ export default function Footer() {
           <p className="font-body text-center md:text-left" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.45)' }}>
             © 2026 Soccerex. All Rights Reserved. Powered by{' '}
             <a href="https://digitalhost.co" target="_blank" rel="noopener noreferrer"
-              style={{ color: '#bfb170', textDecoration: 'none', transition: 'color 0.2s' }}
+              style={{ color: 'var(--color-gold)', textDecoration: 'none', transition: 'color 0.2s' }}
               onMouseEnter={e => { e.currentTarget.style.color = '#d4c78e' }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#bfb170' }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
             >Digital Host</a>.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
@@ -189,7 +204,7 @@ export default function Footer() {
             ].map(l => (
               <Link key={l.to} to={l.to}
                 style={{ color: 'rgba(255,255,255,0.45)', textDecoration: 'none', fontSize: '0.78rem', transition: 'color 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#bfb170' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.45)' }}
               >{l.label}</Link>
             ))}

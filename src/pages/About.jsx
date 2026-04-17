@@ -50,6 +50,104 @@ const NETWORK = [
   'Stadia and infrastructure', 'Performance and medical', 'Academy and youth development',
 ]
 
+// ─── Flip card: icon/title/desc on front, event image on back ──────────────
+function FlipCard({ icon: Icon, title, desc, img, variant = 'centered' }) {
+  return (
+    <div
+      className="sx-flip scale-up"
+      style={{
+        perspective: '1000px',
+        height: variant === 'centered' ? '280px' : '270px',
+      }}
+    >
+      <div className="sx-flip-inner" style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        transformStyle: 'preserve-3d',
+        transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
+      }}>
+        {/* Front */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
+          background: '#fff',
+          border: '1px solid rgba(9,32,62,0.06)',
+          borderRadius: '14px',
+          boxShadow: '0 8px 28px rgba(9,32,62,0.06)',
+          padding: variant === 'centered' ? '32px 24px' : '28px 26px',
+          textAlign: variant === 'centered' ? 'center' : 'left',
+          display: 'flex', flexDirection: 'column', alignItems: variant === 'centered' ? 'center' : 'flex-start',
+          justifyContent: 'flex-start',
+        }}>
+          <div style={{
+            width: variant === 'centered' ? '64px' : '60px',
+            height: variant === 'centered' ? '64px' : '60px',
+            borderRadius: '14px',
+            background: 'var(--color-gold)',
+            boxShadow: '0 8px 20px rgba(255,107,53,0.25)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            marginBottom: '18px',
+          }}>
+            <Icon size={variant === 'centered' ? 30 : 28} color="#09203e" strokeWidth={2.2} />
+          </div>
+          <h4 className="font-heading font-bold mb-3" style={{
+            fontSize: variant === 'centered' ? '1rem' : '1.05rem',
+            color: '#09203e',
+            lineHeight: 1.3,
+          }}>{title}</h4>
+          <p className="font-body" style={{
+            fontSize: variant === 'centered' ? '0.84rem' : '0.9rem',
+            color: '#555',
+            lineHeight: 1.5,
+          }}>{desc}</p>
+        </div>
+
+        {/* Back */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
+          transform: 'rotateY(180deg)',
+          borderRadius: '14px',
+          overflow: 'hidden',
+          boxShadow: '0 16px 40px rgba(9,32,62,0.18)',
+        }}>
+          <img src={img} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover', filter: 'saturate(1.05)',
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(180deg, rgba(9,32,62,0) 40%, rgba(9,32,62,0.95) 100%)',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            padding: '22px 22px 24px',
+          }}>
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 10px',
+              background: 'var(--color-gold)',
+              color: '#09203e',
+              borderRadius: '100px',
+              fontSize: '0.62rem',
+              fontWeight: 700,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              marginBottom: '10px',
+            }}>
+              Live at Soccerex
+            </span>
+            <h4 className="font-heading font-bold" style={{ color: '#fff', fontSize: '1.05rem', lineHeight: 1.3 }}>
+              {title}
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Animated counter ──────────────────────────────────────────────────────
 function AnimatedCounter({ target, suffix = '' }) {
   const ref = useRef(null)
@@ -105,26 +203,40 @@ export default function About() {
     <div style={{ background: '#050d1a' }}>
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '80vh' }}>
+      <section className="inner-hero relative overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0" style={{
           backgroundImage: 'url(/images/about/discover-soccerex.jpg)',
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'saturate(0.3) brightness(0.3)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 28%',
+          filter: 'saturate(0.35) brightness(0.32)',
         }} />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(5,13,26,0.5) 0%, rgba(9,32,62,0.85) 100%)' }} />
-        <NetworkNodes color="#bfb170" nodeCount={35} opacity={0.15} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(5,13,26,0.4) 0%, rgba(9,32,62,0.88) 100%)' }} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={35} opacity={0.15} />
         {/* Radial gold glow */}
-        <div className="absolute pointer-events-none" style={{ top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.08) 0%, transparent 60%)' }} />
+        <div className="absolute pointer-events-none" style={{ top: '10%', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
 
-        <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(140px,15vw,200px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
-          <p className="section-label text-gold mb-6 fade-up">ABOUT US</p>
-          <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.8rem)' }}>
+        <div className="relative z-10 text-center" style={{ maxWidth: '1000px', padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)' }}>
+          <div className="inner-hero-crest inner-hero-crest--lg flex justify-center fade-up">
+            <img
+              src="/brand/crests/crest-main-white.svg"
+              alt=""
+              aria-hidden="true"
+              style={{
+                filter: 'drop-shadow(0 8px 40px rgba(255, 107, 53, 0.35)) drop-shadow(0 0 90px rgba(255, 183, 3, 0.18))',
+              }}
+            />
+          </div>
+          <p className="section-label text-gold mb-6 fade-up">ABOUT SOCCEREX</p>
+          <h1 className="font-heading font-bold text-white leading-[1.05] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 5.4rem)' }}>
             The Global Leader in the{' '}
             <span style={{ color: 'var(--color-gold)' }}>Business of Football</span>
           </h1>
-          <div className="fade-up mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
-          <p className="font-body text-white/65 leading-relaxed fade-up font-mono uppercase tracking-widest" style={{ fontSize: '0.85rem' }}>
-            Since 1996
+          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <p className="font-body text-white/80 leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: 'clamp(1.05rem, 1.6vw, 1.35rem)', maxWidth: '820px', lineHeight: 1.55 }}>
+            Since 1996, Soccerex has been the neutral ground where the global football industry comes together to connect, deal, and grow the game. Thirty years, three continents, one platform.
+          </p>
+          <p className="font-body text-white/55 fade-up font-mono uppercase tracking-widest" style={{ fontSize: '0.85rem', letterSpacing: '0.2em' }}>
+            Est. 1996
           </p>
         </div>
       </section>
@@ -143,7 +255,7 @@ export default function About() {
             <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>OUR MISSION</p>
             <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.6rem)', color: '#09203e' }}>
               To Fuel The Global Growth of the{' '}
-              <span style={{ color: '#bfb170' }}>Football Community</span>{' '}
+              <span style={{ color: 'var(--color-gold)' }}>Football Community</span>{' '}
               Through World-Class Events, Insights, and Partnerships.
             </h2>
             <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
@@ -151,33 +263,26 @@ export default function About() {
               Celebrating 30 years as the longest-running dedicated football business platform in the world, Soccerex has earned its position as the neutral ground where the global football community comes together. On our 30th anniversary, we continue to evolve. From an events company to a year-round platform. From a place where relationships begin to a system that ensures results.
             </p>
           </div>
-          <p className="font-mono uppercase tracking-[0.15em] text-center mb-6 fade-up" style={{ fontSize: '0.72rem', color: '#bfb170', fontWeight: 600 }}>
+          <p className="font-mono uppercase tracking-[0.15em] text-center mb-6 fade-up" style={{ fontSize: '0.72rem', color: 'var(--color-gold)', fontWeight: 600 }}>
             Core Values
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {[
-              { icon: Shield, title: 'Neutrality & Trust', desc: 'Clubs, leagues, brands, and investors engage openly, without agenda or bias.' },
-              { icon: NetworkIcon, title: 'Global Connectivity', desc: 'Decision-makers from every part of the global football ecosystem, connected.' },
-              { icon: Brain, title: 'Institutional Memory', desc: 'Relationships and partnerships build over time, not from scratch.' },
-              { icon: Target, title: 'Commercial Gravity', desc: 'A concentrated environment where opportunities naturally emerge.' },
-              { icon: Award, title: 'Credibility', desc: 'A proven track record across global markets over three decades.' },
-            ].map((p, i) => {
-              const Icon = p.icon
-              return (
-                <div key={p.title} className="scale-up" style={{ transitionDelay: `${i * 50}ms` }}>
-                  <div style={{ background: '#fff', padding: '32px 24px', borderRadius: '14px', border: '1px solid rgba(9,32,62,0.06)', boxShadow: '0 8px 28px rgba(9,32,62,0.06)', height: '100%', textAlign: 'center', transition: 'transform 0.3s, box-shadow 0.3s' }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(9,32,62,0.12)' }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(9,32,62,0.06)' }}
-                  >
-                    <div style={{ width: '52px', height: '52px', borderRadius: '12px', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                      <Icon size={24} color="#09203e" strokeWidth={2} />
-                    </div>
-                    <h4 className="font-heading font-bold mb-3" style={{ fontSize: '0.95rem', color: '#09203e' }}>{p.title}</h4>
-                    <p className="font-body" style={{ fontSize: '0.82rem', color: '#555', lineHeight: 1.5 }}>{p.desc}</p>
-                  </div>
-                </div>
-              )
-            })}
+              { icon: Shield, title: 'Neutrality & Trust', desc: 'Clubs, leagues, brands, and investors engage openly, without agenda or bias.', img: '/hero/03-TIER1-infantino-fifa-president.jpg' },
+              { icon: NetworkIcon, title: 'Global Connectivity', desc: 'Decision-makers from every part of the global football ecosystem, connected.', img: '/hero/22-NEW-soccerex-brasil-auditorium.jpg' },
+              { icon: Brain, title: 'Institutional Memory', desc: 'Relationships and partnerships build over time, not from scratch.', img: '/hero/04-TIER1-bobby-charlton-handprints.jpg' },
+              { icon: Target, title: 'Commercial Gravity', desc: 'A concentrated environment where opportunities naturally emerge.', img: '/images/about/networking-group.jpg' },
+              { icon: Award, title: 'Credibility', desc: 'A proven track record across global markets over three decades.', img: '/hero/07-TIER1-van-der-sar.jpg' },
+            ].map((p) => (
+              <FlipCard
+                key={p.title}
+                icon={p.icon}
+                title={p.title}
+                desc={p.desc}
+                img={p.img}
+                variant="centered"
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -195,7 +300,7 @@ export default function About() {
         <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>DISCOVER SOCCEREX</p>
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
-            We Are Football, <span style={{ color: '#bfb170' }}>Connected.</span>
+            We Are Football, <span style={{ color: 'var(--color-gold)' }}>Connected.</span>
           </h2>
           <div className="fade-up mb-10" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
 
@@ -226,13 +331,13 @@ export default function About() {
 
       {/* ═══ STATS BAR ═════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden flex items-center" style={{ background: '#09203e', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8 w-full" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {[
-            { num: '75000+', display: '75,000+', label: 'Attendees', sub: 'Industry professionals across six continents' },
+            { num: '75k+', display: '75k+', label: 'Attendees', sub: 'Industry professionals across six continents' },
             { num: '57', display: '57', label: 'Events', sub: 'In major football markets worldwide' },
-            { num: '24', display: '24', label: 'Cities', sub: 'Global footprint from Miami to Macau' },
-            { num: '6', display: '6', label: 'Continents', sub: 'Engaging every major football region' },
+            { num: '21', display: '21', label: 'Cities', sub: 'Global footprint from Miami to Macau' },
+            { num: '5k+', display: '5k+', label: 'Brands', sub: 'Sport, media, and technology worldwide' },
           ].map((s) => (
             <div key={s.label} className="text-center scale-up">
               <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1 }}>
@@ -259,37 +364,25 @@ export default function About() {
             <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>WHO WE REACH</p>
             <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
               Audience{' '}
-              <span style={{ color: '#bfb170' }}>Reach</span>
+              <span style={{ color: 'var(--color-gold)' }}>Reach</span>
             </h2>
             <div className="fade-up mx-auto" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { title: 'Global Football Institutional Partners', desc: 'FIFA, LaLiga, CONCACAF, Premier League, Serie A, UEFA, MLS, and National Football Federations (U.S. Soccer, CBF, FA, and more).', icon: Globe },
-              { title: 'Industry Operators and Commercial Drivers', desc: 'Clubs across Europe, the Americas, Africa, and Asia. League executives and rightsholders. Major sponsors (Adidas, Puma, Coca-Cola). Broadcasters and media platforms (Sky, ESPN, Globo). Event managers, consultants, and agents.', icon: Users },
-              { title: 'Emerging Players and Economy Builders', desc: 'Sports tech startups. Investors and fund managers. Commercial advisors and dealmakers. Digital platforms and fan engagement apps. Academies, grassroots organizers, and NGO programs.', icon: ArrowRight },
-            ].map((item, i) => {
-              const Icon = item.icon
-              return (
-                <div key={item.title} className="scale-up" style={{ transitionDelay: `${i * 60}ms` }}>
-                  <div style={{
-                    background: '#fff', padding: '32px 26px', borderRadius: '14px',
-                    border: '1px solid rgba(9,32,62,0.06)',
-                    boxShadow: '0 8px 28px rgba(9,32,62,0.06)',
-                    height: '100%', transition: 'transform 0.3s, box-shadow 0.3s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(9,32,62,0.12)' }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(9,32,62,0.06)' }}
-                  >
-                    <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'linear-gradient(135deg, #bfb170, #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-                      <Icon size={20} color="#09203e" strokeWidth={2} />
-                    </div>
-                    <h3 className="font-heading font-bold mb-3" style={{ fontSize: '1.05rem', color: '#09203e' }}>{item.title}</h3>
-                    <p className="font-body leading-relaxed" style={{ fontSize: '0.9rem', color: '#555' }}>{item.desc}</p>
-                  </div>
-                </div>
-              )
-            })}
+              { title: 'Global Football Institutional Partners', desc: 'FIFA, LaLiga, CONCACAF, Premier League, Serie A, UEFA, MLS, and National Football Federations (U.S. Soccer, CBF, FA, and more).', icon: Globe, img: '/hero/16-TIER2-football-for-hope-youth.jpg' },
+              { title: 'Industry Operators and Commercial Drivers', desc: 'Clubs across four continents. League executives and rightsholders. Major sponsors, broadcasters, and media platforms. Event managers, consultants, and agents.', icon: Users, img: '/hero/15-TIER2-asian-forum-panel.jpg' },
+              { title: 'Emerging Players and Economy Builders', desc: 'Sports tech startups. Investors and fund managers. Commercial advisors and dealmakers. Digital platforms and fan engagement apps. Academies, grassroots organizers, and NGO programs.', icon: ArrowRight, img: '/hero/09-TIER1-jenny-chiu-diverse-panel.jpg' },
+            ].map((item) => (
+              <FlipCard
+                key={item.title}
+                icon={item.icon}
+                title={item.title}
+                desc={item.desc}
+                img={item.img}
+                variant="full"
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -307,7 +400,7 @@ export default function About() {
         <div className="relative z-10" style={{ maxWidth: '900px', margin: '0 auto' }}>
           <p className="section-label mb-4 fade-up text-center" style={{ color: '#09203e', fontWeight: 600 }}>OUR HISTORY</p>
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
-            30 Years of <span style={{ color: '#bfb170' }}>Milestones</span>
+            30 Years of <span style={{ color: 'var(--color-gold)' }}>Milestones</span>
           </h2>
           <div className="fade-up mx-auto mb-12" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
 
@@ -324,13 +417,13 @@ export default function About() {
                 <div className="absolute" style={{
                   left: 'clamp(-6px, -0.8vw, -2px)', top: '6px', width: '14px', height: '14px',
                   borderRadius: '50%',
-                  background: i === TIMELINE.length - 1 ? '#bfb170' : '#09203e',
+                  background: i === TIMELINE.length - 1 ? 'var(--color-gold)' : '#09203e',
                   border: '3px solid #f4f3f0',
                   boxShadow: i === TIMELINE.length - 1
                     ? '0 0 0 4px rgba(191,177,112,0.2), 0 0 20px rgba(191,177,112,0.4)'
                     : '0 0 0 4px rgba(9,32,62,0.08)',
                 }} />
-                <span className="font-mono text-xs uppercase tracking-widest" style={{ color: '#bfb170', fontWeight: 700 }}>{item.year}</span>
+                <span className="font-mono text-xs uppercase tracking-widest" style={{ color: 'var(--color-gold)', fontWeight: 700 }}>{item.year}</span>
                 <h3 className="font-heading font-semibold mt-1 mb-2" style={{ fontSize: '1.15rem', color: '#09203e' }}>{item.title}</h3>
                 <p className="font-body leading-relaxed" style={{ fontSize: '0.92rem', color: '#666' }}>{item.desc}</p>
               </div>
@@ -350,14 +443,12 @@ export default function About() {
           filter: 'saturate(0.3) brightness(0.25)',
         }} />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(9,32,62,0.9) 0%, rgba(5,13,26,0.85) 100%)' }} />
-        <NetworkNodes color="#bfb170" nodeCount={25} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.1} />
 
         <div className="relative z-10 text-center" style={{ maxWidth: '850px', margin: '0 auto' }}>
-          {/* Quote marks */}
-          <div className="fade-up mb-6" style={{ fontSize: '5rem', color: 'rgba(191,177,112,0.3)', lineHeight: 0.5, fontFamily: 'Space Grotesk', fontWeight: 800 }}>"</div>
           <blockquote className="fade-up">
             <p className="font-heading font-bold text-white leading-snug mb-6 text-glow" style={{ fontSize: 'clamp(1.6rem, 3.2vw, 2.5rem)' }}>
-              "Take care of the game and the business takes care of itself."
+              &ldquo;Take care of the game and the business takes care of itself.&rdquo;
             </p>
             <div style={{ width: '60px', height: '2px', background: 'var(--color-gold)', margin: '0 auto 2rem' }} />
           </blockquote>
@@ -365,7 +456,7 @@ export default function About() {
             It is this ethos, implemented for the first time in 1996 and carried since, that has ensured Soccerex kept its position as the number one global football business event.
           </p>
           <p className="font-body text-white/60 leading-relaxed fade-up mx-auto" style={{ fontSize: '1rem', maxWidth: '720px' }}>
-            Now entering our 30th year of operations, we have hosted 57 events in 24 cities around the world, welcoming over 75,000 delegates.
+            Now entering our 30th year of operations, we have hosted 57 events in 21 cities around the world, welcoming over 75,000 delegates.
           </p>
         </div>
       </section>
@@ -382,7 +473,7 @@ export default function About() {
         <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <p className="section-label mb-4 fade-up text-center" style={{ color: '#09203e', fontWeight: 600 }}>PROVEN RETURN ON INVESTMENT</p>
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
-            Deals That Got Done at <span style={{ color: '#bfb170' }}>Soccerex</span>
+            Deals That Got Done at <span style={{ color: 'var(--color-gold)' }}>Soccerex</span>
           </h2>
           <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           <p className="font-body leading-relaxed mb-14 fade-up text-center mx-auto" style={{ color: '#666', maxWidth: '650px', fontSize: '1.02rem' }}>
@@ -415,7 +506,7 @@ export default function About() {
 
       {/* ═══ CTA ═══════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #09203e 0%, #0e2a4f 50%, #061729 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)', textAlign: 'center' }}>
-        <NetworkNodes color="#bfb170" nodeCount={25} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.1} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.08) 0%, transparent 60%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '700px', margin: '0 auto' }}>
@@ -430,7 +521,7 @@ export default function About() {
             <Link to="/europe-2026" className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
               style={{ background: 'var(--color-gold)', color: '#09203e', textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.transform = 'translateY(0)' }}>
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.transform = 'translateY(0)' }}>
               Next Event <ArrowRight size={16} />
             </Link>
             <Link to="/contact" className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"

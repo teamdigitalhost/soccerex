@@ -69,9 +69,9 @@ export default function Navbar() {
 
           <Link to="/contact"
             className="hidden lg:inline-flex items-center gap-2 text-navy font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
-            style={{ background: '#bfb170', border: '1px solid #bfb170', textDecoration: 'none' }}
+            style={{ background: 'var(--color-gold)', border: '1px solid var(--color-gold)', textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.borderColor = '#d4c78e' }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.borderColor = '#bfb170' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.borderColor = 'var(--color-gold)' }}
           >
             Get in Touch
           </Link>
@@ -100,7 +100,7 @@ export default function Navbar() {
           ))}
           <Link to="/contact" onClick={() => setMenuOpen(false)}
             className="nav-mobile-link inline-flex items-center gap-2 text-navy font-mono text-xs uppercase tracking-[0.2em] px-8 py-4 mt-6 cursor-pointer border-none"
-            style={{ background: '#bfb170', textDecoration: 'none', transitionDelay: menuOpen ? `${150 + navLinks.length * 80}ms` : '0ms' }}>
+            style={{ background: 'var(--color-gold)', textDecoration: 'none', transitionDelay: menuOpen ? `${150 + navLinks.length * 80}ms` : '0ms' }}>
             Get in Touch
           </Link>
         </div>

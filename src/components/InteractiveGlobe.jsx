@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 import Globe from 'react-globe.gl'
 
+/* HMR: this module owns a Three.js scene + WebGL context. Hot-patching leaks
+   the old renderer and can leave the canvas black. Force a full reload when
+   this file changes during dev so the scene is rebuilt from scratch. */
+if (import.meta.hot) {
+  import.meta.hot.accept(() => { import.meta.hot.invalidate() })
+}
+
 const CITIES = [
   { city: 'London', country: 'UK', lat: 51.5074, lng: -0.1278, years: '1996, 1997, 2005', label: 'Soccerex Launch and European Events' },
   { city: 'Paris', country: 'France', lat: 48.8566, lng: 2.3522, years: '1998', label: 'European Expansion' },
@@ -40,6 +47,7 @@ export default function InteractiveGlobe() {
   const [selectedCity, setSelectedCity] = useState(null)
   const [listOpen, setListOpen] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
+  const [panelVisible, setPanelVisible] = useState(true)
 
   // Track screen size for collapsible behavior
   useEffect(() => {
@@ -177,14 +185,86 @@ export default function InteractiveGlobe() {
       </div>
 
       {/* City Directory: overlaid on the right side */}
+      {/* Show panel button — slides in from the right when panel is hidden */}
+      <button
+        onClick={() => setPanelVisible(true)}
+        aria-label="Show event cities panel"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          right: 0,
+          transform: panelVisible ? 'translate(100%, -50%)' : 'translate(0, -50%)',
+          opacity: panelVisible ? 0 : 1,
+          pointerEvents: panelVisible ? 'none' : 'auto',
+          zIndex: 21,
+          background: 'rgba(9,32,62,0.85)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(191,177,112,0.35)',
+          borderRight: 'none',
+          borderRadius: '10px 0 0 10px',
+          padding: '14px 10px',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          color: '#bfb170',
+          fontFamily: '"IBM Plex Mono", monospace',
+          fontSize: '0.58rem',
+          textTransform: 'uppercase',
+          letterSpacing: '0.15em',
+          fontWeight: 600,
+          transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, border-color 0.2s',
+          writingMode: 'vertical-rl',
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.7)' }}
+        onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.35)' }}
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotate(90deg)' }}>
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Cities
+      </button>
+
       <div style={{
         position: 'absolute',
         top: '50%',
         right: 'clamp(16px, 3vw, 60px)',
-        transform: 'translateY(-50%)',
+        transform: panelVisible ? 'translateY(-50%) translateX(0)' : `translateY(-50%) translateX(calc(100% + clamp(16px, 3vw, 60px)))`,
+        opacity: panelVisible ? 1 : 0,
+        pointerEvents: panelVisible ? 'auto' : 'none',
         width: 'clamp(260px, 28vw, 340px)',
         zIndex: 20,
+        transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease',
       }}>
+        {/* Hide panel button — small close chevron at the top of the panel */}
+        <button
+          onClick={() => setPanelVisible(false)}
+          aria-label="Hide event cities panel"
+          style={{
+            position: 'absolute',
+            top: '-6px',
+            right: '-6px',
+            zIndex: 2,
+            width: '28px',
+            height: '28px',
+            borderRadius: '50%',
+            background: 'rgba(9,32,62,0.92)',
+            border: '1px solid rgba(191,177,112,0.4)',
+            backdropFilter: 'blur(8px)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#bfb170',
+            transition: 'transform 0.15s ease, border-color 0.15s',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.8)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.4)' }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
         {/* Selected city detail (always visible, even when list collapsed) */}
         {sel && (
           <div style={{

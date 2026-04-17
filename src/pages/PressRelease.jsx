@@ -36,7 +36,7 @@ export default function PressRelease() {
       <div style={{ background: '#fff', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="text-center">
           <h1 className="font-heading font-bold text-2xl mb-4" style={{ color: '#1a1a1a' }}>Press release not found</h1>
-          <Link to="/" className="font-body text-sm" style={{ color: '#c8302c' }}>Return to homepage</Link>
+          <Link to="/" className="font-body text-sm" style={{ color: 'var(--color-red)' }}>Return to homepage</Link>
         </div>
       </div>
     )
@@ -76,7 +76,7 @@ export default function PressRelease() {
             }
             if (block.type === 'quote') {
               return (
-                <blockquote key={i} style={{ borderLeft: '3px solid #c8302c', paddingLeft: '24px', margin: '2rem 0' }}>
+                <blockquote key={i} style={{ borderLeft: '3px solid var(--color-red)', paddingLeft: '24px', margin: '2rem 0' }}>
                   <p className="font-body leading-relaxed italic mb-2" style={{ fontSize: '1.1rem', color: '#333' }}>
                     {block.text}
                   </p>
@@ -98,7 +98,7 @@ export default function PressRelease() {
               Soccerex is the world's leading football business event platform, connecting the global football industry through conferences, exhibitions, media, and networking. For over 25 years, Soccerex has brought together the most influential stakeholders in the game to shape its commercial, strategic, and institutional future.
             </p>
             <p className="font-body text-sm" style={{ color: '#999' }}>
-              Media Contact: <a href="mailto:press@soccerex.com" style={{ color: '#c8302c', textDecoration: 'none' }}>press@soccerex.com</a>
+              Media Contact: <a href="mailto:press@soccerex.com" style={{ color: 'var(--color-red)', textDecoration: 'none' }}>press@soccerex.com</a>
             </p>
           </div>
         </article>

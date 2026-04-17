@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
+import Crest from './Crest'
 
 // ─── Hero images — built from manifest, shuffled fresh each visit ────────────
 let ALL_IMAGES = []
@@ -34,15 +35,9 @@ function buildPlaylist(heritage, modern) {
   return result
 }
 
-// ─── Rotating taglines (each completes "30 Years...") ───────────────────────
-const TAGLINES = [
-  'of Connecting the Football Industry',
-  'of Building Relationships That Matter',
-  'of Shaping the Global Game',
-  'of Deals Getting Done',
-  'at the Center of Football Business',
-  'of Uniting Clubs, Brands & Investors',
-]
+// ─── Static tagline (CEO-approved statement) ────────────────────────────────
+// Rotating taglines archived in HeroSlideshow.baseline.jsx for future reuse.
+const HERO_STATEMENT = 'as the Longest-Running Football Business Platform, Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership.'
 
 // ─── Letter-by-letter component ─────────────────────────────────────────────
 function CascadingText({ text, visible, className = '' }) {
@@ -343,10 +338,6 @@ export default function HeroSlideshow() {
   const sectionRef = useRef(null)
   const [currentImage, setCurrentImage] = useState(0)
   const [showImage, setShowImage] = useState(true)
-  const [taglineIndex, setTaglineIndex] = useState(0)
-  const SUBLINE_WORDS = ['Event', 'Platform']
-  const [sublineWord, setSublineWord] = useState(0)
-  const [taglineVisible, setTaglineVisible] = useState(false)
   const [textReady, setTextReady] = useState(false)
   const [transitioning, setTransitioning] = useState(false) // gold/blue fade between cycles
 
@@ -393,33 +384,7 @@ export default function HeroSlideshow() {
     return () => clearInterval(interval)
   }, [imagesLoaded])
 
-  // ── Rotating tagline cycle ────────────────────────────────────────────
-  useEffect(() => {
-    let interval
-    // Show first tagline after intro animations settle
-    const showTimer = setTimeout(() => {
-      // Letters already rendered hidden; trigger cascade on next frame
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setTaglineVisible(true))
-      })
-      // Start cycling only after first tagline is shown
-      interval = setInterval(() => {
-        setTaglineVisible(false)
-        setTimeout(() => {
-          // Step 1: render new letters (hidden)
-          setTaglineIndex((prev) => (prev + 1) % TAGLINES.length)
-          setSublineWord((prev) => (prev + 1) % SUBLINE_WORDS.length)
-          // Step 2: on next frame, trigger the cascade-in transition
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              setTaglineVisible(true)
-            })
-          })
-        }, 1200)
-      }, 3300)
-    }, 2500)
-    return () => { clearTimeout(showTimer); if (interval) clearInterval(interval) }
-  }, [])
+  // (Rotating tagline logic retired. Kept baseline copy in HeroSlideshow.baseline.jsx.)
 
   return (
     <section ref={sectionRef} className="hero-slideshow relative overflow-hidden flex items-center justify-center" style={{ minHeight: '100dvh' }}>
@@ -439,40 +404,33 @@ export default function HeroSlideshow() {
       {/* Dark gradient overlay */}
       <div className="hero-overlay" aria-hidden="true" />
 
-      {/* Text content */}
+      {/* Text content — crest-led anniversary edition lockup */}
       <div className={`hero-text relative z-10 text-center ${textReady ? 'hero-text-visible' : ''}`}
-        style={{ maxWidth: '900px', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
+        style={{ maxWidth: '900px', padding: 'clamp(40px,6vw,90px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
 
-        {/* Eyebrow */}
-        <p className="hero-eyebrow section-label text-gold mb-2">
-          SOCCEREX &middot; EST. 1996
-        </p>
-
-        {/* 3D SVG "30" with particles radiating from behind */}
+        {/* Anniversary crest (already says SOCCEREX + EST.1996 | 30 YEARS — no eyebrow needed) */}
         <div className="hero-30-with-particles">
           <ParticleField />
-          <Hero30SVG />
+          <div className="hero-crest-wrap">
+            <Crest variant="main" color="white" size={280} decorative />
+          </div>
         </div>
-
-        {/* "Years" under the 30 */}
-        <div className="hero-years">YEARS</div>
 
         {/* Gold divider */}
         <div className="hero-divider" />
 
-        {/* Rotating tagline with letter-by-letter cascade */}
-        <div className="hero-tagline-wrapper">
-          <CascadingText
-            text={TAGLINES[taglineIndex]}
-            visible={taglineVisible}
-            className="hero-tagline"
-          />
-        </div>
-
-        {/* Subline */}
-        <p className="hero-subline font-body text-white/45 leading-relaxed mt-6 mb-10"
-          style={{ fontSize: 'clamp(0.8rem, 1.2vw, 0.95rem)', maxWidth: '500px', margin: '1.5rem auto 2.5rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          The World's Premier Football Business Platform
+        {/* Static CEO-approved tagline */}
+        <p
+          className="hero-static-tagline font-body text-white/80 leading-relaxed"
+          style={{
+            fontSize: 'clamp(1rem, 1.5vw, 1.2rem)',
+            maxWidth: '760px',
+            margin: '1.5rem auto 2rem',
+            fontWeight: 400,
+            lineHeight: 1.55,
+          }}
+        >
+          {HERO_STATEMENT}
         </p>
 
         {/* CTAs */}
@@ -484,7 +442,7 @@ export default function HeroSlideshow() {
           <a href="/contact"
             className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
             style={{ textDecoration: 'none' }}>
-            Partner with Soccerex
+            Join Soccerex
           </a>
         </div>
       </div>

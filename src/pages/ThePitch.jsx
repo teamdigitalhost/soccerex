@@ -178,7 +178,7 @@ export default function ThePitch() {
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
-        <NetworkNodes color="#bfb170" nodeCount={35} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={35} opacity={0.15} />
         <div className="absolute pointer-events-none" style={{ top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
 
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(140px,15vw,200px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
@@ -222,7 +222,7 @@ export default function ThePitch() {
 
       {/* ═══ THREE TIERS ═══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #061729 0%, #09203e 50%, #0e2a4f 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={30} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.1} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.06) 0%, transparent 70%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
@@ -337,7 +337,7 @@ export default function ThePitch() {
 
       {/* ═══ INTEREST FORM ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '720px', margin: '0 auto' }}>
           <p className="section-label text-gold mb-4 fade-up text-center">APPLY NOW</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-center text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
@@ -444,7 +444,7 @@ export default function ThePitch() {
 
       {/* ═══ LAUNCH NOTE / CTA ════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #09203e 0%, #0e2a4f 50%, #061729 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)', textAlign: 'center' }}>
-        <NetworkNodes color="#bfb170" nodeCount={25} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.1} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.08) 0%, transparent 60%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '700px', margin: '0 auto' }}>

@@ -52,14 +52,14 @@ export default function InsightArticle() {
             background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
           }} />
         )}
-        <NetworkNodes color="#bfb170" nodeCount={25} opacity={0.12} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.12} />
 
         <div className="relative z-10 flex flex-col items-center justify-end" style={{ minHeight: article.featuredImage ? '50vh' : '40vh', padding: 'clamp(130px,12vw,170px) clamp(24px,5vw,80px) clamp(50px,6vw,80px)' }}>
           <div style={{ maxWidth: '860px', textAlign: 'center' }}>
             <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
               {article.categories.filter((c) => c !== 'Uncategorized').map((cat) => (
                 <span key={cat} className="font-mono uppercase tracking-[0.15em]" style={{
-                  fontSize: '0.65rem', color: '#bfb170', fontWeight: 600,
+                  fontSize: '0.65rem', color: 'var(--color-gold)', fontWeight: 600,
                   background: 'rgba(191,177,112,0.12)', padding: '5px 14px', borderRadius: '6px',
                   border: '1px solid rgba(191,177,112,0.2)',
                 }}>
@@ -85,7 +85,7 @@ export default function InsightArticle() {
           {/* Back link */}
           <Link to="/insights" className="inline-flex items-center gap-2 mb-10 font-mono uppercase tracking-[0.15em]"
             style={{ fontSize: '0.72rem', color: '#09203e', textDecoration: 'none', transition: 'color 0.2s' }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#bfb170' }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
             onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
           >
             <ArrowLeft size={14} /> Back to Insights
@@ -93,7 +93,7 @@ export default function InsightArticle() {
 
           {/* Excerpt as lede */}
           {article.excerpt && (
-            <p className="font-body leading-relaxed mb-8" style={{ fontSize: '1.2rem', color: '#09203e', fontWeight: 500, borderLeft: '4px solid #bfb170', paddingLeft: '20px' }}>
+            <p className="font-body leading-relaxed mb-8" style={{ fontSize: '1.2rem', color: '#09203e', fontWeight: 500, borderLeft: '4px solid var(--color-gold)', paddingLeft: '20px' }}>
               {article.excerpt}
             </p>
           )}
@@ -124,13 +124,13 @@ export default function InsightArticle() {
         <>
           <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
           <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-            <NetworkNodes color="#bfb170" nodeCount={20} opacity={0.1} />
+            <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
             <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
               <div className="text-center mb-12">
                 <p className="section-label text-gold mb-4">KEEP READING</p>
                 <h2 className="font-heading font-bold text-white leading-tight" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)' }}>
                   Related{' '}
-                  <span style={{ color: '#bfb170' }}>Articles</span>
+                  <span style={{ color: 'var(--color-gold)' }}>Articles</span>
                 </h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -154,7 +154,7 @@ export default function InsightArticle() {
                       <div style={{ padding: '20px' }}>
                         <p className="font-mono" style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.45)', marginBottom: '8px' }}>{r.date}</p>
                         <h3 className="font-heading font-bold text-white leading-snug mb-3" style={{ fontSize: '1rem' }}>{r.title}</h3>
-                        <span className="inline-flex items-center gap-1 font-body font-semibold uppercase tracking-[0.1em]" style={{ fontSize: '0.72rem', color: '#bfb170' }}>
+                        <span className="inline-flex items-center gap-1 font-body font-semibold uppercase tracking-[0.1em]" style={{ fontSize: '0.72rem', color: 'var(--color-gold)' }}>
                           Read <ArrowRight size={12} />
                         </span>
                       </div>

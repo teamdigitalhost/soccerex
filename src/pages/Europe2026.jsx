@@ -4,26 +4,41 @@ import { Link } from 'react-router-dom'
 import PixelDivider from '../components/PixelDivider'
 
 const IMG = '/events/europe/2026'
+const SPK = '/images/speakers/europe-2026'
 
 const SPEAKERS = [
-  { name: 'Javier Tebas', role: 'President, LALIGA', img: `${IMG}/speakers/javier-tebas.jpg` },
-  { name: 'Dani', role: 'Former AFC Ajax and Portugal International', img: `${IMG}/speakers/dani.jpg` },
-  { name: 'Demy de Zeeuw', role: 'Founder, 433 (Former Ajax International)', img: `${IMG}/speakers/demy-de-zeeuw.jpg` },
-  { name: 'Sebastien Bassong', role: 'Former Premier League Player and Performance Coach', img: `${IMG}/speakers/sebastien-bassong.jpg` },
-  { name: 'Nicola Legrottaglie', role: 'Former Italian International and Coach', img: `${IMG}/speakers/nicola-legrottaglie.jpg` },
-  { name: 'Paul Barber OBE', role: 'Chief Executive and Deputy Chairman, Brighton and Hove Albion FC', img: `${IMG}/speakers/paul-barber.jpg` },
-  { name: 'Gijs de Jong', role: 'General Secretary, Royal Netherlands Football Association', img: `${IMG}/speakers/gijs-de-jong.jpg` },
-  { name: 'Sarah Guilfoyle', role: 'Managing Director, Wigan Athletic FC', img: `${IMG}/speakers/sarah-guilfoyle.jpg` },
-  { name: 'Mark Miles', role: 'Managing Director, West Bromwich Albion FC', img: `${IMG}/speakers/mark-miles.jpg` },
-  { name: 'Peter Ridsdale', role: 'CEO, Preston North End FC', img: `${IMG}/speakers/peter-ridsdale.jpg` },
-  { name: 'Andy Scoulding', role: 'Head of Loans and Pathways, Tottenham Hotspur', img: `${IMG}/speakers/andy-scoulding.jpg` },
-  { name: 'Rini De Groot', role: 'Head of Scouting, PSV', img: `${IMG}/speakers/rini-de-groot.jpg` },
-  { name: 'Luke Wilson', role: 'Chief Commercial Officer, Millwall FC', img: `${IMG}/speakers/luke-wilson.jpg` },
-  { name: 'Rob Pilgrim', role: 'Head of Sport, YouTube EMEA', img: `${IMG}/speakers/rob-pilgrim.jpg` },
-  { name: 'Tim Edwards', role: 'Sports Partnerships Lead, TikTok', img: `${IMG}/speakers/tim-edwards.jpg` },
-  { name: 'Misha Sher', role: 'Head of Football, WPP', img: `${IMG}/speakers/misha-sher.jpg` },
-  { name: 'Maurits Schon', role: 'Managing Director and COO, OneFootball', img: `${IMG}/speakers/maurits-schon.jpg` },
-  { name: 'Hidde Salverda', role: 'COO, Johan Cruijff ArenA', img: `${IMG}/speakers/hidde-salverda.jpg` },
+  { name: 'Aaryaman Banerji', role: 'Lane Clark & Peacock, Head of Football Governance', img: `${SPK}/aaryaman-banerji.webp` },
+  { name: 'Arron Ackerman', role: 'FIFA, Team Lead for Football Performance Analysis', img: `${SPK}/arron-ackerman.webp` },
+  { name: 'Bianca Rech', role: "FC Bayern München, Director, Women's Football", img: `${SPK}/bianca-rech.webp` },
+  { name: 'Blair McNally', role: 'Football Content Creator', img: `${SPK}/blair-mcnally.webp` },
+  { name: 'Cecilia Lagos', role: 'ESPN, Sports Journalist', img: `${SPK}/cecilia-lagos.webp` },
+  { name: 'Christian Nourry', role: 'Queens Park Rangers FC, CEO', img: `${SPK}/christian-nourry.webp` },
+  { name: 'Dirk Schlünz', role: 'FC Nürnberg, Managing Director', img: `${SPK}/dirk-schlunz.webp` },
+  { name: 'Dr. Ravi Gill', role: 'The OPSIS Group, CEO and Co-Founder', img: `${SPK}/dr-ravi-gill.webp` },
+  { name: 'Dustin Boettger', role: 'Global Soccer Network, CEO', img: `${SPK}/dustin-boettger.webp` },
+  { name: 'Eva Gerritse', role: 'Blauw Sponsorship Impact, CEO', img: `${SPK}/eva-gerritse.webp` },
+  { name: 'Frederique de Laat', role: 'Branthlete, Founder', img: `${SPK}/frederique-de-laat.webp` },
+  { name: 'Gareth Jennings', role: 'Harburg Group (Al Kholood, CF Cadiz), Group Sporting Director', img: `${SPK}/gareth-jennings.webp` },
+  { name: 'Gennaro Giulio Tedeschi', role: "Tedeschi and Partners Women's Football Management, CEO and Founder", img: `${SPK}/gennaro-giulio-tedeschi.webp` },
+  { name: 'Gilbert Martina', role: 'Curaçao Football Federation, President', img: `${SPK}/gilbert-martina.webp` },
+  { name: 'Henning Bindzus', role: 'Hannover 96, CEO Business', img: `${SPK}/henning-bindzus.webp` },
+  { name: 'Jan Willem van Dop', role: 'Go Ahead Eagles Voetbal B.V., CEO', img: `${SPK}/jan-willem-van-dop.webp` },
+  { name: 'Jeff Lahart', role: 'Special Olympics, Lead, Global Football Development', img: `${SPK}/jeff-lahart.webp` },
+  { name: 'Jim McCarthy', role: 'Impresario Strategic, Founder', img: `${SPK}/jim-mccarthy.webp` },
+  { name: 'Kyle Israel', role: 'Momentous Sports and Magnolia Hill Partners, Co-Founder and External Relations', img: `${SPK}/kyle-israel.webp` },
+  { name: 'Mauro Steentjes', role: 'The Stadium Consultancy, Stadium Specialist Consultant', img: `${SPK}/mauro-steentjes.webp` },
+  { name: 'Miles Addy', role: 'The Content Club, Director', img: `${SPK}/miles-addy.webp` },
+  { name: 'Nick Lewis', role: 'COPA90, Creative Director', img: `${SPK}/nick-lewis.webp` },
+  { name: 'Ollie Cantrill', role: 'Insight Eleven, Founder', img: `${SPK}/ollie-cantrill.webp` },
+  { name: 'Paul Rayment', role: 'Footballco, PR Manager', img: `${SPK}/paul-rayment.webp` },
+  { name: 'Roy Vermeer', role: 'Vermeer Sports Law, Owner', img: `${SPK}/roy-vermeer.webp` },
+  { name: 'Sanne Kramer', role: 'VB Voeding and PWC Zwolle, Co-Founder and First Team Nutritionist', img: `${SPK}/sanne-kramer.webp` },
+  { name: 'Sébastien Bassong', role: 'Take What Is Yours, Founder', img: `${SPK}/sebastien-bassong.webp` },
+  { name: 'Steyn Akkerman', role: 'MVV Maastricht, First Team Scout and Football Relations', img: `${SPK}/steyn-akkerman.webp` },
+  { name: 'Terry Flewers', role: 'The Football Terrace, Founder', img: `${SPK}/terry-flewers.webp` },
+  { name: 'Toan Ravenscroft', role: 'MSQ Sport and Entertainment, Managing Partner', img: `${SPK}/toan-ravenscroft.webp` },
+  { name: 'Tom Gorringe', role: 'Swansea City Football Club, Chief Executive Officer', img: `${SPK}/tom-gorringe.webp` },
+  { name: 'Tom Kopelman', role: 'The OPSIS Group, COO and Co-Founder', img: `${SPK}/tom-kopelman.webp` },
 ]
 
 const WHY_ATTEND = [
@@ -52,14 +67,14 @@ export default function Europe2026() {
     <div className="event-page theme-europe" style={{ background: 'var(--event-bg-dark)' }}>
 
       {/* ─── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden flex items-center" style={{ minHeight: '65vh' }}>
+      <section className="inner-hero relative overflow-hidden flex items-center">
         <div className="absolute inset-0" style={{
           backgroundImage: `url(${IMG}/sections/arena-interior.webp)`,
           backgroundSize: 'cover', backgroundPosition: 'center', filter: 'saturate(0.4) brightness(0.25)',
         }} />
         <div className="absolute inset-0" style={{ background: 'var(--event-overlay)' }} />
 
-        <div className="relative z-10 text-center w-full" style={{ padding: 'clamp(140px,15vw,200px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
+        <div className="relative z-10 text-center w-full" style={{ padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
           <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-6" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
             <ArrowLeft size={14} /> Back to Home
           </Link>
@@ -68,12 +83,22 @@ export default function Europe2026() {
             <span className="event-badge"><span className="event-badge-dot" /> Amsterdam</span>
           </div>
 
-          <h1 className="font-heading font-bold text-white leading-tight mb-2" style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)', textShadow: '0 2px 30px rgba(0,0,0,0.5)' }}>
+          {/* Europe-specific anniversary crest as the hero lockup */}
+          <div className="inner-hero-crest inner-hero-crest--xl flex justify-center fade-up">
+            <img
+              src="/brand/crests/crest-europe-white.svg"
+              alt="Soccerex Europe, Est. 1996, 30 Years"
+              style={{
+                filter: 'drop-shadow(0 10px 50px rgba(200, 48, 44, 0.5)) drop-shadow(0 0 110px rgba(200, 48, 44, 0.2))',
+              }}
+            />
+          </div>
+
+          <h1 className="font-heading font-bold text-white leading-tight mb-2" style={{ fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)', textShadow: '0 2px 30px rgba(0,0,0,0.5)' }}>
             AMSTERDAM
           </h1>
-          <h2 className="font-heading font-bold leading-tight mb-6" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', color: '#fff', textShadow: '0 0 40px rgba(200,48,44,0.6), 0 2px 20px rgba(0,0,0,0.4)' }}>
-            <span style={{ color: 'var(--event-primary)', WebkitTextStroke: '1px rgba(255,255,255,0.15)' }}>WELCOMES THE</span><br />
-            <span style={{ color: 'var(--event-primary)', WebkitTextStroke: '1px rgba(255,255,255,0.15)' }}>FOOTBALL WORLD</span>
+          <h2 className="font-heading font-bold leading-tight mb-6" style={{ fontSize: 'clamp(1.4rem, 3.2vw, 2.6rem)', color: '#fff', textShadow: '0 0 40px rgba(200,48,44,0.6), 0 2px 20px rgba(0,0,0,0.4)' }}>
+            <span style={{ color: 'var(--event-primary)', WebkitTextStroke: '1px rgba(255,255,255,0.15)' }}>WELCOMES THE FOOTBALL WORLD</span>
           </h2>
 
           <div className="flex items-center justify-center gap-12 mb-6 flex-wrap">
@@ -191,17 +216,17 @@ export default function Europe2026() {
       {/* Dark to white pixel glitch divider */}
       <PixelDivider color="#200808" layers={4} height={100} speed={0.6} />
 
-      {/* ─── PAST SPEAKERS (White section) ──────────────────────────────── */}
+      {/* ─── CURRENT SPEAKERS (White section) ────────────────────────────── */}
       <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(160px,16vw,200px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div className="flex justify-center mb-3">
             <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full" style={{ background: 'rgba(200,48,44,0.08)', border: '1px solid rgba(200,48,44,0.2)', color: 'var(--event-primary)' }}>
               <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--event-primary)' }} />
-              Past Speakers
+              2026 Lineup
             </span>
           </div>
           <h2 className="font-heading font-bold text-center text-2xl mb-8" style={{ color: '#1a1a1a' }}>
-            Legends of the Game, <span style={{ color: 'var(--event-primary)' }}>United at Soccerex</span>
+            On Stage: <span style={{ color: 'var(--event-primary)' }}>Football's Sharpest Voices</span>
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {SPEAKERS.map((s) => (
