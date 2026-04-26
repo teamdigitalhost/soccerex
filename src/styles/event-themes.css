@@ -17,32 +17,34 @@
   --event-overlay: linear-gradient(135deg, rgba(140,20,20,0.6) 0%, rgba(50,5,5,0.65) 40%, rgba(20,0,0,0.85) 100%);
 }
 
-/* ─── Miami — Pink & Teal ────────────────────────────────────────────────── */
+/* ─── Miami — Highlighter Pink on Miami Blue ────────────────────────────── */
 .theme-miami {
-  --event-primary: #e84393;
-  --event-primary-light: #fd79a8;
-  --event-primary-dark: #c02070;
-  --event-primary-bg: rgba(232, 67, 147, 0.12);
-  --event-primary-border: rgba(232, 67, 147, 0.3);
-  --event-primary-glow: rgba(232, 67, 147, 0.4);
-  --event-bg-dark: #0a0515;
-  --event-bg-mid: #120820;
-  --event-bg-section: #0e0618;
-  --event-overlay: linear-gradient(135deg, rgba(100,20,80,0.6) 0%, rgba(20,5,30,0.65) 40%, rgba(10,0,15,0.85) 100%);
+  --event-primary: #ff2e9a;            /* highlighter pink (accent) */
+  --event-primary-light: #ff6fb8;
+  --event-primary-dark: #d6117a;
+  --event-primary-bg: rgba(255, 46, 154, 0.14);
+  --event-primary-border: rgba(255, 46, 154, 0.35);
+  --event-primary-glow: rgba(255, 46, 154, 0.5);
+  --event-secondary: #00bfe6;          /* Miami ocean blue */
+  --event-bg-dark: #031a28;            /* deep Miami blue */
+  --event-bg-mid: #04273c;
+  --event-bg-section: #052b42;
+  --event-overlay: linear-gradient(135deg, rgba(0,120,170,0.55) 0%, rgba(8,40,70,0.65) 40%, rgba(3,20,36,0.85) 100%);
 }
 
-/* ─── Middle East (Riyadh) — Gold & Sand ─────────────────────────────────── */
+/* ─── Middle East (Riyadh) — Green with Yellow Highlights ───────────────── */
 .theme-riyadh {
-  --event-primary: #d4a853;
-  --event-primary-light: #e8c878;
-  --event-primary-dark: #b08830;
-  --event-primary-bg: rgba(212, 168, 83, 0.12);
-  --event-primary-border: rgba(212, 168, 83, 0.3);
-  --event-primary-glow: rgba(212, 168, 83, 0.4);
-  --event-bg-dark: #0a0800;
-  --event-bg-mid: #1a1508;
-  --event-bg-section: #141005;
-  --event-overlay: linear-gradient(135deg, rgba(100,80,20,0.6) 0%, rgba(30,20,5,0.65) 40%, rgba(15,10,0,0.85) 100%);
+  --event-primary: #f2e93c;            /* highlighter yellow (accent) */
+  --event-primary-light: #fff26e;
+  --event-primary-dark: #c9c028;
+  --event-primary-bg: rgba(242, 233, 60, 0.12);
+  --event-primary-border: rgba(242, 233, 60, 0.35);
+  --event-primary-glow: rgba(242, 233, 60, 0.45);
+  --event-secondary: #0f8f52;          /* Saudi green */
+  --event-bg-dark: #031a10;            /* deep green */
+  --event-bg-mid: #062a19;
+  --event-bg-section: #05241a;
+  --event-overlay: linear-gradient(135deg, rgba(12,110,60,0.55) 0%, rgba(8,45,28,0.7) 40%, rgba(3,22,14,0.88) 100%);
 }
 
 /* ─── Shared event component styles ──────────────────────────────────────── */
@@ -175,4 +177,38 @@
   color: rgba(255,255,255,0.5);
   font-size: 11px;
   line-height: 1.4;
+}
+
+/* Pre-register form inputs (shared across event pages) */
+.pre-reg-input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.pre-reg-input::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+.pre-reg-input:focus {
+  border-color: var(--event-primary);
+  background: rgba(255,255,255,0.06);
+}
+
+/* Event card used on coming-soon pages (dark background) */
+.event-page .event-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 28px;
 }

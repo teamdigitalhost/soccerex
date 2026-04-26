@@ -12,6 +12,8 @@ const Events = lazy(() => import('./pages/Events'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Gallery = lazy(() => import('./pages/Gallery'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
+const Miami2026 = lazy(() => import('./pages/Miami2026'))
+const Riyadh2027 = lazy(() => import('./pages/Riyadh2027'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
 const InsightsList = lazy(() => import('./pages/InsightsList'))
@@ -40,6 +42,8 @@ function App() {
           <Route path="/insights/:slug" element={<InsightArticle />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/europe-2026" element={<Europe2026 />} />
+          <Route path="/miami-2026" element={<Miami2026 />} />
+          <Route path="/riyadh-2027" element={<Riyadh2027 />} />
           <Route path="/press/:slug" element={<PressRelease />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsConditions />} />

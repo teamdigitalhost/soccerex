@@ -286,7 +286,7 @@ export default function Europe2026() {
             </a>
           </div>
           <p className="font-body text-white/40 text-sm mt-6">
-            Sponsorship and exhibitor enquiries: <a href="mailto:press@soccerex.com" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>press@soccerex.com</a>
+            Sponsorship and exhibitor enquiries: <a href="mailto:enquiries@soccerex.com" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>enquiries@soccerex.com</a>
           </p>
         </div>
       </section>

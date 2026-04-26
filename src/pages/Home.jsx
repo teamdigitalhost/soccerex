@@ -360,7 +360,10 @@ function EventsSection() {
       venue: 'Johan Cruijff ArenA',
       img: '/events/europe/2026/sections/arena-interior.webp',
       crest: '/brand/crests/crest-europe-white.svg',
-      to: '/europe-2026',
+      learnMoreTo: '/europe-2026',
+      ctaLabel: 'Buy Tickets',
+      ctaHref: 'https://soccerexeurope2026.eventify.io/t2/tickets/',
+      ctaExternal: true,
       status: 'open',
     },
     {
@@ -370,7 +373,10 @@ function EventsSection() {
       venue: 'Miami Freedom Park',
       img: '/events/miami/2026/sections/miami-skyline.jpg',
       crest: '/brand/crests/crest-miami-white.svg',
-      to: null,
+      learnMoreTo: '/miami-2026',
+      ctaLabel: 'Pre-register',
+      ctaHref: '/miami-2026#pre-register',
+      ctaExternal: false,
       status: 'soon',
     },
     {
@@ -380,7 +386,10 @@ function EventsSection() {
       venue: 'Misk City',
       img: '/events/middle-east/2026/sections/riyadh-skyline.jpg',
       crest: '/brand/crests/crest-riyadh-white.svg',
-      to: null,
+      learnMoreTo: '/riyadh-2027',
+      ctaLabel: 'Pre-register',
+      ctaHref: '/riyadh-2027#pre-register',
+      ctaExternal: false,
       status: 'soon',
     },
   ]
@@ -399,23 +408,18 @@ function EventsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {events.map((event) => {
-            const Wrapper = event.to ? Link : 'div'
-            const wrapperProps = event.to ? { to: event.to } : {}
             return (
               <div
                 key={event.city}
                 className="fade-up"
                 style={{ containerType: 'inline-size' }}
               >
-                <Wrapper
-                  {...wrapperProps}
+                <div
                   className="group relative overflow-hidden"
                   style={{
                     aspectRatio: '3/4',
                     width: '100%',
                     borderRadius: '14px',
-                    cursor: event.to ? 'pointer' : 'default',
-                    textDecoration: 'none',
                     display: 'block',
                   }}
                 >
@@ -497,12 +501,34 @@ function EventsSection() {
                     <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.18em', marginTop: '14px' }}>
                       {event.name}
                     </p>
-                    {/* Fixed slot keeps all three city names at the same baseline */}
-                    <div style={{ marginTop: '14px', minHeight: '20px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-gold)', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-                      {event.to ? <>Explore event <ArrowRight size={14} /></> : null}
+                    {/* Dual CTA: Learn more + (Buy Tickets | Pre-register) */}
+                    <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', position: 'relative', zIndex: 6 }}>
+                      <Link
+                        to={event.learnMoreTo}
+                        className="home-event-cta home-event-cta--ghost"
+                      >
+                        Learn more
+                      </Link>
+                      {event.ctaExternal ? (
+                        <a
+                          href={event.ctaHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="home-event-cta home-event-cta--solid"
+                        >
+                          {event.ctaLabel}
+                        </a>
+                      ) : (
+                        <Link
+                          to={event.ctaHref}
+                          className="home-event-cta home-event-cta--solid"
+                        >
+                          {event.ctaLabel}
+                        </Link>
+                      )}
                     </div>
                   </div>
-                </Wrapper>
+                </div>
               </div>
             )
           })}
