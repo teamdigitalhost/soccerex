@@ -17,19 +17,112 @@
   --event-overlay: linear-gradient(135deg, rgba(140,20,20,0.6) 0%, rgba(50,5,5,0.65) 40%, rgba(20,0,0,0.85) 100%);
 }
 
-/* ─── Miami — Highlighter Pink on Miami Blue ────────────────────────────── */
+/* ─── Miami — Vice Blue + Miami Pink on Deep Navy ────────────────────────── */
 .theme-miami {
-  --event-primary: #ff2e9a;            /* highlighter pink (accent) */
-  --event-primary-light: #ff6fb8;
-  --event-primary-dark: #d6117a;
-  --event-primary-bg: rgba(255, 46, 154, 0.14);
-  --event-primary-border: rgba(255, 46, 154, 0.35);
-  --event-primary-glow: rgba(255, 46, 154, 0.5);
-  --event-secondary: #00bfe6;          /* Miami ocean blue */
-  --event-bg-dark: #031a28;            /* deep Miami blue */
-  --event-bg-mid: #04273c;
-  --event-bg-section: #052b42;
-  --event-overlay: linear-gradient(135deg, rgba(0,120,170,0.55) 0%, rgba(8,40,70,0.65) 40%, rgba(3,20,36,0.85) 100%);
+  /* Brand palette per Soccerex Miami 2026 brand sheet */
+  --event-primary: #E91E63;            /* Miami Pink (primary accent) */
+  --event-primary-light: #ff5b8a;
+  --event-primary-dark: #b3134a;
+  --event-primary-bg: rgba(233, 30, 99, 0.14);
+  --event-primary-border: rgba(233, 30, 99, 0.35);
+  --event-primary-glow: rgba(233, 30, 99, 0.5);
+
+  --event-secondary: #007C91;          /* Vice Blue */
+  --event-secondary-light: #00C6D7;    /* Aqua Mist */
+
+  --event-bg-dark: #0D1B2A;            /* Deep Navy */
+  --event-bg-mid: #102538;
+  --event-bg-section: #0a1622;
+
+  /* Secondary palette (used for gradients, accents) */
+  --event-purple: #6A39C6;             /* Purple Haze */
+  --event-peach: #FFB46A;              /* Sunset Peach */
+  --event-sand: #FFF1EB;
+  --event-slate: #607186;
+
+  --event-overlay: linear-gradient(135deg, rgba(0,124,145,0.55) 0%, rgba(106,57,198,0.30) 40%, rgba(13,27,42,0.88) 100%);
+
+  /* Miami signature gradients */
+  --miami-sunset: linear-gradient(135deg, #FFB46A 0%, #E91E63 50%, #6A39C6 100%);
+  --miami-sky: linear-gradient(180deg, #FFB46A 0%, #E91E63 35%, #6A39C6 65%, #007C91 100%);
+  --miami-text-gradient: linear-gradient(90deg, #007C91 0%, #00C6D7 35%, #E91E63 100%);
+}
+
+/* Miami-only utility classes */
+.miami-headline {
+  font-family: 'Oswald', 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.0;
+}
+.miami-subhead {
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.miami-body {
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-weight: 400;
+}
+.miami-script {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+}
+.miami-text-gradient {
+  background: var(--miami-text-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+/* Faint synthwave grid overlay (pure CSS, no image) */
+.miami-grid {
+  background-image:
+    linear-gradient(rgba(0, 198, 215, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 198, 215, 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center center;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0.5) 100%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0.5) 100%);
+}
+/* Subtle palm silhouette using inline SVG, repeated as background-image. The palm
+   itself is a single dark shape; we tint it via filter when stacked on light bg. */
+.miami-palms {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 240' fill='%230D1B2A'><path d='M80 240 V120 M80 120 C 60 100 30 95 12 110 C 35 100 55 102 78 116 M80 120 C 100 100 130 95 148 110 C 125 100 105 102 82 116 M80 116 C 70 95 55 78 30 70 C 55 75 70 85 79 110 M80 116 C 90 95 105 78 130 70 C 105 75 90 85 81 110 M80 112 C 78 90 78 60 90 30 C 80 60 80 90 80 110 M80 112 C 82 90 82 60 70 30 C 80 60 80 90 80 110'/></svg>");
+  background-repeat: no-repeat;
+}
+.miami-cell {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 198, 215, 0.18);
+  border-radius: 12px;
+  padding: 22px 16px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+.miami-cell:hover {
+  border-color: var(--event-primary);
+  background: rgba(233, 30, 99, 0.08);
+  transform: translateY(-2px);
+}
+.miami-pillar {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 0;
+  min-width: 110px;
+}
+.miami-pillar-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--event-secondary-light);
 }
 
 /* ─── Middle East (Riyadh) — Green with Yellow Highlights ───────────────── */
