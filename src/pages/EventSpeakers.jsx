@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { ExternalLink, Search, Globe2, Building2 } from 'lucide-react'
 import { getEvent, getEventSpeakers } from '../lib/soccerexApi'
 import { eventThemeClass } from '../lib/eventTheme'
@@ -18,10 +18,12 @@ const ROLE_STATUS_LABEL = {
 
 export default function EventSpeakers() {
   const { slug } = useParams()
+  const location = useLocation()
   const [event, setEvent] = useState(null)
   const [speakers, setSpeakers] = useState(null)
   const [error, setError] = useState(null)
   const [query, setQuery] = useState('')
+  const [highlightSlug, setHighlightSlug] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -31,6 +33,26 @@ export default function EventSpeakers() {
       .catch((err) => { if (!cancelled) setError(err) })
     return () => { cancelled = true }
   }, [slug])
+
+  /* When the page lands with a #speaker-slug hash (e.g. linked from the
+     agenda), wait for cards to render then scroll to the matching one and
+     pulse a temporary highlight ring. */
+  useEffect(() => {
+    if (!speakers || !location.hash) return
+    const target = location.hash.slice(1)
+    if (!target) return
+    /* Defer until after layout */
+    const id = window.requestAnimationFrame(() => {
+      const el = document.getElementById(`speaker-${target}`)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        setHighlightSlug(target)
+        const timer = setTimeout(() => setHighlightSlug(null), 2200)
+        return () => clearTimeout(timer)
+      }
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [speakers, location.hash])
 
   const isPast = useMemo(() => {
     if (!event?.ends_on) return false
@@ -101,7 +123,7 @@ export default function EventSpeakers() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredSpeakers.map((s) => (
-                  <SpeakerCard key={s.slug} speaker={s} archived={isPast} />
+                  <SpeakerCard key={s.slug} speaker={s} archived={isPast} highlighted={highlightSlug === s.slug} />
                 ))}
               </div>
 
@@ -118,20 +140,22 @@ export default function EventSpeakers() {
   )
 }
 
-function SpeakerCard({ speaker, archived }) {
+function SpeakerCard({ speaker, archived, highlighted }) {
   const initials = (speaker.display_name || '?')
     .split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()
   const roleStatus = ROLE_STATUS_LABEL[speaker.role_status] || speaker.role_status
 
   return (
-    <article style={{
+    <article id={`speaker-${speaker.slug}`} style={{
       background: '#FFFFFF',
-      border: '1px solid rgba(13,27,42,0.10)',
+      border: highlighted ? '1px solid var(--event-primary)' : '1px solid rgba(13,27,42,0.10)',
+      boxShadow: highlighted ? '0 0 0 4px var(--event-primary-bg), 0 18px 40px -22px var(--event-primary-glow)' : 'none',
       borderRadius: 14,
       overflow: 'hidden',
       display: 'flex', flexDirection: 'column',
-      transition: 'border-color 0.2s, box-shadow 0.2s',
+      transition: 'border-color 0.4s ease, box-shadow 0.4s ease',
       filter: archived ? 'saturate(0.85)' : 'none',
+      scrollMarginTop: '120px',
     }}>
       {/* Photo / placeholder */}
       <div style={{

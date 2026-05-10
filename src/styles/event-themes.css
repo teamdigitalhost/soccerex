@@ -187,6 +187,12 @@
   box-shadow: 0 12px 28px -16px rgba(13, 27, 42, 0.18);
 }
 
+/* Speaker chip on the agenda — clickable variant (Link) gets hover lift */
+.speaker-chip:hover {
+  background: var(--event-primary-bg, rgba(233, 30, 99, 0.08)) !important;
+  border-color: var(--event-primary, #E91E63) !important;
+}
+
 /* Programming submission form (light, white background) */
 .prog-input {
   display: block;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Calendar, Clock, MapPin, List, LayoutGrid } from 'lucide-react'
 import { getEvent, getAgenda } from '../lib/soccerexApi'
 import { eventThemeClass } from '../lib/eventTheme'
@@ -22,7 +22,7 @@ export default function EventAgenda() {
     return () => { cancelled = true }
   }, [slug])
 
-  const grouped = useMemo(() => groupByDayAndStage(sessions || []), [sessions])
+  const grouped = useMemo(() => groupByDayAndStage(sessions || [], slug), [sessions, slug])
   const days = grouped.map((g) => g.day)
 
   /* Default-select first day once data lands */
@@ -198,7 +198,7 @@ function SessionCard({ session, compact }) {
       {session.speakers?.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-1">
           {session.speakers.map((sp) => (
-            <SpeakerChip key={sp.slug} speaker={sp} />
+            <SpeakerChip key={sp.slug} speaker={sp} eventSlug={session._eventSlug} />
           ))}
         </div>
       )}
@@ -206,16 +206,18 @@ function SessionCard({ session, compact }) {
   )
 }
 
-function SpeakerChip({ speaker }) {
+function SpeakerChip({ speaker, eventSlug }) {
   const initials = (speaker.display_name || '?')
     .split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()
-  return (
-    <span className="flex items-center gap-2" style={{
-      padding: '4px 10px 4px 4px', borderRadius: 999,
-      background: 'rgba(13,27,42,0.04)',
-      border: '1px solid rgba(13,27,42,0.08)',
-      fontSize: 12,
-    }}>
+  /* No public speaker-detail endpoint exists, so we link to the event's
+     speaker directory and anchor to this speaker. The listing page scrolls
+     to the slug and briefly highlights the matching card. */
+  const href = eventSlug && speaker.slug
+    ? `/events/${eventSlug}/speakers#${speaker.slug}`
+    : null
+
+  const inner = (
+    <>
       {speaker.photo_url ? (
         <img src={speaker.photo_url} alt="" style={{ width: 22, height: 22, borderRadius: 999, objectFit: 'cover' }} />
       ) : (
@@ -230,16 +232,35 @@ function SpeakerChip({ speaker }) {
       {speaker.role && speaker.role !== 'speaker' && (
         <span className="miami-subhead" style={{ fontSize: 9, color: 'var(--event-primary)', letterSpacing: '0.14em' }}>{speaker.role}</span>
       )}
-    </span>
+    </>
+  )
+
+  const baseStyle = {
+    padding: '4px 10px 4px 4px', borderRadius: 999,
+    background: 'rgba(13,27,42,0.04)',
+    border: '1px solid rgba(13,27,42,0.08)',
+    fontSize: 12,
+    transition: 'background 0.15s, border-color 0.15s',
+  }
+
+  if (!href) {
+    return <span className="flex items-center gap-2" style={baseStyle}>{inner}</span>
+  }
+  return (
+    <Link to={href} className="speaker-chip flex items-center gap-2"
+      style={{ ...baseStyle, textDecoration: 'none', cursor: 'pointer' }}>
+      {inner}
+    </Link>
   )
 }
 
 /* ─── Helpers ───────────────────────────────────────────────────────────── */
 
-function groupByDayAndStage(sessions) {
+function groupByDayAndStage(sessions, eventSlug) {
   const byDay = new Map()
-  for (const s of sessions) {
-    if (!s.starts_at) continue
+  for (const raw of sessions) {
+    if (!raw.starts_at) continue
+    const s = { ...raw, _eventSlug: eventSlug }
     /* Use the YYYY-MM-DD prefix of the ISO string. starts_at already carries
        the event-zone offset, so this groups by the actual event-local day. */
     const day = s.starts_at.slice(0, 10)
