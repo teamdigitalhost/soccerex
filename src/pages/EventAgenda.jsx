@@ -1,0 +1,285 @@
+import { useEffect, useMemo, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Calendar, Clock, MapPin, List, LayoutGrid } from 'lucide-react'
+import { getEvent, getAgenda } from '../lib/soccerexApi'
+import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
+
+export default function EventAgenda() {
+  const { slug } = useParams()
+  const [event, setEvent] = useState(null)
+  const [sessions, setSessions] = useState(null)
+  const [error, setError] = useState(null)
+  const [view, setView] = useState('timeline') // 'timeline' | 'list'
+  const [activeDay, setActiveDay] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setEvent(null); setSessions(null); setError(null)
+    Promise.all([getEvent(slug), getAgenda(slug)])
+      .then(([e, s]) => { if (!cancelled) { setEvent(e); setSessions(s || []) } })
+      .catch((err) => { if (!cancelled) setError(err) })
+    return () => { cancelled = true }
+  }, [slug])
+
+  const grouped = useMemo(() => groupByDayAndStage(sessions || []), [sessions])
+  const days = grouped.map((g) => g.day)
+
+  /* Default-select first day once data lands */
+  useEffect(() => {
+    if (days.length > 0 && !activeDay) setActiveDay(days[0])
+  }, [days, activeDay])
+
+  const activeGroup = grouped.find((g) => g.day === activeDay) || grouped[0]
+
+  return (
+    <div className="event-page theme-miami" style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+      <EventHeader event={event} slug={slug} active="agenda" loading={!event && !error} />
+
+      <section style={{ padding: 'clamp(40px,6vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
+        <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
+
+          <div className="mb-10">
+            <p className="miami-subhead mb-3" style={{ color: '#007C91', fontSize: 11 }}>Schedule</p>
+            <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D1B2A', lineHeight: 1.05, marginBottom: 16 }}>
+              The <span className="miami-text-gradient">running order</span>
+            </h1>
+            <p className="miami-body" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 720, lineHeight: 1.6 }}>
+              {sessions && sessions.length > 0
+                ? `${sessions.length} session${sessions.length === 1 ? '' : 's'} across ${grouped.length} day${grouped.length === 1 ? '' : 's'}, grouped by stage. All times shown in event time.`
+                : 'Live programme schedule, grouped by day and stage.'}
+            </p>
+          </div>
+
+          {error && <ErrorState error={error} />}
+          {!error && sessions === null && <LoadingState label="Loading schedule" />}
+
+          {sessions && sessions.length === 0 && (
+            <EmptyState message="No sessions published yet for this event." />
+          )}
+
+          {sessions && sessions.length > 0 && (
+            <>
+              <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
+                <div className="flex flex-wrap gap-2">
+                  {grouped.map((g, i) => (
+                    <button key={g.day} type="button" onClick={() => setActiveDay(g.day)} className="miami-subhead" style={{
+                      padding: '10px 16px', borderRadius: 12,
+                      fontSize: 11, letterSpacing: '0.14em',
+                      background: activeDay === g.day ? '#0D1B2A' : '#FFFFFF',
+                      color: activeDay === g.day ? '#fff' : '#0D1B2A',
+                      border: '1px solid ' + (activeDay === g.day ? '#0D1B2A' : 'rgba(13,27,42,0.10)'),
+                      cursor: 'pointer', transition: 'all 0.15s',
+                      display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2,
+                    }}>
+                      <span style={{ fontSize: 9, opacity: 0.7 }}>Day {i + 1}</span>
+                      <span style={{ fontSize: 13 }}>{formatDayLabel(g.day)}</span>
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-1" role="tablist" aria-label="View toggle">
+                  <ViewBtn active={view === 'timeline'} onClick={() => setView('timeline')} icon={LayoutGrid} label="Timeline" />
+                  <ViewBtn active={view === 'list'} onClick={() => setView('list')} icon={List} label="List" />
+                </div>
+              </div>
+
+              {activeGroup && (
+                view === 'timeline'
+                  ? <TimelineView group={activeGroup} />
+                  : <ListView group={activeGroup} />
+              )}
+            </>
+          )}
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function ViewBtn({ active, onClick, icon: Icon, label }) {
+  return (
+    <button type="button" onClick={onClick} aria-pressed={active} style={{
+      display: 'inline-flex', alignItems: 'center', gap: 6,
+      padding: '8px 12px', borderRadius: 8,
+      fontSize: 11, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
+      background: active ? '#0D1B2A' : '#FFFFFF',
+      color: active ? '#fff' : '#0D1B2A',
+      border: '1px solid ' + (active ? '#0D1B2A' : 'rgba(13,27,42,0.10)'),
+      cursor: 'pointer', fontFamily: 'Montserrat, sans-serif',
+    }}>
+      <Icon size={13} /> {label}
+    </button>
+  )
+}
+
+function TimelineView({ group }) {
+  return (
+    <div className="grid gap-6" style={{ gridTemplateColumns: `repeat(${Math.max(1, group.stages.length)}, minmax(260px, 1fr))` }}>
+      {group.stages.map((stage) => (
+        <div key={stage.slug || stage.name} style={{
+          background: '#FAFBFC',
+          border: '1px solid rgba(13,27,42,0.08)',
+          borderRadius: 14, padding: 16, minWidth: 0,
+        }}>
+          <div className="flex items-center gap-2 mb-4 pb-3" style={{ borderBottom: '1px solid rgba(13,27,42,0.08)' }}>
+            <span style={{ width: 8, height: 8, borderRadius: 999, background: '#E91E63' }} />
+            <p className="miami-headline" style={{ fontSize: 13, color: '#0D1B2A', letterSpacing: '0.04em' }}>{stage.name}</p>
+            <span className="miami-body" style={{ fontSize: 11, color: '#607186', marginLeft: 'auto' }}>{stage.sessions.length}</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {stage.sessions.map((s) => <SessionCard key={s.id} session={s} compact />)}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function ListView({ group }) {
+  return (
+    <div className="flex flex-col gap-3">
+      {group.flatSessions.map((s) => <SessionCard key={s.id} session={s} />)}
+    </div>
+  )
+}
+
+function SessionCard({ session, compact }) {
+  return (
+    <article style={{
+      background: '#FFFFFF',
+      border: '1px solid rgba(13,27,42,0.10)',
+      borderRadius: 12,
+      padding: compact ? 14 : 18,
+      display: 'flex', flexDirection: 'column', gap: 10,
+    }}>
+      <div className="flex items-center gap-3 flex-wrap">
+        <span className="miami-subhead" style={{
+          fontSize: 11, letterSpacing: '0.14em', color: '#E91E63',
+          fontVariantNumeric: 'tabular-nums',
+        }}>
+          <Clock size={11} style={{ display: 'inline', marginRight: 4 }} />
+          {formatTime(session.starts_at)} - {formatTime(session.ends_at)}
+        </span>
+        {session.format && (
+          <span style={{
+            padding: '2px 8px', borderRadius: 4,
+            fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
+            color: '#007C91', background: 'rgba(0,124,145,0.08)',
+            fontFamily: 'Montserrat, sans-serif',
+          }}>
+            {session.format}
+          </span>
+        )}
+        {!compact && session.stage?.name && (
+          <span className="miami-body" style={{ fontSize: 11, color: '#607186' }}>
+            <MapPin size={11} style={{ display: 'inline', marginRight: 3 }} />
+            {session.stage.name}
+          </span>
+        )}
+      </div>
+
+      <h3 className="miami-headline" style={{ fontSize: compact ? '0.95rem' : '1.1rem', color: '#0D1B2A', lineHeight: 1.2, letterSpacing: '0.005em' }}>
+        {session.title}
+      </h3>
+
+      {!compact && session.abstract && (
+        <p className="miami-body" style={{ fontSize: 13, color: '#3a4a5a', lineHeight: 1.55 }}>
+          {session.abstract}
+        </p>
+      )}
+
+      {session.topic && (
+        <p className="miami-body" style={{ fontSize: 11, color: '#607186' }}>
+          Topic: <span style={{ color: '#0D1B2A' }}>{session.topic.title}</span>
+          {session.topic.theme && <span style={{ color: '#607186' }}> · {session.topic.theme}</span>}
+        </p>
+      )}
+
+      {session.speakers?.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-1">
+          {session.speakers.map((sp) => (
+            <SpeakerChip key={sp.slug} speaker={sp} />
+          ))}
+        </div>
+      )}
+    </article>
+  )
+}
+
+function SpeakerChip({ speaker }) {
+  const initials = (speaker.display_name || '?')
+    .split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()
+  return (
+    <span className="flex items-center gap-2" style={{
+      padding: '4px 10px 4px 4px', borderRadius: 999,
+      background: 'rgba(13,27,42,0.04)',
+      border: '1px solid rgba(13,27,42,0.08)',
+      fontSize: 12,
+    }}>
+      {speaker.photo_url ? (
+        <img src={speaker.photo_url} alt="" style={{ width: 22, height: 22, borderRadius: 999, objectFit: 'cover' }} />
+      ) : (
+        <span style={{
+          width: 22, height: 22, borderRadius: 999,
+          background: 'linear-gradient(135deg, #007C91, #E91E63)',
+          color: '#fff', display: 'grid', placeItems: 'center',
+          fontSize: 10, fontWeight: 700, fontFamily: 'Oswald, sans-serif',
+        }}>{initials}</span>
+      )}
+      <span className="miami-body" style={{ color: '#0D1B2A' }}>{speaker.display_name}</span>
+      {speaker.role && speaker.role !== 'speaker' && (
+        <span className="miami-subhead" style={{ fontSize: 9, color: '#E91E63', letterSpacing: '0.14em' }}>{speaker.role}</span>
+      )}
+    </span>
+  )
+}
+
+/* ─── Helpers ───────────────────────────────────────────────────────────── */
+
+function groupByDayAndStage(sessions) {
+  const byDay = new Map()
+  for (const s of sessions) {
+    if (!s.starts_at) continue
+    /* Use the YYYY-MM-DD prefix of the ISO string. starts_at already carries
+       the event-zone offset, so this groups by the actual event-local day. */
+    const day = s.starts_at.slice(0, 10)
+    if (!byDay.has(day)) byDay.set(day, [])
+    byDay.get(day).push(s)
+  }
+
+  const result = []
+  for (const [day, daySessions] of Array.from(byDay.entries()).sort()) {
+    daySessions.sort((a, b) => a.starts_at.localeCompare(b.starts_at))
+    const byStage = new Map()
+    for (const s of daySessions) {
+      const key = s.stage?.slug || s.stage?.name || 'unscheduled'
+      if (!byStage.has(key)) byStage.set(key, { slug: key, name: s.stage?.name || 'Unscheduled', sessions: [] })
+      byStage.get(key).sessions.push(s)
+    }
+    result.push({
+      day,
+      stages: Array.from(byStage.values()),
+      flatSessions: daySessions,
+    })
+  }
+  return result
+}
+
+function formatTime(iso) {
+  if (!iso) return ''
+  /* The serialized ISO already includes the event timezone offset. We extract
+     the literal HH:MM from the string so the displayed time matches what the
+     event programme actually says, regardless of the user's local timezone. */
+  const m = iso.match(/T(\d{2}):(\d{2})/)
+  if (!m) return ''
+  let [, h, mm] = m
+  let hour = parseInt(h, 10)
+  const period = hour >= 12 ? 'PM' : 'AM'
+  hour = hour % 12 || 12
+  return `${hour}:${mm} ${period}`
+}
+
+function formatDayLabel(yyyymmdd) {
+  if (!yyyymmdd) return ''
+  const d = new Date(yyyymmdd + 'T00:00:00')
+  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+}
