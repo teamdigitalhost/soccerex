@@ -26,6 +26,8 @@ const EventAgendaConcept = lazy(() => import('./pages/EventAgendaConcept'))
 const EventAgenda = lazy(() => import('./pages/EventAgenda'))
 const EventSpeakers = lazy(() => import('./pages/EventSpeakers'))
 const EventSpeakerProfile = lazy(() => import('./pages/EventSpeakerProfile'))
+const ProfileAccess = lazy(() => import('./pages/ProfileAccess'))
+const ProfileEditor = lazy(() => import('./pages/ProfileEditor'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
 // Unreleased verticals (Deal Network, HerSoccerex, The Pitch) kept on disk but
 // no longer routed until announced. Restore routes in App.jsx when launching.
@@ -60,6 +62,9 @@ function App() {
           <Route path="/events/:slug/schedule" element={<EventAgenda />} />
           <Route path="/events/:slug/speakers" element={<EventSpeakers />} />
           <Route path="/events/:slug/speakers/:speakerSlug" element={<EventSpeakerProfile />} />
+          {/* Profile self-service editor (passwordless via emailed link) */}
+          <Route path="/profile-access" element={<ProfileAccess />} />
+          <Route path="/profile-access/edit/:slug" element={<ProfileEditor />} />
         </Routes>
       </Suspense>
       <Footer />

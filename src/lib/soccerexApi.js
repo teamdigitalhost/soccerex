@@ -102,4 +102,89 @@ export async function submitProgrammingProposal(slug, payload, opts = {}) {
   }))
 }
 
+/* ───── Profile self-service (auth via short-lived edit_token) ───────────── */
+
+async function authedRequest(path, { method = 'GET', body, token, signal, formData } = {}) {
+  const url = `${API_BASE_URL}${path}`
+  const headers = { Accept: 'application/json' }
+  if (token) headers.Authorization = `Bearer ${token}`
+  let fetchBody
+  if (formData) {
+    fetchBody = formData /* let the browser set the multipart boundary */
+  } else if (body !== undefined) {
+    headers['Content-Type'] = 'application/json'
+    fetchBody = JSON.stringify(body)
+  }
+
+  let res
+  try {
+    res = await fetch(url, { method, headers, body: fetchBody, signal })
+  } catch (err) {
+    if (err && err.name === 'AbortError') throw err
+    throw new ApiError(`Network error contacting Soccerex API: ${err.message}`, { status: 0 })
+  }
+
+  let parsed = null
+  const text = await res.text()
+  if (text) { try { parsed = JSON.parse(text) } catch { /* leave parsed null */ } }
+
+  if (!res.ok) {
+    const message = (parsed && (parsed.message || parsed.error)) || `Request failed: ${res.status} ${res.statusText}`
+    throw new ApiError(message, { status: res.status, body: parsed })
+  }
+  return parsed
+}
+
+export async function requestProfileAccess({ email, profile_slug } = {}) {
+  return await authedRequest('/profile-access/request', {
+    method: 'POST',
+    body: profile_slug ? { email, profile_slug } : { email },
+  })
+}
+
+export async function previewProfileAccess(token) {
+  return unwrap(await authedRequest('/profile-access/preview', { method: 'POST', body: { token } }))
+}
+
+export async function exchangeProfileAccess(token) {
+  /* Spec gives { edit_token, expires_at, ... }. We pass the parsed payload
+     through as-is so the caller can stash it (including profiles + email
+     for the chooser UI). */
+  const payload = await authedRequest('/profile-access/exchange', { method: 'POST', body: { token } })
+  return (payload && 'data' in payload) ? payload.data : payload
+}
+
+export async function getEditableProfile(slug, editToken) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}`,
+    { token: editToken },
+  ))
+}
+
+export async function updateEditableProfile(slug, editToken, patch) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}`,
+    { method: 'PATCH', body: patch, token: editToken },
+  ))
+}
+
+/**
+ * Upload one or more files to a profile.
+ * fields: { kind, featured?, alt_text?, tags?: string[], files: File[] }
+ */
+export async function uploadProfileAssets(slug, editToken, fields) {
+  const fd = new FormData()
+  fd.append('kind', fields.kind)
+  if (fields.featured !== undefined) fd.append('featured', fields.featured ? '1' : '0')
+  if (fields.alt_text) fd.append('alt_text', fields.alt_text)
+  if (Array.isArray(fields.tags)) {
+    fields.tags.forEach((t) => fd.append('tags[]', t))
+  }
+  ;(fields.files || []).forEach((f) => fd.append('files[]', f))
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/assets`,
+    { method: 'POST', formData: fd, token: editToken },
+  ))
+}
+
 export { ApiError }

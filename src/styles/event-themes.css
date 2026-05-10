@@ -187,6 +187,68 @@
   box-shadow: 0 12px 28px -16px rgba(13, 27, 42, 0.18);
 }
 
+/* Profile editor: sticky save bar at the bottom of the form */
+.profile-editor-save-bar {
+  position: sticky;
+  bottom: 16px;
+  z-index: 10;
+  background: #FFFFFF;
+  border: 1px solid rgba(13, 27, 42, 0.10);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: 0 18px 40px -24px rgba(13, 27, 42, 0.25);
+}
+
+/* Profile editor: drop zone wrapper around the native file input */
+.profile-uploader-drop {
+  background: #FAFBFC;
+  border: 1px dashed rgba(13, 27, 42, 0.18);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+/* Profile self-service shell + chooser styles */
+.event-page .card {
+  width: 100%;
+  max-width: 520px;
+  background: #FFFFFF;
+  border: 1px solid rgba(13, 27, 42, 0.08);
+  border-radius: 18px;
+  padding: clamp(28px, 4vw, 44px);
+  box-shadow: 0 30px 80px -32px rgba(13, 27, 42, 0.18);
+}
+.event-page .profile-pick {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: #FFFFFF;
+  border: 1px solid rgba(13, 27, 42, 0.10);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: left;
+}
+.event-page .profile-pick-btn {
+  width: 100%;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.event-page .profile-pick-btn:hover {
+  border-color: var(--event-primary);
+  background: var(--event-tile-soft);
+}
+.event-page .inline-text-btn {
+  background: none; border: none; padding: 0;
+  color: var(--event-primary, #E91E63);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* Speaker chip on the agenda — clickable variant (Link) gets hover lift */
 .speaker-chip:hover {
   background: var(--event-primary-bg, rgba(233, 30, 99, 0.08)) !important;
