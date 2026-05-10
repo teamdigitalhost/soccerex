@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Calendar, Clock, MapPin, List, LayoutGrid } from 'lucide-react'
 import { getEvent, getAgenda } from '../lib/soccerexApi'
+import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
 
 export default function EventAgenda() {
@@ -32,14 +33,14 @@ export default function EventAgenda() {
   const activeGroup = grouped.find((g) => g.day === activeDay) || grouped[0]
 
   return (
-    <div className="event-page theme-miami" style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+    <div className={`event-page ${eventThemeClass(slug)}`} style={{ background: '#FFFFFF', minHeight: '100vh' }}>
       <EventHeader event={event} slug={slug} active="agenda" loading={!event && !error} />
 
       <section style={{ padding: 'clamp(40px,6vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
 
           <div className="mb-10">
-            <p className="miami-subhead mb-3" style={{ color: '#007C91', fontSize: 11 }}>Schedule</p>
+            <p className="miami-subhead mb-3" style={{ color: 'var(--event-secondary)', fontSize: 11 }}>Schedule</p>
             <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D1B2A', lineHeight: 1.05, marginBottom: 16 }}>
               The <span className="miami-text-gradient">running order</span>
             </h1>
@@ -121,7 +122,7 @@ function TimelineView({ group }) {
           borderRadius: 14, padding: 16, minWidth: 0,
         }}>
           <div className="flex items-center gap-2 mb-4 pb-3" style={{ borderBottom: '1px solid rgba(13,27,42,0.08)' }}>
-            <span style={{ width: 8, height: 8, borderRadius: 999, background: '#E91E63' }} />
+            <span style={{ width: 8, height: 8, borderRadius: 999, background: 'var(--event-primary)' }} />
             <p className="miami-headline" style={{ fontSize: 13, color: '#0D1B2A', letterSpacing: '0.04em' }}>{stage.name}</p>
             <span className="miami-body" style={{ fontSize: 11, color: '#607186', marginLeft: 'auto' }}>{stage.sessions.length}</span>
           </div>
@@ -153,7 +154,7 @@ function SessionCard({ session, compact }) {
     }}>
       <div className="flex items-center gap-3 flex-wrap">
         <span className="miami-subhead" style={{
-          fontSize: 11, letterSpacing: '0.14em', color: '#E91E63',
+          fontSize: 11, letterSpacing: '0.14em', color: 'var(--event-primary)',
           fontVariantNumeric: 'tabular-nums',
         }}>
           <Clock size={11} style={{ display: 'inline', marginRight: 4 }} />
@@ -163,7 +164,7 @@ function SessionCard({ session, compact }) {
           <span style={{
             padding: '2px 8px', borderRadius: 4,
             fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
-            color: '#007C91', background: 'rgba(0,124,145,0.08)',
+            color: 'var(--event-secondary)', background: 'var(--event-tile-soft)',
             fontFamily: 'Montserrat, sans-serif',
           }}>
             {session.format}
@@ -220,14 +221,14 @@ function SpeakerChip({ speaker }) {
       ) : (
         <span style={{
           width: 22, height: 22, borderRadius: 999,
-          background: 'linear-gradient(135deg, #007C91, #E91E63)',
+          background: 'var(--event-text-gradient)',
           color: '#fff', display: 'grid', placeItems: 'center',
           fontSize: 10, fontWeight: 700, fontFamily: 'Oswald, sans-serif',
         }}>{initials}</span>
       )}
       <span className="miami-body" style={{ color: '#0D1B2A' }}>{speaker.display_name}</span>
       {speaker.role && speaker.role !== 'speaker' && (
-        <span className="miami-subhead" style={{ fontSize: 9, color: '#E91E63', letterSpacing: '0.14em' }}>{speaker.role}</span>
+        <span className="miami-subhead" style={{ fontSize: 9, color: 'var(--event-primary)', letterSpacing: '0.14em' }}>{speaker.role}</span>
       )}
     </span>
   )

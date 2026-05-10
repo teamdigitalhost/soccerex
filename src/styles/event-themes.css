@@ -11,10 +11,16 @@
   --event-primary-bg: rgba(200, 48, 44, 0.12);
   --event-primary-border: rgba(200, 48, 44, 0.3);
   --event-primary-glow: rgba(200, 48, 44, 0.4);
+  --event-secondary: #1a3fbf;          /* Dutch blue accent */
+  --event-secondary-light: #4d6fdb;
   --event-bg-dark: #1a0505;
   --event-bg-mid: #2a0a0a;
   --event-bg-section: #200808;
   --event-overlay: linear-gradient(135deg, rgba(140,20,20,0.6) 0%, rgba(50,5,5,0.65) 40%, rgba(20,0,0,0.85) 100%);
+  /* Programming-page derivative tokens, parallel to Miami's */
+  --event-text-gradient: linear-gradient(90deg, #c8302c 0%, #e8504c 60%, #1a3fbf 100%);
+  --event-sunset: linear-gradient(135deg, #ff8a5f 0%, #c8302c 55%, #6a0d0d 100%);
+  --event-tile-soft: rgba(200, 48, 44, 0.06);
 }
 
 /* ─── Miami — Vice Blue + Miami Pink on Deep Navy ────────────────────────── */
@@ -48,10 +54,14 @@
 
   --event-overlay: linear-gradient(135deg, rgba(0,124,145,0.55) 0%, rgba(106,57,198,0.30) 40%, rgba(13,27,42,0.88) 100%);
 
-  /* Miami signature gradients */
+  /* Miami signature gradients (legacy aliases retained, plus theme-agnostic
+     names so the programming pages can stay event-neutral) */
   --miami-sunset: linear-gradient(135deg, #FFB46A 0%, #E91E63 50%, #6A39C6 100%);
   --miami-sky: linear-gradient(180deg, #FFB46A 0%, #E91E63 35%, #6A39C6 65%, #007C91 100%);
   --miami-text-gradient: linear-gradient(90deg, #007C91 0%, #00C6D7 35%, #E91E63 100%);
+  --event-text-gradient: var(--miami-text-gradient);
+  --event-sunset: var(--miami-sunset);
+  --event-tile-soft: rgba(233, 30, 99, 0.06);
 }
 
 /* Miami typography utilities — scoped to .theme-miami so they win over any
@@ -83,8 +93,9 @@
   font-family: 'Caveat', cursive !important;
   font-weight: 700;
 }
-.miami-text-gradient {
-  background: var(--miami-text-gradient);
+.miami-text-gradient,
+.event-text-gradient {
+  background: var(--event-text-gradient, var(--miami-text-gradient));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -169,10 +180,10 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: var(--miami-sunset);
+  background: var(--event-sunset, var(--miami-sunset));
 }
 .miami-card-light:hover {
-  border-color: rgba(233, 30, 99, 0.25);
+  border-color: var(--event-primary-border);
   box-shadow: 0 12px 28px -16px rgba(13, 27, 42, 0.18);
 }
 
@@ -193,8 +204,8 @@
 }
 .prog-input::placeholder { color: rgba(13, 27, 42, 0.35); }
 .prog-input:focus {
-  border-color: #E91E63;
-  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.15);
+  border-color: var(--event-primary, #E91E63);
+  box-shadow: 0 0 0 3px var(--event-primary-glow, rgba(233, 30, 99, 0.4));
 }
 textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserrat', 'Inter', sans-serif; }
 .prog-spin { animation: prog-spin 0.9s linear infinite; }
@@ -252,15 +263,15 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   z-index: 1;
 }
 
-/* Miami poster-style pill buttons */
+/* Miami poster-style pill buttons (theme-aware via --event-primary tokens) */
 .miami-pill-primary {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 14px 28px;
-  background: #E91E63;
+  background: var(--event-primary, #E91E63);
   color: #fff;
-  border: 2px solid #E91E63;
+  border: 2px solid var(--event-primary, #E91E63);
   border-radius: 999px;
   font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: 12px;
@@ -270,13 +281,13 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 8px 24px -8px rgba(233, 30, 99, 0.6);
+  box-shadow: 0 8px 24px -8px var(--event-primary-glow, rgba(233, 30, 99, 0.6));
 }
 .miami-pill-primary:hover {
-  background: #c81b58;
-  border-color: #c81b58;
+  background: var(--event-primary-dark, #c81b58);
+  border-color: var(--event-primary-dark, #c81b58);
   transform: translateY(-1px);
-  box-shadow: 0 12px 30px -10px rgba(233, 30, 99, 0.75);
+  box-shadow: 0 12px 30px -10px var(--event-primary-glow, rgba(233, 30, 99, 0.75));
 }
 
 .miami-pill-outline {
@@ -285,8 +296,8 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   gap: 10px;
   padding: 14px 28px;
   background: transparent;
-  color: #E91E63;
-  border: 2px solid #E91E63;
+  color: var(--event-primary, #E91E63);
+  border: 2px solid var(--event-primary, #E91E63);
   border-radius: 999px;
   font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: 12px;
@@ -298,7 +309,7 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   transition: all 0.2s;
 }
 .miami-pill-outline:hover {
-  background: rgba(233, 30, 99, 0.08);
+  background: var(--event-primary-bg, rgba(233, 30, 99, 0.08));
 }
 
 /* Outline button on light backgrounds */
@@ -333,10 +344,15 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   --event-primary-border: rgba(242, 233, 60, 0.35);
   --event-primary-glow: rgba(242, 233, 60, 0.45);
   --event-secondary: #0f8f52;          /* Saudi green */
+  --event-secondary-light: #2db876;
   --event-bg-dark: #031a10;            /* deep green */
   --event-bg-mid: #062a19;
   --event-bg-section: #05241a;
   --event-overlay: linear-gradient(135deg, rgba(12,110,60,0.55) 0%, rgba(8,45,28,0.7) 40%, rgba(3,22,14,0.88) 100%);
+  /* Programming-page derivative tokens */
+  --event-text-gradient: linear-gradient(90deg, #0f8f52 0%, #2db876 50%, #c9c028 100%);
+  --event-sunset: linear-gradient(135deg, #f2e93c 0%, #c9c028 50%, #0f8f52 100%);
+  --event-tile-soft: rgba(15, 143, 82, 0.06);
 }
 
 /* ─── Shared event component styles ──────────────────────────────────────── */

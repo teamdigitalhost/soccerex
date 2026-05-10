@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ExternalLink, Search, Globe2, Building2 } from 'lucide-react'
 import { getEvent, getEventSpeakers } from '../lib/soccerexApi'
+import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
 
 const ROLE_STATUS_LABEL = {
@@ -48,14 +49,14 @@ export default function EventSpeakers() {
   }, [speakers, query])
 
   return (
-    <div className="event-page theme-miami" style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+    <div className={`event-page ${eventThemeClass(slug)}`} style={{ background: '#FFFFFF', minHeight: '100vh' }}>
       <EventHeader event={event} slug={slug} active="speakers" loading={!event && !error} />
 
       <section style={{ padding: 'clamp(40px,6vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
 
           <div className="mb-10">
-            <p className="miami-subhead mb-3" style={{ color: '#007C91', fontSize: 11 }}>
+            <p className="miami-subhead mb-3" style={{ color: 'var(--event-secondary)', fontSize: 11 }}>
               {isPast ? 'Speaker archive' : 'Speakers'}
             </p>
             <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D1B2A', lineHeight: 1.05, marginBottom: 16 }}>
@@ -137,7 +138,7 @@ function SpeakerCard({ speaker, archived }) {
         position: 'relative', aspectRatio: '4/3',
         background: speaker.photo_url
           ? '#0D1B2A'
-          : 'linear-gradient(135deg, #007C91 0%, #E91E63 60%, #6A39C6 100%)',
+          : 'var(--event-sunset)',
       }}>
         {speaker.photo_url ? (
           <img src={speaker.photo_url} alt={speaker.display_name}
@@ -198,7 +199,7 @@ function SpeakerCard({ speaker, archived }) {
         {speaker.website_url && (
           <a href={speaker.website_url} target="_blank" rel="noopener noreferrer"
             className="miami-subhead mt-3 inline-flex items-center gap-1.5"
-            style={{ fontSize: 11, color: '#E91E63', letterSpacing: '0.14em' }}>
+            style={{ fontSize: 11, color: 'var(--event-primary)', letterSpacing: '0.14em' }}>
             Website <ExternalLink size={11} />
           </a>
         )}

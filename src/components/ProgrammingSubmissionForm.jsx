@@ -123,13 +123,13 @@ export default function ProgrammingSubmissionForm({ open, onClose, eventSlug, to
         </button>
 
         {/* Pink top stripe */}
-        <div style={{ height: 4, background: 'linear-gradient(90deg, #007C91 0%, #E91E63 50%, #FFB46A 100%)' }} />
+        <div style={{ height: 4, background: 'var(--event-sunset, linear-gradient(90deg, #007C91 0%, #E91E63 50%, #FFB46A 100%))' }} />
 
         <div style={{ padding: 'clamp(24px, 4vw, 36px)' }}>
           {status === 'success' ? (
             <div style={{ textAlign: 'center', padding: '12px 0 8px' }}>
               <div style={{ width: 64, height: 64, borderRadius: 999, background: 'rgba(0,124,145,0.10)', border: '1px solid rgba(0,124,145,0.3)', display: 'grid', placeItems: 'center', margin: '0 auto 18px' }}>
-                <Check size={28} style={{ color: '#007C91' }} />
+                <Check size={28} style={{ color: 'var(--event-secondary, #007C91)' }} />
               </div>
               <h3 className="font-heading font-bold" style={{ fontSize: '1.4rem', color: '#0D1B2A', marginBottom: 10 }}>Submission received.</h3>
               <p className="font-body" style={{ fontSize: '0.95rem', color: '#3a4a5a', maxWidth: '420px', margin: '0 auto 24px' }}>
@@ -139,7 +139,7 @@ export default function ProgrammingSubmissionForm({ open, onClose, eventSlug, to
             </div>
           ) : (
             <>
-              <p className="font-mono" style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#E91E63', marginBottom: 8 }}>
+              <p className="font-mono" style={{ fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--event-primary, #E91E63)', marginBottom: 8 }}>
                 {topic ? `Topic: ${topic.title}` : 'Programming submission'}
               </p>
               <h3 className="font-heading font-bold" style={{ fontSize: '1.4rem', color: '#0D1B2A', marginBottom: 6 }}>

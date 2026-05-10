@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Calendar, MapPin, Users, Megaphone, Layers, AlertCircle, Loader2, Plus } from 'lucide-react'
 import { getEvent, getAgendaConcept } from '../lib/soccerexApi'
+import { eventThemeClass } from '../lib/eventTheme'
 import ProgrammingSubmissionForm from '../components/ProgrammingSubmissionForm'
 
 const STATUS_LABEL = {
@@ -12,8 +13,8 @@ const STATUS_LABEL = {
 }
 
 const STATUS_STYLE = {
-  in_program: { color: '#fff', bg: '#E91E63', border: 'transparent' },
-  approved: { color: '#0D1B2A', bg: 'rgba(0,124,145,0.10)', border: 'rgba(0,124,145,0.35)' },
+  in_program: { color: '#fff', bg: 'var(--event-primary)', border: 'transparent' },
+  approved: { color: '#0D1B2A', bg: 'var(--event-tile-soft)', border: 'var(--event-primary-border)' },
   proposed: { color: '#0D1B2A', bg: 'rgba(106,57,198,0.08)', border: 'rgba(106,57,198,0.30)' },
   archived: { color: '#607186', bg: 'rgba(13,27,42,0.05)', border: 'rgba(13,27,42,0.15)' },
 }
@@ -59,14 +60,14 @@ export default function EventAgendaConcept() {
   }
 
   return (
-    <div className="event-page theme-miami" style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+    <div className={`event-page ${eventThemeClass(slug)}`} style={{ background: '#FFFFFF', minHeight: '100vh' }}>
       <EventHeader event={event} slug={slug} active="agenda-concept" loading={!event && !error} />
 
       <section style={{ padding: 'clamp(40px,6vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
 
           <div className="mb-10">
-            <p className="miami-subhead mb-3" style={{ color: '#007C91', fontSize: 11 }}>Programme themes</p>
+            <p className="miami-subhead mb-3" style={{ color: 'var(--event-secondary)', fontSize: 11 }}>Programme themes</p>
             <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D1B2A', lineHeight: 1.05, marginBottom: 16 }}>
               The shape of the <span className="miami-text-gradient">conversation</span>
             </h1>
@@ -111,8 +112,8 @@ export default function EventAgendaConcept() {
               </div>
 
               {/* Free-form submission below */}
-              <div className="mt-12 p-7 rounded-2xl text-center" style={{ background: '#FFF1EB', border: '1px solid rgba(13,27,42,0.06)' }}>
-                <p className="miami-subhead mb-2" style={{ color: '#E91E63', fontSize: 11 }}>None of these fit?</p>
+              <div className="mt-12 p-7 rounded-2xl text-center" style={{ background: 'var(--event-tile-soft)', border: '1px solid rgba(13,27,42,0.06)' }}>
+                <p className="miami-subhead mb-2" style={{ color: 'var(--event-primary)', fontSize: 11 }}>None of these fit?</p>
                 <h3 className="miami-headline mb-2" style={{ fontSize: '1.4rem', color: '#0D1B2A' }}>Suggest a topic of your own</h3>
                 <p className="miami-body mb-5" style={{ fontSize: '0.95rem', color: '#3a4a5a', maxWidth: 560, margin: '0 auto 20px' }}>
                   Have a programme theme we have not listed? Pitch it directly to the Soccerex programme team.
@@ -151,7 +152,7 @@ function TopicCard({ topic, onSuggest }) {
       position: 'relative', overflow: 'hidden',
       transition: 'border-color 0.2s, box-shadow 0.2s',
     }}>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'var(--miami-sunset)' }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'var(--event-sunset)' }} />
 
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
@@ -166,7 +167,7 @@ function TopicCard({ topic, onSuggest }) {
             {statusLabel}
           </span>
           {topic.theme && (
-            <span className="miami-subhead" style={{ color: '#007C91', fontSize: 10 }}>{topic.theme}</span>
+            <span className="miami-subhead" style={{ color: 'var(--event-secondary)', fontSize: 10 }}>{topic.theme}</span>
           )}
         </div>
       </div>
@@ -269,7 +270,7 @@ export function EventHeader({ event, slug, active, loading }) {
           </Link>
           <span style={{ width: 1, height: 18, background: 'rgba(13,27,42,0.15)' }} />
           <div>
-            <p className="miami-subhead" style={{ fontSize: 10, color: '#E91E63', letterSpacing: '0.2em' }}>
+            <p className="miami-subhead" style={{ fontSize: 10, color: 'var(--event-primary)', letterSpacing: '0.2em' }}>
               {loading ? 'Loading' : (event?.cycle || event?.name || slug)}
             </p>
             <p className="miami-headline" style={{ fontSize: 16, color: '#0D1B2A' }}>
@@ -282,7 +283,7 @@ export function EventHeader({ event, slug, active, loading }) {
                 {event.venue?.name && (
                   <>{' '}<MapPin size={11} style={{ display: 'inline', margin: '0 4px 0 8px' }} />{event.venue.name}</>
                 )}
-                {isPast && <span style={{ marginLeft: 10, color: '#E91E63', fontWeight: 600 }}>· Concluded</span>}
+                {isPast && <span style={{ marginLeft: 10, color: 'var(--event-primary)', fontWeight: 600 }}>· Concluded</span>}
               </p>
             )}
           </div>
