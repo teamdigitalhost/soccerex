@@ -118,7 +118,7 @@ export default function ProfileEditor() {
   if (!editToken) return null /* redirect in flight */
 
   return (
-    <div className="event-page theme-miami" style={{ background: '#FAFBFC', minHeight: '100vh' }}>
+    <div className="event-page theme-soccerex" style={{ background: '#FAFBFC', minHeight: '100vh' }}>
       <EditorHeader profile={profile} session={session} onSignOut={signOut} />
 
       <section style={{ padding: 'clamp(24px,3vw,40px) clamp(24px,5vw,60px) clamp(80px,10vw,120px)' }}>

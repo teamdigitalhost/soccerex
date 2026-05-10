@@ -3,6 +3,58 @@
 /* Each event gets its own color palette. Shared structure, unique identity.    */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
+/* ─── Soccerex (neutral) — Navy + Ember Orange on White ──────────────────
+   Use for chrome that isn't tied to a specific event: account / profile
+   self-service, generic forms, post-event archives, etc. */
+.theme-soccerex {
+  /* Keep the global heading/body fonts (Space Grotesk + Inter) — no Oswald. */
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --event-primary: #ff6b35;            /* Soccerex ember orange */
+  --event-primary-light: #ff8a5f;
+  --event-primary-dark: #d9531f;
+  --event-primary-bg: rgba(255, 107, 53, 0.10);
+  --event-primary-border: rgba(255, 107, 53, 0.30);
+  --event-primary-glow: rgba(255, 107, 53, 0.35);
+
+  --event-secondary: #1a3fbf;          /* Soccerex blue accent */
+  --event-secondary-light: #4d6fdb;
+
+  --event-bg-dark: #09203e;            /* Soccerex navy */
+  --event-bg-mid: #0e2a4f;
+  --event-bg-section: #061729;
+  --event-overlay: linear-gradient(135deg, rgba(9,32,62,0.85) 0%, rgba(6,23,41,0.92) 100%);
+
+  /* Programming-page derivative tokens */
+  --event-text-gradient: linear-gradient(90deg, #09203e 0%, #1a3fbf 60%, #ff6b35 100%);
+  --event-sunset: linear-gradient(90deg, #09203e 0%, #1a3fbf 60%, #ff6b35 100%);
+  --event-tile-soft: rgba(9, 32, 62, 0.04);
+}
+
+/* Within .theme-soccerex, neutralize the Miami-only typography helpers.
+   These selectors carry the same specificity as the .miami-* defaults but
+   sit later in the file, so they win on the cascade. !important matches the
+   original rule's !important so font-family is correctly overridden. */
+.theme-soccerex .miami-headline {
+  font-family: 'Space Grotesk', sans-serif !important;
+  text-transform: none;
+  letter-spacing: -0.005em;
+}
+.theme-soccerex .miami-subhead {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+.theme-soccerex .miami-body {
+  font-family: 'Inter', sans-serif !important;
+}
+.theme-soccerex .miami-script {
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-style: italic;
+  font-weight: 600;
+}
+
 /* ─── Europe (Amsterdam) — Red & White ───────────────────────────────────── */
 .theme-europe {
   --event-primary: #c8302c;

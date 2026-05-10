@@ -278,7 +278,7 @@ function ProfileChooser({ session, onSignOut, onPick }) {
 
 function Shell({ children }) {
   return (
-    <div className="event-page theme-miami" style={{
+    <div className="event-page theme-soccerex" style={{
       minHeight: '100vh',
       background: 'linear-gradient(180deg, #FFFFFF 0%, #FAFBFC 100%)',
       display: 'flex', flexDirection: 'column', alignItems: 'center',
