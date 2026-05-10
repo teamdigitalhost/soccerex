@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { ExternalLink, Search, Globe2, Building2 } from 'lucide-react'
 import { getEvent, getEventSpeakers } from '../lib/soccerexApi'
 import { eventThemeClass } from '../lib/eventTheme'
@@ -123,7 +123,7 @@ export default function EventSpeakers() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredSpeakers.map((s) => (
-                  <SpeakerCard key={s.slug} speaker={s} archived={isPast} highlighted={highlightSlug === s.slug} />
+                  <SpeakerCard key={s.slug} speaker={s} archived={isPast} highlighted={highlightSlug === s.slug} eventSlug={slug} />
                 ))}
               </div>
 
@@ -140,29 +140,33 @@ export default function EventSpeakers() {
   )
 }
 
-function SpeakerCard({ speaker, archived, highlighted }) {
+function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
   const initials = (speaker.display_name || '?')
     .split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()
   const roleStatus = ROLE_STATUS_LABEL[speaker.role_status] || speaker.role_status
+  /* Prefer the API-provided profile_path; fall back to the canonical pattern. */
+  const profileHref = speaker.profile_path
+    || (eventSlug && speaker.slug ? `/events/${eventSlug}/speakers/${speaker.slug}` : null)
 
-  return (
-    <article id={`speaker-${speaker.slug}`} style={{
-      background: '#FFFFFF',
-      border: highlighted ? '1px solid var(--event-primary)' : '1px solid rgba(13,27,42,0.10)',
-      boxShadow: highlighted ? '0 0 0 4px var(--event-primary-bg), 0 18px 40px -22px var(--event-primary-glow)' : 'none',
-      borderRadius: 14,
-      overflow: 'hidden',
-      display: 'flex', flexDirection: 'column',
-      transition: 'border-color 0.4s ease, box-shadow 0.4s ease',
-      filter: archived ? 'saturate(0.85)' : 'none',
-      scrollMarginTop: '120px',
-    }}>
+  const cardStyle = {
+    background: '#FFFFFF',
+    border: highlighted ? '1px solid var(--event-primary)' : '1px solid rgba(13,27,42,0.10)',
+    boxShadow: highlighted ? '0 0 0 4px var(--event-primary-bg), 0 18px 40px -22px var(--event-primary-glow)' : 'none',
+    borderRadius: 14,
+    overflow: 'hidden',
+    display: 'flex', flexDirection: 'column',
+    transition: 'border-color 0.4s ease, box-shadow 0.4s ease, transform 0.2s ease',
+    filter: archived ? 'saturate(0.85)' : 'none',
+    scrollMarginTop: '120px',
+    color: 'inherit', textDecoration: 'none',
+  }
+
+  const body = (
+    <>
       {/* Photo / placeholder */}
       <div style={{
         position: 'relative', aspectRatio: '4/3',
-        background: speaker.photo_url
-          ? '#0D1B2A'
-          : 'var(--event-sunset)',
+        background: speaker.photo_url ? '#0D1B2A' : 'var(--event-sunset)',
       }}>
         {speaker.photo_url ? (
           <img src={speaker.photo_url} alt={speaker.display_name}
@@ -175,7 +179,6 @@ function SpeakerCard({ speaker, archived, highlighted }) {
             </span>
           </div>
         )}
-        {/* Bottom gradient + role status chip */}
         {roleStatus && (
           <div style={{ position: 'absolute', top: 12, left: 12 }}>
             <span style={{
@@ -186,7 +189,7 @@ function SpeakerCard({ speaker, archived, highlighted }) {
               border: '1px solid rgba(255,255,255,0.2)',
               fontFamily: 'Montserrat, sans-serif',
             }}>
-              <span style={{ width: 6, height: 6, borderRadius: 999, background: speaker.role_status === 'confirmed' ? '#10b981' : '#FFB46A' }} />
+              <span style={{ width: 6, height: 6, borderRadius: 999, background: speaker.role_status === 'confirmed' ? '#10b981' : 'var(--event-primary)' }} />
               {roleStatus}
             </span>
           </div>
@@ -220,14 +223,24 @@ function SpeakerCard({ speaker, archived, highlighted }) {
           </p>
         )}
 
-        {speaker.website_url && (
-          <a href={speaker.website_url} target="_blank" rel="noopener noreferrer"
-            className="miami-subhead mt-3 inline-flex items-center gap-1.5"
+        {profileHref && (
+          <span className="miami-subhead mt-3 inline-flex items-center gap-1.5"
             style={{ fontSize: 11, color: 'var(--event-primary)', letterSpacing: '0.14em' }}>
-            Website <ExternalLink size={11} />
-          </a>
+            View profile <ExternalLink size={11} />
+          </span>
         )}
       </div>
-    </article>
+    </>
+  )
+
+  if (profileHref) {
+    return (
+      <Link to={profileHref} id={`speaker-${speaker.slug}`} className="speaker-card-link" style={cardStyle}>
+        {body}
+      </Link>
+    )
+  }
+  return (
+    <article id={`speaker-${speaker.slug}`} style={cardStyle}>{body}</article>
   )
 }

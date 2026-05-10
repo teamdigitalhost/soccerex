@@ -193,6 +193,13 @@
   border-color: var(--event-primary, #E91E63) !important;
 }
 
+/* Speaker listing card (Link wrapper) — subtle hover lift */
+.speaker-card-link:hover {
+  border-color: var(--event-primary-border) !important;
+  box-shadow: 0 18px 40px -24px rgba(13,27,42,0.25) !important;
+  transform: translateY(-2px);
+}
+
 /* Programming submission form (light, white background) */
 .prog-input {
   display: block;

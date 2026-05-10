@@ -81,6 +81,13 @@ export async function getEventSpeakers(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}/speakers`, opts))
 }
 
+export async function getEventSpeaker(eventSlug, speakerSlug, opts = {}) {
+  return unwrap(await request(
+    `/events/${encodeURIComponent(eventSlug)}/speakers/${encodeURIComponent(speakerSlug)}`,
+    opts,
+  ))
+}
+
 /**
  * payload shape:
  *   { kind: 'speaker_interest' | 'topic_suggestion' | 'session_proposal',

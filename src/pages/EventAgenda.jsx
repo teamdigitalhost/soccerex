@@ -209,12 +209,13 @@ function SessionCard({ session, compact }) {
 function SpeakerChip({ speaker, eventSlug }) {
   const initials = (speaker.display_name || '?')
     .split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()
-  /* No public speaker-detail endpoint exists, so we link to the event's
-     speaker directory and anchor to this speaker. The listing page scrolls
-     to the slug and briefly highlights the matching card. */
-  const href = eventSlug && speaker.slug
-    ? `/events/${eventSlug}/speakers#${speaker.slug}`
-    : null
+  /* Prefer the API-provided profile_path (event-scoped speaker profile).
+     Fall back to constructing the same path from the event + speaker slugs
+     if the older agenda payload didn't include it. */
+  const href = speaker.profile_path
+    || (eventSlug && speaker.slug
+      ? `/events/${eventSlug}/speakers/${speaker.slug}`
+      : null)
 
   const inner = (
     <>
