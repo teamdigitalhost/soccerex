@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom'
 import {
   ArrowLeft, Save, Loader2, Check, AlertCircle, Upload, X, Plus, Star,
   FileText, LogOut, Shield, Trash2,
@@ -10,6 +10,7 @@ import {
 import {
   readProfileAccessSession, clearProfileAccessSession,
 } from '../lib/profileAccessAuth'
+import { isTestModeFromUrl } from '../lib/testMode'
 
 const COMPANY_TYPES = new Set(['brand', 'club', 'federation', 'company', 'organisation'])
 
@@ -39,6 +40,7 @@ const KNOWN_SOCIALS = ['linkedin', 'twitter', 'x', 'instagram', 'youtube', 'face
 export default function ProfileEditor() {
   const { slug } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [session, setSession] = useState(() => readProfileAccessSession())
 
   const [profile, setProfile] = useState(null)
@@ -54,14 +56,26 @@ export default function ProfileEditor() {
     }
   }, [session, navigate])
 
+  /* When this edit session was created in test mode but the URL is missing
+     ?test=1 (e.g. user pasted /profile-access/edit/slug directly), append it
+     so the global test-mode banner appears and any internal Link copies work. */
+  useEffect(() => {
+    if (!session?.is_test) return
+    if (isTestModeFromUrl()) return
+    const params = new URLSearchParams(location.search)
+    params.set('test', '1')
+    navigate({ pathname: location.pathname, search: `?${params.toString()}` }, { replace: true })
+  }, [session, location.pathname, location.search, navigate])
+
   const editToken = session?.edit_token
+  const isTest = !!session?.is_test
 
   /* Load profile */
   useEffect(() => {
     if (!editToken) return
     let cancelled = false
     setProfile(null); setForm(null); setError(null)
-    getEditableProfile(slug, editToken)
+    getEditableProfile(slug, editToken, { test: isTest })
       .then((p) => { if (!cancelled) { setProfile(p); setForm(toFormState(p)) } })
       .catch((err) => {
         if (cancelled) return
@@ -74,7 +88,7 @@ export default function ProfileEditor() {
         setError(err)
       })
     return () => { cancelled = true }
-  }, [slug, editToken, navigate])
+  }, [slug, editToken, isTest, navigate])
 
   const profileType = profile?.type || profile?.profile_type
   const isCompany = profileType && COMPANY_TYPES.has(String(profileType).toLowerCase())
@@ -90,7 +104,7 @@ export default function ProfileEditor() {
     setSaveResult(null)
     try {
       const patch = toApiPatch(form)
-      const updated = await updateEditableProfile(slug, editToken, patch)
+      const updated = await updateEditableProfile(slug, editToken, patch, { test: isTest })
       setProfile(updated)
       setForm(toFormState(updated))
       setSaveResult({ status: 'success', message: 'Submitted for review.' })
@@ -216,6 +230,7 @@ export default function ProfileEditor() {
                   : 'Upload a headshot, banner, or supporting documents. Featured headshot or banner changes are submitted for review.'}>
                 <AssetUploader
                   slug={slug} editToken={editToken} kindOptions={kindOptions}
+                  isTest={isTest}
                   onUnauthorized={signOut}
                 />
                 <AssetList profile={profile} />
@@ -349,7 +364,7 @@ function LinksEditor({ value, onChange }) {
 
 /* ─── Asset uploader ────────────────────────────────────────────────────── */
 
-function AssetUploader({ slug, editToken, kindOptions, onUnauthorized }) {
+function AssetUploader({ slug, editToken, kindOptions, isTest, onUnauthorized }) {
   const [kind, setKind] = useState(kindOptions[0]?.value || 'photo')
   const [featured, setFeatured] = useState(false)
   const [altText, setAltText] = useState('')
@@ -370,7 +385,7 @@ function AssetUploader({ slug, editToken, kindOptions, onUnauthorized }) {
     setStatus('uploading'); setMessage('')
     try {
       const tags = tagsInput.split(/[,\n]/).map((t) => t.trim()).filter(Boolean)
-      await uploadProfileAssets(slug, editToken, { kind, featured, alt_text: altText, tags, files })
+      await uploadProfileAssets(slug, editToken, { kind, featured, alt_text: altText, tags, files }, { test: isTest })
       setStatus('success')
       const featuredMsg = featured ? ' Submitted for review.' : ' Uploaded.'
       setMessage(`${files.length} file${files.length === 1 ? '' : 's'}${featuredMsg}`)

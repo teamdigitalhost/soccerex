@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ThemePicker from './components/ThemePicker'
+import TestModeBanner from './components/TestModeBanner'
 
 // Code-split every page so only the active route's JS is loaded
 const Home = lazy(() => import('./pages/Home'))
@@ -35,6 +36,7 @@ const ProfileEditor = lazy(() => import('./pages/ProfileEditor'))
 function App() {
   return (
     <BrowserRouter>
+      <TestModeBanner />
       <Navbar />
       <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050d1a' }} />}>
         <Routes>

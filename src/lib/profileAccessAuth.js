@@ -36,8 +36,8 @@ export function readProfileAccessSession() {
   return readFrom(window.sessionStorage) || readFrom(window.localStorage)
 }
 
-export function writeProfileAccessSession({ edit_token, expires_at, profiles, email, persist = false }) {
-  const payload = { edit_token, expires_at, profiles, email, persist, stored_at: new Date().toISOString() }
+export function writeProfileAccessSession({ edit_token, expires_at, profiles, email, persist = false, is_test = false }) {
+  const payload = { edit_token, expires_at, profiles, email, persist, is_test, stored_at: new Date().toISOString() }
   const store = pickStore(persist)
   store.setItem(KEY, JSON.stringify(payload))
   /* If switching modes, clear the other store so we don't leave a stale copy. */

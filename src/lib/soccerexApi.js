@@ -13,6 +13,8 @@
  *   POST /events/{slug}/program-submissions    -> { data: Submission }, 201
  */
 
+import { withTestParam } from './testMode'
+
 const DEFAULT_BASE = 'https://soccerex.digitalhost.co/api/v1'
 
 export const API_BASE_URL =
@@ -27,8 +29,8 @@ class ApiError extends Error {
   }
 }
 
-async function request(path, { method = 'GET', body, signal } = {}) {
-  const url = `${API_BASE_URL}${path}`
+async function request(path, { method = 'GET', body, signal, test } = {}) {
+  const url = withTestParam(`${API_BASE_URL}${path}`, { test })
   const headers = { Accept: 'application/json' }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
 
@@ -104,8 +106,8 @@ export async function submitProgrammingProposal(slug, payload, opts = {}) {
 
 /* ───── Profile self-service (auth via short-lived edit_token) ───────────── */
 
-async function authedRequest(path, { method = 'GET', body, token, signal, formData } = {}) {
-  const url = `${API_BASE_URL}${path}`
+async function authedRequest(path, { method = 'GET', body, token, signal, formData, test } = {}) {
+  const url = withTestParam(`${API_BASE_URL}${path}`, { test })
   const headers = { Accept: 'application/json' }
   if (token) headers.Authorization = `Bearer ${token}`
   let fetchBody
@@ -135,36 +137,41 @@ async function authedRequest(path, { method = 'GET', body, token, signal, formDa
   return parsed
 }
 
-export async function requestProfileAccess({ email, profile_slug } = {}) {
+export async function requestProfileAccess({ email, profile_slug } = {}, opts = {}) {
   return await authedRequest('/profile-access/request', {
     method: 'POST',
     body: profile_slug ? { email, profile_slug } : { email },
+    test: opts.test,
   })
 }
 
-export async function previewProfileAccess(token) {
-  return unwrap(await authedRequest('/profile-access/preview', { method: 'POST', body: { token } }))
+export async function previewProfileAccess(token, opts = {}) {
+  return unwrap(await authedRequest('/profile-access/preview', {
+    method: 'POST', body: { token }, test: opts.test,
+  }))
 }
 
-export async function exchangeProfileAccess(token) {
+export async function exchangeProfileAccess(token, opts = {}) {
   /* Spec gives { edit_token, expires_at, ... }. We pass the parsed payload
      through as-is so the caller can stash it (including profiles + email
      for the chooser UI). */
-  const payload = await authedRequest('/profile-access/exchange', { method: 'POST', body: { token } })
+  const payload = await authedRequest('/profile-access/exchange', {
+    method: 'POST', body: { token }, test: opts.test,
+  })
   return (payload && 'data' in payload) ? payload.data : payload
 }
 
-export async function getEditableProfile(slug, editToken) {
+export async function getEditableProfile(slug, editToken, opts = {}) {
   return unwrap(await authedRequest(
     `/profile-access/profiles/${encodeURIComponent(slug)}`,
-    { token: editToken },
+    { token: editToken, test: opts.test },
   ))
 }
 
-export async function updateEditableProfile(slug, editToken, patch) {
+export async function updateEditableProfile(slug, editToken, patch, opts = {}) {
   return unwrap(await authedRequest(
     `/profile-access/profiles/${encodeURIComponent(slug)}`,
-    { method: 'PATCH', body: patch, token: editToken },
+    { method: 'PATCH', body: patch, token: editToken, test: opts.test },
   ))
 }
 
@@ -172,7 +179,7 @@ export async function updateEditableProfile(slug, editToken, patch) {
  * Upload one or more files to a profile.
  * fields: { kind, featured?, alt_text?, tags?: string[], files: File[] }
  */
-export async function uploadProfileAssets(slug, editToken, fields) {
+export async function uploadProfileAssets(slug, editToken, fields, opts = {}) {
   const fd = new FormData()
   fd.append('kind', fields.kind)
   if (fields.featured !== undefined) fd.append('featured', fields.featured ? '1' : '0')
@@ -183,7 +190,7 @@ export async function uploadProfileAssets(slug, editToken, fields) {
   ;(fields.files || []).forEach((f) => fd.append('files[]', f))
   return unwrap(await authedRequest(
     `/profile-access/profiles/${encodeURIComponent(slug)}/assets`,
-    { method: 'POST', formData: fd, token: editToken },
+    { method: 'POST', formData: fd, token: editToken, test: opts.test },
   ))
 }
 

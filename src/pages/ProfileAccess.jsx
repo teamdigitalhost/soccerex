@@ -7,6 +7,7 @@ import {
 import {
   readProfileAccessSession, writeProfileAccessSession, clearProfileAccessSession,
 } from '../lib/profileAccessAuth'
+import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 
 export default function ProfileAccess() {
   const [params, setParams] = useSearchParams()
@@ -20,10 +21,14 @@ export default function ProfileAccess() {
      so the email link "just works" even if a stale session is around. */
   if (token) {
     return <TokenLanding token={token} onExchanged={(payload) => {
-      const stored = writeProfileAccessSession({ ...payload, persist: false })
+      const stored = writeProfileAccessSession({
+        ...payload,
+        persist: false,
+        is_test: isTestModeFromUrl(),
+      })
       setSession(stored)
       /* Remove the token from the URL once exchanged so a back-button doesn't
-         re-trigger the preview/exchange flow. */
+         re-trigger the preview/exchange flow. Keep test=1 if it was there. */
       const next = new URLSearchParams(params)
       next.delete('token')
       setParams(next, { replace: true })
@@ -40,7 +45,7 @@ export default function ProfileAccess() {
     return <ProfileChooser session={session} onSignOut={() => {
       clearProfileAccessSession()
       setSession(null)
-    }} onPick={(slug) => navigate(`/profile-access/edit/${encodeURIComponent(slug)}`)} />
+    }} onPick={(slug) => navigate(withTestSearch(`/profile-access/edit/${encodeURIComponent(slug)}`))} />
   }
 
   return <RequestForm />
