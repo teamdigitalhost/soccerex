@@ -129,7 +129,7 @@ export default function Miami2026() {
     <div className="event-page theme-miami" style={{ background: '#FFFFFF' }}>
 
       {/* ─── HERO (crisp white, MIAMI 2026 dominates) ─────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#FFFFFF', minHeight: '92vh' }}>
+      <section className="relative overflow-hidden" style={{ background: '#FFFFFF' }}>
         {/* Subtle pink wash top-right — backdrop tint only, no warmth */}
         <div className="absolute pointer-events-none" style={{
           top: '-360px', right: '-360px', width: '900px', height: '900px',
