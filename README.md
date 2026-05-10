@@ -1,16 +1,28 @@
-# React + Vite
+# Soccerex Front
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React/Vite public website for Soccerex.
 
-Currently, two official plugins are available:
+## API Configuration
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The frontend reads the Soccerex backend through:
 
-## React Compiler
+```text
+VITE_SOCCEREX_API_BASE_URL=https://soccerex.digitalhost.co/api/v1
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+`https://soccerex.digitalhost.co` is the current Laravel Cloud platform service
+URL. If production later moves to `system.soccerex.com`,
+`backend.soccerex.com`, or another Soccerex-owned domain, update this variable
+in the frontend environment and deployment settings. Do not point shared
+frontend work at `https://soccerex.back`; that hostname is local-only.
 
-## Expanding the ESLint configuration
+The backend must allow the frontend origin through CORS. Current backend config
+allows `https://soccerex.front`, localhost dev origins, and production website
+origins by default, with more origins configurable via `CORS_ALLOWED_ORIGINS`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Local Build
+
+```zsh
+npm install
+npm run build
+```

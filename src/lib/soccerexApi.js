@@ -1,8 +1,9 @@
 /**
  * Soccerex public API client.
  *
- * Reads from import.meta.env.VITE_SOCCEREX_API_BASE_URL with a sensible local
- * default. All endpoints are public JSON, no auth required.
+ * Reads from import.meta.env.VITE_SOCCEREX_API_BASE_URL. Set that variable when
+ * the backend moves domains; the fallback is only the current Laravel Cloud
+ * platform service URL.
  *
  * Endpoint shapes (sampled 2026-05-10):
  *   GET /events/{slug}                         -> { data: Event }
@@ -12,7 +13,7 @@
  *   POST /events/{slug}/program-submissions    -> { data: Submission }, 201
  */
 
-const DEFAULT_BASE = 'https://soccerex.back/api/v1'
+const DEFAULT_BASE = 'https://soccerex.digitalhost.co/api/v1'
 
 export const API_BASE_URL =
   (import.meta.env && import.meta.env.VITE_SOCCEREX_API_BASE_URL) || DEFAULT_BASE
