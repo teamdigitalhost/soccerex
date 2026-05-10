@@ -125,10 +125,10 @@
   color: var(--event-secondary-light);
 }
 
-/* Light-themed cell + card variants for sand/cream sections */
+/* Light cell + card variants — crisp white on near-white sections */
 .miami-cell-light {
   background: #FFFFFF;
-  border: 1px solid rgba(13, 27, 42, 0.06);
+  border: 1px solid rgba(13, 27, 42, 0.08);
   border-radius: 12px;
   padding: 22px 14px;
   text-align: center;
@@ -136,7 +136,7 @@
 }
 .miami-cell-light:hover {
   border-color: rgba(233, 30, 99, 0.4);
-  box-shadow: 0 12px 32px -16px rgba(233, 30, 99, 0.35);
+  box-shadow: 0 8px 24px -12px rgba(233, 30, 99, 0.30), 0 2px 6px -2px rgba(13, 27, 42, 0.06);
   transform: translateY(-2px);
 }
 
@@ -159,8 +159,60 @@
   background: var(--miami-sunset);
 }
 .miami-card-light:hover {
-  border-color: rgba(233, 30, 99, 0.3);
-  box-shadow: 0 18px 40px -22px rgba(13, 27, 42, 0.25);
+  border-color: rgba(233, 30, 99, 0.25);
+  box-shadow: 0 12px 28px -16px rgba(13, 27, 42, 0.18);
+}
+
+/* ─── Placeholder slots for designer-supplied vector graphics ──────────
+   The designer will drop in PNG/SVG via background-image rules. Each slot
+   has a position, size, and opacity ready. Until the asset is supplied,
+   the slot is visually empty (no background-image set). */
+.hero-graphic-palm {
+  position: absolute;
+  pointer-events: none;
+  /* Designer: drop pink palm illustration here */
+  /* background-image: url('/events/miami/2026/graphics/palm-pink.png'); */
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center top;
+  top: -20px;
+  right: 6%;
+  width: clamp(200px, 24vw, 360px);
+  height: clamp(280px, 36vw, 520px);
+  opacity: 0.95;
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+.hero-graphic-tower {
+  position: absolute;
+  pointer-events: none;
+  /* Designer: drop turquoise/pink lifeguard tower illustration here */
+  /* background-image: url('/events/miami/2026/graphics/lifeguard-tower.png'); */
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center bottom;
+  bottom: 0;
+  left: clamp(20px, 5vw, 80px);
+  width: clamp(80px, 10vw, 140px);
+  height: clamp(100px, 12vw, 180px);
+  opacity: 0.9;
+  z-index: 1;
+}
+.hero-graphic-skyline {
+  position: absolute;
+  pointer-events: none;
+  /* Designer: drop pink-tinted skyline silhouette here, full-width */
+  /* background-image: url('/events/miami/2026/graphics/skyline-silhouette.png'); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(80px, 10vw, 140px);
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  z-index: 1;
 }
 
 /* Miami poster-style pill buttons */
