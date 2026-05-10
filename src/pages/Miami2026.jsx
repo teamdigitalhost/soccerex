@@ -284,7 +284,6 @@ export default function Miami2026() {
                 </div>
               ))}
             </div>
-            </div>
           </div>
         </div>
       </section>
