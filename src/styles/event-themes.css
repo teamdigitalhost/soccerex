@@ -19,6 +19,12 @@
 
 /* ─── Miami — Vice Blue + Miami Pink on Deep Navy ────────────────────────── */
 .theme-miami {
+  /* Override the global font tokens for everything under the Miami subtree.
+     Anything using var(--font-heading) / var(--font-body) (including Tailwind's
+     font-heading and font-body utilities) inherits Oswald + Montserrat here. */
+  --font-heading: 'Oswald', 'Space Grotesk', sans-serif;
+  --font-body: 'Montserrat', 'Inter', sans-serif;
+
   /* Brand palette per Soccerex Miami 2026 brand sheet */
   --event-primary: #E91E63;            /* Miami Pink (primary accent) */
   --event-primary-light: #ff5b8a;
@@ -48,26 +54,33 @@
   --miami-text-gradient: linear-gradient(90deg, #007C91 0%, #00C6D7 35%, #E91E63 100%);
 }
 
-/* Miami-only utility classes */
+/* Miami typography utilities — scoped to .theme-miami so they win over any
+   global font-family declarations. Also marked !important for the family
+   itself, since Tailwind v4 utilities are also family declarations and we
+   want Oswald/Montserrat to be unambiguous in the Miami subtree. */
+.theme-miami .miami-headline,
 .miami-headline {
-  font-family: 'Oswald', 'Space Grotesk', sans-serif;
+  font-family: 'Oswald', 'Space Grotesk', sans-serif !important;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 1.0;
 }
+.theme-miami .miami-subhead,
 .miami-subhead {
-  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-family: 'Montserrat', 'Inter', sans-serif !important;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
+.theme-miami .miami-body,
 .miami-body {
-  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-family: 'Montserrat', 'Inter', sans-serif !important;
   font-weight: 400;
 }
+.theme-miami .miami-script,
 .miami-script {
-  font-family: 'Caveat', cursive;
+  font-family: 'Caveat', cursive !important;
   font-weight: 700;
 }
 .miami-text-gradient {
