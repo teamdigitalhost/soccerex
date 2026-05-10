@@ -414,10 +414,10 @@ function EventsSection() {
               ? 'linear-gradient(90deg, #007C91 0%, #E91E63 50%, #FFB46A 100%)'
               : 'var(--color-gold)'
             const overlayGradient = isMiami
-              ? 'linear-gradient(180deg, rgba(0,124,145,0.15) 0%, rgba(233,30,99,0.30) 55%, rgba(13,27,42,0.95) 100%)'
+              ? 'linear-gradient(180deg, rgba(13,27,42,0.45) 0%, rgba(13,27,42,0.30) 28%, rgba(233,30,99,0.30) 60%, rgba(13,27,42,0.97) 100%)'
               : 'linear-gradient(180deg, rgba(5,13,26,0.2) 0%, rgba(5,13,26,0.5) 50%, rgba(5,13,26,0.95) 100%)'
             const imageFilter = isMiami
-              ? 'saturate(1.2) brightness(0.92) hue-rotate(-8deg)'
+              ? 'saturate(1.15) brightness(0.72) hue-rotate(-6deg)'
               : 'saturate(1.1) brightness(0.85)'
             return (
               <div
@@ -498,7 +498,9 @@ function EventsSection() {
                     <h3 className="font-heading font-bold leading-none" style={{
                       fontSize: 'clamp(2.4rem, 5vw, 3.6rem)',
                       color: cityColor,
-                      textShadow: isMiami ? '0 2px 20px rgba(233,30,99,0.45)' : '0 2px 20px rgba(0,0,0,0.4)',
+                      textShadow: isMiami
+                        ? '0 2px 8px rgba(13,27,42,0.7), 0 2px 24px rgba(13,27,42,0.5)'
+                        : '0 2px 20px rgba(0,0,0,0.4)',
                       marginBottom: '12px',
                       letterSpacing: '-0.02em',
                     }}>
