@@ -190,12 +190,12 @@ function ByTheNumbersSection() {
   ]
 
   return (
-    <section className="relative overflow-hidden" style={{ background: '#050d1a', padding: 'clamp(80px,10vw,130px) clamp(24px,5vw,80px)' }}>
-      <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
+    <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,130px) clamp(24px,5vw,80px)' }}>
+      <NetworkNodes color="#0D1B2A" accentColor="var(--color-gold)" nodeCount={20} opacity={0.06} />
       <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
         <div className="mb-14">
           <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-gold)', fontWeight: 600 }}>SOCCEREX BY THE NUMBERS</p>
-          <h2 className="font-heading font-bold text-white leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)' }}>
+          <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', color: '#0D1B2A' }}>
             30 Years <span style={{ color: 'var(--color-gold)' }}>of Global Impact</span>
           </h2>
         </div>
@@ -205,7 +205,8 @@ function ByTheNumbersSection() {
               style={{
                 aspectRatio: '4/5',
                 borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid rgba(13,27,42,0.08)',
+                boxShadow: '0 12px 32px -16px rgba(13,27,42,0.18)',
                 transitionDelay: `${i * 40}ms`,
               }}
             >
@@ -361,10 +362,11 @@ function EventsSection() {
       img: '/events/europe/2026/sections/arena-interior.webp',
       crest: '/brand/crests/crest-europe-white.svg',
       learnMoreTo: '/europe-2026',
-      ctaLabel: 'Buy Tickets',
-      ctaHref: 'https://soccerexeurope2026.eventify.io/t2/tickets/',
-      ctaExternal: true,
-      status: 'open',
+      ctaLabel: 'View Recap',
+      ctaHref: '/europe-2026',
+      ctaExternal: false,
+      status: 'past',
+      pastLabel: 'Thank you!',
     },
     {
       city: 'MIAMI',
@@ -395,30 +397,41 @@ function EventsSection() {
   ]
 
   return (
-    <section id="events" className="relative overflow-hidden" style={{ background: '#050d1a' }}>
+    <section id="events" className="relative overflow-hidden" style={{ background: '#FFFFFF' }}>
       {/* Section number watermark */}
-      <div className="absolute top-8 right-8 font-heading font-bold pointer-events-none select-none" style={{ fontSize: 'clamp(8rem, 20vw, 16rem)', lineHeight: 1, color: 'rgba(255,255,255,0.02)' }}>03</div>
+      <div className="absolute top-8 right-8 font-heading font-bold pointer-events-none select-none" style={{ fontSize: 'clamp(8rem, 20vw, 16rem)', lineHeight: 1, color: 'rgba(13,27,42,0.04)' }}>03</div>
 
       <div className="relative z-10" style={{ maxWidth: '1400px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div className="mb-14">
-          <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', color: '#fff' }}>
-            Upcoming <span style={{ color: 'var(--color-gold)' }}>Events</span>
+          <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-gold)', fontWeight: 600 }}>WHERE WE GATHER</p>
+          <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', color: '#0D1B2A' }}>
+            The Soccerex <span style={{ color: 'var(--color-gold)' }}>2026 Calendar</span>
           </h2>
+          <p className="font-body fade-up mt-4" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: '680px' }}>
+            One year. Three flagship gatherings on three continents. Amsterdam closed our European chapter in May; Miami opens the Americas in September; Riyadh lands in the Middle East in early 2027.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {events.map((event) => {
             const isMiami = event.city === 'MIAMI'
-            const cityColor = isMiami ? '#E91E63' : 'var(--color-gold)'
+            const isPast = event.status === 'past'
+            const cityColor = isMiami ? '#E91E63' : isPast ? 'rgba(255,255,255,0.85)' : 'var(--color-gold)'
             const accentStripe = isMiami
               ? 'linear-gradient(90deg, #007C91 0%, #E91E63 50%, #FFB46A 100%)'
-              : 'var(--color-gold)'
+              : isPast
+                ? 'rgba(255,255,255,0.35)'
+                : 'var(--color-gold)'
             const overlayGradient = isMiami
               ? 'linear-gradient(180deg, rgba(13,27,42,0.45) 0%, rgba(13,27,42,0.30) 28%, rgba(233,30,99,0.30) 60%, rgba(13,27,42,0.97) 100%)'
-              : 'linear-gradient(180deg, rgba(5,13,26,0.2) 0%, rgba(5,13,26,0.5) 50%, rgba(5,13,26,0.95) 100%)'
+              : isPast
+                ? 'linear-gradient(180deg, rgba(5,13,26,0.55) 0%, rgba(5,13,26,0.65) 40%, rgba(5,13,26,0.95) 100%)'
+                : 'linear-gradient(180deg, rgba(5,13,26,0.2) 0%, rgba(5,13,26,0.5) 50%, rgba(5,13,26,0.95) 100%)'
             const imageFilter = isMiami
               ? 'saturate(1.15) brightness(0.72) hue-rotate(-6deg)'
-              : 'saturate(1.1) brightness(0.85)'
+              : isPast
+                ? 'grayscale(0.55) brightness(0.7) contrast(1.05)'
+                : 'saturate(1.1) brightness(0.85)'
             return (
               <div
                 key={event.city}
@@ -493,6 +506,11 @@ function EventsSection() {
                     {event.status === 'open' && (
                       <div style={{ alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px', background: 'var(--color-gold)', borderRadius: '100px', color: '#09203e', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                         Registration Open
+                      </div>
+                    )}
+                    {event.status === 'past' && (
+                      <div style={{ alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '100px', color: 'rgba(255,255,255,0.85)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+                        {event.pastLabel || 'Event Concluded'}
                       </div>
                     )}
                     <h3 className="font-heading font-bold leading-none" style={{
@@ -1484,7 +1502,7 @@ export default function Home() {
       <PixelDivider color="#1a0000" layers={4} height={90} speed={0.5} />
       <EventsSection />
       <ByTheNumbersSection />
-      <PixelDivider color="#050d1a" layers={4} height={90} speed={0.6} />
+      <PixelDivider color="#FFFFFF" layers={4} height={110} speed={0.6} />
       <HeritageMapSection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <SpeakersShowcase />
