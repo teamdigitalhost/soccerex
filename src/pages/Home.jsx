@@ -408,6 +408,17 @@ function EventsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {events.map((event) => {
+            const isMiami = event.city === 'MIAMI'
+            const cityColor = isMiami ? '#E91E63' : 'var(--color-gold)'
+            const accentStripe = isMiami
+              ? 'linear-gradient(90deg, #007C91 0%, #E91E63 50%, #FFB46A 100%)'
+              : 'var(--color-gold)'
+            const overlayGradient = isMiami
+              ? 'linear-gradient(180deg, rgba(0,124,145,0.15) 0%, rgba(233,30,99,0.30) 55%, rgba(13,27,42,0.95) 100%)'
+              : 'linear-gradient(180deg, rgba(5,13,26,0.2) 0%, rgba(5,13,26,0.5) 50%, rgba(5,13,26,0.95) 100%)'
+            const imageFilter = isMiami
+              ? 'saturate(1.2) brightness(0.92) hue-rotate(-8deg)'
+              : 'saturate(1.1) brightness(0.85)'
             return (
               <div
                 key={event.city}
@@ -421,6 +432,7 @@ function EventsSection() {
                     width: '100%',
                     borderRadius: '14px',
                     display: 'block',
+                    boxShadow: isMiami ? '0 24px 60px -28px rgba(233,30,99,0.5)' : 'none',
                   }}
                 >
                   {/* Background image */}
@@ -430,14 +442,14 @@ function EventsSection() {
                     style={{
                       position: 'absolute', inset: 0, width: '100%', height: '100%',
                       objectFit: 'cover',
-                      filter: 'saturate(1.1) brightness(0.85)',
+                      filter: imageFilter,
                       transition: 'transform 0.6s ease',
                     }}
                   />
                   {/* Gradient overlay */}
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(5,13,26,0.2) 0%, rgba(5,13,26,0.5) 50%, rgba(5,13,26,0.95) 100%)' }} />
+                  <div style={{ position: 'absolute', inset: 0, background: overlayGradient }} />
                   {/* Accent top edge */}
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'var(--color-gold)' }} />
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: accentStripe }} />
 
                   {/* Top strip — badge gets the FULL top strip now (chip moved to
                       bottom CTA zone). Height caps at ~62% of card width (~47%
@@ -474,7 +486,7 @@ function EventsSection() {
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px', display: 'flex', flexDirection: 'column' }}>
                     {/* Status chip sits above the city name, out of the top strip */}
                     {event.status === 'soon' && (
-                      <div style={{ alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '100px', color: '#fff', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                      <div style={{ alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px', background: isMiami ? '#E91E63' : 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: isMiami ? '1px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.2)', borderRadius: '100px', color: '#fff', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                         Coming Soon
                       </div>
                     )}
@@ -485,8 +497,8 @@ function EventsSection() {
                     )}
                     <h3 className="font-heading font-bold leading-none" style={{
                       fontSize: 'clamp(2.4rem, 5vw, 3.6rem)',
-                      color: 'var(--color-gold)',
-                      textShadow: '0 2px 20px rgba(0,0,0,0.4)',
+                      color: cityColor,
+                      textShadow: isMiami ? '0 2px 20px rgba(233,30,99,0.45)' : '0 2px 20px rgba(0,0,0,0.4)',
                       marginBottom: '12px',
                       letterSpacing: '-0.02em',
                     }}>
