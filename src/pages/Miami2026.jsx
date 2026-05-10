@@ -128,108 +128,162 @@ export default function Miami2026() {
   return (
     <div className="event-page theme-miami" style={{ background: 'var(--event-sand, #FFF1EB)' }}>
 
-      {/* ─── HERO (light, sand-dominant) ─────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #FFF6EE 0%, #FFE6D2 60%, #FFF1EB 100%)' }}>
-        {/* Sunset gradient blob top-right */}
+      {/* ─── HERO (poster-style, sand-dominant, MIAMI 2026 dominates) ───── */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(170deg, #FFEFE0 0%, #FFE0CB 45%, #FFD9C4 75%, #F4D7CE 100%)', minHeight: '92vh' }}>
+        {/* Big sunset blob top-right (the dominant warmth source) */}
         <div className="absolute pointer-events-none" style={{
-          top: '-200px', right: '-200px', width: '720px', height: '720px',
-          background: 'radial-gradient(circle, rgba(255,180,106,0.55) 0%, rgba(233,30,99,0.35) 40%, rgba(106,57,198,0.0) 70%)',
+          top: '-280px', right: '-280px', width: '1100px', height: '1100px',
+          background: 'radial-gradient(circle, rgba(255,180,106,0.70) 0%, rgba(255,180,106,0.55) 18%, rgba(233,30,99,0.45) 42%, rgba(106,57,198,0.18) 65%, rgba(0,124,145,0) 80%)',
+          filter: 'blur(10px)',
+        }} />
+        {/* Vice-blue blob bottom-left */}
+        <div className="absolute pointer-events-none" style={{
+          bottom: '-220px', left: '-220px', width: '720px', height: '720px',
+          background: 'radial-gradient(circle, rgba(0,198,215,0.45) 0%, rgba(0,124,145,0.22) 45%, rgba(0,124,145,0) 70%)',
           filter: 'blur(20px)',
         }} />
-        {/* Aqua mist blob bottom-left */}
+        {/* Pink wash mid-band so MIAMI 2026 sits on a hint of color */}
         <div className="absolute pointer-events-none" style={{
-          bottom: '-160px', left: '-160px', width: '520px', height: '520px',
-          background: 'radial-gradient(circle, rgba(0,198,215,0.35) 0%, rgba(0,124,145,0.18) 50%, rgba(0,124,145,0) 70%)',
-          filter: 'blur(20px)',
+          top: '38%', left: '-80px', width: '60%', height: '32%',
+          background: 'radial-gradient(ellipse at center, rgba(233,30,99,0.18) 0%, rgba(233,30,99,0) 65%)',
+          filter: 'blur(40px)',
         }} />
-        {/* Faint synthwave grid */}
+        {/* Synthwave grid: more visible in lower portion */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(13,27,42,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,27,42,0.06) 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-          maskImage: 'radial-gradient(ellipse at 50% 30%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at 50% 30%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%)',
+          backgroundImage: 'linear-gradient(rgba(13,27,42,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(13,27,42,0.07) 1px, transparent 1px)',
+          backgroundSize: '72px 72px',
+          maskImage: 'linear-gradient(180deg, rgba(0,0,0,0) 10%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 100%)',
+          WebkitMaskImage: 'linear-gradient(180deg, rgba(0,0,0,0) 10%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 100%)',
         }} />
+        {/* Stylized hot-pink palm fronds, top-center as a graphic accent */}
+        <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMin meet" aria-hidden="true"
+          className="absolute pointer-events-none"
+          style={{ top: '-40px', right: '8%', height: '70%', width: 'auto', opacity: 0.85, mixBlendMode: 'multiply' }}>
+          <g fill="#E91E63" opacity="0.85">
+            {/* central trunk: thin elegant curve */}
+            <path d="M 196 600 Q 197 480 200 360 Q 203 250 200 140 L 198 140 Q 195 250 198 360 Q 201 480 200 600 Z" />
+            {/* Six fronds radiating from the top, each a long teardrop */}
+            <path d="M 200 130 C 160 122 110 130 60 160 C 110 138 160 138 200 150 Z" />
+            <path d="M 200 130 C 240 122 290 130 340 160 C 290 138 240 138 200 150 Z" />
+            <path d="M 200 130 C 170 100 130 80 80 80 C 140 95 175 110 200 145 Z" />
+            <path d="M 200 130 C 230 100 270 80 320 80 C 260 95 225 110 200 145 Z" />
+            <path d="M 200 130 C 188 90 192 50 210 10 C 198 50 200 100 200 140 Z" />
+            <path d="M 200 130 C 212 90 208 50 190 10 C 202 50 200 100 200 140 Z" />
+          </g>
+        </svg>
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center" style={{ maxWidth: '1280px', margin: '0 auto', padding: 'clamp(48px,6vw,96px) clamp(24px,5vw,80px) clamp(64px,8vw,120px)' }}>
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-12 items-center" style={{ maxWidth: '1320px', margin: '0 auto', padding: 'clamp(40px,5vw,72px) clamp(24px,5vw,80px) clamp(56px,7vw,100px)' }}>
           {/* Left: text */}
           <div className="lg:col-span-7">
-            <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-7" style={{ color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
+            <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-6" style={{ color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
               <ArrowLeft size={14} /> Back to Home
             </Link>
 
-            {/* 30 YEARS strip */}
-            <div className="flex items-center gap-3 mb-7 flex-wrap">
-              <span className="miami-headline" style={{ fontSize: '52px', lineHeight: 0.95, color: '#E91E63' }}>30</span>
-              <div>
-                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '11px', letterSpacing: '0.2em', lineHeight: 1.2 }}>YEARS OF BUILDING</p>
-                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '11px', letterSpacing: '0.2em', lineHeight: 1.2 }}>THE GLOBAL GAME</p>
+            {/* 30 YEARS block: big number, stacked label, timeline tail */}
+            <div className="flex items-end gap-4 mb-7 flex-wrap">
+              <span className="miami-headline" style={{ fontSize: 'clamp(56px, 7vw, 84px)', lineHeight: 0.85, color: '#E91E63' }}>30</span>
+              <div style={{ marginBottom: 6 }}>
+                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: 'clamp(10px, 0.9vw, 12px)', letterSpacing: '0.22em', lineHeight: 1.25 }}>YEARS</p>
+                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: 'clamp(10px, 0.9vw, 12px)', letterSpacing: '0.22em', lineHeight: 1.25 }}>OF BUILDING</p>
+                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: 'clamp(10px, 0.9vw, 12px)', letterSpacing: '0.22em', lineHeight: 1.25 }}>THE GLOBAL GAME</p>
               </div>
-              <div className="flex items-center gap-2 ml-2" style={{ color: '#0D1B2A', opacity: 0.6 }}>
+              <div className="flex items-center gap-2" style={{ color: '#0D1B2A', opacity: 0.55, marginBottom: 8 }}>
                 <span className="miami-subhead" style={{ fontSize: '11px' }}>1996</span>
-                <span style={{ width: 56, height: 2, background: 'linear-gradient(90deg, #007C91, #E91E63)' }} />
+                <span style={{ width: 64, height: 2, background: 'linear-gradient(90deg, #007C91, #E91E63)' }} />
                 <span className="miami-subhead" style={{ fontSize: '11px' }}>2026</span>
               </div>
             </div>
 
-            <h1 className="miami-headline mb-3" style={{ fontSize: 'clamp(2rem, 4.4vw, 3.4rem)', color: '#0D1B2A', lineHeight: 1.05, letterSpacing: '0.005em' }}>
-              The world came for<br />
-              the World Cup.
-              <br />
+            <h1 className="miami-headline mb-6" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', color: '#0D1B2A', lineHeight: 1.08, letterSpacing: '0.01em' }}>
+              The world came for the World Cup.<br />
               <span style={{ color: '#E91E63' }}>Now it stays for Soccerex.</span>
             </h1>
 
-            {/* Wordmark: SOCCEREX in navy + script Miami + 2026 gradient */}
-            <div className="flex items-end flex-wrap gap-x-4 gap-y-1 my-7">
-              <span className="miami-headline" style={{ fontSize: 'clamp(2.6rem, 6vw, 4.6rem)', lineHeight: 0.9, color: '#0D1B2A', letterSpacing: '0.02em' }}>
-                SOCCEREX
+            {/* MASSIVE MIAMI 2026 wordmark, the visual hero */}
+            <div className="mb-3" style={{ position: 'relative' }}>
+              <h2 className="miami-headline miami-text-gradient" style={{
+                fontSize: 'clamp(4.5rem, 12vw, 9.5rem)',
+                lineHeight: 0.85,
+                letterSpacing: '-0.005em',
+                marginLeft: '-0.04em',
+                fontWeight: 700,
+              }}>
+                MIAMI 2026
+              </h2>
+              {/* Script "Soccerex" tag floating above-left */}
+              <span className="miami-script absolute" style={{
+                top: 'clamp(-18px, -2vw, -28px)',
+                left: 'clamp(8px, 1vw, 18px)',
+                fontSize: 'clamp(1.6rem, 2.6vw, 2.4rem)',
+                color: '#E91E63',
+                lineHeight: 1,
+                transform: 'rotate(-3deg)',
+              }}>
+                Soccerex
               </span>
-              <span className="miami-script" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.6rem)', lineHeight: 0.85, color: '#E91E63' }}>Miami</span>
-              <span className="miami-headline miami-text-gradient" style={{ fontSize: 'clamp(2rem, 4.4vw, 3.2rem)', lineHeight: 0.9, letterSpacing: '0.01em' }}>2026</span>
             </div>
 
-            <p className="miami-subhead mb-8" style={{ color: '#0D1B2A', opacity: 0.7, fontSize: '12px', letterSpacing: '0.2em' }}>
+            <p className="miami-subhead mb-8" style={{ color: '#0D1B2A', opacity: 0.75, fontSize: 'clamp(11px, 1vw, 13px)', letterSpacing: '0.22em' }}>
               Football's most influential week returns home.
             </p>
 
-            <div className="flex items-center gap-8 mb-8 flex-wrap">
+            <div className="flex items-center gap-6 lg:gap-8 mb-8 flex-wrap">
               <div>
                 <p className="miami-subhead mb-1" style={{ color: '#607186', fontSize: '10px' }}><MapPin size={12} className="inline mr-1" /> Venue</p>
-                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.15rem', letterSpacing: '0.04em' }}>Miami Freedom Park</p>
+                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.1rem', letterSpacing: '0.04em' }}>Miami Freedom Park</p>
               </div>
-              <div style={{ width: 60, height: 2, background: 'linear-gradient(90deg, transparent, #E91E63, transparent)' }} />
+              <div style={{ width: 48, height: 2, background: 'linear-gradient(90deg, transparent, #E91E63, transparent)' }} />
               <div>
                 <p className="miami-subhead mb-1" style={{ color: '#607186', fontSize: '10px' }}><Calendar size={12} className="inline mr-1" /> Date</p>
-                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.15rem', letterSpacing: '0.04em' }}>23-25 September 2026</p>
+                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.1rem', letterSpacing: '0.04em' }}>23-25 September 2026</p>
               </div>
             </div>
 
-            <p className="miami-body leading-relaxed mb-8" style={{ fontSize: '1.02rem', color: '#1a2a3a', maxWidth: '620px' }}>
-              Nine months before the 2026 FIFA World Cup kicks off across North America, the global football industry lands in Miami. Three days of executive content, networking, and commercial opportunity at the city's new home of football, Miami Freedom Park.
-            </p>
-
-            <div className="flex flex-wrap gap-3">
-              <a href="#pre-register" className="event-btn-primary"><Mail size={16} /> Pre-register</a>
-              <Link to="/" className="event-btn-outline-light"><ArrowLeft size={16} /> Back to Soccerex</Link>
+            <div className="flex flex-wrap gap-3 items-center">
+              <a href="#pre-register" className="miami-pill-primary"><Mail size={15} /> Pre-register Now</a>
+              <a href="#pre-register" className="miami-pill-outline">Reserve Your Place &rarr;</a>
             </div>
           </div>
 
-          {/* Right: image card */}
-          <div className="lg:col-span-5">
-            <div className="relative" style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 30px 80px -30px rgba(13,27,42,0.45), 0 12px 30px -10px rgba(233,30,99,0.25)', aspectRatio: '4/5' }}>
-              <img src={`${IMG}/sections/miami-skyline.jpg`} alt="Miami skyline at sunset" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.1) contrast(1.05)' }} />
-              {/* Gradient overlay on image */}
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(255,180,106,0.15) 0%, rgba(233,30,99,0.18) 50%, rgba(13,27,42,0.55) 100%)' }} />
+          {/* Right: image card with overlaid Miami lockup */}
+          <div className="lg:col-span-5 lg:pl-4">
+            <div className="relative" style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 40px 90px -30px rgba(13,27,42,0.55), 0 16px 36px -12px rgba(233,30,99,0.32)', aspectRatio: '4/5' }}>
+              <img src={`${IMG}/sections/miami-skyline.jpg`} alt="Miami skyline at sunset" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.18) contrast(1.06)' }} />
+              {/* Sunset gradient overlay */}
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(255,180,106,0.18) 0%, rgba(233,30,99,0.12) 35%, rgba(106,57,198,0.20) 65%, rgba(13,27,42,0.65) 100%)' }} />
               {/* Inner ring */}
-              <div className="absolute inset-0 pointer-events-none" style={{ borderRadius: '20px', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.2)' }} />
-
-              <div className="absolute left-0 right-0 bottom-0 p-6 text-white">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'rgba(13,27,42,0.55)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                  <span style={{ width: 6, height: 6, borderRadius: 999, background: '#E91E63', boxShadow: '0 0 10px rgba(233,30,99,0.8)' }} />
-                  <span className="miami-subhead" style={{ fontSize: '10px' }}>Coming Soon</span>
+              <div className="absolute inset-0 pointer-events-none" style={{ borderRadius: '24px', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.18)' }} />
+              {/* Coming Soon chip */}
+              <div className="absolute" style={{ top: 18, left: 18 }}>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: '#E91E63', boxShadow: '0 4px 18px -4px rgba(233,30,99,0.7)' }}>
+                  <span style={{ width: 6, height: 6, borderRadius: 999, background: '#fff' }} />
+                  <span className="miami-subhead" style={{ fontSize: '10px', color: '#fff' }}>Coming Soon</span>
                 </div>
-                <p className="miami-headline" style={{ fontSize: '1.6rem', letterSpacing: '0.03em' }}>Miami, USA</p>
-                <p className="miami-body" style={{ fontSize: '0.85rem', opacity: 0.8 }}>Three days at the city's new home of football.</p>
               </div>
+              {/* Bottom lockup */}
+              <div className="absolute left-0 right-0 bottom-0 px-7 pb-7 pt-16 text-white" style={{ background: 'linear-gradient(180deg, rgba(13,27,42,0) 0%, rgba(13,27,42,0.55) 45%, rgba(13,27,42,0.85) 100%)' }}>
+                <p className="miami-subhead mb-1" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>Soccerex</p>
+                <p className="miami-headline" style={{ fontSize: 'clamp(1.6rem, 2.6vw, 2.2rem)', letterSpacing: '0.01em', lineHeight: 0.95 }}>Miami, USA</p>
+                <div className="flex items-center gap-3 mt-3">
+                  <span style={{ width: 24, height: 2, background: '#E91E63' }} />
+                  <span className="miami-subhead" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.85)' }}>Three days at the city's new home of football</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trust strip below photo */}
+            <div className="grid grid-cols-3 gap-3 mt-5">
+              {[
+                { num: '3', label: 'Days' },
+                { num: '100+', label: 'Speakers' },
+                { num: '50+', label: 'Countries' },
+              ].map((s) => (
+                <div key={s.label} className="text-center px-3 py-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(8px)', border: '1px solid rgba(13,27,42,0.08)' }}>
+                  <p className="miami-headline" style={{ fontSize: '1.4rem', color: '#0D1B2A', lineHeight: 1 }}>{s.num}</p>
+                  <p className="miami-subhead mt-1" style={{ fontSize: '10px', color: '#607186', letterSpacing: '0.18em' }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
             </div>
           </div>
         </div>
