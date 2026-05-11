@@ -213,7 +213,7 @@ function UpcomingEventSection() {
               <div className="flex items-center gap-3 mt-2">
                 <MapPin size={16} style={{ color: '#007C91' }} />
                 <div>
-                  <p className="font-heading font-semibold" style={{ fontSize: 15, color: '#0D1B2A' }}>Miami Freedom Park</p>
+                  <p className="font-heading font-semibold" style={{ fontSize: 15, color: '#0D1B2A' }}>Location to be announced</p>
                   <p className="font-body" style={{ fontSize: 12.5, color: '#607186' }}>Miami, USA</p>
                 </div>
               </div>
@@ -1617,7 +1617,14 @@ export default function Home() {
   return (
     <>
       <HeroSlideshow />
+      {/* Dark wave spilling out of the hero into the white Miami section
+          below. Keeps the cinematic feel while pivoting to the crisp
+          white aesthetic. */}
+      <PixelDivider color="#050d1a" layers={4} height={110} speed={0.5} />
       <UpcomingEventSection />
+      {/* Beige-to-white wavy handoff — the subtle detail. The cream Miami
+          band crests into the pure-white Events section. */}
+      <PixelDivider color="#FFF1EB" layers={4} height={80} speed={0.4} />
       <EventsSection />
       <ByTheNumbersSection />
       <PixelDivider color="#FFFFFF" layers={4} height={110} speed={0.6} />
