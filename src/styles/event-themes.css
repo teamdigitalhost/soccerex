@@ -240,6 +240,36 @@
   box-shadow: 0 12px 28px -16px rgba(13, 27, 42, 0.18);
 }
 
+/* Company portal — compact, scannable tables for agreements, invoices,
+   payment schedule, orders, and tickets. */
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  margin-bottom: 4px;
+}
+.portal-table thead th {
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #607186;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(13,27,42,0.10);
+  font-weight: 600;
+}
+.portal-table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(13,27,42,0.06);
+  vertical-align: top;
+}
+.portal-table tbody tr:last-child td { border-bottom: 0; }
+.portal-table tbody tr:hover td { background: rgba(13,27,42,0.02); }
+@media (max-width: 640px) {
+  .portal-table { font-size: 12px; }
+  .portal-table thead th, .portal-table tbody td { padding: 8px 6px; }
+}
+
 /* Profile editor: sticky save bar at the bottom of the form */
 .profile-editor-save-bar {
   position: sticky;

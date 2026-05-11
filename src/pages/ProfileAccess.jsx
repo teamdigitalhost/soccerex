@@ -45,7 +45,9 @@ export default function ProfileAccess() {
     return <ProfileChooser session={session} onSignOut={() => {
       clearProfileAccessSession()
       setSession(null)
-    }} onPick={(slug) => navigate(withTestSearch(`/profile-access/edit/${encodeURIComponent(slug)}`))} />
+    }}
+      onPick={(slug) => navigate(withTestSearch(`/profile-access/edit/${encodeURIComponent(slug)}`))}
+      onPortal={(slug) => navigate(withTestSearch(`/profile-access/portal/${encodeURIComponent(slug)}`))} />
   }
 
   return <RequestForm />
@@ -233,9 +235,10 @@ function TokenLanding({ token, onExchanged, onSignOut }) {
 
 /* ─── Signed-in chooser ─────────────────────────────────────────────────── */
 
-function ProfileChooser({ session, onSignOut, onPick }) {
+function ProfileChooser({ session, onSignOut, onPick, onPortal }) {
   const profiles = Array.isArray(session.profiles) ? session.profiles : []
   const expiresAt = session.expires_at ? new Date(session.expires_at) : null
+  const isCompany = (p) => p.profile_kind === 'company' || p.is_company === true
 
   return (
     <Shell>
@@ -245,24 +248,39 @@ function ProfileChooser({ session, onSignOut, onPick }) {
         <h1 className="miami-headline" style={titleStyle}>You are signed in</h1>
         {session.email && (
           <p className="miami-body" style={leadStyle}>
-            As <strong>{session.email}</strong>. Choose a profile to edit.
+            As <strong>{session.email}</strong>. Choose a profile to manage.
           </p>
         )}
         {profiles.length > 0 ? (
           <ul className="flex flex-col gap-2 mt-5 text-left">
             {profiles.map((p) => (
               <li key={p.slug}>
-                <button type="button" onClick={() => onPick(p.slug)} className="profile-pick profile-pick-btn">
-                  <div>
-                    <p className="miami-headline" style={{ fontSize: 14, color: '#0D1B2A' }}>{p.display_name || p.legal_name || p.slug}</p>
-                    {(p.profile_kind || p.type) && (
-                      <p className="miami-body" style={{ fontSize: 11, color: '#607186', textTransform: 'capitalize' }}>
-                        {[p.profile_kind, p.type].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(' · ')}
-                      </p>
-                    )}
+                <div className="profile-pick" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
+                  <div className="flex items-center justify-between gap-3" style={{ width: '100%' }}>
+                    <div>
+                      <p className="miami-headline" style={{ fontSize: 14, color: '#0D1B2A' }}>{p.display_name || p.legal_name || p.slug}</p>
+                      {(p.profile_kind || p.type) && (
+                        <p className="miami-body" style={{ fontSize: 11, color: '#607186', textTransform: 'capitalize' }}>
+                          {[p.profile_kind, p.type].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(' · ')}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <ArrowRight size={16} style={{ color: 'var(--event-primary)' }} />
-                </button>
+                  <div className="flex flex-wrap gap-2" style={{ width: '100%' }}>
+                    {isCompany(p) && (
+                      <button type="button" onClick={() => onPortal(p.slug)}
+                        className="event-btn-outline-light"
+                        style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11 }}>
+                        Open portal <ArrowRight size={13} />
+                      </button>
+                    )}
+                    <button type="button" onClick={() => onPick(p.slug)}
+                      className="event-btn-outline-light"
+                      style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11, background: 'var(--event-primary, #ff6b35)', color: '#fff', borderColor: 'var(--event-primary, #ff6b35)' }}>
+                      Edit profile <ArrowRight size={13} />
+                    </button>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>

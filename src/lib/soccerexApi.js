@@ -239,4 +239,21 @@ export async function uploadProfileAssets(slug, editToken, fields, opts = {}) {
   ))
 }
 
+/**
+ * Sponsor / exhibitor company portal — aggregates everything the company
+ * needs to manage their participation: next_actions, deliverables, assets
+ * summary, pass allocation, agreements + invoices, orders + tickets, plus
+ * a compact profile summary.
+ *
+ * Authed with the same bearer edit_token used by the profile editor. Deal
+ * margin and private staff notes are explicitly NOT in this response — the
+ * backend hides them. The frontend never has to filter.
+ */
+export async function getCompanyPortal(slug, editToken, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/portal`,
+    { token: editToken, test: opts.test },
+  ))
+}
+
 export { ApiError }
