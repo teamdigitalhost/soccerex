@@ -1617,10 +1617,13 @@ export default function Home() {
   return (
     <>
       <HeroSlideshow />
-      {/* Dark wave spilling out of the hero into the white Miami section
-          below. Keeps the cinematic feel while pivoting to the crisp
-          white aesthetic. */}
-      <PixelDivider color="#050d1a" layers={4} height={110} speed={0.5} />
+      {/* Dark wave spilling out of the hero into the white Miami section.
+          Negative margin pulls the divider UP so its solid dark top
+          overlaps the hero's bottom — the photo + the divider's top fill
+          blend, and only the wavy crest is visible. */}
+      <div style={{ position: 'relative', zIndex: 5, marginTop: '-110px' }}>
+        <PixelDivider color="#050d1a" layers={4} height={110} speed={0.5} />
+      </div>
       <UpcomingEventSection />
       {/* Beige-to-white wavy handoff — the subtle detail. The cream Miami
           band crests into the pure-white Events section. */}
