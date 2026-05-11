@@ -26,3 +26,7 @@ dist-ssr
 # Local Netlify folder
 .netlify
 .gstack/
+
+# Raw brand kit (kept out of git/deploy; processed assets live under
+# public/events/<event>/{graphics,icons}/)
+public/brand/

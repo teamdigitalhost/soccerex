@@ -14,24 +14,24 @@ import { isTestModeFromUrl } from '../lib/testMode'
 
 const COMPANY_TYPES = new Set(['brand', 'club', 'federation', 'company', 'organisation'])
 
-const KIND_OPTIONS_PERSON = [
-  { value: 'headshot', label: 'Headshot' },
-  { value: 'photo',    label: 'Photo' },
-  { value: 'banner',   label: 'Banner' },
-  { value: 'pdf',      label: 'PDF / document' },
-  { value: 'other',    label: 'Other' },
-]
+const KIND_LABELS = {
+  headshot: 'Headshot',
+  photo:    'Photo',
+  banner:   'Banner',
+  logo:     'Logo',
+  artwork:  'Artwork',
+  signage:  'Signage',
+  deck:     'Deck',
+  pdf:      'PDF / document',
+  other:    'Other',
+}
 
-const KIND_OPTIONS_COMPANY = [
-  { value: 'logo',     label: 'Logo' },
-  { value: 'banner',   label: 'Banner' },
-  { value: 'photo',    label: 'Photo' },
-  { value: 'artwork',  label: 'Artwork' },
-  { value: 'signage',  label: 'Signage' },
-  { value: 'deck',     label: 'Deck' },
-  { value: 'pdf',      label: 'PDF / document' },
-  { value: 'other',    label: 'Other' },
-]
+/* Fallback kinds used only when the API does not return asset_options. The
+   server is now authoritative — these are last-resort defaults. */
+const FALLBACK_KINDS_PERSON  = ['headshot', 'photo', 'banner', 'pdf', 'other']
+const FALLBACK_KINDS_COMPANY = ['logo', 'banner', 'photo', 'artwork', 'signage', 'deck', 'pdf', 'other']
+const FALLBACK_FEATURED_PERSON  = ['headshot', 'photo', 'banner']
+const FALLBACK_FEATURED_COMPANY = ['logo', 'banner']
 
 /* Known social keys the form surfaces first; the rest are rendered dynamically
    in the order they come back from the API. */
@@ -91,8 +91,23 @@ export default function ProfileEditor() {
   }, [slug, editToken, isTest, navigate])
 
   const profileType = profile?.type || profile?.profile_type
-  const isCompany = profileType && COMPANY_TYPES.has(String(profileType).toLowerCase())
-  const kindOptions = isCompany ? KIND_OPTIONS_COMPANY : KIND_OPTIONS_PERSON
+  /* The API now returns profile_kind ("person" | "company") and is_company.
+     Prefer those; fall back to the legacy type sniff for older responses. */
+  const profileKind = profile?.profile_kind
+  const isCompany = profileKind
+    ? profileKind === 'company'
+    : profile?.is_company !== undefined
+      ? !!profile.is_company
+      : profileType && COMPANY_TYPES.has(String(profileType).toLowerCase())
+
+  const assetOptions = profile?.asset_options || {}
+  const allowedKinds = Array.isArray(assetOptions.allowed_kinds) && assetOptions.allowed_kinds.length > 0
+    ? assetOptions.allowed_kinds
+    : (isCompany ? FALLBACK_KINDS_COMPANY : FALLBACK_KINDS_PERSON)
+  const featuredKinds = Array.isArray(assetOptions.featured_kinds)
+    ? assetOptions.featured_kinds
+    : (isCompany ? FALLBACK_FEATURED_COMPANY : FALLBACK_FEATURED_PERSON)
+  const kindOptions = allowedKinds.map((k) => ({ value: k, label: KIND_LABELS[k] || prettyKey(k) }))
 
   const update = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
   const updateRaw = (k, v) => setForm((f) => ({ ...f, [k]: v }))
@@ -230,6 +245,7 @@ export default function ProfileEditor() {
                   : 'Upload a headshot, banner, or supporting documents. Featured headshot or banner changes are submitted for review.'}>
                 <AssetUploader
                   slug={slug} editToken={editToken} kindOptions={kindOptions}
+                  featuredKinds={featuredKinds}
                   isTest={isTest}
                   onUnauthorized={signOut}
                 />
@@ -264,7 +280,7 @@ function EditorHeader({ profile, session, onSignOut }) {
           <span style={{ width: 1, height: 18, background: 'rgba(13,27,42,0.15)' }} />
           <div>
             <p className="miami-subhead" style={{ fontSize: 10, color: 'var(--event-primary)', letterSpacing: '0.2em' }}>
-              {profile?.type || 'Profile'}
+              {[profile?.profile_kind, profile?.type].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(' · ') || 'Profile'}
             </p>
             <p className="miami-headline" style={{ fontSize: 16, color: '#0D1B2A' }}>
               {profile?.display_name || profile?.legal_name || '...'}
@@ -364,9 +380,15 @@ function LinksEditor({ value, onChange }) {
 
 /* ─── Asset uploader ────────────────────────────────────────────────────── */
 
-function AssetUploader({ slug, editToken, kindOptions, isTest, onUnauthorized }) {
+function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], isTest, onUnauthorized }) {
   const [kind, setKind] = useState(kindOptions[0]?.value || 'photo')
   const [featured, setFeatured] = useState(false)
+  const featuredAllowed = featuredKinds.includes(kind)
+  /* If the user switches to a kind that does not allow featured, clear the flag
+     so we never POST featured=1 for a kind the server will reject. */
+  useEffect(() => {
+    if (!featuredAllowed && featured) setFeatured(false)
+  }, [featuredAllowed, featured])
   const [altText, setAltText] = useState('')
   const [tagsInput, setTagsInput] = useState('')
   const [files, setFiles] = useState([])
@@ -415,10 +437,13 @@ function AssetUploader({ slug, editToken, kindOptions, isTest, onUnauthorized })
       <Field label="Tags (comma separated)">
         <input value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} className="prog-input" placeholder="hero, dark-mode" />
       </Field>
-      <label className="flex items-center gap-2" style={{ fontSize: 12, color: '#3a4a5a' }}>
-        <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} />
-        <Star size={13} style={{ color: 'var(--event-primary)' }} />
-        Make this the featured {kind} (changes to featured logo / photo / banner go through review)
+      <label className="flex items-center gap-2" style={{ fontSize: 12, color: featuredAllowed ? '#3a4a5a' : '#9aa6b3' }}>
+        <input type="checkbox" checked={featured} disabled={!featuredAllowed}
+          onChange={(e) => setFeatured(e.target.checked)} />
+        <Star size={13} style={{ color: featuredAllowed ? 'var(--event-primary)' : '#9aa6b3' }} />
+        {featuredAllowed
+          ? <>Make this the featured {kind} (featured changes go through review)</>
+          : <>Featured uploads are only available for: {featuredKinds.join(', ') || 'no kinds'}</>}
       </label>
       <div className="profile-uploader-drop">
         <input ref={inputRef} type="file" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} style={{ display: 'block' }} />

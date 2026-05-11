@@ -1,12 +1,33 @@
 import { useEffect, useState } from 'react'
-import {
-  ArrowLeft, MapPin, Calendar, Mail, Check, Users, Trophy, Briefcase, Star,
-  Lightbulb, Handshake, TrendingUp, Globe,
-  Shield, Building2, Landmark, Wallet, GraduationCap, Volleyball,
-} from 'lucide-react'
+import { ArrowLeft, MapPin, Calendar, Mail, Check, Trophy, Users, Briefcase, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { preregisterLead, ApiError } from '../lib/soccerexApi'
+import { isTestModeFromUrl } from '../lib/testMode'
 
 const IMG = '/events/miami/2026'
+const GFX = '/events/miami/2026/graphics'
+const ICN = '/events/miami/2026/icons'
+
+const ECOSYSTEM_BRAND = [
+  { label: 'Clubs', icon: 'clubs' },
+  { label: 'Leagues', icon: 'leagues' },
+  { label: 'Federations', icon: 'federations' },
+  { label: 'Investors', icon: 'investors' },
+  { label: 'Private Equity', icon: 'private-equity' },
+  { label: 'Governments', icon: 'governments' },
+  { label: "Women's Football", icon: 'womens-football' },
+  { label: 'Stadiums', icon: 'stadiums' },
+  { label: 'Agencies', icon: 'agencies' },
+  { label: 'Academies', icon: 'academies' },
+]
+
+const PILLARS_BRAND = [
+  { label: 'Insight', icon: 'insight' },
+  { label: 'Network', icon: 'network' },
+  { label: 'Deals', icon: 'deals' },
+  { label: 'Growth', icon: 'growth' },
+  { label: 'Impact', icon: 'impact' },
+]
 
 const WHY_ATTEND = [
   { title: 'The Americas Converge', desc: 'MLS, Liga MX, CONCACAF, CONMEBOL and the investors reshaping football in the Western Hemisphere, in one room.' },
@@ -26,27 +47,6 @@ const THEMES = [
   'Talent pathways across North, Central and South America',
 ]
 
-const ECOSYSTEM = [
-  { label: 'Clubs', Icon: Shield },
-  { label: 'Leagues', Icon: Trophy },
-  { label: 'Federations', Icon: Globe },
-  { label: 'Investors', Icon: Wallet },
-  { label: 'Private Equity', Icon: TrendingUp },
-  { label: 'Governments', Icon: Landmark },
-  { label: "Women's Football", Icon: Volleyball },
-  { label: 'Stadiums', Icon: Building2 },
-  { label: 'Agencies', Icon: Briefcase },
-  { label: 'Academies', Icon: GraduationCap },
-]
-
-const PILLARS = [
-  { label: 'Insight', Icon: Lightbulb },
-  { label: 'Network', Icon: Users },
-  { label: 'Deals', Icon: Handshake },
-  { label: 'Growth', Icon: TrendingUp },
-  { label: 'Impact', Icon: Globe },
-]
-
 const RIGHTS_HOLDER_POINTS = [
   'Connect with brands, investors and solution providers ready to expand your football business across the Americas.',
   'Discover the innovations and best practices shaping MLS, Liga MX, CONCACAF and the road to the 2026 World Cup.',
@@ -54,29 +54,41 @@ const RIGHTS_HOLDER_POINTS = [
   'Build the relationships that turn into deals long before the tournament kicks off.',
 ]
 
-function encode(data) {
-  return Object.keys(data)
-    .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
-    .join('&')
-}
-
 function PreRegisterForm() {
-  const [form, setForm] = useState({ 'full-name': '', email: '', company: '', role: '', country: '' })
-  const [status, setStatus] = useState('idle')
+  const [form, setForm] = useState({ fullName: '', email: '', companyOrOrganisation: '', role: '', country: '' })
+  const [status, setStatus] = useState('idle') /* idle | submitting | success | error */
+  const [errors, setErrors] = useState({})     /* field -> [messages] from Laravel 422 */
+  const [topError, setTopError] = useState('') /* non-field-specific error message */
 
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
   const submit = async (e) => {
     e.preventDefault()
     setStatus('submitting')
+    setErrors({})
+    setTopError('')
     try {
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({ 'form-name': 'miami-preregister', ...form }),
-      })
+      await preregisterLead({
+        full_name: form.fullName,
+        email: form.email,
+        organisation: form.companyOrOrganisation,
+        role: form.role,
+        country: form.country,
+        event_slug: 'soccerex-miami-2026',
+        attendee_type: 'rights_holder',
+        interest: 'Complimentary rights-holder pass',
+        source: 'miami-event-preregister',
+        source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+        marketing_opt_in: true,
+      }, { test: isTestModeFromUrl() })
       setStatus('success')
-    } catch {
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 422 && err.body?.errors) {
+        setErrors(err.body.errors)
+        setTopError(err.body.message || 'Please fix the highlighted fields and try again.')
+      } else {
+        setTopError(err?.message || 'Something went wrong. Please try again, or email enquiries@soccerex.com.')
+      }
       setStatus('error')
     }
   }
@@ -88,36 +100,48 @@ function PreRegisterForm() {
           <Check size={26} style={{ color: 'var(--event-primary-light)' }} />
         </div>
         <h4 className="font-heading font-bold text-white text-lg mb-2">You're on the list.</h4>
-        <p className="font-body text-white/65 text-sm leading-relaxed">We'll be in touch as soon as registration, tickets and the agenda for Soccerex Miami 2026 are live.</p>
+        <p className="font-body text-white/65 text-sm leading-relaxed">We'll send updates as registration opens.</p>
       </div>
     )
   }
 
-  return (
-    <form name="miami-preregister" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={submit} className="flex flex-col gap-3">
-      <input type="hidden" name="form-name" value="miami-preregister" />
-      <p hidden><label>Leave blank: <input name="bot-field" /></label></p>
+  /* Laravel 422 returns errors keyed by the field name we POSTed. */
+  const fieldError = (k) => errors[k]?.[0]
 
+  return (
+    <form onSubmit={submit} className="flex flex-col gap-3" noValidate>
       <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Full name
-        <input required value={form['full-name']} onChange={update('full-name')} placeholder="Eve Moneypenny" className="pre-reg-input" />
+        <input required value={form.fullName} onChange={update('fullName')} placeholder="Eve Moneypenny"
+          className="pre-reg-input" aria-invalid={!!fieldError('full_name')} />
+        {fieldError('full_name') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('full_name')}</span>}
       </label>
       <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Email
-        <input required type="email" value={form.email} onChange={update('email')} placeholder="eve@example.com" className="pre-reg-input" />
+        <input required type="email" value={form.email} onChange={update('email')} placeholder="eve@example.com"
+          className="pre-reg-input" aria-invalid={!!fieldError('email')} />
+        {fieldError('email') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('email')}</span>}
       </label>
       <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Company / Organisation
-        <input value={form.company} onChange={update('company')} placeholder="Organisation" className="pre-reg-input" />
+        <input value={form.companyOrOrganisation} onChange={update('companyOrOrganisation')} placeholder="Organisation"
+          className="pre-reg-input" aria-invalid={!!fieldError('organisation')} />
+        {fieldError('organisation') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('organisation')}</span>}
       </label>
       <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Role
-        <input value={form.role} onChange={update('role')} placeholder="Your role" className="pre-reg-input" />
+        <input value={form.role} onChange={update('role')} placeholder="Your role"
+          className="pre-reg-input" aria-invalid={!!fieldError('role')} />
+        {fieldError('role') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('role')}</span>}
       </label>
       <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Country
-        <input value={form.country} onChange={update('country')} placeholder="Country" className="pre-reg-input" />
+        <input value={form.country} onChange={update('country')} placeholder="Country"
+          className="pre-reg-input" aria-invalid={!!fieldError('country')} />
+        {fieldError('country') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('country')}</span>}
       </label>
 
       <button type="submit" disabled={status === 'submitting'} className="event-btn-primary mt-2 justify-center">
         {status === 'submitting' ? 'Sending, one moment' : 'Join the list'}
       </button>
-      {status === 'error' && <p className="font-body text-xs" style={{ color: '#ff8080' }}>Something went wrong. Please email enquiries@soccerex.com and we'll add you manually.</p>}
+      {status === 'error' && topError && (
+        <p className="font-body text-xs" style={{ color: '#ff8080' }}>{topError}</p>
+      )}
     </form>
   )
 }
@@ -126,99 +150,63 @@ export default function Miami2026() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
-    <div className="event-page theme-miami" style={{ background: '#FFFFFF' }}>
+    <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
 
-      {/* ─── HERO (crisp white, MIAMI 2026 dominates) ─────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#FFFFFF' }}>
-        {/* Subtle pink wash top-right — backdrop tint only, no warmth */}
-        <div className="absolute pointer-events-none" style={{
-          top: '-360px', right: '-360px', width: '900px', height: '900px',
-          background: 'radial-gradient(circle, rgba(233,30,99,0.10) 0%, rgba(233,30,99,0.04) 45%, rgba(233,30,99,0) 70%)',
-          filter: 'blur(10px)',
-        }} />
-        {/* Subtle aqua wash bottom-left */}
-        <div className="absolute pointer-events-none" style={{
-          bottom: '-280px', left: '-280px', width: '720px', height: '720px',
-          background: 'radial-gradient(circle, rgba(0,198,215,0.10) 0%, rgba(0,124,145,0.04) 50%, rgba(0,124,145,0) 70%)',
-          filter: 'blur(20px)',
-        }} />
-        {/* Faint synthwave grid — barely there, for crispness */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(13,27,42,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(13,27,42,0.04) 1px, transparent 1px)',
-          backgroundSize: '80px 80px',
-          maskImage: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.2) 100%)',
-          WebkitMaskImage: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.2) 100%)',
-        }} />
+      {/* ─── HERO ─────────────────────────────────────────────────────── */}
+      <section className="miami-hero relative overflow-hidden">
+        {/* Soft retro grid */}
+        <div className="absolute inset-0 pointer-events-none miami-hero-grid" />
 
-        {/* Vector graphic placeholder slots — designer to drop in PNG/SVG via background-image */}
-        <div data-graphic="palm-pink-top" className="hero-graphic-palm" />
-        <div data-graphic="lifeguard-tower" className="hero-graphic-tower" />
-        <div data-graphic="skyline-silhouette" className="hero-graphic-skyline" />
+        {/* Sun behind the skyline */}
+        <img src={`${GFX}/sun.svg`} alt="" aria-hidden className="miami-hero-sun" />
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-12 items-center" style={{ maxWidth: '1320px', margin: '0 auto', padding: 'clamp(40px,5vw,72px) clamp(24px,5vw,80px) clamp(56px,7vw,100px)' }}>
-          {/* Left: text */}
+        {/* City skyline silhouette across the bottom */}
+        <img src={`${GFX}/skyline.png`} alt="" aria-hidden className="miami-hero-skyline" />
+
+        {/* Single palm on the right — left side stays clean so the logo reads */}
+        <img src={`${GFX}/tree3.svg`} alt="" aria-hidden className="miami-hero-palm-right" />
+
+        {/* Cyan brush stroke filling the empty top-right corner. Using
+            the tapered Asset 44 stroke (soft brushy edges all round) so it
+            can simply overflow off-screen at top + right without needing
+            a hard clip mask. */}
+        <img src={`${GFX}/brush-stroke-cyan.svg`} alt="" aria-hidden className="miami-hero-brush" />
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-10 items-center" style={{ maxWidth: '1360px', margin: '0 auto', padding: 'clamp(28px,4vw,56px) clamp(24px,5vw,72px) clamp(180px,18vw,280px)' }}>
+          {/* Left: brand lockup + meta */}
           <div className="lg:col-span-7">
-            <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-6" style={{ color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
+            <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-8" style={{ color: '#0D1B2A', opacity: 0.6, textDecoration: 'none' }}>
               <ArrowLeft size={14} /> Back to Home
             </Link>
 
-            {/* 30 YEARS block: big number, stacked label, timeline tail */}
-            <div className="flex items-end gap-4 mb-7 flex-wrap">
-              <span className="miami-headline" style={{ fontSize: 'clamp(56px, 7vw, 84px)', lineHeight: 0.85, color: '#E91E63' }}>30</span>
-              <div style={{ marginBottom: 6 }}>
-                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: 'clamp(10px, 0.9vw, 12px)', letterSpacing: '0.22em', lineHeight: 1.25 }}>YEARS</p>
-                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: 'clamp(10px, 0.9vw, 12px)', letterSpacing: '0.22em', lineHeight: 1.25 }}>OF BUILDING</p>
-                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: 'clamp(10px, 0.9vw, 12px)', letterSpacing: '0.22em', lineHeight: 1.25 }}>THE GLOBAL GAME</p>
-              </div>
-              <div className="flex items-center gap-2" style={{ color: '#0D1B2A', opacity: 0.55, marginBottom: 8 }}>
-                <span className="miami-subhead" style={{ fontSize: '11px' }}>1996</span>
-                <span style={{ width: 64, height: 2, background: 'linear-gradient(90deg, #007C91, #E91E63)' }} />
-                <span className="miami-subhead" style={{ fontSize: '11px' }}>2026</span>
-              </div>
+            {/* Date strip */}
+            <div className="flex items-center gap-4 mb-7" style={{ color: '#0D1B2A' }}>
+              <span className="miami-subhead" style={{ fontSize: '12px', letterSpacing: '0.24em', color: '#0D1B2A' }}>23-25 SEPTEMBER 2026</span>
+              <span style={{ width: 7, height: 7, background: '#E91E63' }} />
+              <span className="miami-subhead" style={{ fontSize: '12px', letterSpacing: '0.24em', color: '#007C91' }}>MIAMI, USA</span>
             </div>
 
-            <h1 className="miami-headline mb-6" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', color: '#0D1B2A', lineHeight: 1.08, letterSpacing: '0.01em' }}>
-              The world came for the World Cup.<br />
-              <span style={{ color: '#E91E63' }}>Now it stays for Soccerex.</span>
-            </h1>
+            {/* Primary brand lockup */}
+            <img src={`${GFX}/logo-primary.svg`} alt="Soccerex Miami 2026" className="miami-hero-logo" />
 
-            {/* MASSIVE MIAMI 2026 wordmark, the visual hero */}
-            <div className="mb-3" style={{ position: 'relative' }}>
-              <h2 className="miami-headline miami-text-gradient" style={{
-                fontSize: 'clamp(4.5rem, 12vw, 9.5rem)',
-                lineHeight: 0.85,
-                letterSpacing: '-0.005em',
-                marginLeft: '-0.04em',
-                fontWeight: 700,
-              }}>
-                MIAMI 2026
-              </h2>
-              {/* Script "Soccerex" tag floating above-left */}
-              <span className="miami-script absolute" style={{
-                top: 'clamp(-18px, -2vw, -28px)',
-                left: 'clamp(8px, 1vw, 18px)',
-                fontSize: 'clamp(1.6rem, 2.6vw, 2.4rem)',
-                color: '#E91E63',
-                lineHeight: 1,
-                transform: 'rotate(-3deg)',
-              }}>
-                Soccerex
-              </span>
-            </div>
-
-            <p className="miami-subhead mb-8" style={{ color: '#0D1B2A', opacity: 0.75, fontSize: 'clamp(11px, 1vw, 13px)', letterSpacing: '0.22em' }}>
-              Football's most influential week returns home.
+            {/* Tagline */}
+            <p className="miami-subhead mt-7 mb-2" style={{ color: '#007C91', fontSize: 'clamp(11px, 1vw, 13px)', letterSpacing: '0.28em' }}>
+              Where Global Football Meets Miami
             </p>
+            <h1 className="miami-headline mb-8" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', color: '#0D1B2A', lineHeight: 1.15, letterSpacing: '0.01em', maxWidth: '640px' }}>
+              The world came for the World Cup.<br />
+              <span style={{ color: '#E91E63' }}>The industry stays for Soccerex.</span>
+            </h1>
 
             <div className="flex items-center gap-6 lg:gap-8 mb-8 flex-wrap">
               <div>
                 <p className="miami-subhead mb-1" style={{ color: '#607186', fontSize: '10px' }}><MapPin size={12} className="inline mr-1" /> Venue</p>
-                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.1rem', letterSpacing: '0.04em' }}>Miami Freedom Park</p>
+                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.05rem', letterSpacing: '0.04em' }}>Miami Freedom Park</p>
               </div>
-              <div style={{ width: 48, height: 2, background: 'linear-gradient(90deg, transparent, #E91E63, transparent)' }} />
+              <div style={{ width: 7, height: 7, background: '#E91E63' }} />
               <div>
                 <p className="miami-subhead mb-1" style={{ color: '#607186', fontSize: '10px' }}><Calendar size={12} className="inline mr-1" /> Date</p>
-                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.1rem', letterSpacing: '0.04em' }}>23-25 September 2026</p>
+                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.05rem', letterSpacing: '0.04em' }}>23-25 September 2026</p>
               </div>
             </div>
 
@@ -228,42 +216,45 @@ export default function Miami2026() {
             </div>
           </div>
 
-          {/* Right: image card with overlaid Miami lockup */}
+          {/* Right: anniversary + speaker card */}
           <div className="lg:col-span-5 lg:pl-4">
-            <div className="relative" style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 40px 90px -30px rgba(13,27,42,0.55), 0 16px 36px -12px rgba(233,30,99,0.32)', aspectRatio: '4/5' }}>
-              <img src={`${IMG}/sections/miami-skyline.jpg`} alt="Miami skyline at sunset" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.18) contrast(1.06)' }} />
-              {/* Sunset gradient overlay */}
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(255,180,106,0.18) 0%, rgba(233,30,99,0.12) 35%, rgba(106,57,198,0.20) 65%, rgba(13,27,42,0.65) 100%)' }} />
-              {/* Inner ring */}
-              <div className="absolute inset-0 pointer-events-none" style={{ borderRadius: '24px', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.18)' }} />
-              {/* Coming Soon chip */}
-              <div className="absolute" style={{ top: 18, left: 18 }}>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: '#E91E63', boxShadow: '0 4px 18px -4px rgba(233,30,99,0.7)' }}>
-                  <span style={{ width: 6, height: 6, borderRadius: 999, background: '#fff' }} />
-                  <span className="miami-subhead" style={{ fontSize: '10px', color: '#fff' }}>Coming Soon</span>
+            {/* 30 YEARS anniversary block */}
+            <div className="miami-anniv mb-6">
+              <div className="flex items-end gap-4">
+                <span className="miami-headline" style={{ fontSize: 'clamp(72px, 8vw, 110px)', lineHeight: 0.85, color: '#E91E63' }}>30</span>
+                <div style={{ marginBottom: 10 }}>
+                  <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '12px', letterSpacing: '0.22em', lineHeight: 1.3 }}>YEARS</p>
+                  <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '12px', letterSpacing: '0.22em', lineHeight: 1.3 }}>OF BUILDING</p>
+                  <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '12px', letterSpacing: '0.22em', lineHeight: 1.3 }}>THE GLOBAL GAME</p>
                 </div>
               </div>
-              {/* Bottom lockup */}
-              <div className="absolute left-0 right-0 bottom-0 px-7 pb-7 pt-16 text-white" style={{ background: 'linear-gradient(180deg, rgba(13,27,42,0) 0%, rgba(13,27,42,0.55) 45%, rgba(13,27,42,0.85) 100%)' }}>
-                <p className="miami-subhead mb-1" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>Soccerex</p>
-                <p className="miami-headline" style={{ fontSize: 'clamp(1.6rem, 2.6vw, 2.2rem)', letterSpacing: '0.01em', lineHeight: 0.95 }}>Miami, USA</p>
-                <div className="flex items-center gap-3 mt-3">
-                  <span style={{ width: 24, height: 2, background: '#E91E63' }} />
-                  <span className="miami-subhead" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.85)' }}>Three days at the city's new home of football</span>
-                </div>
+              <div className="flex items-center gap-3 mt-4" style={{ color: '#0D1B2A' }}>
+                <span className="miami-subhead" style={{ fontSize: '11px', color: '#607186' }}>1996</span>
+                <span style={{ flex: 1, height: 2, background: 'linear-gradient(90deg, #007C91, #E91E63)' }} />
+                <span className="miami-subhead" style={{ fontSize: '11px', color: '#E91E63' }}>2026</span>
               </div>
             </div>
 
-            {/* Trust strip below photo */}
-            <div className="grid grid-cols-3 gap-3 mt-5">
+            {/* Trust strip */}
+            <div className="grid grid-cols-3 gap-3">
               {[
                 { num: '3', label: 'Days' },
                 { num: '100+', label: 'Speakers' },
                 { num: '50+', label: 'Countries' },
               ].map((s) => (
-                <div key={s.label} className="text-center px-3 py-4 rounded-xl" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)', boxShadow: '0 4px 14px -8px rgba(13,27,42,0.18)' }}>
+                <div key={s.label} className="text-center px-3 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)', boxShadow: '0 4px 14px -8px rgba(13,27,42,0.18)' }}>
                   <p className="miami-headline" style={{ fontSize: '1.4rem', color: '#0D1B2A', lineHeight: 1 }}>{s.num}</p>
                   <p className="miami-subhead mt-1" style={{ fontSize: '10px', color: '#607186', letterSpacing: '0.18em' }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Pillars strip — uses real brand icons */}
+            <div className="miami-pillar-strip mt-5">
+              {PILLARS_BRAND.map((p) => (
+                <div key={p.label} className="miami-pillar-mini">
+                  <img src={`${ICN}/${p.icon}.svg`} alt="" aria-hidden />
+                  <span className="miami-subhead">{p.label}</span>
                 </div>
               ))}
             </div>
@@ -272,16 +263,18 @@ export default function Miami2026() {
       </section>
 
       {/* ─── WHAT IS SOCCEREX MIAMI ─────────────────────────────────────── */}
-      <section style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
-        <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+      <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+        {/* Faded Miami script watermark behind the section */}
+        <div className="miami-script-watermark" style={{ top: '8%', right: '-6%', width: 'min(120%, 1400px)', height: '60%' }} />
+        <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-start mb-16">
             <div className="relative">
-              <img src={`${IMG}/sections/miami-night.jpg`} alt="Miami at night" style={{ width: '100%', borderRadius: '16px', objectFit: 'cover', aspectRatio: '4/3', boxShadow: '0 24px 60px -28px rgba(13,27,42,0.45)' }} />
-              <div className="absolute" style={{ left: -14, top: -14, width: 64, height: 64, background: 'var(--miami-sunset)', borderRadius: '16px', zIndex: -1, opacity: 0.9 }} />
-              <div className="absolute" style={{ right: -14, bottom: -14, width: 96, height: 96, border: '2px solid #007C91', borderRadius: '16px', zIndex: -1 }} />
+              <img src={`${IMG}/sections/miami-night.jpg`} alt="Miami at night" style={{ width: '100%', objectFit: 'cover', aspectRatio: '4/3', boxShadow: '0 24px 60px -28px rgba(13,27,42,0.45)' }} />
+              <div className="absolute" style={{ left: -14, top: -14, width: 64, height: 64, background: 'var(--miami-sunset)', zIndex: -1, opacity: 0.9 }} />
+              <div className="absolute" style={{ right: -14, bottom: -14, width: 96, height: 96, border: '2px solid #007C91', zIndex: -1 }} />
             </div>
             <div>
-              <p className="miami-subhead mb-3" style={{ color: '#007C91', fontSize: '11px' }}>Where global football meets Miami</p>
+              <p className="miami-kicker">Where global football meets Miami</p>
               <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
                 What is <span style={{ color: '#E91E63' }}>Soccerex Miami</span>?
               </h2>
@@ -297,8 +290,8 @@ export default function Miami2026() {
           <h3 className="miami-headline mb-6" style={{ fontSize: 'clamp(1.2rem, 2vw, 1.5rem)', color: '#0D1B2A' }}>Three Days of Insightful Content</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {THEMES.map((theme) => (
-              <div key={theme} className="flex items-center gap-4 px-5 py-4 rounded-xl" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)' }}>
-                <div style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--miami-sunset)', flexShrink: 0 }} />
+              <div key={theme} className="flex items-center gap-4 px-5 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)' }}>
+                <div style={{ width: 8, height: 8, background: 'var(--miami-sunset)', flexShrink: 0 }} />
                 <span className="miami-body font-medium" style={{ fontSize: '0.95rem', color: '#0D1B2A' }}>{theme}</span>
               </div>
             ))}
@@ -306,19 +299,22 @@ export default function Miami2026() {
         </div>
       </section>
 
+      {/* Brand divider */}
+      <hr className="miami-divider" aria-hidden style={{ margin: '0 auto' }} />
+
       {/* ─── ECOSYSTEM (crisp white) ────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#FAFBFC', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)', borderTop: '1px solid rgba(13,27,42,0.06)', borderBottom: '1px solid rgba(13,27,42,0.06)' }}>
+      <section className="relative overflow-hidden" style={{ background: '#FAFBFC', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
-          <div className="text-center mb-12">
-            <p className="miami-subhead mb-3" style={{ color: '#007C91', fontSize: '11px' }}>Who's in the room</p>
+          <div className="text-center mb-12 flex flex-col items-center">
+            <p className="miami-kicker">Who's in the room</p>
             <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
               The <span className="miami-text-gradient">Soccerex Ecosystem</span>
             </h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            {ECOSYSTEM.map(({ label, Icon }) => (
+            {ECOSYSTEM_BRAND.map(({ label, icon }) => (
               <div key={label} className="miami-cell-light">
-                <Icon size={28} style={{ color: '#007C91', margin: '0 auto 12px' }} />
+                <img src={`${ICN}/${icon}.svg`} alt="" aria-hidden style={{ width: 40, height: 40, margin: '0 auto 12px', display: 'block' }} />
                 <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '11px' }}>{label}</p>
               </div>
             ))}
@@ -326,9 +322,13 @@ export default function Miami2026() {
         </div>
       </section>
 
+      {/* Brand divider */}
+      <hr className="miami-divider" aria-hidden style={{ margin: '0 auto' }} />
+
       {/* ─── WHY ATTEND (white) ──────────────────────────────────────────── */}
       <section style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+          <p className="miami-kicker miami-kicker--pink">Built for the deal-makers</p>
           <h2 className="miami-headline mb-10" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>Why Attend?</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {WHY_ATTEND.map((item, i) => {
@@ -336,7 +336,7 @@ export default function Miami2026() {
               const Icon = Icons[i]
               return (
                 <div key={item.title} className="miami-card-light">
-                  <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(0,124,145,0.08)', border: '1px solid rgba(0,124,145,0.2)', display: 'grid', placeItems: 'center', marginBottom: 16 }}>
+                  <div style={{ width: 44, height: 44, background: 'rgba(0,124,145,0.08)', border: '1px solid rgba(0,124,145,0.2)', display: 'grid', placeItems: 'center', marginBottom: 16 }}>
                     <Icon size={22} style={{ color: '#007C91' }} />
                   </div>
                   <h3 className="miami-subhead mb-3" style={{ fontSize: '1rem', color: '#0D1B2A', letterSpacing: '0.1em' }}>{item.title}</h3>
@@ -359,12 +359,11 @@ export default function Miami2026() {
             From Conventions, to Platforms.<br />
             From Conversations, to <span style={{ color: '#0D1B2A' }}>Outcomes</span>.
           </h2>
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 mt-10">
-            {PILLARS.map(({ label, Icon }) => (
+          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 mt-10">
+            {PILLARS_BRAND.map(({ label, icon }) => (
               <div key={label} className="miami-pillar">
-                <div className="miami-pillar-icon" style={{ background: 'rgba(13,27,42,0.25)', borderColor: 'rgba(255,255,255,0.4)', color: '#fff' }}>
-                  <Icon size={22} />
-                </div>
+                <img src={`${ICN}/${icon}.svg`} alt="" aria-hidden
+                  style={{ width: 48, height: 48, filter: 'brightness(0) invert(1)' }} />
                 <span className="miami-subhead" style={{ color: '#fff', fontSize: '12px', letterSpacing: '0.18em' }}>{label}</span>
               </div>
             ))}
@@ -387,7 +386,7 @@ export default function Miami2026() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--event-primary-border)', borderRadius: '14px', padding: 'clamp(24px, 3vw, 36px)' }}>
+            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--event-primary-border)', padding: 'clamp(24px, 3vw, 36px)' }}>
               <h3 className="miami-subhead text-white mb-2 flex items-center gap-2" style={{ fontSize: '1.05rem', letterSpacing: '0.1em' }}>
                 <Mail size={18} style={{ color: 'var(--event-primary-light)' }} /> Pre-register
               </h3>
@@ -395,7 +394,7 @@ export default function Miami2026() {
               <PreRegisterForm />
             </div>
 
-            <div style={{ background: 'linear-gradient(145deg, var(--event-primary-bg), rgba(255,255,255,0.02))', border: '1px solid var(--event-primary-border)', borderRadius: '14px', padding: 'clamp(24px, 3vw, 36px)' }}>
+            <div style={{ background: 'linear-gradient(145deg, var(--event-primary-bg), rgba(255,255,255,0.02))', border: '1px solid var(--event-primary-border)', padding: 'clamp(24px, 3vw, 36px)' }}>
               <h3 className="miami-subhead text-white mb-2 flex items-center gap-2" style={{ fontSize: '1.05rem', letterSpacing: '0.1em' }}>
                 <Trophy size={18} style={{ color: 'var(--event-primary-light)' }} /> Rights Holders
               </h3>

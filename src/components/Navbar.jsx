@@ -9,6 +9,19 @@ const navLinks = [
   { label: 'Insights', to: '/insights' },
 ]
 
+/* CTA accent color is route-aware so each event page's "Get in Touch" button
+   matches its brand. Order matters — first prefix match wins. */
+const CTA_THEMES = [
+  { match: '/miami-2026',    bg: '#E91E63', hover: '#c81b58', text: '#FFFFFF' },
+  { match: '/europe-2026',   bg: '#c8302c', hover: '#a72824', text: '#FFFFFF' },
+  { match: '/riyadh-2027',   bg: '#f2e93c', hover: '#d9d128', text: '#0D1B2A' },
+]
+const CTA_DEFAULT = { bg: 'var(--color-gold)', hover: '#d4c78e', text: 'var(--color-navy, #0D1B2A)' }
+
+function ctaThemeFor(pathname) {
+  return CTA_THEMES.find((t) => pathname.startsWith(t.match)) || CTA_DEFAULT
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -16,6 +29,7 @@ export default function Navbar() {
   const navigate = useNavigate()
   const isHome = location.pathname === '/'
   const solid = scrolled || !isHome
+  const cta = ctaThemeFor(location.pathname)
 
   useEffect(() => {
     let ticking = false
@@ -68,10 +82,10 @@ export default function Navbar() {
           </div>
 
           <Link to="/contact"
-            className="hidden lg:inline-flex items-center gap-2 text-navy font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
-            style={{ background: 'var(--color-gold)', border: '1px solid var(--color-gold)', textDecoration: 'none' }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.borderColor = '#d4c78e' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+            className="hidden lg:inline-flex items-center gap-2 font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
+            style={{ background: cta.bg, border: `1px solid ${cta.bg}`, color: cta.text, textDecoration: 'none' }}
+            onMouseEnter={e => { e.currentTarget.style.background = cta.hover; e.currentTarget.style.borderColor = cta.hover }}
+            onMouseLeave={e => { e.currentTarget.style.background = cta.bg; e.currentTarget.style.borderColor = cta.bg }}
           >
             Get in Touch
           </Link>
@@ -99,8 +113,8 @@ export default function Navbar() {
             </Link>
           ))}
           <Link to="/contact" onClick={() => setMenuOpen(false)}
-            className="nav-mobile-link inline-flex items-center gap-2 text-navy font-mono text-xs uppercase tracking-[0.2em] px-8 py-4 mt-6 cursor-pointer border-none"
-            style={{ background: 'var(--color-gold)', textDecoration: 'none', transitionDelay: menuOpen ? `${150 + navLinks.length * 80}ms` : '0ms' }}>
+            className="nav-mobile-link inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] px-8 py-4 mt-6 cursor-pointer border-none"
+            style={{ background: cta.bg, color: cta.text, textDecoration: 'none', transitionDelay: menuOpen ? `${150 + navLinks.length * 80}ms` : '0ms' }}>
             Get in Touch
           </Link>
         </div>

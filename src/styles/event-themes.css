@@ -125,8 +125,9 @@
   font-family: 'Oswald', 'Space Grotesk', sans-serif !important;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
   line-height: 1.0;
+  font-feature-settings: 'kern' 1;
 }
 .theme-miami .miami-subhead,
 .miami-subhead {
@@ -191,11 +192,11 @@
   min-width: 110px;
 }
 .miami-pillar-icon {
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   display: grid;
   place-items: center;
-  border-radius: 12px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--event-secondary-light);
@@ -205,7 +206,7 @@
 .miami-cell-light {
   background: #FFFFFF;
   border: 1px solid rgba(13, 27, 42, 0.08);
-  border-radius: 12px;
+  border-radius: 0;
   padding: 22px 14px;
   text-align: center;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
@@ -219,7 +220,7 @@
 .miami-card-light {
   background: #FFFFFF;
   border: 1px solid rgba(13, 27, 42, 0.08);
-  border-radius: 14px;
+  border-radius: 0;
   padding: 28px;
   position: relative;
   overflow: hidden;
@@ -390,6 +391,215 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   z-index: 1;
 }
 
+/* ─── Miami 2026 hero — brand asset composition ──────────────────────── */
+.miami-hero {
+  position: relative;
+  background:
+    radial-gradient(900px 600px at 88% -10%, rgba(233,30,99,0.10), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(0,198,215,0.10), transparent 60%),
+    linear-gradient(180deg, #FFF8F4 0%, #FFF1EB 100%);
+  isolation: isolate;
+}
+.miami-hero-grid {
+  background-image:
+    linear-gradient(rgba(0,124,145,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,124,145,0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.25) 100%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.25) 100%);
+  z-index: 0;
+}
+.miami-hero-sun {
+  position: absolute;
+  right: clamp(40px, 6vw, 140px);
+  bottom: clamp(60px, 9vw, 160px);
+  width: clamp(160px, 18vw, 300px);
+  height: auto;
+  opacity: 0.7;
+  z-index: 0;
+  filter: drop-shadow(0 8px 30px rgba(233,30,99,0.20));
+  pointer-events: none;
+}
+.miami-hero-skyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(60px, 7vw, 120px);
+  width: 100%;
+  height: clamp(120px, 14vw, 200px);
+  object-fit: cover;
+  object-position: center bottom;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  z-index: 1;
+  pointer-events: none;
+  /* Fade the top edge of the skyline into the cream background so the
+     buildings don't end on a hard horizon line */
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,1) 100%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,1) 100%);
+}
+/* Big cyan brush stroke anchored to the top-right of the hero. The asset
+   itself has tapered, brushy edges on all four sides, so we deliberately
+   overflow it off-screen at top + right — the visible portion shows only
+   the soft, painted contours of the stroke inside the section. */
+.miami-hero-brush {
+  position: absolute;
+  top: clamp(-180px, -14vw, -100px);
+  right: clamp(-220px, -14vw, -120px);
+  width: clamp(520px, 56vw, 880px);
+  height: auto;
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+@media (max-width: 1023px) {
+  .miami-hero-brush {
+    top: clamp(-140px, -20vw, -80px);
+    right: clamp(-160px, -22vw, -80px);
+    width: clamp(380px, 70vw, 580px);
+    opacity: 0.32;
+  }
+}
+.miami-hero-palm-right {
+  position: absolute;
+  right: clamp(-40px, -3vw, 0px);
+  bottom: 0;
+  height: clamp(240px, 38vw, 560px);
+  width: auto;
+  opacity: 0.7;
+  z-index: 2;
+  pointer-events: none;
+}
+.miami-hero-logo {
+  display: block;
+  width: clamp(280px, 38vw, 460px);
+  height: auto;
+  margin-left: -6px;
+}
+.miami-anniv {
+  background: #FFFFFF;
+  border: 1px solid rgba(13,27,42,0.08);
+  border-radius: 0;
+  padding: clamp(20px, 2.2vw, 32px);
+  box-shadow: 0 18px 48px -28px rgba(13,27,42,0.30);
+  position: relative;
+  overflow: hidden;
+}
+.miami-anniv::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #007C91 0%, #00C6D7 35%, #E91E63 100%);
+}
+.miami-pillar-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid rgba(13,27,42,0.08);
+  border-radius: 0;
+  padding: 14px 10px;
+  box-shadow: 0 6px 18px -10px rgba(13,27,42,0.18);
+}
+.miami-pillar-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+.miami-pillar-mini img {
+  width: 28px;
+  height: 28px;
+}
+.miami-pillar-mini .miami-subhead {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: #0D1B2A;
+}
+@media (max-width: 1023px) {
+  /* Center the hero column at tablet and below so left-rag text doesn't
+     hang awkwardly under the centered logo on narrow viewports. */
+  .miami-hero .lg\:col-span-7,
+  .miami-hero .lg\:col-span-5 {
+    text-align: center;
+  }
+  .miami-hero .lg\:col-span-7 > * {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .miami-hero-logo {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* Date strip + meta row + CTAs need explicit justify-center to override
+     their default justify-start */
+  .miami-hero .lg\:col-span-7 .flex.items-center,
+  .miami-hero .lg\:col-span-7 .flex.flex-wrap {
+    justify-content: center;
+  }
+}
+@media (max-width: 768px) {
+  .miami-hero-palm-right { opacity: 0.5; }
+  .miami-hero-sun { opacity: 0.7; }
+  .miami-hero-skyline {
+    height: clamp(90px, 18vw, 140px);
+    opacity: 0.45;
+  }
+}
+
+/* ─── Brand section divider — pink/cyan faded line ─────────────────────── */
+.miami-divider {
+  display: block;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  height: 6px;
+  background-image: url('/events/miami/2026/graphics/divider-h.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  border: 0;
+}
+
+/* ─── Brand kicker — small caps label with brush-stroke accent ──────────── */
+.miami-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Montserrat', 'Inter', sans-serif !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 11px;
+  color: #007C91;
+  margin: 0 0 14px;
+}
+.miami-kicker::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: currentColor;
+  flex-shrink: 0;
+  margin-bottom: 1px;
+}
+.miami-kicker--pink { color: #E91E63; }
+
+/* ─── Faded oversized Miami script as section watermark ─────────────────── */
+.miami-script-watermark {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  background-image: url('/events/miami/2026/graphics/miami-script.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  opacity: 0.06;
+  z-index: 0;
+}
+
 /* Miami poster-style pill buttons (theme-aware via --event-primary tokens) */
 .miami-pill-primary {
   display: inline-flex;
@@ -399,7 +609,7 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   background: var(--event-primary, #E91E63);
   color: #fff;
   border: 2px solid var(--event-primary, #E91E63);
-  border-radius: 999px;
+  border-radius: 0;
   font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 700;
@@ -422,10 +632,10 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   align-items: center;
   gap: 10px;
   padding: 14px 28px;
-  background: transparent;
+  background: #FFFFFF;
   color: var(--event-primary, #E91E63);
   border: 2px solid var(--event-primary, #E91E63);
-  border-radius: 999px;
+  border-radius: 0;
   font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 700;

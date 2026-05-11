@@ -198,7 +198,11 @@ function TokenLanding({ token, onExchanged, onSignOut }) {
                 <li key={p.slug} className="profile-pick">
                   <div>
                     <p className="miami-headline" style={{ fontSize: 14, color: '#0D1B2A' }}>{p.display_name || p.legal_name || p.slug}</p>
-                    {p.type && <p className="miami-body" style={{ fontSize: 11, color: '#607186', textTransform: 'capitalize' }}>{p.type}</p>}
+                    {(p.profile_kind || p.type) && (
+                      <p className="miami-body" style={{ fontSize: 11, color: '#607186', textTransform: 'capitalize' }}>
+                        {[p.profile_kind, p.type].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(' · ')}
+                      </p>
+                    )}
                   </div>
                 </li>
               ))}
@@ -251,7 +255,11 @@ function ProfileChooser({ session, onSignOut, onPick }) {
                 <button type="button" onClick={() => onPick(p.slug)} className="profile-pick profile-pick-btn">
                   <div>
                     <p className="miami-headline" style={{ fontSize: 14, color: '#0D1B2A' }}>{p.display_name || p.legal_name || p.slug}</p>
-                    {p.type && <p className="miami-body" style={{ fontSize: 11, color: '#607186', textTransform: 'capitalize' }}>{p.type}</p>}
+                    {(p.profile_kind || p.type) && (
+                      <p className="miami-body" style={{ fontSize: 11, color: '#607186', textTransform: 'capitalize' }}>
+                        {[p.profile_kind, p.type].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(' · ')}
+                      </p>
+                    )}
                   </div>
                   <ArrowRight size={16} style={{ color: 'var(--event-primary)' }} />
                 </button>

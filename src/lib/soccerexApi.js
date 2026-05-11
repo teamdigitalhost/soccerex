@@ -104,6 +104,27 @@ export async function submitProgrammingProposal(slug, payload, opts = {}) {
   }))
 }
 
+/**
+ * Lead pre-register submission. Used by event pre-register / rights-holder forms.
+ * Backend creates a lead row only; admins qualify and convert later.
+ *
+ * Required: { email }. Recommended: full_name, organisation, role, country,
+ * event_slug, attendee_type, interest, source, source_url, marketing_opt_in.
+ *
+ * Backend accepts the US-spelled and shorter aliases too: name / company /
+ * organization. Returns { id, kind, status, received_at } at HTTP 201.
+ *
+ * On 422 the caller gets an ApiError whose .body.errors is a
+ * Laravel field -> string[] map.
+ */
+export async function preregisterLead(payload, opts = {}) {
+  return unwrap(await request('/leads/preregister', {
+    method: 'POST',
+    body: payload,
+    test: opts.test,
+  }))
+}
+
 /* ───── Profile self-service (auth via short-lived edit_token) ───────────── */
 
 async function authedRequest(path, { method = 'GET', body, token, signal, formData, test } = {}) {
