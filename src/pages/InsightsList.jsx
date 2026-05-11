@@ -7,6 +7,7 @@ import {
   getContentPillars, getArticlesByPillar,
 } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
+import { insightArticle } from '../lib/routes'
 
 function useScrollAnimations(dep) {
   useEffect(() => {
@@ -312,7 +313,7 @@ export default function InsightsList() {
                   {articles.slice(0, 5).map((a) => {
                     const LinkTag = a.externalUrl
                       ? ({ children, ...rest }) => <a href={a.externalUrl} target="_blank" rel="noreferrer" {...rest}>{children}</a>
-                      : ({ children, ...rest }) => <Link to={`/insights/${a.slug}`} {...rest}>{children}</Link>
+                      : ({ children, ...rest }) => <Link to={insightArticle(a.slug)} {...rest}>{children}</Link>
                     return (
                     <LinkTag key={a.id} className="group block" style={{ textDecoration: 'none' }}>
                       <p className="font-mono uppercase" style={{ fontSize: '0.62rem', color: 'var(--color-gold)', letterSpacing: '0.1em', marginBottom: '4px' }}>{a.date}</p>
@@ -369,7 +370,7 @@ function ArticleRow({ article, index }) {
   const isExternal = !!article.externalUrl
   const ArticleLink = ({ children, className, style }) => isExternal
     ? <a href={article.externalUrl} target="_blank" rel="noreferrer" className={className} style={style}>{children}</a>
-    : <Link to={`/insights/${article.slug}`} className={className} style={style}>{children}</Link>
+    : <Link to={insightArticle(article.slug)} className={className} style={style}>{children}</Link>
   return (
     <div className="fade-up" style={{ marginBottom: '40px', paddingBottom: '40px', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
       <ArticleLink className="block" style={{ textDecoration: 'none' }}>

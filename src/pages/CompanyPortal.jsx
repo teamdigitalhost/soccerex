@@ -8,6 +8,7 @@ import {
 import { getCompanyPortal, ApiError } from '../lib/soccerexApi'
 import { readProfileAccessSession, clearProfileAccessSession } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
+import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
 
 /* The portal payload is rendered as-is. The backend strips internal-only
    fields (deal margin, staff notes) before serialising; this view never
@@ -23,7 +24,7 @@ export default function CompanyPortal() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (!session?.edit_token) navigate('/profile-access', { replace: true })
+    if (!session?.edit_token) navigate(PROFILE_ACCESS, { replace: true })
   }, [session, navigate])
 
   /* Keep ?test=1 in the URL when the session was created in test mode and
@@ -49,7 +50,7 @@ export default function CompanyPortal() {
         if (cancelled) return
         if (err instanceof ApiError && err.status === 401) {
           clearProfileAccessSession(); setSession(null)
-          navigate('/profile-access?expired=1', { replace: true })
+          navigate(PROFILE_EXPIRED, { replace: true })
           return
         }
         setError(err)
@@ -59,7 +60,7 @@ export default function CompanyPortal() {
 
   const signOut = () => {
     clearProfileAccessSession()
-    navigate('/profile-access', { replace: true })
+    navigate(PROFILE_ACCESS, { replace: true })
   }
 
   if (!editToken) return null
@@ -109,7 +110,7 @@ function PortalHeader({ profile, session, onSignOut }) {
     }}>
       <div className="flex items-center justify-between gap-6 flex-wrap" style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div className="flex items-center gap-4 flex-wrap">
-          <Link to={withTestSearch('/profile-access')} className="inline-flex items-center gap-2 font-mono uppercase tracking-widest"
+          <Link to={withTestSearch(PROFILE_ACCESS)} className="inline-flex items-center gap-2 font-mono uppercase tracking-widest"
             style={{ fontSize: 11, color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
             <ArrowLeft size={13} /> Profiles
           </Link>
@@ -142,7 +143,7 @@ function PortalHeader({ profile, session, onSignOut }) {
 
 function ProfileSummary({ profile, slug }) {
   if (!profile) return null
-  const editHref = withTestSearch(`/profile-access/edit/${encodeURIComponent(slug)}`)
+  const editHref = withTestSearch(profileEditor(slug))
   return (
     <Card kicker="Company" title="Profile summary" action={
       <Link to={editHref} className="event-btn-outline-light" style={{ padding: '10px 18px', fontSize: 12 }}>
@@ -297,7 +298,7 @@ function Deliverables({ data }) {
 function AssetLibrary({ data, slug }) {
   const summary = data?.summary || {}
   const recent = Array.isArray(data?.recent) ? data.recent : []
-  const editHref = withTestSearch(`/profile-access/edit/${encodeURIComponent(slug)}`)
+  const editHref = withTestSearch(profileEditor(slug))
   return (
     <Card kicker="Brand & creative" title="Asset library" action={
       <Link to={editHref} className="event-btn-outline-light" style={{ padding: '10px 18px', fontSize: 12 }}>

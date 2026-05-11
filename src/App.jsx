@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ThemePicker from './components/ThemePicker'
 import TestModeBanner from './components/TestModeBanner'
+import { INSIGHTS, PROFILE_ACCESS, ROUTE_PATTERNS } from './lib/routes'
 
 // Code-split every page so only the active route's JS is loaded
 const Home = lazy(() => import('./pages/Home'))
@@ -47,8 +48,8 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/app" element={<SoccerexApp />} />
-          <Route path="/insights" element={<InsightsList />} />
-          <Route path="/insights/:slug" element={<InsightArticle />} />
+          <Route path={INSIGHTS} element={<InsightsList />} />
+          <Route path={ROUTE_PATTERNS.insightArticle} element={<InsightArticle />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/europe-2026" element={<Europe2026 />} />
           <Route path="/miami-2026" element={<Miami2026 />} />
@@ -66,9 +67,9 @@ function App() {
           <Route path="/events/:slug/speakers" element={<EventSpeakers />} />
           <Route path="/events/:slug/speakers/:speakerSlug" element={<EventSpeakerProfile />} />
           {/* Profile self-service editor (passwordless via emailed link) */}
-          <Route path="/profile-access" element={<ProfileAccess />} />
-          <Route path="/profile-access/edit/:slug" element={<ProfileEditor />} />
-          <Route path="/profile-access/portal/:slug" element={<CompanyPortal />} />
+          <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
+          <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />
+          <Route path={ROUTE_PATTERNS.companyPortal} element={<CompanyPortal />} />
         </Routes>
       </Suspense>
       <Footer />

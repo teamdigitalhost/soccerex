@@ -8,6 +8,7 @@ import {
   readProfileAccessSession, writeProfileAccessSession, clearProfileAccessSession,
 } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
+import { profileEditor, companyPortal } from '../lib/routes'
 
 export default function ProfileAccess() {
   const [params, setParams] = useSearchParams()
@@ -46,8 +47,8 @@ export default function ProfileAccess() {
       clearProfileAccessSession()
       setSession(null)
     }}
-      onPick={(slug) => navigate(withTestSearch(`/profile-access/edit/${encodeURIComponent(slug)}`))}
-      onPortal={(slug) => navigate(withTestSearch(`/profile-access/portal/${encodeURIComponent(slug)}`))} />
+      onPick={(slug) => navigate(withTestSearch(profileEditor(slug)))}
+      onPortal={(slug) => navigate(withTestSearch(companyPortal(slug)))} />
   }
 
   return <RequestForm />

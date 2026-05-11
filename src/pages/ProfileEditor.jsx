@@ -11,6 +11,7 @@ import {
   readProfileAccessSession, clearProfileAccessSession,
 } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl } from '../lib/testMode'
+import { PROFILE_ACCESS, PROFILE_EXPIRED } from '../lib/routes'
 
 const COMPANY_TYPES = new Set(['brand', 'club', 'federation', 'company', 'organisation'])
 
@@ -52,7 +53,7 @@ export default function ProfileEditor() {
   /* Bounce out if no token */
   useEffect(() => {
     if (!session || !session.edit_token) {
-      navigate('/profile-access', { replace: true })
+      navigate(PROFILE_ACCESS, { replace: true })
     }
   }, [session, navigate])
 
@@ -82,7 +83,7 @@ export default function ProfileEditor() {
         if (err instanceof ApiError && err.status === 401) {
           clearProfileAccessSession()
           setSession(null)
-          navigate('/profile-access?expired=1', { replace: true })
+          navigate(PROFILE_EXPIRED, { replace: true })
           return
         }
         setError(err)
@@ -127,7 +128,7 @@ export default function ProfileEditor() {
       if (err instanceof ApiError && err.status === 401) {
         clearProfileAccessSession()
         setSession(null)
-        navigate('/profile-access?expired=1', { replace: true })
+        navigate(PROFILE_EXPIRED, { replace: true })
         return
       }
       const detail = err instanceof ApiError && err.body?.errors
@@ -141,7 +142,7 @@ export default function ProfileEditor() {
 
   const signOut = () => {
     clearProfileAccessSession()
-    navigate('/profile-access', { replace: true })
+    navigate(PROFILE_ACCESS, { replace: true })
   }
 
   if (!editToken) return null /* redirect in flight */
@@ -273,7 +274,7 @@ function EditorHeader({ profile, session, onSignOut }) {
     }}>
       <div className="flex items-center justify-between gap-6 flex-wrap" style={{ maxWidth: 980, margin: '0 auto' }}>
         <div className="flex items-center gap-4 flex-wrap">
-          <Link to="/profile-access" className="inline-flex items-center gap-2 font-mono uppercase tracking-widest"
+          <Link to={PROFILE_ACCESS} className="inline-flex items-center gap-2 font-mono uppercase tracking-widest"
             style={{ fontSize: 11, color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
             <ArrowLeft size={13} /> Profiles
           </Link>
