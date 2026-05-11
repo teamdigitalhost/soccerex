@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Calendar, MapPin, Users, Megaphone, Layers, AlertCircle, Loader2, Plus } from 'lucide-react'
 import { getEvent, getAgendaConcept } from '../lib/soccerexApi'
+import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { eventThemeClass } from '../lib/eventTheme'
 import ProgrammingSubmissionForm from '../components/ProgrammingSubmissionForm'
 import { HOME, eventAgendaConcept, eventAgenda, eventSpeakers } from '../lib/routes'
@@ -32,7 +33,8 @@ export default function EventAgendaConcept() {
   useEffect(() => {
     let cancelled = false
     setEvent(null); setTopics(null); setError(null)
-    Promise.all([getEvent(slug), getAgendaConcept(slug)])
+    const test = isTestModeFromUrl()
+    Promise.all([getEvent(slug, { test }), getAgendaConcept(slug, { test })])
       .then(([e, t]) => { if (!cancelled) { setEvent(e); setTopics(t || []) } })
       .catch((err) => { if (!cancelled) setError(err) })
     return () => { cancelled = true }
@@ -291,9 +293,9 @@ export function EventHeader({ event, slug, active, loading }) {
         </div>
 
         <nav className="flex gap-1 flex-wrap" aria-label="Programming sections">
-          <NavTab to={eventAgendaConcept(slug)} active={active === 'agenda-concept'}>Programme themes</NavTab>
-          <NavTab to={eventAgenda(slug)} active={active === 'agenda'}>Schedule</NavTab>
-          <NavTab to={eventSpeakers(slug)} active={active === 'speakers'}>Speakers</NavTab>
+          <NavTab to={withTestSearch(eventAgendaConcept(slug))} active={active === 'agenda-concept'}>Programme themes</NavTab>
+          <NavTab to={withTestSearch(eventAgenda(slug))} active={active === 'agenda'}>Schedule</NavTab>
+          <NavTab to={withTestSearch(eventSpeakers(slug))} active={active === 'speakers'}>Speakers</NavTab>
         </nav>
       </div>
     </header>

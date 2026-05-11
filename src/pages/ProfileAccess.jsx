@@ -24,7 +24,7 @@ export default function ProfileAccess() {
     return <TokenLanding token={token} onExchanged={(payload) => {
       const stored = writeProfileAccessSession({
         ...payload,
-        persist: false,
+        persist: payload.persist ?? false,
         is_test: isTestModeFromUrl(),
       })
       setSession(stored)

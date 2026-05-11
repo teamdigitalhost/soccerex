@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Calendar, Clock, MapPin, List, LayoutGrid } from 'lucide-react'
 import { getEvent, getAgenda } from '../lib/soccerexApi'
+import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
+import { eventSpeaker } from '../lib/routes'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
 
@@ -16,7 +18,8 @@ export default function EventAgenda() {
   useEffect(() => {
     let cancelled = false
     setEvent(null); setSessions(null); setError(null)
-    Promise.all([getEvent(slug), getAgenda(slug)])
+    const test = isTestModeFromUrl()
+    Promise.all([getEvent(slug, { test }), getAgenda(slug, { test })])
       .then(([e, s]) => { if (!cancelled) { setEvent(e); setSessions(s || []) } })
       .catch((err) => { if (!cancelled) setError(err) })
     return () => { cancelled = true }
@@ -212,10 +215,12 @@ function SpeakerChip({ speaker, eventSlug }) {
   /* Prefer the API-provided profile_path (event-scoped speaker profile).
      Fall back to constructing the same path from the event + speaker slugs
      if the older agenda payload didn't include it. */
-  const href = speaker.profile_path
-    || (eventSlug && speaker.slug
-      ? `/events/${eventSlug}/speakers/${speaker.slug}`
-      : null)
+  /* Prefer the route builder so the path is consistent with App.jsx routes
+     and so withTestSearch() can preserve ?test=1 from the agenda URL into
+     the speaker profile URL. */
+  const rawHref = speaker.profile_path
+    || (eventSlug && speaker.slug ? eventSpeaker(eventSlug, speaker.slug) : null)
+  const href = rawHref ? withTestSearch(rawHref) : null
 
   const inner = (
     <>

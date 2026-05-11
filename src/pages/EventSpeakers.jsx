@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { ExternalLink, Search, Globe2, Building2 } from 'lucide-react'
 import { getEvent, getEventSpeakers } from '../lib/soccerexApi'
+import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
+import { eventSpeaker } from '../lib/routes'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
 
@@ -28,7 +30,8 @@ export default function EventSpeakers() {
   useEffect(() => {
     let cancelled = false
     setEvent(null); setSpeakers(null); setError(null)
-    Promise.all([getEvent(slug), getEventSpeakers(slug)])
+    const test = isTestModeFromUrl()
+    Promise.all([getEvent(slug, { test }), getEventSpeakers(slug, { test })])
       .then(([e, s]) => { if (!cancelled) { setEvent(e); setSpeakers(s || []) } })
       .catch((err) => { if (!cancelled) setError(err) })
     return () => { cancelled = true }
@@ -145,8 +148,11 @@ function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
     .split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()
   const roleStatus = ROLE_STATUS_LABEL[speaker.role_status] || speaker.role_status
   /* Prefer the API-provided profile_path; fall back to the canonical pattern. */
-  const profileHref = speaker.profile_path
-    || (eventSlug && speaker.slug ? `/events/${eventSlug}/speakers/${speaker.slug}` : null)
+  const rawProfileHref = speaker.profile_path
+    || (eventSlug && speaker.slug ? eventSpeaker(eventSlug, speaker.slug) : null)
+  /* Preserve ?test=1 across navigation so the test-mode banner stays
+     pinned and the next page's API calls keep their test-data scope. */
+  const profileHref = rawProfileHref ? withTestSearch(rawProfileHref) : null
 
   const cardStyle = {
     background: '#FFFFFF',

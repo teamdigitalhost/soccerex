@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { X, Check, Loader2, AlertCircle } from 'lucide-react'
 import { submitProgrammingProposal, ApiError } from '../lib/soccerexApi'
+import { isTestModeFromUrl } from '../lib/testMode'
 
 const KIND_OPTIONS = [
   { value: 'speaker_interest', label: 'Suggest a speaker', help: 'Yourself or someone you would like to see on this topic.' },
@@ -75,7 +76,7 @@ export default function ProgrammingSubmissionForm({ open, onClose, eventSlug, to
       const payload = { ...form }
       if (!payload.topic_slug) delete payload.topic_slug
       Object.keys(payload).forEach((k) => { if (payload[k] === '') delete payload[k] })
-      await submitProgrammingProposal(eventSlug, payload)
+      await submitProgrammingProposal(eventSlug, payload, { test: isTestModeFromUrl() })
       setStatus('success')
     } catch (err) {
       setStatus('error')
