@@ -1616,10 +1616,7 @@ export default function Home() {
 
   return (
     <>
-      {/* HeroSection is the new white/cream-based hero. To revert to the
-          photo slideshow, swap <HeroSection /> with <HeroSlideshow /> — the
-          component is preserved on disk. */}
-      <HeroSection />
+      <HeroSlideshow />
       <UpcomingEventSection />
       <EventsSection />
       <ByTheNumbersSection />
