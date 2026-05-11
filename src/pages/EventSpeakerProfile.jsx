@@ -6,6 +6,7 @@ import {
 import { getEventSpeaker } from '../lib/soccerexApi'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState } from './EventAgendaConcept'
+import { eventSpeakers, eventAgenda } from '../lib/routes'
 
 const ROLE_STATUS_LABEL = {
   confirmed: 'Confirmed',
@@ -58,7 +59,7 @@ export default function EventSpeakerProfile() {
       <section style={{ padding: 'clamp(24px,3vw,40px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
 
-          <Link to={`/events/${slug}/speakers`} className="inline-flex items-center gap-2 font-mono uppercase tracking-widest mb-6"
+          <Link to={eventSpeakers(slug)} className="inline-flex items-center gap-2 font-mono uppercase tracking-widest mb-6"
             style={{ fontSize: 11, color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
             <ArrowLeft size={13} /> Back to all speakers
           </Link>
@@ -211,7 +212,7 @@ function ProfileBody({ speaker, eventSlug }) {
 
 function SessionRow({ session, eventSlug }) {
   return (
-    <Link to={`/events/${eventSlug}/agenda`} style={{ textDecoration: 'none' }}>
+    <Link to={eventAgenda(eventSlug)} style={{ textDecoration: 'none' }}>
       <article style={{
         background: '#FFFFFF',
         border: '1px solid rgba(13,27,42,0.10)',

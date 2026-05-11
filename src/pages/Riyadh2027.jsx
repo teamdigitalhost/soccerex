@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ArrowLeft, MapPin, Calendar, Mail, Check, Users, Trophy, Briefcase, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PixelDivider from '../components/PixelDivider'
+import { HOME } from '../lib/routes'
 
 const IMG = '/events/middle-east/2026'
 
@@ -112,7 +113,7 @@ export default function Riyadh2027() {
         <div className="absolute inset-0" style={{ background: 'var(--event-overlay)' }} />
 
         <div className="relative z-10 text-center w-full" style={{ padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
-          <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-6" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
+          <Link to={HOME} className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-6" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
             <ArrowLeft size={14} /> Back to Home
           </Link>
 
@@ -153,7 +154,7 @@ export default function Riyadh2027() {
 
           <div className="flex flex-wrap justify-center gap-3">
             <a href="#pre-register" className="event-btn-primary"><Mail size={16} /> Pre-register</a>
-            <Link to="/" className="event-btn-outline"><ArrowLeft size={16} /> Back to Soccerex</Link>
+            <Link to={HOME} className="event-btn-outline"><ArrowLeft size={16} /> Back to Soccerex</Link>
           </div>
         </div>
       </section>

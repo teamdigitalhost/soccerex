@@ -3,6 +3,7 @@ import { ArrowRight, Globe, Users, Mic, Newspaper, Shield, Network as NetworkIco
 import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import { CONTACT, EUROPE_2026 } from '../lib/routes'
 
 // ─── Timeline data ──────────────────────────────────────────────────────────
 const TIMELINE = [
@@ -518,13 +519,13 @@ export default function About() {
             To enquire about hosting a Soccerex in your city, or to join our next event, get in touch.
           </p>
           <div className="flex flex-wrap justify-center gap-4 fade-up">
-            <Link to="/europe-2026" className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
+            <Link to={EUROPE_2026} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
               style={{ background: 'var(--color-gold)', color: '#09203e', textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.transform = 'translateY(0)' }}>
               Next Event <ArrowRight size={16} />
             </Link>
-            <Link to="/contact" className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
+            <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
               style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)' }}>

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
+import { HOME } from '../lib/routes'
 
 // Press releases organized by slug. Add new ones here.
 const PRESS_RELEASES = {
@@ -36,7 +37,7 @@ export default function PressRelease() {
       <div style={{ background: '#fff', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="text-center">
           <h1 className="font-heading font-bold text-2xl mb-4" style={{ color: '#1a1a1a' }}>Press release not found</h1>
-          <Link to="/" className="font-body text-sm" style={{ color: 'var(--color-red)' }}>Return to homepage</Link>
+          <Link to={HOME} className="font-body text-sm" style={{ color: 'var(--color-red)' }}>Return to homepage</Link>
         </div>
       </div>
     )

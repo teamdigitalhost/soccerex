@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Users, Globe, Handshake, Megaphone, ArrowRight, Mail, Newspaper, TrendingUp, MapPin } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import { ABOUT, CONTACT, INSIGHTS } from '../lib/routes'
 
 // ─── Full logo inventory (228 logos from soccerex.com/global-network) ───────
 const LOGOS = [
@@ -641,7 +642,7 @@ export default function GlobalNetwork() {
               <p className="font-body leading-relaxed mb-8 fade-up" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.75)' }}>
                 Keeping abreast of the rapidly changing football business environment is key. Our comprehensive newsfeed provides the latest trends and updates from influential industry players. Consider it your one-stop solution for all football industry news.
               </p>
-              <Link to="/insights" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
+              <Link to={INSIGHTS} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
                 style={{ background: 'var(--color-gold)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
@@ -691,14 +692,14 @@ export default function GlobalNetwork() {
               Bring the global football industry to your doorstep. Soccerex events drive economic impact, tourism, and international visibility for their host cities.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
-              <Link to="/contact?type=host" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+              <Link to={`${CONTACT}?type=host`} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
                 style={{ background: 'var(--color-gold)', color: '#09203e', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-red)' }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
               >
                 Contact Us <ArrowRight size={16} />
               </Link>
-              <Link to="/about" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+              <Link to={ABOUT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
                 style={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.color = 'var(--color-gold)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = '#fff' }}

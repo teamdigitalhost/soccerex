@@ -2,6 +2,9 @@ import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, Calendar, FileText, Mic, Users, CheckCircle2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PixelDivider from '../components/PixelDivider'
+import {
+  HOME, MIAMI_2026, pressRelease, eventSpeakers, eventAgenda, eventAgendaConcept,
+} from '../lib/routes'
 
 const EVENT_API_SLUG = 'soccerex-europe-2026'
 
@@ -84,7 +87,7 @@ export default function Europe2026() {
         <div className="absolute inset-0" style={{ background: 'var(--event-overlay)' }} />
 
         <div className="relative z-10 text-center w-full" style={{ padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
-          <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-6" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
+          <Link to={HOME} className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-6" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
             <ArrowLeft size={14} /> Back to Home
           </Link>
 
@@ -132,12 +135,12 @@ export default function Europe2026() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/miami-2026" className="event-btn-primary">
+            <Link to={MIAMI_2026} className="event-btn-primary">
               Next: Miami 2026 <ArrowRight size={16} />
             </Link>
-            <Link to={`/events/${EVENT_API_SLUG}/speakers`} className="event-btn-outline"><Mic size={16} /> Who Spoke</Link>
-            <Link to={`/events/${EVENT_API_SLUG}/agenda`} className="event-btn-outline"><Calendar size={16} /> The Agenda</Link>
-            <Link to="/press/soccerex-europe-amsterdam-may-2026" className="event-btn-outline"><FileText size={16} /> Press Release</Link>
+            <Link to={eventSpeakers(EVENT_API_SLUG)} className="event-btn-outline"><Mic size={16} /> Who Spoke</Link>
+            <Link to={eventAgenda(EVENT_API_SLUG)} className="event-btn-outline"><Calendar size={16} /> The Agenda</Link>
+            <Link to={pressRelease('soccerex-europe-amsterdam-may-2026')} className="event-btn-outline"><FileText size={16} /> Press Release</Link>
           </div>
         </div>
       </section>
@@ -268,7 +271,7 @@ export default function Europe2026() {
           </div>
 
           <div className="text-center mt-10">
-            <Link to={`/events/${EVENT_API_SLUG}/speakers`}
+            <Link to={eventSpeakers(EVENT_API_SLUG)}
               className="inline-flex items-center gap-2 px-6 py-3 font-body font-semibold text-xs uppercase tracking-widest"
               style={{ background: '#fff', color: 'var(--event-primary)', border: '1px solid rgba(200,48,44,0.3)', borderRadius: '4px', textDecoration: 'none' }}>
               <Mic size={15} /> Open the speaker archive <ArrowRight size={13} />
@@ -283,7 +286,7 @@ export default function Europe2026() {
           <h2 className="font-heading font-bold text-2xl mb-4" style={{ color: '#1a1a1a' }}>Event Archive</h2>
           <p className="font-body mb-8" style={{ color: '#666' }}>Materials and the press record from Soccerex Europe 2026.</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to={`/events/${EVENT_API_SLUG}/agenda`} className="event-btn-primary">
+            <Link to={eventAgenda(EVENT_API_SLUG)} className="event-btn-primary">
               <Calendar size={16} /> Programme &amp; sessions
             </Link>
             <a href="/events/europe/2026/agenda-concept.pdf" target="_blank" rel="noopener noreferrer"
@@ -296,7 +299,7 @@ export default function Europe2026() {
               style={{ background: '#fff', color: 'var(--event-primary)', border: '1px solid rgba(200,48,44,0.3)', borderRadius: '4px', textDecoration: 'none' }}>
               <FileText size={16} /> Attendee snapshot (PDF)
             </a>
-            <Link to="/press/soccerex-europe-amsterdam-may-2026"
+            <Link to={pressRelease('soccerex-europe-amsterdam-may-2026')}
               className="inline-flex items-center gap-2 px-6 py-3 font-body font-semibold text-xs uppercase tracking-widest cursor-pointer"
               style={{ background: '#fff', color: '#333', border: '1px solid #ddd', borderRadius: '4px', textDecoration: 'none' }}>
               <FileText size={16} /> Press release
@@ -325,15 +328,15 @@ export default function Europe2026() {
             Nine months before the FIFA World Cup, the global football industry lands in Miami. Three days of executive content, networking, and commercial opportunity at Miami Freedom Park.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/miami-2026" className="event-btn-primary" style={{ padding: '18px 36px', fontSize: '15px' }}>
+            <Link to={MIAMI_2026} className="event-btn-primary" style={{ padding: '18px 36px', fontSize: '15px' }}>
               Explore Miami 2026 <ArrowRight size={18} />
             </Link>
-            <Link to="/miami-2026#pre-register" className="event-btn-outline" style={{ padding: '18px 36px', fontSize: '15px' }}>
+            <Link to={`${MIAMI_2026}#pre-register`} className="event-btn-outline" style={{ padding: '18px 36px', fontSize: '15px' }}>
               Pre-register
             </Link>
           </div>
           <p className="font-body text-white/40 text-sm mt-8">
-            Want to be on stage in Miami? <Link to="/events/soccerex-miami-2026/agenda-concept" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>Browse the programme themes</Link>.
+            Want to be on stage in Miami? <Link to={eventAgendaConcept('soccerex-miami-2026')} style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>Browse the programme themes</Link>.
           </p>
           <p className="font-body text-white/30 text-xs mt-3">
             Partner enquiries: <a href="mailto:enquiries@soccerex.com" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>enquiries@soccerex.com</a>

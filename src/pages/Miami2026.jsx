@@ -3,6 +3,7 @@ import { ArrowLeft, MapPin, Calendar, Mail, Check, Trophy, Users, Briefcase, Sta
 import { Link } from 'react-router-dom'
 import { preregisterLead, ApiError } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
+import { HOME } from '../lib/routes'
 
 const IMG = '/events/miami/2026'
 const GFX = '/events/miami/2026/graphics'
@@ -175,7 +176,7 @@ export default function Miami2026() {
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-10 items-center" style={{ maxWidth: '1360px', margin: '0 auto', padding: 'clamp(28px,4vw,56px) clamp(24px,5vw,72px) clamp(140px,15vw,220px)' }}>
           {/* Left: brand lockup + meta */}
           <div className="lg:col-span-7">
-            <Link to="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-8" style={{ color: '#0D1B2A', opacity: 0.6, textDecoration: 'none' }}>
+            <Link to={HOME} className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-8" style={{ color: '#0D1B2A', opacity: 0.6, textDecoration: 'none' }}>
               <ArrowLeft size={14} /> Back to Home
             </Link>
 

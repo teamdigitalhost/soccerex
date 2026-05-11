@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
+import {
+  HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, INSIGHTS,
+  MIAMI_2026, EUROPE_2026, RIYADH_2027,
+} from '../lib/routes'
 
 const navLinks = [
-  { label: 'About', to: '/about' },
-  { label: 'Events', to: '/events' },
-  { label: 'Network', to: '/global-network' },
-  { label: 'Insights', to: '/insights' },
+  { label: 'About',    to: ABOUT },
+  { label: 'Events',   to: EVENTS },
+  { label: 'Network',  to: GLOBAL_NETWORK },
+  { label: 'Insights', to: INSIGHTS },
 ]
 
 /* CTA accent color is route-aware so each event page's "Get in Touch" button
    matches its brand. Order matters — first prefix match wins. */
 const CTA_THEMES = [
-  { match: '/miami-2026',    bg: '#E91E63', hover: '#c81b58', text: '#FFFFFF' },
-  { match: '/europe-2026',   bg: '#c8302c', hover: '#a72824', text: '#FFFFFF' },
-  { match: '/riyadh-2027',   bg: '#f2e93c', hover: '#d9d128', text: '#0D1B2A' },
+  { match: MIAMI_2026,  bg: '#E91E63', hover: '#c81b58', text: '#FFFFFF' },
+  { match: EUROPE_2026, bg: '#c8302c', hover: '#a72824', text: '#FFFFFF' },
+  { match: RIYADH_2027, bg: '#f2e93c', hover: '#d9d128', text: '#0D1B2A' },
 ]
 const CTA_DEFAULT = { bg: 'var(--color-gold)', hover: '#d4c78e', text: 'var(--color-navy, #0D1B2A)' }
 
@@ -67,7 +71,7 @@ export default function Navbar() {
         borderBottom: solid ? '1px solid rgba(191,177,112,0.15)' : '1px solid transparent',
       }}>
         <div className="flex items-center justify-between px-6" style={{ maxWidth: '1200px', margin: '0 auto', height: '72px' }}>
-          <Link to="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
+          <Link to={HOME} className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
             <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '28px', width: 'auto' }} />
           </Link>
 
@@ -81,7 +85,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          <Link to="/contact"
+          <Link to={CONTACT}
             className="hidden lg:inline-flex items-center gap-2 font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
             style={{ background: cta.bg, border: `1px solid ${cta.bg}`, color: cta.text, textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.background = cta.hover; e.currentTarget.style.borderColor = cta.hover }}
@@ -112,7 +116,7 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link to="/contact" onClick={() => setMenuOpen(false)}
+          <Link to={CONTACT} onClick={() => setMenuOpen(false)}
             className="nav-mobile-link inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] px-8 py-4 mt-6 cursor-pointer border-none"
             style={{ background: cta.bg, color: cta.text, textDecoration: 'none', transitionDelay: menuOpen ? `${150 + navLinks.length * 80}ms` : '0ms' }}>
             Get in Touch

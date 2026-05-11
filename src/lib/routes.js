@@ -2,8 +2,8 @@
  * Single source of truth for internal route paths.
  *
  * Two reasons this module exists:
- *   1. Renaming a route prefix (e.g. /profile-access → /portal) becomes a
- *      one-file change instead of a project-wide grep.
+ *   1. Renaming a route prefix becomes a one-file change instead of a
+ *      project-wide grep.
  *   2. Builders that take slugs handle encoding consistently, so no
  *      caller needs to remember to call encodeURIComponent.
  *
@@ -24,6 +24,25 @@ export const EVENTS          = '/events'
 export const CONTACT         = '/contact'
 export const GLOBAL_NETWORK  = '/global-network'
 export const GALLERY         = '/gallery'
+export const APP_PAGE        = '/app'
+
+/* ─── Event landing pages ──────────────────────────────────────────────── */
+export const MIAMI_2026      = '/miami-2026'
+export const EUROPE_2026     = '/europe-2026'
+export const RIYADH_2027     = '/riyadh-2027'
+
+/* ─── Per-event API-driven pages ───────────────────────────────────────── */
+export const eventAgendaConcept = (slug) => `${EVENTS}/${encodeURIComponent(slug)}/agenda-concept`
+export const eventTopics        = (slug) => `${EVENTS}/${encodeURIComponent(slug)}/topics`
+export const eventAgenda        = (slug) => `${EVENTS}/${encodeURIComponent(slug)}/agenda`
+export const eventSchedule      = (slug) => `${EVENTS}/${encodeURIComponent(slug)}/schedule`
+export const eventSpeakers      = (slug) => `${EVENTS}/${encodeURIComponent(slug)}/speakers`
+export const eventSpeaker       = (slug, speakerSlug) =>
+  `${EVENTS}/${encodeURIComponent(slug)}/speakers/${encodeURIComponent(speakerSlug)}`
+
+/* ─── Press ────────────────────────────────────────────────────────────── */
+export const PRESS           = '/press'
+export const pressRelease    = (slug) => `${PRESS}/${encodeURIComponent(slug)}`
 
 /* ─── Insights / content hub ───────────────────────────────────────────── */
 export const INSIGHTS        = '/insights'
@@ -35,11 +54,24 @@ export const PROFILE_EXPIRED = `${PROFILE_ACCESS}?expired=1`
 export const profileEditor   = (slug) => `${PROFILE_ACCESS}/edit/${encodeURIComponent(slug)}`
 export const companyPortal   = (slug) => `${PROFILE_ACCESS}/portal/${encodeURIComponent(slug)}`
 
+/* ─── Policy pages ─────────────────────────────────────────────────────── */
+export const PRIVACY_POLICY  = '/privacy-policy'
+export const TERMS           = '/terms'
+export const COOKIE_POLICY   = '/cookie-policy'
+export const REFUND_POLICY   = '/refund-policy'
+
 /* ─── Route declarations (for App.jsx <Route path=...>) ────────────────── */
 /* These mirror the constants above but expose React-Router param shapes
    (":slug") where the builders above accept a real slug. */
 export const ROUTE_PATTERNS = {
-  insightArticle: `${INSIGHTS}/:slug`,
-  profileEditor:  `${PROFILE_ACCESS}/edit/:slug`,
-  companyPortal:  `${PROFILE_ACCESS}/portal/:slug`,
+  insightArticle:      `${INSIGHTS}/:slug`,
+  profileEditor:       `${PROFILE_ACCESS}/edit/:slug`,
+  companyPortal:       `${PROFILE_ACCESS}/portal/:slug`,
+  pressRelease:        `${PRESS}/:slug`,
+  eventAgendaConcept:  `${EVENTS}/:slug/agenda-concept`,
+  eventTopics:         `${EVENTS}/:slug/topics`,
+  eventAgenda:         `${EVENTS}/:slug/agenda`,
+  eventSchedule:       `${EVENTS}/:slug/schedule`,
+  eventSpeakers:       `${EVENTS}/:slug/speakers`,
+  eventSpeaker:        `${EVENTS}/:slug/speakers/:speakerSlug`,
 }

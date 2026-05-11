@@ -8,7 +8,7 @@ import {
   readProfileAccessSession, writeProfileAccessSession, clearProfileAccessSession,
 } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
-import { profileEditor, companyPortal } from '../lib/routes'
+import { HOME, CONTACT, PRIVACY_POLICY, profileEditor, companyPortal } from '../lib/routes'
 
 export default function ProfileAccess() {
   const [params, setParams] = useSearchParams()
@@ -324,7 +324,7 @@ function Shell({ children }) {
 function Header() {
   return (
     <div style={{ width: '100%', maxWidth: 520, marginBottom: 24, textAlign: 'center' }}>
-      <Link to="/" className="font-mono uppercase tracking-widest" style={{ fontSize: 11, color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
+      <Link to={HOME} className="font-mono uppercase tracking-widest" style={{ fontSize: 11, color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
         Soccerex
       </Link>
     </div>
@@ -334,8 +334,8 @@ function Header() {
 function FooterLinks() {
   return (
     <div className="flex gap-4 mt-8" style={{ fontSize: 11 }}>
-      <Link to="/privacy-policy" style={{ color: '#607186', textDecoration: 'none' }}>Privacy</Link>
-      <Link to="/contact" style={{ color: '#607186', textDecoration: 'none' }}>Get help</Link>
+      <Link to={PRIVACY_POLICY} style={{ color: '#607186', textDecoration: 'none' }}>Privacy</Link>
+      <Link to={CONTACT} style={{ color: '#607186', textDecoration: 'none' }}>Get help</Link>
     </div>
   )
 }

@@ -6,6 +6,7 @@ import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
+import { EVENTS, CONTACT, EUROPE_2026, GALLERY } from '../lib/routes'
 import ImageGrid from '../components/ImageGrid'
 import { lazy, Suspense } from 'react'
 const InteractiveGlobe = lazy(() => import('../components/InteractiveGlobe'))
@@ -53,7 +54,7 @@ function HeroSection() {
           What started as an event has become a global meeting point for the football industry, where relationships are built, ideas are tested, and opportunities take shape.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
-          <Link to="/events"
+          <Link to={EVENTS}
             className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none"
             style={{ background: 'var(--color-gold)', color: '#09203e', textDecoration: 'none' }}
             onMouseEnter={e => e.currentTarget.style.background = '#d4c78e'}
@@ -61,7 +62,7 @@ function HeroSection() {
             Explore Events
             <ArrowRight size={16} />
           </Link>
-          <Link to="/contact"
+          <Link to={CONTACT}
             className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
             style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.color = 'var(--color-gold)' }}
@@ -116,7 +117,7 @@ function UpcomingEventSection() {
                 style={{ background: '#c8302c', border: 'none', color: '#fff', textDecoration: 'none' }}>
                 <FileText size={18} /> Agenda Concept
               </a>
-              <Link to="/europe-2026"
+              <Link to={EUROPE_2026}
                 className="inline-flex items-center gap-3 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 transition-all duration-300 cursor-pointer"
                 style={{ background: 'transparent', border: '1px solid #c8302c', color: '#fff', textDecoration: 'none' }}>
                 <Globe size={18} /> Event Info
@@ -964,7 +965,7 @@ function SpeakersShowcase() {
           ))}
         </div>
         <div className="text-center mt-10 fade-up">
-          <Link to="/events#speakers" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+          <Link to={`${EVENTS}#speakers`} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
             style={{ background: '#09203e', color: '#fff', padding: '14px 32px', fontSize: '0.82rem', textDecoration: 'none', transition: 'all 0.3s' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#0d2b52' }}
             onMouseLeave={e => { e.currentTarget.style.background = '#09203e' }}
@@ -1324,7 +1325,7 @@ function HeritageGallerySection() {
         {/* CTA */}
         <div className="text-center fade-up" style={{ marginTop: 'clamp(2rem, 4vw, 3rem)' }}>
           <Link
-            to="/gallery"
+            to={GALLERY}
             className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none"
             style={{ background: 'transparent', border: '1px solid rgba(191,177,112,0.4)', color: 'var(--color-gold)', textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.background = 'rgba(191,177,112,0.08)' }}
@@ -1350,7 +1351,7 @@ function FinalCTASection() {
           Be Part of What's Next in Football
         </h2>
         <div className="fade-up">
-          <Link to="/contact" className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-10 py-5 transition-all duration-300 cursor-pointer border-none"
+          <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-10 py-5 transition-all duration-300 cursor-pointer border-none"
             style={{ background: 'var(--color-gold)', color: '#09203e', fontSize: '0.95rem', textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.transform = 'translateY(0)' }}>

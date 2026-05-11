@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Calendar, Tag } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import { INSIGHTS, insightArticle } from '../lib/routes'
 
 export default function InsightArticle() {
   const { slug } = useParams()
@@ -83,7 +84,7 @@ export default function InsightArticle() {
       <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px) clamp(100px,12vw,160px)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           {/* Back link */}
-          <Link to="/insights" className="inline-flex items-center gap-2 mb-10 font-mono uppercase tracking-[0.15em]"
+          <Link to={INSIGHTS} className="inline-flex items-center gap-2 mb-10 font-mono uppercase tracking-[0.15em]"
             style={{ fontSize: '0.72rem', color: '#09203e', textDecoration: 'none', transition: 'color 0.2s' }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
             onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
@@ -135,7 +136,7 @@ export default function InsightArticle() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {related.map((r) => (
-                  <Link key={r.id} to={`/insights/${r.slug}`} className="block group" style={{ textDecoration: 'none' }}>
+                  <Link key={r.id} to={insightArticle(r.slug)} className="block group" style={{ textDecoration: 'none' }}>
                     <div style={{
                       background: 'rgba(255,255,255,0.04)',
                       border: '1px solid rgba(191,177,112,0.15)',

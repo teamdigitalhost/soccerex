@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, MapPin, Users, Megaphone, Layers, AlertCircle, Loa
 import { getEvent, getAgendaConcept } from '../lib/soccerexApi'
 import { eventThemeClass } from '../lib/eventTheme'
 import ProgrammingSubmissionForm from '../components/ProgrammingSubmissionForm'
+import { HOME, eventAgendaConcept, eventAgenda, eventSpeakers } from '../lib/routes'
 
 const STATUS_LABEL = {
   in_program: 'In programme',
@@ -264,7 +265,7 @@ export function EventHeader({ event, slug, active, loading }) {
     }}>
       <div className="flex items-center justify-between gap-6 flex-wrap" style={{ maxWidth: 1240, margin: '0 auto' }}>
         <div className="flex items-center gap-4 flex-wrap">
-          <Link to="/" className="inline-flex items-center gap-2 font-mono uppercase tracking-widest"
+          <Link to={HOME} className="inline-flex items-center gap-2 font-mono uppercase tracking-widest"
             style={{ fontSize: 11, color: '#0D1B2A', opacity: 0.55, textDecoration: 'none' }}>
             <ArrowLeft size={13} /> Soccerex
           </Link>
@@ -290,9 +291,9 @@ export function EventHeader({ event, slug, active, loading }) {
         </div>
 
         <nav className="flex gap-1 flex-wrap" aria-label="Programming sections">
-          <NavTab to={`/events/${slug}/agenda-concept`} active={active === 'agenda-concept'}>Programme themes</NavTab>
-          <NavTab to={`/events/${slug}/agenda`} active={active === 'agenda'}>Schedule</NavTab>
-          <NavTab to={`/events/${slug}/speakers`} active={active === 'speakers'}>Speakers</NavTab>
+          <NavTab to={eventAgendaConcept(slug)} active={active === 'agenda-concept'}>Programme themes</NavTab>
+          <NavTab to={eventAgenda(slug)} active={active === 'agenda'}>Schedule</NavTab>
+          <NavTab to={eventSpeakers(slug)} active={active === 'speakers'}>Speakers</NavTab>
         </nav>
       </div>
     </header>

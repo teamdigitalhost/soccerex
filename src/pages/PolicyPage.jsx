@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import { HOME } from '../lib/routes'
 
 export default function PolicyPage({ title, eyebrow, lastUpdated, sections }) {
   useEffect(() => { window.scrollTo(0, 0) }, [])
@@ -32,7 +33,7 @@ export default function PolicyPage({ title, eyebrow, lastUpdated, sections }) {
       {/* Content */}
       <section style={{ background: '#f4f3f0', padding: 'clamp(60px,8vw,120px) clamp(24px,5vw,80px) clamp(80px,10vw,140px)' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <Link to="/" className="inline-flex items-center gap-2 mb-10 font-mono uppercase tracking-[0.15em]"
+          <Link to={HOME} className="inline-flex items-center gap-2 mb-10 font-mono uppercase tracking-[0.15em]"
             style={{ fontSize: '0.72rem', color: '#09203e', textDecoration: 'none', transition: 'color 0.2s' }}
             onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
             onMouseLeave={e => { e.currentTarget.style.color = '#09203e' }}

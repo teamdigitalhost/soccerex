@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Calendar, MapPin, Download, Quote, Globe } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import { CONTACT, EUROPE_2026 } from '../lib/routes'
 
 // ═══ UPCOMING EVENTS (2 featured) ════════════════════════════════════════════
 const UPCOMING = [
@@ -350,7 +351,7 @@ export default function Events() {
           </p>
           {/* Live event pill */}
           <div className="fade-up mt-10">
-            <Link to="/europe-2026" style={{ textDecoration: 'none' }}>
+            <Link to={EUROPE_2026} style={{ textDecoration: 'none' }}>
               <div className="ev-ring-pulse inline-flex items-center gap-3 px-6 py-3 rounded-full" style={{
                 background: 'rgba(200,48,44,0.15)', border: '1px solid rgba(200,48,44,0.5)',
                 transition: 'all 0.3s',
@@ -610,14 +611,14 @@ export default function Events() {
             May 11 to 13, 2026. Johan Cruijff ArenA. Federations, leagues, clubs, brands, media, and football legends, together.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
-            <Link to="/europe-2026" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            <Link to={EUROPE_2026} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: '#c8302c', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#a02020' }}
               onMouseLeave={e => { e.currentTarget.style.background = '#c8302c' }}
             >
               Event Details <ArrowRight size={16} />
             </Link>
-            <Link to="/contact" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', border: '1px solid #c8302c', transition: 'all 0.3s' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#c8302c' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}

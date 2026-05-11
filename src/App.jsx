@@ -4,7 +4,13 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ThemePicker from './components/ThemePicker'
 import TestModeBanner from './components/TestModeBanner'
-import { INSIGHTS, PROFILE_ACCESS, ROUTE_PATTERNS } from './lib/routes'
+import {
+  HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, APP_PAGE,
+  MIAMI_2026, EUROPE_2026, RIYADH_2027,
+  INSIGHTS, PROFILE_ACCESS,
+  PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
+  ROUTE_PATTERNS,
+} from './lib/routes'
 
 // Code-split every page so only the active route's JS is loaded
 const Home = lazy(() => import('./pages/Home'))
@@ -42,30 +48,30 @@ function App() {
       <Navbar />
       <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050d1a' }} />}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/global-network" element={<GlobalNetwork />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/app" element={<SoccerexApp />} />
+          <Route path={HOME} element={<Home />} />
+          <Route path={ABOUT} element={<About />} />
+          <Route path={GLOBAL_NETWORK} element={<GlobalNetwork />} />
+          <Route path={EVENTS} element={<Events />} />
+          <Route path={CONTACT} element={<Contact />} />
+          <Route path={APP_PAGE} element={<SoccerexApp />} />
           <Route path={INSIGHTS} element={<InsightsList />} />
           <Route path={ROUTE_PATTERNS.insightArticle} element={<InsightArticle />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/europe-2026" element={<Europe2026 />} />
-          <Route path="/miami-2026" element={<Miami2026 />} />
-          <Route path="/riyadh-2027" element={<Riyadh2027 />} />
-          <Route path="/press/:slug" element={<PressRelease />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsConditions />} />
-          <Route path="/cookie-policy" element={<CookiePolicy />} />
-          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path={GALLERY} element={<Gallery />} />
+          <Route path={EUROPE_2026} element={<Europe2026 />} />
+          <Route path={MIAMI_2026} element={<Miami2026 />} />
+          <Route path={RIYADH_2027} element={<Riyadh2027 />} />
+          <Route path={ROUTE_PATTERNS.pressRelease} element={<PressRelease />} />
+          <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
+          <Route path={TERMS} element={<TermsConditions />} />
+          <Route path={COOKIE_POLICY} element={<CookiePolicy />} />
+          <Route path={REFUND_POLICY} element={<RefundPolicy />} />
           {/* API-driven public programming pages (per-event) */}
-          <Route path="/events/:slug/agenda-concept" element={<EventAgendaConcept />} />
-          <Route path="/events/:slug/topics" element={<EventAgendaConcept />} />
-          <Route path="/events/:slug/agenda" element={<EventAgenda />} />
-          <Route path="/events/:slug/schedule" element={<EventAgenda />} />
-          <Route path="/events/:slug/speakers" element={<EventSpeakers />} />
-          <Route path="/events/:slug/speakers/:speakerSlug" element={<EventSpeakerProfile />} />
+          <Route path={ROUTE_PATTERNS.eventAgendaConcept} element={<EventAgendaConcept />} />
+          <Route path={ROUTE_PATTERNS.eventTopics} element={<EventAgendaConcept />} />
+          <Route path={ROUTE_PATTERNS.eventAgenda} element={<EventAgenda />} />
+          <Route path={ROUTE_PATTERNS.eventSchedule} element={<EventAgenda />} />
+          <Route path={ROUTE_PATTERNS.eventSpeakers} element={<EventSpeakers />} />
+          <Route path={ROUTE_PATTERNS.eventSpeaker} element={<EventSpeakerProfile />} />
           {/* Profile self-service editor (passwordless via emailed link) */}
           <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />

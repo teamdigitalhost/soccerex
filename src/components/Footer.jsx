@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Mail, MapPin } from 'lucide-react'
+import { HOME } from '../lib/routes'
 
 // Inline brand SVGs (lucide does not ship brand icons)
 const BrandIcons = {
@@ -68,7 +69,7 @@ export default function Footer() {
               uses negative margins to reclaim the layout space, matching the
               approach used on event cards. Centered inside the column. */}
           <div style={{ containerType: 'inline-size' }}>
-            <Link to="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', textDecoration: 'none', marginBottom: '28px' }}>
+            <Link to={HOME} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', textDecoration: 'none', marginBottom: '28px' }}>
               <img
                 src="/brand/crests/crest-main-white.svg"
                 alt=""
