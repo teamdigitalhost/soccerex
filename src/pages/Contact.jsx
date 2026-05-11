@@ -6,6 +6,9 @@ import {
 } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import { submitLead } from '../lib/soccerexApi'
+import { isTestModeFromUrl } from '../lib/testMode'
+import { Loader2 } from 'lucide-react'
 
 // ═══ INQUIRY TYPES ════════════════════════════════════════════════════════════
 // Each type routes to the correct email and shows relevant conditional fields.
@@ -148,34 +151,47 @@ export default function Contact() {
 
   const updateField = (key, value) => setForm((prev) => ({ ...prev, [key]: value }))
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Compose a structured email body
-    const lines = [
-      `Inquiry Type: ${inquiry.label}`,
-      '',
-      `Name: ${form.firstName || ''} ${form.lastName || ''}`.trim(),
-      `Email: ${form.email || ''}`,
-    ]
-    if (form.phone) lines.push(`Phone: ${form.phone}`)
-    lines.push('')
-    // Conditional fields
-    inquiry.fields.forEach((key) => {
-      const def = FIELD_DEFS[key]
-      if (form[key]) lines.push(`${def.label}: ${form[key]}`)
-    })
-    lines.push('')
-    lines.push('Message:')
-    lines.push(form.message || '')
-    lines.push('')
-    lines.push('---')
-    lines.push('Sent via soccerex.com/contact')
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
-    const subject = `[${inquiry.label}] Inquiry from ${form.firstName || ''} ${form.lastName || ''}`.trim()
-    const body = encodeURIComponent(lines.join('\n'))
-    const href = `mailto:${inquiry.email}?subject=${encodeURIComponent(subject)}&body=${body}`
-    window.location.href = href
-    setSubmitted(true)
+  /* Map each inquiry type to the backend lead endpoint that handles it.
+     Falls back to generic /leads/contact when there's no specialised path. */
+  const leadKindFor = (id) => {
+    if (id === 'partner' || id === 'exhibit') return 'sponsorship-inquiry'
+    if (id === 'speaker') return 'speaker-inquiry'
+    return 'contact'
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setSubmitting(true); setSubmitError('')
+
+    /* Collect a flat payload that maps cleanly onto the backend's expected
+       lead-submission columns. The lead automation router on the backend
+       knows the source by `inquiry_type` and `source`. */
+    const payload = {
+      inquiry_type: inquiry.id,
+      name: `${form.firstName || ''} ${form.lastName || ''}`.trim() || undefined,
+      first_name: form.firstName || undefined,
+      last_name:  form.lastName || undefined,
+      email: form.email || undefined,
+      phone: form.phone || undefined,
+      message: form.message || undefined,
+      source: `contact-${inquiry.id}`,
+      source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+    }
+    inquiry.fields.forEach((key) => {
+      if (form[key]) payload[key] = form[key]
+    })
+
+    try {
+      await submitLead(leadKindFor(inquiry.id), payload, { test: isTestModeFromUrl() })
+      setSubmitted(true)
+    } catch (err) {
+      setSubmitError(err?.message || `We couldn't submit your message. Please email ${inquiry.email} directly.`)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -373,17 +389,23 @@ export default function Contact() {
             {/* Submit */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
               <p className="font-body" style={{ fontSize: '0.78rem', color: '#888', maxWidth: '400px', lineHeight: 1.5 }}>
-                By submitting, your message opens in your email client ready to send to{' '}
-                <span style={{ color: 'var(--color-gold)', fontWeight: 600 }}>{inquiry.email}</span>.
+                {submitted
+                  ? <>Thanks — your message is with the Soccerex team. We'll follow up by email.</>
+                  : <>We'll route your message to the right team and reply by email.</>}
               </p>
-              <button type="submit" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
-                style={{ background: 'var(--color-gold)', color: '#09203e', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: 'pointer', transition: 'all 0.25s' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#d4c78e' }}
+              <button type="submit" disabled={submitting || submitted} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
+                style={{ background: 'var(--color-gold)', color: '#09203e', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: submitting ? 'wait' : 'pointer', transition: 'all 0.25s', opacity: submitting ? 0.7 : 1 }}
+                onMouseEnter={(e) => { if (!submitting) e.currentTarget.style.background = '#d4c78e' }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-gold)' }}
               >
-                {submitted ? <><Check size={16} /> Sent</> : <>Send Message <ArrowRight size={16} /></>}
+                {submitting ? <><Loader2 size={16} className="prog-spin" /> Sending</>
+                  : submitted ? <><Check size={16} /> Sent</>
+                  : <>Send message <ArrowRight size={16} /></>}
               </button>
             </div>
+            {submitError && (
+              <p className="font-body mt-3" style={{ fontSize: '0.82rem', color: '#b91c1c' }}>{submitError}</p>
+            )}
           </form>
           )}
           {/* Empty-state hint before a selection is made */}

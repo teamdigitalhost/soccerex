@@ -53,6 +53,9 @@ export const PROFILE_ACCESS  = '/profile-access'
 export const PROFILE_EXPIRED = `${PROFILE_ACCESS}?expired=1`
 export const profileEditor   = (slug) => `${PROFILE_ACCESS}/edit/${encodeURIComponent(slug)}`
 export const companyPortal   = (slug) => `${PROFILE_ACCESS}/portal/${encodeURIComponent(slug)}`
+/* Personal portal: aggregates speaker / delegate / rights-holder / VIP roles
+   for a single person profile into one neutral, timeless dashboard. */
+export const personalPortal  = (slug) => `${PROFILE_ACCESS}/me/${encodeURIComponent(slug)}`
 
 /* ─── Policy pages ─────────────────────────────────────────────────────── */
 export const PRIVACY_POLICY  = '/privacy-policy'
@@ -67,6 +70,7 @@ export const ROUTE_PATTERNS = {
   insightArticle:      `${INSIGHTS}/:slug`,
   profileEditor:       `${PROFILE_ACCESS}/edit/:slug`,
   companyPortal:       `${PROFILE_ACCESS}/portal/:slug`,
+  personalPortal:      `${PROFILE_ACCESS}/me/:slug`,
   pressRelease:        `${PRESS}/:slug`,
   eventAgendaConcept:  `${EVENTS}/:slug/agenda-concept`,
   eventTopics:         `${EVENTS}/:slug/topics`,

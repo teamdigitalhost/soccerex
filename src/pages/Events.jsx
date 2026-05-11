@@ -4,6 +4,8 @@ import { ArrowRight, Calendar, MapPin, Download, Quote, Globe } from 'lucide-rea
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { CONTACT, EUROPE_2026 } from '../lib/routes'
+import InquiryModalButton from '../components/InquiryModalButton'
+import { sponsorshipSchema, speakerSchema } from '../lib/leadSchemas'
 
 // ═══ UPCOMING EVENTS (2 featured) ════════════════════════════════════════════
 const UPCOMING = [
@@ -618,13 +620,34 @@ export default function Events() {
             >
               Event Details <ArrowRight size={16} />
             </Link>
-            <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', border: '1px solid #c8302c', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#c8302c' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
-            >
-              Get in Touch
-            </Link>
+            <InquiryModalButton
+              kind="sponsorship-inquiry"
+              label="Become a partner"
+              modalTitle="Become a Soccerex partner"
+              eyebrow="Sponsorship & exhibition"
+              intro="Tell us a little about your organisation and what you'd like to achieve. We'll send the right partnership pack for your goals."
+              schema={sponsorshipSchema}
+              extraPayload={{ source: 'events-page-cta' }}
+              submitLabel="Send inquiry"
+              successTitle="Inquiry received."
+              successBody="A partnerships lead will follow up by email with a tailored pack and next steps."
+              buttonStyle={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', border: '1px solid #c8302c', cursor: 'pointer', transition: 'all 0.3s' }}
+              buttonClassName="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            />
+            <InquiryModalButton
+              kind="speaker-inquiry"
+              label="Speak at Soccerex"
+              modalTitle="Speak at Soccerex"
+              eyebrow="Speaker interest"
+              intro="Tell us who you are and what you'd talk about. The programme team will reach out if there's a fit for an upcoming event."
+              schema={speakerSchema}
+              extraPayload={{ source: 'events-page-cta' }}
+              submitLabel="Send"
+              successTitle="Thanks — we have your details."
+              successBody="The programme team will reach out if there's a fit for an upcoming event."
+              buttonStyle={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', border: '1px solid rgba(255,255,255,0.35)', cursor: 'pointer', transition: 'all 0.3s' }}
+              buttonClassName="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            />
           </div>
         </div>
       </section>

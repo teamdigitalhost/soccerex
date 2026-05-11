@@ -8,7 +8,7 @@ import {
   readProfileAccessSession, writeProfileAccessSession, clearProfileAccessSession,
 } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
-import { HOME, CONTACT, PRIVACY_POLICY, profileEditor, companyPortal } from '../lib/routes'
+import { HOME, CONTACT, PRIVACY_POLICY, profileEditor, companyPortal, personalPortal } from '../lib/routes'
 
 export default function ProfileAccess() {
   const [params, setParams] = useSearchParams()
@@ -47,8 +47,14 @@ export default function ProfileAccess() {
       clearProfileAccessSession()
       setSession(null)
     }}
-      onPick={(slug) => navigate(withTestSearch(profileEditor(slug)))}
-      onPortal={(slug) => navigate(withTestSearch(companyPortal(slug)))} />
+      onPick={(slug, profile) => {
+        /* Companies → sponsor portal. Persons → unified personal portal that
+           pulls speaker / delegate / rights-holder / VIP roles in parallel. */
+        const isCompany = profile?.profile_kind === 'company' || profile?.is_company === true
+        const target = isCompany ? companyPortal(slug) : personalPortal(slug)
+        navigate(withTestSearch(target))
+      }}
+      onEdit={(slug) => navigate(withTestSearch(profileEditor(slug)))} />
   }
 
   return <RequestForm />
@@ -236,10 +242,9 @@ function TokenLanding({ token, onExchanged, onSignOut }) {
 
 /* ─── Signed-in chooser ─────────────────────────────────────────────────── */
 
-function ProfileChooser({ session, onSignOut, onPick, onPortal }) {
+function ProfileChooser({ session, onSignOut, onPick, onEdit }) {
   const profiles = Array.isArray(session.profiles) ? session.profiles : []
   const expiresAt = session.expires_at ? new Date(session.expires_at) : null
-  const isCompany = (p) => p.profile_kind === 'company' || p.is_company === true
 
   return (
     <Shell>
@@ -268,17 +273,15 @@ function ProfileChooser({ session, onSignOut, onPick, onPortal }) {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2" style={{ width: '100%' }}>
-                    {isCompany(p) && (
-                      <button type="button" onClick={() => onPortal(p.slug)}
-                        className="event-btn-outline-light"
-                        style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11 }}>
-                        Open portal <ArrowRight size={13} />
-                      </button>
-                    )}
-                    <button type="button" onClick={() => onPick(p.slug)}
+                    <button type="button" onClick={() => onPick(p.slug, p)}
                       className="event-btn-outline-light"
-                      style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11, background: 'var(--event-primary, #ff6b35)', color: '#fff', borderColor: 'var(--event-primary, #ff6b35)' }}>
-                      Edit profile <ArrowRight size={13} />
+                      style={{ flex: '2 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11, background: 'var(--event-primary, #ff6b35)', color: '#fff', borderColor: 'var(--event-primary, #ff6b35)' }}>
+                      Open portal <ArrowRight size={13} />
+                    </button>
+                    <button type="button" onClick={() => onEdit(p.slug)}
+                      className="event-btn-outline-light"
+                      style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11 }}>
+                      Edit profile
                     </button>
                   </div>
                 </div>

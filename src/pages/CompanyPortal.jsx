@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, Edit3, Upload, AlertCircle, Loader2, LogOut,
-  Calendar, CheckCircle2, Circle, FileText, Ticket, Wallet,
-  Building2, ExternalLink, UserPlus, Image,
+  Calendar, CheckCircle2, Circle, FileText, Ticket, Wallet, X, Plus,
+  Building2, ExternalLink, UserPlus, Image, HelpCircle, MessageSquare, Send,
 } from 'lucide-react'
-import { getCompanyPortal, ApiError } from '../lib/soccerexApi'
+import { getCompanyPortal, assignCompanyPass, postDeliverableUpdate, ApiError } from '../lib/soccerexApi'
 import { readProfileAccessSession, clearProfileAccessSession } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
@@ -63,6 +63,10 @@ export default function CompanyPortal() {
     navigate(PROFILE_ACCESS, { replace: true })
   }
 
+  /* Reload the whole portal payload after a write (pass assignment,
+     deliverable update). Cheaper than tracking each affected sub-tree. */
+  const refresh = () => getCompanyPortal(slug, editToken, { test: isTest }).then(setPortal).catch(() => {})
+
   if (!editToken) return null
   const profile = portal?.profile || portal?.company || null
 
@@ -79,9 +83,16 @@ export default function CompanyPortal() {
             <div className="flex flex-col gap-6">
               <ProfileSummary profile={profile} slug={slug} />
               <NextActions actions={portal.next_actions} />
-              <Deliverables data={portal.deliverables} />
+              <Deliverables data={portal.deliverables} slug={slug} editToken={editToken} isTest={isTest} onRefresh={refresh} />
               <AssetLibrary data={portal.asset_library} slug={slug} />
-              <PassAllocation data={portal.passes || portal.pass_allocation} />
+              <PassAllocation
+                data={portal.passes || portal.pass_allocation}
+                events={portal.events || (portal.event ? [portal.event] : [])}
+                slug={slug}
+                editToken={editToken}
+                isTest={isTest}
+                onRefresh={refresh}
+              />
               <CommercialOverview
                 agreements={portal.agreements}
                 invoices={portal.invoices}
@@ -251,46 +262,220 @@ function ActionCard({ action }) {
 
 /* ─── Deliverables ────────────────────────────────────────────────────── */
 
-function Deliverables({ data }) {
+function Deliverables({ data, slug, editToken, isTest, onRefresh }) {
+  const [acting, setActing] = useState(null) /* { deliverable, action } */
   const summary = data?.summary || {}
   const items = Array.isArray(data?.items) ? data.items : (Array.isArray(data) ? data : [])
   return (
-    <Card kicker="Deliverables" title="What we owe each other">
-      <SummaryStrip stats={[
-        { label: 'Total', value: summary.total ?? items.length },
-        { label: 'Completed', value: summary.completed, tone: 'success' },
-        { label: 'In progress', value: summary.in_progress },
-        { label: 'Overdue', value: summary.overdue, tone: summary.overdue ? 'danger' : 'default' },
-      ]} />
-      {items.length > 0 ? (
-        <table className="portal-table">
-          <thead>
-            <tr>
-              <th>Deliverable</th>
-              <th>Owner</th>
-              <th>Due</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((d, i) => (
-              <tr key={d.id || i}>
-                <td>
-                  <p className="miami-body" style={{ fontSize: 13, color: '#0D1B2A', fontWeight: 600 }}>{d.title || d.name}</p>
-                  {d.description && <p className="miami-body" style={{ fontSize: 12, color: '#607186', marginTop: 2 }}>{d.description}</p>}
-                </td>
-                <td><Cell text={d.owner} /></td>
-                <td><Cell text={fmtDate(d.due_at || d.due_date)} mono /></td>
-                <td><StatusPill status={d.status} /></td>
+    <>
+      <Card kicker="Deliverables" title="What we owe each other">
+        <SummaryStrip stats={[
+          { label: 'Total', value: summary.total ?? items.length },
+          { label: 'Completed', value: summary.completed, tone: 'success' },
+          { label: 'In progress', value: summary.in_progress },
+          { label: 'Overdue', value: summary.overdue, tone: summary.overdue ? 'danger' : 'default' },
+        ]} />
+        {items.length > 0 ? (
+          <table className="portal-table">
+            <thead>
+              <tr>
+                <th>Deliverable</th>
+                <th>Owner</th>
+                <th>Due</th>
+                <th>Status</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <Empty icon={CheckCircle2} title="No deliverables logged yet" body="The Soccerex team will populate this as your agreement is finalised." />
+            </thead>
+            <tbody>
+              {items.map((d, i) => {
+                const source = d.source || (d.deal_id ? 'deal' : 'agreement')
+                const sourceId = d.source_id || d.deal_id || d.agreement_id || d.id
+                const acted = !!d.acknowledged_at || d.status === 'acknowledged'
+                return (
+                  <tr key={d.id || i}>
+                    <td>
+                      <p className="miami-body" style={{ fontSize: 13, color: '#0D1B2A', fontWeight: 600 }}>{d.title || d.name}</p>
+                      {d.description && <p className="miami-body" style={{ fontSize: 12, color: '#607186', marginTop: 2 }}>{d.description}</p>}
+                    </td>
+                    <td><Cell text={d.owner} /></td>
+                    <td><Cell text={fmtDate(d.due_at || d.due_date)} mono /></td>
+                    <td><StatusPill status={d.status} /></td>
+                    <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                      <DeliverableActions
+                        deliverable={d}
+                        source={source}
+                        sourceId={sourceId}
+                        acted={acted}
+                        onPick={(action) => setActing({ deliverable: d, source, sourceId, action })}
+                      />
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <Empty icon={CheckCircle2} title="No deliverables logged yet" body="The Soccerex team will populate this as your agreement is finalised." />
+        )}
+      </Card>
+      {acting && (
+        <DeliverableActionDialog
+          {...acting}
+          slug={slug}
+          editToken={editToken}
+          isTest={isTest}
+          onClose={() => setActing(null)}
+          onSaved={() => { setActing(null); onRefresh && onRefresh() }}
+        />
       )}
-    </Card>
+    </>
   )
+}
+
+function DeliverableActions({ deliverable, acted, onPick }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="inline-flex flex-wrap gap-1.5 justify-end" style={{ position: 'relative' }}>
+      {!acted && (
+        <button onClick={() => onPick('acknowledge')} className="event-btn-outline-light" style={{ padding: '6px 10px', fontSize: 10.5 }}>
+          <CheckCircle2 size={11} /> Acknowledge
+        </button>
+      )}
+      <button onClick={() => onPick('submit_evidence')} className="event-btn-outline-light" style={{ padding: '6px 10px', fontSize: 10.5 }}>
+        <Upload size={11} /> Submit evidence
+      </button>
+      <button onClick={() => setOpen((x) => !x)} aria-label="More actions" className="event-btn-outline-light" style={{ padding: '6px 10px', fontSize: 10.5 }}>
+        ⋯
+      </button>
+      {open && (
+        <div onMouseLeave={() => setOpen(false)} style={{
+          position: 'absolute', right: 0, top: '100%', marginTop: 4,
+          background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.12)',
+          boxShadow: '0 12px 30px -16px rgba(13,27,42,0.30)', minWidth: 180, zIndex: 5,
+        }}>
+          <ActionRow icon={MessageSquare} label="Add a note" onClick={() => { setOpen(false); onPick('add_note') }} />
+          <ActionRow icon={HelpCircle}    label="Request help" onClick={() => { setOpen(false); onPick('request_help') }} />
+          <ActionRow icon={Send}          label="Mark ready for review" onClick={() => { setOpen(false); onPick('ready_for_review') }} />
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ActionRow({ icon: Icon, label, onClick }) {
+  return (
+    <button onClick={onClick} style={{
+      display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+      padding: '10px 12px', background: 'transparent', border: 0, textAlign: 'left',
+      cursor: 'pointer', fontSize: 12, color: '#0D1B2A',
+    }}>
+      <Icon size={13} style={{ color: '#607186' }} /> {label}
+    </button>
+  )
+}
+
+function DeliverableActionDialog({ deliverable, source, sourceId, action, slug, editToken, isTest, onClose, onSaved }) {
+  const [note, setNote] = useState('')
+  const [files, setFiles] = useState([])
+  const [urls, setUrls] = useState([''])
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(null)
+
+  const labels = {
+    acknowledge:      { title: `Acknowledge: ${deliverable.title || deliverable.name}`,        cta: 'Acknowledge',       note: 'Optional confirmation note' },
+    add_note:         { title: `Add note: ${deliverable.title || deliverable.name}`,            cta: 'Save note',         note: 'Note for the Soccerex team' },
+    request_help:     { title: `Need help with: ${deliverable.title || deliverable.name}`,      cta: 'Send request',      note: 'Tell us what would unblock you' },
+    ready_for_review: { title: `Ready for review: ${deliverable.title || deliverable.name}`,    cta: 'Mark ready',        note: 'Anything we should look at first?' },
+    submit_evidence:  { title: `Submit evidence: ${deliverable.title || deliverable.name}`,     cta: 'Send for review',   note: 'Optional caption' },
+  }
+  const l = labels[action] || { title: 'Update', cta: 'Send', note: 'Note' }
+  const requireNote = action === 'add_note' || action === 'request_help'
+  const showEvidence = action === 'submit_evidence'
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (requireNote && !note.trim()) return
+    setSubmitting(true); setError(null)
+    try {
+      const cleanUrls = urls.map((u) => u.trim()).filter(Boolean)
+      await postDeliverableUpdate(slug, editToken, source, sourceId, {
+        action,
+        note: note.trim() || undefined,
+        files: showEvidence ? files : undefined,
+        urls:  showEvidence ? cleanUrls : undefined,
+      }, { test: isTest })
+      onSaved()
+    } catch (err) {
+      if (err instanceof ApiError && err.body?.errors) {
+        setError(Object.values(err.body.errors).flat().join(' '))
+      } else {
+        setError(err?.message || 'Could not submit update')
+      }
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <Modal title={l.title} onClose={onClose}>
+      <form onSubmit={submit} className="flex flex-col gap-3">
+        <Field label={l.note + (requireNote ? ' *' : '')}>
+          <textarea rows={action === 'request_help' ? 4 : 3} required={requireNote}
+            value={note} onChange={(e) => setNote(e.target.value)} className="prog-input" />
+        </Field>
+
+        {showEvidence && (
+          <>
+            <Field label="Files">
+              <div className="profile-uploader-drop">
+                <input type="file" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
+                {files.length > 0 && (
+                  <ul className="mt-2 flex flex-col gap-1">
+                    {files.map((f, i) => (
+                      <li key={i} className="flex items-center justify-between gap-2" style={{ fontSize: 12, color: '#3a4a5a' }}>
+                        <span>{f.name} <span style={{ color: '#607186' }}>({(f.size / 1024).toFixed(0)} KB)</span></span>
+                        <button type="button" onClick={() => setFiles(files.filter((_, idx) => idx !== i))} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#607186' }}><X size={14} /></button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </Field>
+            <Field label="Or link URLs">
+              <div className="flex flex-col gap-2">
+                {urls.map((u, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <input type="url" value={u} onChange={(e) => setUrls(urls.map((x, idx) => idx === i ? e.target.value : x))}
+                      placeholder="https://" className="prog-input" />
+                    {urls.length > 1 && (
+                      <button type="button" onClick={() => setUrls(urls.filter((_, idx) => idx !== i))} style={removeBtnStyle}><X size={14} /></button>
+                    )}
+                  </div>
+                ))}
+                <button type="button" onClick={() => setUrls([...urls, ''])} className="event-btn-outline-light self-start" style={{ padding: '6px 10px', fontSize: 11 }}>
+                  <Plus size={11} /> Add URL
+                </button>
+              </div>
+            </Field>
+          </>
+        )}
+
+        {error && <p className="miami-body" style={{ fontSize: 12.5, color: '#b91c1c' }}>{error}</p>}
+
+        <div className="flex justify-end gap-2 mt-2">
+          <button type="button" onClick={onClose} className="event-btn-outline-light" style={{ padding: '10px 14px', fontSize: 11 }}>Cancel</button>
+          <button type="submit" disabled={submitting} className="event-btn-primary" style={{ padding: '10px 14px', fontSize: 11 }}>
+            {submitting ? <><Loader2 size={12} className="prog-spin" /> Sending</> : <><Send size={12} /> {l.cta}</>}
+          </button>
+        </div>
+      </form>
+    </Modal>
+  )
+}
+
+const removeBtnStyle = {
+  background: 'rgba(13,27,42,0.04)', border: '1px solid rgba(13,27,42,0.10)',
+  padding: '8px 10px', cursor: 'pointer', color: '#607186',
 }
 
 /* ─── Asset library ───────────────────────────────────────────────────── */
@@ -342,45 +527,192 @@ function AssetThumb({ asset }) {
 
 /* ─── Pass allocation ─────────────────────────────────────────────────── */
 
-function PassAllocation({ data }) {
+function PassAllocation({ data, events, slug, editToken, isTest, onRefresh }) {
+  const [assignFor, setAssignFor] = useState(null) /* { passType, eventId? } */
   if (!data) return null
   /* The backend may either return a flat shape ({ allocated, assigned, ... })
      or a per-tier breakdown ({ delegate: {...}, vip: {...} }). Handle both. */
   const tiers = []
   if (data.delegate || data.vip) {
-    if (data.delegate) tiers.push({ label: 'Delegate', ...data.delegate })
-    if (data.vip)      tiers.push({ label: 'VIP',      ...data.vip })
+    if (data.delegate) tiers.push({ label: 'Delegate', key: 'delegate', ...data.delegate })
+    if (data.vip)      tiers.push({ label: 'VIP',      key: 'vip',      ...data.vip })
   } else {
-    tiers.push({ label: 'Passes', allocated: data.allocated, assigned: data.assigned, remaining: data.remaining })
+    tiers.push({ label: 'Passes', key: 'delegate', allocated: data.allocated, assigned: data.assigned, remaining: data.remaining })
   }
+  const eventList = Array.isArray(events) ? events : []
   return (
-    <Card kicker="Pass allocation" title="Delegate & VIP passes">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {tiers.map((t) => {
-          const allocated = numericOr(t.allocated, 0)
-          const assigned = numericOr(t.assigned, 0)
-          const remaining = t.remaining != null ? Number(t.remaining) : Math.max(0, allocated - assigned)
-          const pct = allocated > 0 ? Math.min(100, Math.round((assigned / allocated) * 100)) : 0
-          return (
-            <div key={t.label} style={{ border: '1px solid rgba(13,27,42,0.08)', background: '#FFFFFF', padding: 18 }}>
-              <div className="flex items-baseline justify-between mb-3">
-                <p className="miami-subhead" style={{ fontSize: 11, color: 'var(--event-primary)', letterSpacing: '0.18em' }}>{t.label}</p>
-                <p className="miami-headline" style={{ fontSize: 22, color: '#0D1B2A', lineHeight: 1 }}>
-                  {assigned}<span style={{ color: '#9aa6b3', fontSize: 16 }}> / {allocated}</span>
-                </p>
+    <>
+      <Card kicker="Pass allocation" title="Delegate & VIP passes">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {tiers.map((t) => {
+            const allocated = numericOr(t.allocated, 0)
+            const assigned = numericOr(t.assigned, 0)
+            const remaining = t.remaining != null ? Number(t.remaining) : Math.max(0, allocated - assigned)
+            const pct = allocated > 0 ? Math.min(100, Math.round((assigned / allocated) * 100)) : 0
+            return (
+              <div key={t.label} style={{ border: '1px solid rgba(13,27,42,0.08)', background: '#FFFFFF', padding: 18 }}>
+                <div className="flex items-baseline justify-between mb-3">
+                  <p className="miami-subhead" style={{ fontSize: 11, color: 'var(--event-primary)', letterSpacing: '0.18em' }}>{t.label}</p>
+                  <p className="miami-headline" style={{ fontSize: 22, color: '#0D1B2A', lineHeight: 1 }}>
+                    {assigned}<span style={{ color: '#9aa6b3', fontSize: 16 }}> / {allocated}</span>
+                  </p>
+                </div>
+                <div style={{ height: 6, background: 'rgba(13,27,42,0.08)', overflow: 'hidden' }}>
+                  <div style={{ width: `${pct}%`, height: '100%', background: 'var(--event-primary, #ff6b35)' }} />
+                </div>
+                <div className="flex justify-between mt-3 font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.18em', color: '#607186' }}>
+                  <span>Assigned <span style={{ color: '#0D1B2A' }}>{assigned}</span></span>
+                  <span>Remaining <span style={{ color: '#0D1B2A' }}>{remaining}</span></span>
+                </div>
+                {remaining > 0 && (
+                  <button onClick={() => setAssignFor({ passType: t.key })}
+                    className="event-btn-outline-light mt-3" style={{ padding: '8px 14px', fontSize: 11 }}>
+                    <Plus size={12} /> Assign a {t.label.toLowerCase()} pass
+                  </button>
+                )}
               </div>
-              <div style={{ height: 6, background: 'rgba(13,27,42,0.08)', overflow: 'hidden' }}>
-                <div style={{ width: `${pct}%`, height: '100%', background: 'var(--event-primary, #ff6b35)' }} />
-              </div>
-              <div className="flex justify-between mt-3 font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.18em', color: '#607186' }}>
-                <span>Assigned <span style={{ color: '#0D1B2A' }}>{assigned}</span></span>
-                <span>Remaining <span style={{ color: '#0D1B2A' }}>{remaining}</span></span>
-              </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
+        {Array.isArray(data.assignments) && data.assignments.length > 0 && (
+          <div className="mt-5">
+            <p className="miami-subhead mb-2" style={{ fontSize: 10, color: '#607186', letterSpacing: '0.22em' }}>Assigned passes</p>
+            <table className="portal-table">
+              <thead><tr><th>Attendee</th><th>Type</th><th>Email</th><th>Status</th></tr></thead>
+              <tbody>
+                {data.assignments.map((a, i) => (
+                  <tr key={a.id || i}>
+                    <td>
+                      <p className="miami-body" style={{ fontSize: 13, color: '#0D1B2A', fontWeight: 600 }}>{a.attendee_name || a.holder_name || 'Unassigned'}</p>
+                      {a.attendee_role && <p className="miami-body" style={{ fontSize: 12, color: '#607186', marginTop: 2 }}>{a.attendee_role}</p>}
+                    </td>
+                    <td><Cell text={a.pass_type || a.type} /></td>
+                    <td><Cell text={a.attendee_email} /></td>
+                    <td><StatusPill status={a.status} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
+      {assignFor && (
+        <AssignPassDialog
+          tier={assignFor}
+          events={eventList}
+          slug={slug}
+          editToken={editToken}
+          isTest={isTest}
+          onClose={() => setAssignFor(null)}
+          onSaved={() => { setAssignFor(null); onRefresh && onRefresh() }}
+        />
+      )}
+    </>
+  )
+}
+
+function AssignPassDialog({ tier, events, slug, editToken, isTest, onClose, onSaved }) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [role, setRole] = useState('')
+  const [eventId, setEventId] = useState(events[0]?.id || events[0]?.event_id || '')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(null)
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (!name.trim() || !email.trim()) return
+    setSubmitting(true); setError(null)
+    try {
+      await assignCompanyPass(slug, editToken, {
+        event_id: eventId || undefined,
+        pass_type: tier.passType,
+        attendee_name: name.trim(),
+        attendee_email: email.trim(),
+        attendee_role: role.trim() || undefined,
+      }, { test: isTest })
+      onSaved()
+    } catch (err) {
+      if (err instanceof ApiError && err.body?.errors) {
+        setError(Object.values(err.body.errors).flat().join(' '))
+      } else {
+        setError(err?.message || 'Could not assign pass')
+      }
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <Modal title={`Assign ${tier.passType === 'vip' ? 'VIP' : 'delegate'} pass`} onClose={onClose}>
+      <form onSubmit={submit} className="flex flex-col gap-3">
+        {events.length > 1 && (
+          <Field label="Event">
+            <select value={eventId} onChange={(e) => setEventId(e.target.value)} className="prog-input">
+              {events.map((ev) => (
+                <option key={ev.id || ev.event_id} value={ev.id || ev.event_id}>{ev.name || ev.title || ev.slug}</option>
+              ))}
+            </select>
+          </Field>
+        )}
+        <Field label="Attendee name *">
+          <input required value={name} onChange={(e) => setName(e.target.value)} className="prog-input" placeholder="Ana Rivera" />
+        </Field>
+        <Field label="Attendee email *">
+          <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="prog-input" placeholder="ana@company.com" />
+        </Field>
+        <Field label="Role / title">
+          <input value={role} onChange={(e) => setRole(e.target.value)} className="prog-input" placeholder="Partnerships Director" />
+        </Field>
+        {error && <p className="miami-body" style={{ fontSize: 12.5, color: '#b91c1c' }}>{error}</p>}
+        <div className="flex justify-end gap-2 mt-2">
+          <button type="button" onClick={onClose} className="event-btn-outline-light" style={{ padding: '10px 14px', fontSize: 11 }}>Cancel</button>
+          <button type="submit" disabled={submitting} className="event-btn-primary" style={{ padding: '10px 14px', fontSize: 11 }}>
+            {submitting ? <><Loader2 size={12} className="prog-spin" /> Assigning</> : <><Send size={12} /> Assign pass</>}
+          </button>
+        </div>
+      </form>
+    </Modal>
+  )
+}
+
+function Modal({ title, children, onClose }) {
+  useEffect(() => {
+    const esc = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', esc)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', esc)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+  return (
+    <div role="dialog" aria-modal="true" onClick={onClose} style={{
+      position: 'fixed', inset: 0, background: 'rgba(13,27,42,0.55)', zIndex: 50,
+      display: 'grid', placeItems: 'center', padding: 16,
+    }}>
+      <div onClick={(e) => e.stopPropagation()} style={{
+        background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.10)',
+        width: 'min(560px, 100%)', maxHeight: '90vh', overflow: 'auto',
+      }}>
+        <div className="flex items-center justify-between gap-3" style={{ padding: '16px 22px', borderBottom: '1px solid rgba(13,27,42,0.08)' }}>
+          <p className="miami-headline" style={{ fontSize: 15, color: '#0D1B2A' }}>{title}</p>
+          <button onClick={onClose} aria-label="Close" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#607186' }}>
+            <X size={18} />
+          </button>
+        </div>
+        <div style={{ padding: 22 }}>{children}</div>
       </div>
-    </Card>
+    </div>
+  )
+}
+
+function Field({ label, children }) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      {label && <span className="font-mono" style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#607186' }}>{label}</span>}
+      {children}
+    </label>
   )
 }
 

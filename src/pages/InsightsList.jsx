@@ -4,9 +4,10 @@ import { ArrowRight, Search, Calendar, Mail, ChevronRight } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import {
-  getContentPillars, getArticlesByPillar,
+  getContentPillars, getArticlesByPillar, submitLead,
 } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
+import { Loader2, Check } from 'lucide-react'
 import { insightArticle } from '../lib/routes'
 
 function useScrollAnimations(dep) {
@@ -238,31 +239,7 @@ export default function InsightsList() {
                 <p className="font-body leading-relaxed mb-6" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)' }}>
                   Subscribe to get the latest commercial details, groundbreaking interviews, and industry analysis, free, straight to your inbox.
                 </p>
-                <form onSubmit={(e) => { e.preventDefault(); const email = e.target.email.value; window.location.href = `mailto:enquiries@soccerex.com?subject=SoccerExpert%20Subscribe&body=Please%20add%20${encodeURIComponent(email)}%20to%20the%20SoccerExpert%20newsletter.` }}>
-                  <input
-                    name="email"
-                    type="email"
-                    placeholder="Your Email Address"
-                    required
-                    style={{
-                      width: '100%', padding: '13px 14px',
-                      fontSize: '0.9rem', fontFamily: 'Inter, sans-serif',
-                      background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(191,177,112,0.25)',
-                      borderRadius: '8px', color: '#fff', outline: 'none',
-                      marginBottom: '12px', transition: 'border-color 0.2s',
-                    }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
-                    onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.25)' }}
-                  />
-                  <button type="submit" className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] w-full cursor-pointer border-none"
-                    style={{ background: 'var(--color-gold)', color: '#09203e', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = '#d4c78e' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-gold)' }}
-                  >
-                    <Mail size={15} /> Subscribe
-                  </button>
-                </form>
+                <NewsletterForm />
               </div>
 
               {/* Categories */}
@@ -332,6 +309,72 @@ export default function InsightsList() {
         </div>
       </section>
     </div>
+  )
+}
+
+/* ─── Newsletter (SoccerExpert) — wired to /leads/newsletter ───────────── */
+
+function NewsletterForm() {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState('idle')
+  const [error, setError] = useState('')
+
+  const submit = async (e) => {
+    e.preventDefault()
+    setStatus('submitting'); setError('')
+    try {
+      await submitLead('newsletter', {
+        email: email.trim(),
+        list: 'soccerexpert',
+        source: 'insights-sidebar',
+        source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+        marketing_opt_in: true,
+      }, { test: isTestModeFromUrl() })
+      setStatus('success')
+    } catch (err) {
+      setStatus('error')
+      setError(err?.message || "We couldn't subscribe you. Please try again.")
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="flex items-center gap-2 font-body" style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)' }}>
+        <Check size={16} style={{ color: 'var(--color-gold)' }} /> You're subscribed.
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={submit}>
+      <input
+        type="email"
+        placeholder="Your email address"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        autoComplete="email"
+        style={{
+          width: '100%', padding: '13px 14px',
+          fontSize: '0.9rem', fontFamily: 'Inter, sans-serif',
+          background: 'rgba(255,255,255,0.08)',
+          border: '1px solid rgba(191,177,112,0.25)',
+          borderRadius: '8px', color: '#fff', outline: 'none',
+          marginBottom: '12px', transition: 'border-color 0.2s',
+        }}
+        onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+        onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.25)' }}
+      />
+      <button type="submit" disabled={status === 'submitting'}
+        className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] w-full cursor-pointer border-none"
+        style={{ background: 'var(--color-gold)', color: '#09203e', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s', opacity: status === 'submitting' ? 0.7 : 1 }}
+        onMouseEnter={(e) => { if (status !== 'submitting') e.currentTarget.style.background = '#d4c78e' }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-gold)' }}
+      >
+        {status === 'submitting' ? <><Loader2 size={15} className="prog-spin" /> Subscribing</> : <><Mail size={15} /> Subscribe</>}
+      </button>
+      {error && <p className="font-body mt-2" style={{ fontSize: '0.78rem', color: '#ffb4b4' }}>{error}</p>}
+    </form>
   )
 }
 

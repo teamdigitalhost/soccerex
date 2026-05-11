@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { ArrowLeft, MapPin, Calendar, Mail, Check, Trophy, Users, Briefcase, Star } from 'lucide-react'
+import { ArrowLeft, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { preregisterLead, ApiError } from '../lib/soccerexApi'
-import { isTestModeFromUrl } from '../lib/testMode'
 import { HOME } from '../lib/routes'
+import LeadForm from '../components/LeadForm'
+import InquiryModalButton from '../components/InquiryModalButton'
+import { sponsorshipSchema, speakerSchema } from '../lib/leadSchemas'
 
 const IMG = '/events/miami/2026'
 const GFX = '/events/miami/2026/graphics'
@@ -48,102 +49,88 @@ const THEMES = [
   'Talent pathways across North, Central and South America',
 ]
 
-const RIGHTS_HOLDER_POINTS = [
-  'Connect with brands, investors and solution providers ready to expand your football business across the Americas.',
-  'Discover the innovations and best practices shaping MLS, Liga MX, CONCACAF and the road to the 2026 World Cup.',
-  'Showcase your club, federation or league to a senior room of decision-makers and potential partners.',
-  'Build the relationships that turn into deals long before the tournament kicks off.',
+/* Generic Miami pre-register — quick path. Anyone who wants the launch ping. */
+function PreRegisterForm() {
+  return (
+    <LeadForm
+      kind="preregister"
+      theme="dark"
+      submitLabel="Join the list"
+      successTitle="You're on the list."
+      successBody="We'll send updates as registration opens."
+      extraPayload={{
+        event_slug: 'soccerex-miami-2026',
+        attendee_type: 'delegate',
+        source: 'miami-event-preregister',
+        marketing_opt_in: true,
+      }}
+      schema={[{
+        fields: [
+          { name: 'full_name', label: 'Full name *',         required: true, placeholder: 'Eve Moneypenny', autoFocus: true, autoComplete: 'name' },
+          { name: 'email',     label: 'Work email *',         required: true, type: 'email', placeholder: 'eve@example.com', autoComplete: 'email' },
+          { name: 'organisation', label: 'Company / organisation', placeholder: 'Organisation' },
+          { name: 'role',      label: 'Role',                 placeholder: 'Your role' },
+          { name: 'country',   label: 'Country',              placeholder: 'Country',
+            suggest: ['United States', 'United Kingdom', 'Spain', 'Brazil', 'Mexico', 'Argentina', 'Germany', 'France', 'Canada'] },
+        ],
+      }]}
+    />
+  )
+}
+
+/* Rights-holder application — fuller multi-step form. The backend's Lead
+   Inbox reviews these and approves a complimentary delegate pass when the
+   organisation type and official email check out. */
+const ORG_TYPES = [
+  { value: 'club',        label: 'Club' },
+  { value: 'league',      label: 'League' },
+  { value: 'federation',  label: 'Federation / national team' },
+  { value: 'confederation', label: 'Confederation' },
+  { value: 'players_union', label: "Players' union" },
+  { value: 'governing_body', label: 'Other governing body' },
+  { value: 'other',       label: 'Other (please specify)' },
 ]
 
-function PreRegisterForm() {
-  const [form, setForm] = useState({ fullName: '', email: '', companyOrOrganisation: '', role: '', country: '' })
-  const [status, setStatus] = useState('idle') /* idle | submitting | success | error */
-  const [errors, setErrors] = useState({})     /* field -> [messages] from Laravel 422 */
-  const [topError, setTopError] = useState('') /* non-field-specific error message */
-
-  const update = (k) => (e) => setForm({ ...form, [k]: e.target.value })
-
-  const submit = async (e) => {
-    e.preventDefault()
-    setStatus('submitting')
-    setErrors({})
-    setTopError('')
-    try {
-      await preregisterLead({
-        full_name: form.fullName,
-        email: form.email,
-        organisation: form.companyOrOrganisation,
-        role: form.role,
-        country: form.country,
+function RightsHolderForm() {
+  return (
+    <LeadForm
+      kind="preregister"
+      theme="dark"
+      submitLabel="Submit application"
+      successTitle="Application received."
+      successBody="The Soccerex team reviews rights-holder eligibility and will email you. Passes are not issued automatically."
+      extraPayload={{
         event_slug: 'soccerex-miami-2026',
         attendee_type: 'rights_holder',
         interest: 'Complimentary rights-holder pass',
-        source: 'miami-event-preregister',
-        source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+        source: 'miami-rights-holder-apply',
         marketing_opt_in: true,
-      }, { test: isTestModeFromUrl() })
-      setStatus('success')
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 422 && err.body?.errors) {
-        setErrors(err.body.errors)
-        setTopError(err.body.message || 'Please fix the highlighted fields and try again.')
-      } else {
-        setTopError(err?.message || 'Something went wrong. Please try again, or email enquiries@soccerex.com.')
-      }
-      setStatus('error')
-    }
-  }
-
-  if (status === 'success') {
-    return (
-      <div className="flex flex-col items-center text-center" style={{ padding: '32px 8px' }}>
-        <div style={{ width: 56, height: 56, borderRadius: 999, background: 'var(--event-primary-bg)', border: '1px solid var(--event-primary-border)', display: 'grid', placeItems: 'center', marginBottom: 18 }}>
-          <Check size={26} style={{ color: 'var(--event-primary-light)' }} />
-        </div>
-        <h4 className="font-heading font-bold text-white text-lg mb-2">You're on the list.</h4>
-        <p className="font-body text-white/65 text-sm leading-relaxed">We'll send updates as registration opens.</p>
-      </div>
-    )
-  }
-
-  /* Laravel 422 returns errors keyed by the field name we POSTed. */
-  const fieldError = (k) => errors[k]?.[0]
-
-  return (
-    <form onSubmit={submit} className="flex flex-col gap-3" noValidate>
-      <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Full name
-        <input required value={form.fullName} onChange={update('fullName')} placeholder="Eve Moneypenny"
-          className="pre-reg-input" aria-invalid={!!fieldError('full_name')} />
-        {fieldError('full_name') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('full_name')}</span>}
-      </label>
-      <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Email
-        <input required type="email" value={form.email} onChange={update('email')} placeholder="eve@example.com"
-          className="pre-reg-input" aria-invalid={!!fieldError('email')} />
-        {fieldError('email') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('email')}</span>}
-      </label>
-      <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Company / Organisation
-        <input value={form.companyOrOrganisation} onChange={update('companyOrOrganisation')} placeholder="Organisation"
-          className="pre-reg-input" aria-invalid={!!fieldError('organisation')} />
-        {fieldError('organisation') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('organisation')}</span>}
-      </label>
-      <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Role
-        <input value={form.role} onChange={update('role')} placeholder="Your role"
-          className="pre-reg-input" aria-invalid={!!fieldError('role')} />
-        {fieldError('role') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('role')}</span>}
-      </label>
-      <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Country
-        <input value={form.country} onChange={update('country')} placeholder="Country"
-          className="pre-reg-input" aria-invalid={!!fieldError('country')} />
-        {fieldError('country') && <span className="font-body text-[11px]" style={{ color: '#ff8080' }}>{fieldError('country')}</span>}
-      </label>
-
-      <button type="submit" disabled={status === 'submitting'} className="event-btn-primary mt-2 justify-center">
-        {status === 'submitting' ? 'Sending, one moment' : 'Join the list'}
-      </button>
-      {status === 'error' && topError && (
-        <p className="font-body text-xs" style={{ color: '#ff8080' }}>{topError}</p>
-      )}
-    </form>
+      }}
+      schema={[
+        {
+          fields: [
+            { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', options: ORG_TYPES, span: 'full', autoFocus: true },
+            { name: 'organisation_type_other', label: 'Tell us more', placeholder: 'e.g. national association', span: 'full',
+              requires: { field: 'organisation_type', equals: 'other' } },
+            { name: 'organisation', label: 'Organisation name *', required: true, placeholder: 'Official club / league name', span: 'full' },
+            { name: 'country', label: 'Country', placeholder: 'Country',
+              suggest: ['United States', 'Mexico', 'Canada', 'Brazil', 'Argentina', 'Spain', 'England', 'Germany', 'France'] },
+          ],
+        },
+        {
+          fields: [
+            { name: 'full_name', label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoComplete: 'name' },
+            { name: 'role', label: 'Your role *', required: true, placeholder: 'Commercial Director' },
+            { name: 'email', label: 'Official organisation email *', required: true, type: 'email', placeholder: 'eve@officialclub.com', autoComplete: 'email',
+              hint: 'Use the email at your organisation\'s official domain. This helps us verify eligibility.', span: 'full',
+              validate: (v) => /@gmail\.|@yahoo\.|@hotmail\.|@outlook\./i.test(v || '') ? 'Please use your organisation email, not a personal address.' : undefined },
+            { name: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+1 305…' },
+            { name: 'message', label: 'Anything else?', type: 'textarea', rows: 3, span: 'full',
+              placeholder: 'A line about why you\'re attending or what you\'d like to get out of the week.' },
+          ],
+        },
+      ]}
+    />
   )
 }
 
@@ -397,25 +384,54 @@ export default function Miami2026() {
 
             <div style={{ background: 'linear-gradient(145deg, var(--event-primary-bg), rgba(255,255,255,0.02))', border: '1px solid var(--event-primary-border)', padding: 'clamp(24px, 3vw, 36px)' }}>
               <h3 className="miami-subhead text-white mb-2 flex items-center gap-2" style={{ fontSize: '1.05rem', letterSpacing: '0.1em' }}>
-                <Trophy size={18} style={{ color: 'var(--event-primary-light)' }} /> Rights Holders
+                <Trophy size={18} style={{ color: 'var(--event-primary-light)' }} /> Rights holders
               </h3>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5" style={{ background: 'var(--event-primary)', color: '#fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                Complimentary Pass
+              <div className="inline-flex items-center gap-2 px-3 py-1 mb-4" style={{ background: 'var(--event-primary)', color: '#fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                Complimentary pass
               </div>
               <p className="miami-body text-white/75 text-sm mb-5 leading-relaxed">
-                Clubs, leagues, federations and national teams qualify for a complimentary delegate pass. Here's what you unlock:
+                Clubs, leagues, federations and national teams qualify for a complimentary delegate pass. Tell us about your organisation and we'll review eligibility.
               </p>
-              <ul className="flex flex-col gap-3">
-                {RIGHTS_HOLDER_POINTS.map((pt) => (
-                  <li key={pt} className="flex gap-3 items-start">
-                    <Check size={16} style={{ color: 'var(--event-primary-light)', marginTop: 2, flexShrink: 0 }} />
-                    <span className="miami-body text-white/80 text-sm leading-relaxed">{pt}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="miami-body text-white/55 text-xs mt-6">
-                Rights holder enquiries: <a href="mailto:enquiries@soccerex.com" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>enquiries@soccerex.com</a>
-              </p>
+              <RightsHolderForm />
+            </div>
+          </div>
+
+          {/* Other ways to be there — sponsorship & speaker pitches */}
+          <div className="mt-12 pt-10 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.10)' }}>
+            <p className="miami-subhead mb-3" style={{ color: 'var(--event-primary-light)', fontSize: '11px' }}>Other ways to be there</p>
+            <h3 className="miami-headline text-white mb-3" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 1.8rem)' }}>
+              Bring your brand. Bring your voice.
+            </h3>
+            <p className="miami-body mx-auto mb-6 text-white/70" style={{ maxWidth: 560, fontSize: 14 }}>
+              Partner with us, exhibit on the floor, or share what you're building from the stage.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <InquiryModalButton
+                kind="sponsorship-inquiry"
+                label="Partner with Soccerex Miami"
+                modalTitle="Partner with Soccerex Miami"
+                eyebrow="Sponsorship & exhibition"
+                intro="Tell us a little about your organisation and what you'd like to achieve. We'll send the right partnership pack."
+                schema={sponsorshipSchema}
+                extraPayload={{ event_slug: 'soccerex-miami-2026', source: 'miami-sponsor-cta' }}
+                submitLabel="Send inquiry"
+                successTitle="Inquiry received."
+                successBody="A partnerships lead will follow up by email."
+                buttonClassName="miami-pill-primary"
+              />
+              <InquiryModalButton
+                kind="speaker-inquiry"
+                label="Speak in Miami"
+                modalTitle="Speak in Miami"
+                eyebrow="Speaker interest"
+                intro="Tell us who you are and what you'd talk about. The programme team will reach out if there's a fit."
+                schema={speakerSchema}
+                extraPayload={{ event_slug: 'soccerex-miami-2026', source: 'miami-speaker-cta' }}
+                submitLabel="Send"
+                successTitle="Thanks — we have your details."
+                successBody="The programme team will reach out if there's a fit."
+                buttonClassName="miami-pill-outline"
+              />
             </div>
           </div>
         </div>

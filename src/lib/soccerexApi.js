@@ -256,4 +256,118 @@ export async function getCompanyPortal(slug, editToken, opts = {}) {
   ))
 }
 
+/**
+ * Assign one of the company's allocated passes to a named attendee.
+ *
+ * body: { event_id, pass_type: 'delegate' | 'vip', attendee_name, attendee_email, attendee_role? }
+ */
+export async function assignCompanyPass(slug, editToken, body, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/portal/pass-assignments`,
+    { method: 'POST', body, token: editToken, test: opts.test },
+  ))
+}
+
+/**
+ * Post a deliverable update from the company portal.
+ *
+ * source: 'deal' | 'agreement'
+ * action: 'acknowledge' | 'add_note' | 'request_help' | 'submit_evidence' | 'ready_for_review'
+ *
+ * For 'submit_evidence', pass a `files` array (File[]) and/or `urls` array
+ * (string[]) inside fields; we'll switch to multipart form data automatically.
+ * Other actions accept a `note` (string).
+ */
+export async function postDeliverableUpdate(slug, editToken, source, sourceId, fields, opts = {}) {
+  const path = `/profile-access/profiles/${encodeURIComponent(slug)}/portal/deliverables/${encodeURIComponent(source)}/${encodeURIComponent(sourceId)}/updates`
+  const hasFiles = Array.isArray(fields.files) && fields.files.length > 0
+  if (hasFiles) {
+    const fd = new FormData()
+    fd.append('action', fields.action)
+    if (fields.note) fd.append('note', fields.note)
+    fields.files.forEach((f) => fd.append('files[]', f))
+    ;(fields.urls || []).forEach((u) => fd.append('urls[]', u))
+    return unwrap(await authedRequest(path, { method: 'POST', formData: fd, token: editToken, test: opts.test }))
+  }
+  return unwrap(await authedRequest(path, {
+    method: 'POST',
+    body: { action: fields.action, note: fields.note, urls: fields.urls },
+    token: editToken,
+    test: opts.test,
+  }))
+}
+
+/* ───── Speaker portal ─────────────────────────────────────────────────── */
+export async function getSpeakerPortal(slug, editToken, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/speaker-portal`,
+    { token: editToken, test: opts.test },
+  ))
+}
+
+/* ───── Rights-holder portal ───────────────────────────────────────────── */
+export async function getRightsHolderPortal(slug, editToken, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/rights-holder-portal`,
+    { token: editToken, test: opts.test },
+  ))
+}
+
+/* ───── Delegate portal + schedule + networking ────────────────────────── */
+export async function getDelegatePortal(slug, editToken, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/delegate-portal`,
+    { token: editToken, test: opts.test },
+  ))
+}
+
+export async function setDelegateSavedSession(slug, editToken, sessionId, body, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/delegate-portal/schedule/${encodeURIComponent(sessionId)}`,
+    { method: 'POST', body, token: editToken, test: opts.test },
+  ))
+}
+
+export async function getDelegateNetworking(slug, editToken, filters = {}, opts = {}) {
+  const qs = new URLSearchParams()
+  if (filters.event_id) qs.set('event_id', filters.event_id)
+  if (filters.event_slug) qs.set('event_slug', filters.event_slug)
+  const suffix = qs.toString() ? `?${qs.toString()}` : ''
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/delegate-portal/networking${suffix}`,
+    { token: editToken, test: opts.test },
+  ))
+}
+
+export async function updateDelegateNetworking(slug, editToken, prefs, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/delegate-portal/networking`,
+    { method: 'PATCH', body: prefs, token: editToken, test: opts.test },
+  ))
+}
+
+/* ───── VIP overlay ────────────────────────────────────────────────────── */
+export async function getVipPortal(slug, editToken, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/vip-portal`,
+    { token: editToken, test: opts.test },
+  ))
+}
+
+export async function rsvpVipExperience(slug, editToken, experienceId, body, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/vip-portal/experiences/${encodeURIComponent(experienceId)}/rsvp`,
+    { method: 'POST', body, token: editToken, test: opts.test },
+  ))
+}
+
+/* ───── Public lead intake (unauthenticated; preregisterLead lives above) ── */
+export async function submitLead(kind, payload, opts = {}) {
+  return unwrap(await request(`/leads/${encodeURIComponent(kind)}`, {
+    method: 'POST',
+    body: payload,
+    test: opts.test,
+  }))
+}
+
 export { ApiError }
