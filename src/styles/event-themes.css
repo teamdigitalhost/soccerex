@@ -424,7 +424,7 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(60px, 7vw, 120px);
+  bottom: 0;
   width: 100%;
   height: clamp(120px, 14vw, 200px);
   object-fit: cover;
