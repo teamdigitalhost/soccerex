@@ -104,6 +104,30 @@ export async function submitProgrammingProposal(slug, payload, opts = {}) {
   }))
 }
 
+/* ───── Marketing CMS: content pillars + articles + social posts ─────────
+   The pillar is the strategy layer. Articles are owned long-form content
+   tied to a pillar. Social posts are platform-specific satellites of
+   either a pillar or an article. */
+
+export async function getContentPillars(opts = {}) {
+  return unwrap(await request('/content-pillars', opts))
+}
+
+export async function getContentPillar(slug, opts = {}) {
+  return unwrap(await request(`/content-pillars/${encodeURIComponent(slug)}`, opts))
+}
+
+export async function getArticlesByPillar(slug, opts = {}) {
+  return unwrap(await request(`/articles?pillar=${encodeURIComponent(slug)}`, opts))
+}
+
+/** platform: 'linkedin' | 'instagram' | 'x' */
+export async function getSocialPostsByPillar(slug, platform, opts = {}) {
+  const qs = new URLSearchParams({ pillar: slug })
+  if (platform) qs.set('platform', platform)
+  return unwrap(await request(`/social-posts?${qs.toString()}`, opts))
+}
+
 /**
  * Lead pre-register submission. Used by event pre-register / rights-holder forms.
  * Backend creates a lead row only; admins qualify and convert later.
