@@ -106,7 +106,13 @@ export default function PersonalPortal() {
 
   if (!editToken) return null
 
+  /* Loading until all four parallel calls have settled, so the user never
+     sees an interim "no roles yet" flash while the slower endpoints are
+     still in-flight. */
   const loading = data.speaker === undefined
+    || data.rightsHolder === undefined
+    || data.delegate === undefined
+    || data.vip === undefined
   const profile = data.speaker?.profile || data.delegate?.profile || data.rightsHolder?.profile || data.vip?.profile
 
   const hasSpeaker = !!data.speaker
@@ -1070,7 +1076,12 @@ function fmtDateTime(v) {
 function fmtMoney(row) {
   const amount = row.amount ?? row.total ?? row.value
   if (amount == null) return null
+  /* Treat zero as "no money changed hands" — surface complimentary copy
+     instead of "$0.00", which would contradict the rights-holder rule
+     "Do not show checkout/payment language for complimentary passes." */
+  const n = Number(amount)
+  if (!Number.isFinite(n) || n === 0) return null
   const currency = row.currency || row.currency_code || 'USD'
-  try { return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(Number(amount)) }
+  try { return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(n) }
   catch { return `${currency} ${amount}` }
 }

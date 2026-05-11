@@ -195,6 +195,9 @@ export async function previewProfileAccess(token, opts = {}) {
     method: 'POST', body: { token }, test: opts.test,
   }))
 }
+/* Preview is read from the URL on a fresh tab (the link includes &test=1)
+   so the caller in ProfileAccess.jsx now passes { test: isTestModeFromUrl() }
+   — see fix at the call site in ProfileAccess.jsx. */
 
 export async function exchangeProfileAccess(token, opts = {}) {
   /* Spec gives { edit_token, expires_at, ... }. We pass the parsed payload

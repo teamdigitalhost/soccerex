@@ -19,7 +19,7 @@ const INQUIRY_TYPES = [
     icon: Handshake,
     email: 'partner@soccerex.com',
     desc: 'Sponsorship, strategic partnerships, and commercial opportunities.',
-    fields: ['organization', 'country'],
+    fields: ['organisation', 'country'],
   },
   {
     id: 'speaker',
@@ -27,7 +27,7 @@ const INQUIRY_TYPES = [
     icon: Mic,
     email: 'talks@soccerex.com',
     desc: 'Propose yourself or someone you represent as a Soccerex speaker.',
-    fields: ['organization', 'speakerBio', 'linkedin'],
+    fields: ['organisation', 'speakerBio', 'linkedin'],
   },
   {
     id: 'press',
@@ -35,7 +35,7 @@ const INQUIRY_TYPES = [
     icon: Newspaper,
     email: 'press@soccerex.com',
     desc: 'Media accreditation, interview requests, and press releases.',
-    fields: ['organization', 'role', 'outlet', 'deadline'],
+    fields: ['organisation', 'role', 'outlet', 'deadline'],
   },
   {
     id: 'exhibit',
@@ -43,7 +43,7 @@ const INQUIRY_TYPES = [
     icon: Store,
     email: 'exhibit@soccerex.com',
     desc: 'Stand space, brand activations, and exhibitor packages.',
-    fields: ['organization', 'role', 'country', 'productType'],
+    fields: ['organisation', 'role', 'country', 'productType'],
   },
   {
     id: 'volunteer',
@@ -59,7 +59,7 @@ const INQUIRY_TYPES = [
     icon: MapPin,
     email: 'partner@soccerex.com',
     desc: 'Bring a Soccerex event to your city, region, or venue.',
-    fields: ['organization', 'role', 'country', 'venueName'],
+    fields: ['organisation', 'role', 'country', 'venueName'],
   },
   {
     id: 'general',
@@ -73,7 +73,7 @@ const INQUIRY_TYPES = [
 
 // Conditional field definitions
 const FIELD_DEFS = {
-  organization: { label: 'Organization / Company', placeholder: 'Your company or organization', type: 'text' },
+  organisation: { label: 'Organisation / Company', placeholder: 'Your company or organisation', type: 'text' },
   role: { label: 'Your Role', placeholder: 'Title or position', type: 'text' },
   country: { label: 'Country', placeholder: 'Where you are based', type: 'text' },
   partnershipType: {
@@ -166,14 +166,28 @@ export default function Contact() {
     e.preventDefault()
     setSubmitting(true); setSubmitError('')
 
-    /* Collect a flat payload that maps cleanly onto the backend's expected
-       lead-submission columns. The lead automation router on the backend
-       knows the source by `inquiry_type` and `source`. */
+    /* Build a payload whose keys match the handoff doc's canonical shape for
+       the chosen lead-kind:
+         - `name`, `email`, `phone`, `message`, `source`, `source_url`
+         - sponsorship: + `organisation`, `role`, `country`, `partnership_type`,
+                          `budget_range`, `event`, `attendee_count`, `product_type`
+         - speaker:     + `topic`, `linkedin`, `organisation`, `role`
+         - contact:     + everything else as free-form
+       The form's internal field IDs (`speakerBio`, `partnershipType`, …) are
+       mapped to the canonical wire keys here so the backend never sees the
+       Contact-page's UI-only naming. */
+    const CONTACT_KEY_MAP = {
+      speakerBio: 'topic',
+      partnershipType: 'partnership_type',
+      budget: 'budget_range',
+      attendeeCount: 'attendee_count',
+      topicArea: 'topic_area',
+      productType: 'product_type',
+      venueName: 'venue_name',
+    }
     const payload = {
       inquiry_type: inquiry.id,
       name: `${form.firstName || ''} ${form.lastName || ''}`.trim() || undefined,
-      first_name: form.firstName || undefined,
-      last_name:  form.lastName || undefined,
       email: form.email || undefined,
       phone: form.phone || undefined,
       message: form.message || undefined,
@@ -181,7 +195,9 @@ export default function Contact() {
       source_url: typeof window !== 'undefined' ? window.location.href : undefined,
     }
     inquiry.fields.forEach((key) => {
-      if (form[key]) payload[key] = form[key]
+      if (!form[key]) return
+      const wireKey = CONTACT_KEY_MAP[key] || key
+      payload[wireKey] = form[key]
     })
 
     try {
@@ -360,7 +376,7 @@ export default function Contact() {
                   return (
                     <FormField
                       key={key}
-                      icon={key === 'organization' ? Building2 : User}
+                      icon={key === 'organisation' ? Building2 : User}
                       label={def.label}
                       placeholder={def.placeholder}
                       type={def.type}

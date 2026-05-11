@@ -379,7 +379,9 @@ function DeliverableActionDialog({ deliverable, source, sourceId, action, slug, 
   const [files, setFiles] = useState([])
   const [urls, setUrls] = useState([''])
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState(null)
+  const [errors, setErrors] = useState({})
+  const [topError, setTopError] = useState('')
+  const fieldError = (k) => Array.isArray(errors[k]) ? errors[k][0] : errors[k]
 
   const labels = {
     acknowledge:      { title: `Acknowledge: ${deliverable.title || deliverable.name}`,        cta: 'Acknowledge',       note: 'Optional confirmation note' },
@@ -395,7 +397,7 @@ function DeliverableActionDialog({ deliverable, source, sourceId, action, slug, 
   const submit = async (e) => {
     e.preventDefault()
     if (requireNote && !note.trim()) return
-    setSubmitting(true); setError(null)
+    setSubmitting(true); setErrors({}); setTopError('')
     try {
       const cleanUrls = urls.map((u) => u.trim()).filter(Boolean)
       await postDeliverableUpdate(slug, editToken, source, sourceId, {
@@ -406,10 +408,11 @@ function DeliverableActionDialog({ deliverable, source, sourceId, action, slug, 
       }, { test: isTest })
       onSaved()
     } catch (err) {
-      if (err instanceof ApiError && err.body?.errors) {
-        setError(Object.values(err.body.errors).flat().join(' '))
+      if (err instanceof ApiError && err.status === 422 && err.body?.errors) {
+        setErrors(err.body.errors)
+        setTopError(err.body.message || 'Please fix the highlighted fields and try again.')
       } else {
-        setError(err?.message || 'Could not submit update')
+        setTopError(err?.message || 'Could not submit update')
       }
     } finally {
       setSubmitting(false)
@@ -419,14 +422,15 @@ function DeliverableActionDialog({ deliverable, source, sourceId, action, slug, 
   return (
     <Modal title={l.title} onClose={onClose}>
       <form onSubmit={submit} className="flex flex-col gap-3">
-        <Field label={l.note + (requireNote ? ' *' : '')}>
+        <Field label={l.note + (requireNote ? ' *' : '')} error={fieldError('note')}>
           <textarea rows={action === 'request_help' ? 4 : 3} required={requireNote}
-            value={note} onChange={(e) => setNote(e.target.value)} className="prog-input" />
+            value={note} onChange={(e) => setNote(e.target.value)} className="prog-input"
+            aria-invalid={!!fieldError('note')} />
         </Field>
 
         {showEvidence && (
           <>
-            <Field label="Files">
+            <Field label="Files" error={fieldError('files') || fieldError('files.0')}>
               <div className="profile-uploader-drop">
                 <input type="file" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
                 {files.length > 0 && (
@@ -441,7 +445,7 @@ function DeliverableActionDialog({ deliverable, source, sourceId, action, slug, 
                 )}
               </div>
             </Field>
-            <Field label="Or link URLs">
+            <Field label="Or link URLs" error={fieldError('urls') || fieldError('urls.0')}>
               <div className="flex flex-col gap-2">
                 {urls.map((u, i) => (
                   <div key={i} className="flex items-center gap-2">
@@ -460,7 +464,7 @@ function DeliverableActionDialog({ deliverable, source, sourceId, action, slug, 
           </>
         )}
 
-        {error && <p className="miami-body" style={{ fontSize: 12.5, color: '#b91c1c' }}>{error}</p>}
+        {topError && <p className="miami-body" style={{ fontSize: 12.5, color: '#b91c1c' }}>{topError}</p>}
 
         <div className="flex justify-end gap-2 mt-2">
           <button type="button" onClick={onClose} className="event-btn-outline-light" style={{ padding: '10px 14px', fontSize: 11 }}>Cancel</button>
@@ -617,12 +621,14 @@ function AssignPassDialog({ tier, events, slug, editToken, isTest, onClose, onSa
   const [role, setRole] = useState('')
   const [eventId, setEventId] = useState(events[0]?.id || events[0]?.event_id || '')
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState(null)
+  const [errors, setErrors] = useState({}) /* { field: [msg, ...] } from Laravel 422 */
+  const [topError, setTopError] = useState('')
+  const fieldError = (k) => Array.isArray(errors[k]) ? errors[k][0] : errors[k]
 
   const submit = async (e) => {
     e.preventDefault()
     if (!name.trim() || !email.trim()) return
-    setSubmitting(true); setError(null)
+    setSubmitting(true); setErrors({}); setTopError('')
     try {
       await assignCompanyPass(slug, editToken, {
         event_id: eventId || undefined,
@@ -633,10 +639,11 @@ function AssignPassDialog({ tier, events, slug, editToken, isTest, onClose, onSa
       }, { test: isTest })
       onSaved()
     } catch (err) {
-      if (err instanceof ApiError && err.body?.errors) {
-        setError(Object.values(err.body.errors).flat().join(' '))
+      if (err instanceof ApiError && err.status === 422 && err.body?.errors) {
+        setErrors(err.body.errors)
+        setTopError(err.body.message || 'Please fix the highlighted fields and try again.')
       } else {
-        setError(err?.message || 'Could not assign pass')
+        setTopError(err?.message || 'Could not assign pass')
       }
     } finally {
       setSubmitting(false)
@@ -647,24 +654,24 @@ function AssignPassDialog({ tier, events, slug, editToken, isTest, onClose, onSa
     <Modal title={`Assign ${tier.passType === 'vip' ? 'VIP' : 'delegate'} pass`} onClose={onClose}>
       <form onSubmit={submit} className="flex flex-col gap-3">
         {events.length > 1 && (
-          <Field label="Event">
-            <select value={eventId} onChange={(e) => setEventId(e.target.value)} className="prog-input">
+          <Field label="Event" error={fieldError('event_id')}>
+            <select value={eventId} onChange={(e) => setEventId(e.target.value)} className="prog-input" aria-invalid={!!fieldError('event_id')}>
               {events.map((ev) => (
                 <option key={ev.id || ev.event_id} value={ev.id || ev.event_id}>{ev.name || ev.title || ev.slug}</option>
               ))}
             </select>
           </Field>
         )}
-        <Field label="Attendee name *">
-          <input required value={name} onChange={(e) => setName(e.target.value)} className="prog-input" placeholder="Ana Rivera" />
+        <Field label="Attendee name *" error={fieldError('attendee_name')}>
+          <input required value={name} onChange={(e) => setName(e.target.value)} className="prog-input" placeholder="Ana Rivera" aria-invalid={!!fieldError('attendee_name')} />
         </Field>
-        <Field label="Attendee email *">
-          <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="prog-input" placeholder="ana@company.com" />
+        <Field label="Attendee email *" error={fieldError('attendee_email')}>
+          <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="prog-input" placeholder="ana@company.com" aria-invalid={!!fieldError('attendee_email')} />
         </Field>
-        <Field label="Role / title">
-          <input value={role} onChange={(e) => setRole(e.target.value)} className="prog-input" placeholder="Partnerships Director" />
+        <Field label="Role / title" error={fieldError('attendee_role')}>
+          <input value={role} onChange={(e) => setRole(e.target.value)} className="prog-input" placeholder="Partnerships Director" aria-invalid={!!fieldError('attendee_role')} />
         </Field>
-        {error && <p className="miami-body" style={{ fontSize: 12.5, color: '#b91c1c' }}>{error}</p>}
+        {topError && <p className="miami-body" style={{ fontSize: 12.5, color: '#b91c1c' }}>{topError}</p>}
         <div className="flex justify-end gap-2 mt-2">
           <button type="button" onClick={onClose} className="event-btn-outline-light" style={{ padding: '10px 14px', fontSize: 11 }}>Cancel</button>
           <button type="submit" disabled={submitting} className="event-btn-primary" style={{ padding: '10px 14px', fontSize: 11 }}>
@@ -707,11 +714,12 @@ function Modal({ title, children, onClose }) {
   )
 }
 
-function Field({ label, children }) {
+function Field({ label, children, error }) {
   return (
     <label className="flex flex-col gap-1.5">
       {label && <span className="font-mono" style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#607186' }}>{label}</span>}
       {children}
+      {error && <span className="font-body" style={{ fontSize: 11, color: '#b91c1c' }}>{error}</span>}
     </label>
   )
 }

@@ -24,12 +24,13 @@ const ORG_TYPE_OPTIONS = [
   { value: 'other',            label: 'Other' },
 ]
 
-/* Sponsorship / exhibitor inquiry — two short steps. */
+/* Sponsorship / exhibitor inquiry — two short steps. Field names follow the
+   handoff doc primary shape: `name`, `email`, `company`. */
 export const sponsorshipSchema = [
   {
     fields: [
       { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', options: ORG_TYPE_OPTIONS, span: 'full', autoFocus: true },
-      { name: 'organisation', label: 'Organisation *', required: true, placeholder: 'Company name', span: 'full' },
+      { name: 'company', label: 'Organisation *', required: true, placeholder: 'Company name', span: 'full' },
       { name: 'budget_range', label: 'Approximate budget', type: 'select', span: 'full',
         options: [
           { value: 'under-25k', label: 'Under £25k' },
@@ -45,12 +46,12 @@ export const sponsorshipSchema = [
   },
   {
     fields: [
-      { name: 'full_name', label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoComplete: 'name' },
-      { name: 'role',      label: 'Your role *', required: true, placeholder: 'Head of Partnerships' },
-      { name: 'email',     label: 'Work email *', required: true, type: 'email', placeholder: 'eve@brand.com', autoComplete: 'email', span: 'full' },
-      { name: 'phone',     label: 'Phone (optional)', type: 'tel', placeholder: '+1 305…' },
-      { name: 'country',   label: 'Country', placeholder: 'Country', suggest: COUNTRY_SUGGEST },
-      { name: 'message',   label: 'What are you hoping to achieve?', type: 'textarea', rows: 3, span: 'full',
+      { name: 'name',    label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoComplete: 'name' },
+      { name: 'role',    label: 'Your role *', required: true, placeholder: 'Head of Partnerships' },
+      { name: 'email',   label: 'Work email *', required: true, type: 'email', placeholder: 'eve@brand.com', autoComplete: 'email', span: 'full' },
+      { name: 'phone',   label: 'Phone (optional)', type: 'tel', placeholder: '+1 305…' },
+      { name: 'country', label: 'Country', placeholder: 'Country', suggest: COUNTRY_SUGGEST },
+      { name: 'message', label: 'What are you hoping to achieve?', type: 'textarea', rows: 3, span: 'full',
         placeholder: 'A line about your goals — audience, brand-building, deal-making, market entry…' },
     ],
   },
@@ -61,13 +62,13 @@ export const sponsorshipSchema = [
 export const speakerSchema = [
   {
     fields: [
-      { name: 'full_name', label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoFocus: true, autoComplete: 'name' },
-      { name: 'email',     label: 'Email *', required: true, type: 'email', placeholder: 'eve@example.com', autoComplete: 'email' },
-      { name: 'organisation', label: 'Organisation', placeholder: 'Where you work' },
-      { name: 'role',      label: 'Role', placeholder: 'Your role' },
-      { name: 'topic',     label: 'What would you talk about? *', required: true, type: 'textarea', rows: 3, span: 'full',
+      { name: 'name',     label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoFocus: true, autoComplete: 'name' },
+      { name: 'email',    label: 'Email *', required: true, type: 'email', placeholder: 'eve@example.com', autoComplete: 'email' },
+      { name: 'company',  label: 'Organisation', placeholder: 'Where you work' },
+      { name: 'role',     label: 'Role', placeholder: 'Your role' },
+      { name: 'topic',    label: 'What would you talk about? *', required: true, type: 'textarea', rows: 3, span: 'full',
         placeholder: 'A one-line topic, and a line or two about why you\'re the right voice for it.' },
-      { name: 'linkedin',  label: 'LinkedIn (optional)', type: 'url', placeholder: 'https://linkedin.com/in/…', span: 'full' },
+      { name: 'linkedin', label: 'LinkedIn (optional)', type: 'url', placeholder: 'https://linkedin.com/in/…', span: 'full' },
     ],
   },
 ]

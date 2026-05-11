@@ -64,13 +64,16 @@ function PreRegisterForm() {
         source: 'miami-event-preregister',
         marketing_opt_in: true,
       }}
+      /* Field names follow the handoff doc's primary payload shape: `name`,
+         `email`, `company`, `role`, `country`. The backend accepts the
+         US-spelled and longer aliases too. */
       schema={[{
         fields: [
-          { name: 'full_name', label: 'Full name *',         required: true, placeholder: 'Eve Moneypenny', autoFocus: true, autoComplete: 'name' },
-          { name: 'email',     label: 'Work email *',         required: true, type: 'email', placeholder: 'eve@example.com', autoComplete: 'email' },
-          { name: 'organisation', label: 'Company / organisation', placeholder: 'Organisation' },
-          { name: 'role',      label: 'Role',                 placeholder: 'Your role' },
-          { name: 'country',   label: 'Country',              placeholder: 'Country',
+          { name: 'name',    label: 'Full name *',         required: true, placeholder: 'Eve Moneypenny', autoFocus: true, autoComplete: 'name' },
+          { name: 'email',   label: 'Work email *',         required: true, type: 'email', placeholder: 'eve@example.com', autoComplete: 'email' },
+          { name: 'company', label: 'Company / organisation', placeholder: 'Organisation' },
+          { name: 'role',    label: 'Role',                 placeholder: 'Your role' },
+          { name: 'country', label: 'Country',              placeholder: 'Country',
             suggest: ['United States', 'United Kingdom', 'Spain', 'Brazil', 'Mexico', 'Argentina', 'Germany', 'France', 'Canada'] },
         ],
       }]}
@@ -106,24 +109,30 @@ function RightsHolderForm() {
         source: 'miami-rights-holder-apply',
         marketing_opt_in: true,
       }}
+      /* Same primary keys as the quick pre-register schema, plus extra
+         rights-holder context. `organisation_type` and `organisation_type_other`
+         are written through to the lead payload column (free-form) — see
+         backend handoff for storage. */
       schema={[
         {
           fields: [
             { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', options: ORG_TYPES, span: 'full', autoFocus: true },
             { name: 'organisation_type_other', label: 'Tell us more', placeholder: 'e.g. national association', span: 'full',
               requires: { field: 'organisation_type', equals: 'other' } },
-            { name: 'organisation', label: 'Organisation name *', required: true, placeholder: 'Official club / league name', span: 'full' },
+            { name: 'company', label: 'Organisation name *', required: true, placeholder: 'Official club / league name', span: 'full' },
             { name: 'country', label: 'Country', placeholder: 'Country',
               suggest: ['United States', 'Mexico', 'Canada', 'Brazil', 'Argentina', 'Spain', 'England', 'Germany', 'France'] },
           ],
         },
         {
           fields: [
-            { name: 'full_name', label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoComplete: 'name' },
+            { name: 'name', label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoComplete: 'name' },
             { name: 'role', label: 'Your role *', required: true, placeholder: 'Commercial Director' },
             { name: 'email', label: 'Official organisation email *', required: true, type: 'email', placeholder: 'eve@officialclub.com', autoComplete: 'email',
               hint: 'Use the email at your organisation\'s official domain. This helps us verify eligibility.', span: 'full',
-              validate: (v) => /@gmail\.|@yahoo\.|@hotmail\.|@outlook\./i.test(v || '') ? 'Please use your organisation email, not a personal address.' : undefined },
+              /* Anchor the personal-domain test so subdomains like
+                 ops.officialclub.com aren't false-positives. */
+              validate: (v) => /@(gmail|yahoo|hotmail|outlook|icloud|me|live|aol|proton(mail)?)\.[a-z.]+$/i.test(v || '') ? 'Please use your organisation email, not a personal address.' : undefined },
             { name: 'phone', label: 'Phone (optional)', type: 'tel', placeholder: '+1 305…' },
             { name: 'message', label: 'Anything else?', type: 'textarea', rows: 3, span: 'full',
               placeholder: 'A line about why you\'re attending or what you\'d like to get out of the week.' },

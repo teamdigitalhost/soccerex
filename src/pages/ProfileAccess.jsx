@@ -71,7 +71,7 @@ function RequestForm() {
     if (!email.trim()) return
     setStatus('submitting')
     try {
-      await requestProfileAccess({ email: email.trim() })
+      await requestProfileAccess({ email: email.trim() }, { test: isTestModeFromUrl() })
       setStatus('sent')
     } catch {
       /* Endpoint always returns 202; only network failures fall here. */
@@ -133,7 +133,11 @@ function TokenLanding({ token, onExchanged, onSignOut }) {
   useEffect(() => {
     let cancelled = false
     setPreview(null); setError(null)
-    previewProfileAccess(token)
+    /* The magic link carries the test=1 query when issued from a test-mode
+       session, so the preview call must respect it — otherwise the backend
+       can't find the test-issued token (handoff: "A test token cannot be
+       used in production mode"). */
+    previewProfileAccess(token, { test: isTestModeFromUrl() })
       .then((data) => { if (!cancelled) setPreview(data) })
       .catch((err) => { if (!cancelled) setError(err) })
     return () => { cancelled = true }
@@ -142,7 +146,7 @@ function TokenLanding({ token, onExchanged, onSignOut }) {
   const exchange = async () => {
     setExchanging(true)
     try {
-      const result = await exchangeProfileAccess(token)
+      const result = await exchangeProfileAccess(token, { test: isTestModeFromUrl() })
       onExchanged({ ...result, persist })
     } catch (err) {
       setError(err)

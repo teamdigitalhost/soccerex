@@ -32,6 +32,34 @@ function escapeText(s) {
     .replace(/;/g, '\\;')
 }
 
+/* RFC 5545 §3.1: content lines must not exceed 75 octets. Long lines are
+   folded by inserting CRLF + a single whitespace before any continuation.
+   We measure octets (UTF-8 byte length) rather than code points so unicode
+   summary/description fields don't push past the limit silently. */
+function foldLine(line) {
+  const encoder = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null
+  const byteLength = (s) => encoder ? encoder.encode(s).length : s.length
+  if (byteLength(line) <= 75) return line
+  const out = []
+  let buf = ''
+  let bufBytes = 0
+  for (const ch of line) {
+    const chBytes = encoder ? encoder.encode(ch).length : 1
+    /* Reserve 1 octet of headroom so a multibyte char never crosses the
+       boundary mid-character. */
+    if (bufBytes + chBytes > 74) {
+      out.push(buf)
+      buf = ch
+      bufBytes = chBytes
+    } else {
+      buf += ch
+      bufBytes += chBytes
+    }
+  }
+  if (buf) out.push(buf)
+  return out.join('\r\n ') /* CRLF + leading SPACE per the fold spec */
+}
+
 export function buildIcs({ uid, title, description, location, start, end, url } = {}) {
   if (!start) throw new Error('buildIcs: start is required')
   const dtStart = toIcsDate(start)
@@ -57,7 +85,7 @@ export function buildIcs({ uid, title, description, location, start, end, url } 
   if (location)    lines.push(`LOCATION:${escapeText(location)}`)
   if (url)         lines.push(`URL:${escapeText(url)}`)
   lines.push('END:VEVENT', 'END:VCALENDAR')
-  return lines.join('\r\n')
+  return lines.map(foldLine).join('\r\n')
 }
 
 export function downloadIcs(ics, filename = 'event.ics') {
