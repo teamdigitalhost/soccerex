@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { Users, MessageSquare, Globe, KeyRound, MapPin, ArrowRight, Calendar, Ticket, FileText, ExternalLink, Handshake, Heart, Rocket, Shield, Network, Brain, Target, Award } from 'lucide-react'
+import { Users, MessageSquare, Globe, KeyRound, MapPin, Mail, ArrowRight, Calendar, Ticket, FileText, ExternalLink, Handshake, Heart, Rocket, Shield, Network, Brain, Target, Award } from 'lucide-react'
 import { feature } from 'topojson-client'
 import { Link, useLocation } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
-import { EVENTS, CONTACT, EUROPE_2026, GALLERY } from '../lib/routes'
+import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, GALLERY, pressRelease, eventAgendaConcept } from '../lib/routes'
 import ImageGrid from '../components/ImageGrid'
 import { lazy, Suspense } from 'react'
 const InteractiveGlobe = lazy(() => import('../components/InteractiveGlobe'))
@@ -36,142 +36,197 @@ function useScrollAnimations() {
 // ─── SECTION 1: HERO ─────────────────────────────────────────────────────────
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '100dvh', background: 'linear-gradient(135deg, #050d1a 0%, #09203e 40%, #0e2a4f 70%, #061729 100%)' }}>
-      <NetworkNodes color="#1a3fbf" nodeCount={35} opacity={0.12} />
-      {/* Radial glow */}
-      <div className="absolute pointer-events-none" style={{ top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.06) 0%, transparent 60%)' }} />
-      <div className="absolute pointer-events-none" style={{ bottom: '0', left: '0', right: '0', height: '200px', background: 'linear-gradient(to bottom, transparent, #09203e)' }} />
+    <section className="relative overflow-hidden flex items-center justify-center" style={{
+      minHeight: '100dvh',
+      background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF8F4 60%, #FFF1EB 100%)',
+    }}>
+      {/* Soft retro grid — barely there for crispness */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(13,27,42,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(13,27,42,0.04) 1px, transparent 1px)',
+        backgroundSize: '80px 80px',
+        maskImage: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.2) 100%)',
+        WebkitMaskImage: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.2) 100%)',
+      }} />
+      {/* Soft gold radial wash, top-center */}
+      <div className="absolute pointer-events-none" style={{
+        top: '10%', left: '50%', transform: 'translateX(-50%)',
+        width: '900px', height: '900px', borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(191,177,112,0.18) 0%, rgba(191,177,112,0.08) 35%, transparent 65%)',
+      }} />
+      {/* Faint network nodes in navy so it reads on the white field */}
+      <NetworkNodes color="#0D1B2A" accentColor="var(--color-gold)" nodeCount={28} opacity={0.08} />
 
-      <div className="relative z-10 text-center" style={{ maxWidth: '850px', padding: 'clamp(120px,15vw,180px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
-        <p className="section-label text-gold mb-6 fade-up">SOCCEREX &middot; EST. 1996</p>
-        <h1 className="font-heading font-bold text-white text-glow leading-[1.08] mb-6 fade-up gold-underline" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4rem)' }}>
-          30 Years at the Center of the Business of Football
+      <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(120px,15vw,180px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
+        {/* Anniversary kicker — squared filled marker echoes the Miami brand bar */}
+        <div className="flex items-center justify-center gap-3 mb-6 fade-up">
+          <span style={{ width: 7, height: 7, background: 'var(--color-gold)' }} />
+          <p className="font-mono uppercase" style={{ fontSize: 11, letterSpacing: '0.28em', color: '#0D1B2A' }}>
+            Soccerex · Est. 1996 · 30 years
+          </p>
+          <span style={{ width: 7, height: 7, background: 'var(--color-gold)' }} />
+        </div>
+        <h1 className="font-heading font-bold leading-[1.06] mb-6 fade-up" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.4rem)', color: '#0D1B2A' }}>
+          <span style={{ color: 'var(--color-gold)' }}>30 Years</span> at the Center of the<br className="hidden sm:block" /> Business of Football
         </h1>
-        <p className="font-body text-white/80 leading-relaxed mb-4 fade-up" style={{ fontSize: 'clamp(1rem, 1.8vw, 1.2rem)' }}>
-          For three decades, Soccerex has brought together the people shaping the global game. From clubs and leagues to investors, brands, and innovators.
+        <p className="font-body leading-relaxed mb-4 fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.6vw, 1.18rem)', color: '#1a2a3a', maxWidth: '720px' }}>
+          For three decades, Soccerex has brought together the people shaping the global game — clubs and leagues, investors, brands and innovators.
         </p>
-        <p className="font-body text-white/60 leading-relaxed mb-10 fade-up" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.05rem)', maxWidth: '700px', margin: '0 auto 2.5rem' }}>
+        <p className="font-body leading-relaxed mb-10 fade-up mx-auto" style={{ fontSize: 'clamp(0.92rem, 1.4vw, 1.02rem)', color: '#3a4a5a', maxWidth: '680px' }}>
           What started as an event has become a global meeting point for the football industry, where relationships are built, ideas are tested, and opportunities take shape.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
+        <div className="flex flex-wrap items-center justify-center gap-3 fade-up">
           <Link to={EVENTS}
             className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none"
-            style={{ background: 'var(--color-gold)', color: '#09203e', textDecoration: 'none' }}
+            style={{ background: 'var(--color-gold)', color: '#0D1B2A', textDecoration: 'none' }}
             onMouseEnter={e => e.currentTarget.style.background = '#d4c78e'}
             onMouseLeave={e => e.currentTarget.style.background = 'var(--color-gold)'}>
             Explore Events
             <ArrowRight size={16} />
           </Link>
           <Link to={CONTACT}
-            className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
-            style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.3)', textDecoration: 'none' }}
+            className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer"
+            style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.20)', color: '#0D1B2A', textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.color = 'var(--color-gold)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = 'white' }}>
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(13,27,42,0.20)'; e.currentTarget.style.color = '#0D1B2A' }}>
             Join Soccerex
           </Link>
         </div>
       </div>
+
+      {/* Soft fade to next section so the hand-off doesn't read as a hard cut */}
+      <div className="absolute pointer-events-none" style={{
+        bottom: 0, left: 0, right: 0, height: 140,
+        background: 'linear-gradient(to bottom, transparent, #FFFFFF)',
+      }} />
     </section>
   )
 }
 
-// ─── UPCOMING EVENT: SOCCEREX EUROPE 2026 ───────────────────────────────────
+// ─── UPCOMING EVENT: SOCCEREX MIAMI 2026 ────────────────────────────────────
+/* Forward-facing feature for the next event. Mirrors the Miami event page's
+   white-crisp aesthetic but stays compact for the homepage. The Amsterdam
+   recap (past tense) now lives in its own slim band lower on the page. */
 function UpcomingEventSection() {
   const eventLinks = [
-    { label: 'Get Your Ticket', href: 'https://soccerexeurope2026.eventify.io/t2/tickets/', external: true, icon: Ticket, primary: true },
-    { label: 'Official Press Release', href: '/press/soccerex-europe-amsterdam-may-2026', external: false, icon: FileText },
-    { label: 'Rightsholder Registration', href: 'https://soccerexeurope2026.eventify.io/t2/tickets/79DF37', external: true, icon: ExternalLink },
-    { label: 'Selection of Attendees', href: '/events/europe/2026/selection-of-attendees.pdf', external: true, icon: FileText },
+    { label: 'Pre-register Now',     to: `${MIAMI_2026}#pre-register`,             primary: true,  icon: Mail },
+    { label: 'Event Info',           to: MIAMI_2026,                                                 icon: Globe },
+    { label: 'Programme Themes',     to: eventAgendaConcept('soccerex-miami-2026'),                  icon: FileText },
   ]
 
   return (
-    <section className="upcoming-event relative overflow-hidden" style={{ background: '#1a0000' }}>
-      {/* Background image with Amsterdam red treatment */}
-      <div className="absolute inset-0" style={{
-        backgroundImage: 'url(/hero/279-NEW9-cruyff-arena-interior-daylight.jpg)',
-        backgroundSize: 'cover', backgroundPosition: 'center',
-        filter: 'saturate(0.4) brightness(0.25)',
+    <section className="relative overflow-hidden" style={{
+      background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF8F4 100%)',
+    }}>
+      {/* Faint retro grid + Miami-pink/aqua corner washes for warmth without dominating */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(13,27,42,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(13,27,42,0.04) 1px, transparent 1px)',
+        backgroundSize: '64px 64px',
+        maskImage: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.2) 100%)',
+        WebkitMaskImage: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.2) 100%)',
       }} />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(140,20,20,0.6) 0%, rgba(50,5,5,0.65) 40%, rgba(20,0,0,0.85) 100%)' }} />
+      <div className="absolute pointer-events-none" style={{
+        top: '-220px', right: '-220px', width: '700px', height: '700px',
+        background: 'radial-gradient(circle, rgba(233,30,99,0.10) 0%, rgba(233,30,99,0.04) 45%, transparent 70%)',
+      }} />
+      <div className="absolute pointer-events-none" style={{
+        bottom: '-200px', left: '-200px', width: '620px', height: '620px',
+        background: 'radial-gradient(circle, rgba(0,198,215,0.10) 0%, rgba(0,124,145,0.04) 50%, transparent 72%)',
+      }} />
 
       <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left: headline */}
-          <div>
-            <div className="fade-up" style={{ marginBottom: '1.5rem' }}>
-              <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-widest rounded-full" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff' }}>
-                <span className="w-2 h-2 rounded-full" style={{ background: 'var(--color-red)', boxShadow: '0 0 12px var(--color-red)', animation: 'node-pulse 2s infinite' }} />
-                30th Anniversary Edition
-              </span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left: headline + meta + CTAs */}
+          <div className="lg:col-span-7 fade-up">
+            <div className="flex items-center gap-3 mb-5">
+              <span style={{ width: 7, height: 7, background: '#E91E63' }} />
+              <p className="font-mono uppercase" style={{ fontSize: 11, letterSpacing: '0.24em', color: '#0D1B2A' }}>
+                Next event · 23–25 September 2026
+              </p>
             </div>
-            <h2 className="font-heading font-bold text-white leading-[1.05] mb-4 fade-up" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)' }}>
-              Total Football.{' '}<span style={{ color: 'var(--color-red)' }}>Coming Home</span>{' '}for Business.
+            <h2 className="font-heading font-bold leading-[1.05] mb-5" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', color: '#0D1B2A' }}>
+              The world came for the World Cup.<br />
+              <span style={{ color: '#E91E63' }}>The industry stays for Soccerex.</span>
             </h2>
-            <p className="font-body text-white/50 uppercase tracking-widest text-sm mb-6 fade-up">Connect. Lead. Innovate.</p>
-            <p className="font-body text-white/70 leading-relaxed mb-8 fade-up" style={{ fontSize: '1.05rem', maxWidth: '520px' }}>
-              Celebrating 30 years as the longest-running dedicated football business platform in the world, Soccerex has earned its position as the neutral ground where the global football community comes together. Soccerex Europe returns to Amsterdam for its third consecutive edition at the Johan Cruijff ArenA, May 2026.
+            <p className="font-mono uppercase mb-5" style={{ fontSize: 12, letterSpacing: '0.24em', color: '#007C91' }}>
+              Where global football meets Miami
             </p>
-            <div className="flex flex-wrap gap-3 fade-up">
-              <a href="/events/europe/2026/agenda-concept.pdf" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 transition-all duration-300 cursor-pointer"
-                style={{ background: '#c8302c', border: 'none', color: '#fff', textDecoration: 'none' }}>
-                <FileText size={18} /> Agenda Concept
-              </a>
-              <Link to={EUROPE_2026}
-                className="inline-flex items-center gap-3 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 transition-all duration-300 cursor-pointer"
-                style={{ background: 'transparent', border: '1px solid #c8302c', color: '#fff', textDecoration: 'none' }}>
-                <Globe size={18} /> Event Info
-              </Link>
+            <p className="font-body leading-relaxed mb-7" style={{ fontSize: '1.05rem', color: '#1a2a3a', maxWidth: '560px' }}>
+              Soccerex Miami opens the Americas chapter on the doorstep of the 2026 FIFA World Cup. Three days of high-impact content, executive networking, and the partnerships that shape the next decade of football in the region.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {eventLinks.map((link) => {
+                const Icon = link.icon
+                const Tag = link.external ? 'a' : Link
+                const props = link.external ? { href: link.href, target: '_blank', rel: 'noopener noreferrer' } : { to: link.to }
+                return (
+                  <Tag key={link.label} {...props}
+                    className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-7 py-3.5 transition-all duration-200 cursor-pointer"
+                    style={{
+                      textDecoration: 'none',
+                      background: link.primary ? '#E91E63' : '#FFFFFF',
+                      color: link.primary ? '#FFFFFF' : '#0D1B2A',
+                      border: link.primary ? '1px solid #E91E63' : '1px solid rgba(13,27,42,0.18)',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (link.primary) {
+                        e.currentTarget.style.background = '#c81b58'
+                        e.currentTarget.style.borderColor = '#c81b58'
+                      } else {
+                        e.currentTarget.style.borderColor = '#E91E63'
+                        e.currentTarget.style.color = '#E91E63'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (link.primary) {
+                        e.currentTarget.style.background = '#E91E63'
+                        e.currentTarget.style.borderColor = '#E91E63'
+                      } else {
+                        e.currentTarget.style.borderColor = 'rgba(13,27,42,0.18)'
+                        e.currentTarget.style.color = '#0D1B2A'
+                      }
+                    }}
+                  >
+                    <Icon size={15} /> {link.label}
+                  </Tag>
+                )
+              })}
             </div>
           </div>
 
-          {/* Right: event card */}
-          <div className="fade-up">
+          {/* Right: brand-asset card with logo lockup + dates */}
+          <div className="lg:col-span-5 fade-up">
             <div style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
-              backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '16px', padding: 'clamp(32px, 5vw, 48px)', position: 'relative', overflow: 'hidden',
+              position: 'relative',
+              background: '#FFFFFF',
+              border: '1px solid rgba(13,27,42,0.08)',
+              padding: 'clamp(28px, 3.5vw, 44px)',
+              boxShadow: '0 30px 70px -34px rgba(13,27,42,0.30)',
             }}>
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(90deg, var(--color-red), rgba(200,48,44,0.2))' }} />
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-widest rounded-full mb-4" style={{ background: 'rgba(200,48,44,0.15)', border: '1px solid rgba(200,48,44,0.5)', color: '#e8504c' }}>
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-red)', animation: 'node-pulse 2s infinite' }} />
-                Upcoming Event
-              </span>
-              <h3 className="font-heading font-bold text-white mb-2" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>11-13th May 2026</h3>
-              <p className="font-heading font-semibold text-white/90 text-lg mb-4">Johan Cruijff ArenA</p>
-              <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-6" style={{ background: 'rgba(200,48,44,0.1)', border: '1px solid rgba(200,48,44,0.2)' }}>
-                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #a02020, var(--color-red))' }}>
-                  <MapPin size={18} color="#fff" />
-                </div>
+              {/* Pink + cyan top stripe echoes the Miami brand bar */}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #007C91 0%, #00C6D7 35%, #E91E63 100%)' }} />
+              <img src="/events/miami/2026/graphics/logo-primary.svg" alt="Soccerex Miami 2026"
+                style={{ display: 'block', width: 'clamp(220px, 26vw, 320px)', maxWidth: '100%', height: 'auto', margin: '4px 0 22px' }} />
+              <div className="flex items-baseline gap-3 mb-3">
+                <span className="font-heading font-bold" style={{ fontSize: 'clamp(2rem, 4vw, 2.6rem)', color: '#E91E63', lineHeight: 1 }}>23–25</span>
+                <span className="font-mono uppercase" style={{ fontSize: 12, letterSpacing: '0.22em', color: '#0D1B2A' }}>September 2026</span>
+              </div>
+              <div className="flex items-center gap-3 mt-2">
+                <MapPin size={16} style={{ color: '#007C91' }} />
                 <div>
-                  <p className="font-body text-white/90 font-medium text-sm">Amsterdam</p>
-                  <p className="font-body text-white/50 text-xs">Europe's Football Capital</p>
+                  <p className="font-heading font-semibold" style={{ fontSize: 15, color: '#0D1B2A' }}>Miami Freedom Park</p>
+                  <p className="font-body" style={{ fontSize: 12.5, color: '#607186' }}>Miami, USA</p>
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
-                {eventLinks.map((link) => {
-                  const Icon = link.icon
-                  const Tag = link.external ? 'a' : Link
-                  const props = link.external ? { href: link.href, target: '_blank', rel: 'noopener noreferrer' } : { to: link.href }
-                  return (
-                    <Tag key={link.label} {...props}
-                      className="flex items-center justify-between gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-widest transition-all duration-200 cursor-pointer"
-                      style={{
-                        textDecoration: 'none', borderRadius: '8px',
-                        background: link.primary ? '#c8302c' : 'rgba(255,255,255,0.05)',
-                        color: link.primary ? '#fff' : 'rgba(255,255,255,0.7)',
-                        border: link.primary ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                      }}>
-                      <span className="flex items-center gap-2"><Icon size={14} /> {link.label}</span>
-                      <ArrowRight size={14} />
-                    </Tag>
-                  )
-                })}
+              {/* Anniversary line — keeps the 30-years thread visible */}
+              <div className="flex items-center gap-3 mt-6 pt-5" style={{ borderTop: '1px solid rgba(13,27,42,0.08)' }}>
+                <span className="font-heading font-bold" style={{ fontSize: 28, color: '#E91E63', lineHeight: 1 }}>30</span>
+                <p className="font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.22em', color: '#0D1B2A', lineHeight: 1.4 }}>
+                  Years of<br />building the<br />global game
+                </p>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </section>
   )
@@ -406,10 +461,10 @@ function EventsSection() {
         <div className="mb-14">
           <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-gold)', fontWeight: 600 }}>WHERE WE GATHER</p>
           <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', color: '#0D1B2A' }}>
-            The Soccerex <span style={{ color: 'var(--color-gold)' }}>2026 Calendar</span>
+            The Soccerex <span style={{ color: 'var(--color-gold)' }}>Calendar</span>
           </h2>
           <p className="font-body fade-up mt-4" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: '680px' }}>
-            One year. Three flagship gatherings on three continents. Amsterdam closed our European chapter in May; Miami opens the Americas in September; Riyadh lands in the Middle East in early 2027.
+            Three flagship gatherings on three continents. Miami opens the Americas chapter in September, Riyadh lands in the Middle East in early 2027, and Amsterdam wrapped a record European edition in May.
           </p>
         </div>
 
@@ -1480,6 +1535,69 @@ function VerticalsShowcase() {
 }
 
 // ─── HOME PAGE ──────────────────────────────────────────────────────────────
+/* ─── A LOOK BACK: SOCCEREX EUROPE 2026 ───────────────────────────────────
+   Past-tense recap of Amsterdam. Slim white band that points visitors to
+   the press release and gallery without competing with the Miami feature
+   up top. Intentionally low-volume — gratitude + a link, not a hard sell. */
+function EuropeRecapSection() {
+  return (
+    <section className="relative overflow-hidden" style={{ background: '#FFFFFF', borderTop: '1px solid rgba(13,27,42,0.06)', borderBottom: '1px solid rgba(13,27,42,0.06)' }}>
+      <div className="relative z-10" style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+          <div className="md:col-span-5 fade-up">
+            <div className="relative" style={{ aspectRatio: '4/3', overflow: 'hidden', border: '1px solid rgba(13,27,42,0.08)' }}>
+              <img src="/hero/279-NEW9-cruyff-arena-interior-daylight.jpg" alt="Johan Cruijff ArenA"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.35) brightness(0.92)' }} />
+              <div className="absolute" style={{ left: 16, top: 16 }}>
+                <span className="font-mono uppercase" style={{
+                  fontSize: 10, letterSpacing: '0.22em',
+                  background: 'rgba(255,255,255,0.92)', color: '#0D1B2A',
+                  padding: '5px 10px',
+                }}>
+                  Event concluded · May 2026
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="md:col-span-7 fade-up">
+            <div className="flex items-center gap-3 mb-4">
+              <span style={{ width: 7, height: 7, background: '#c8302c' }} />
+              <p className="font-mono uppercase" style={{ fontSize: 11, letterSpacing: '0.24em', color: '#0D1B2A' }}>
+                A look back · Soccerex Europe 2026
+              </p>
+            </div>
+            <h2 className="font-heading font-bold leading-tight mb-4" style={{ fontSize: 'clamp(1.7rem, 3.4vw, 2.4rem)', color: '#0D1B2A' }}>
+              Amsterdam closed our European chapter.
+            </h2>
+            <p className="font-body leading-relaxed mb-3" style={{ fontSize: '1rem', color: '#3a4a5a', maxWidth: '600px' }}>
+              Three days at the Johan Cruijff ArenA brought together federations, leagues, clubs, brands, media and football legends to mark the 30th anniversary edition. Thank you to everyone who joined.
+            </p>
+            <p className="font-body leading-relaxed mb-6" style={{ fontSize: '0.95rem', color: '#607186', maxWidth: '600px' }}>
+              The conversations continue in Miami this September.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link to={pressRelease('soccerex-europe-amsterdam-may-2026')}
+                className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-6 py-3 transition-all duration-200"
+                style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.20)', color: '#0D1B2A', textDecoration: 'none' }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#c8302c'; e.currentTarget.style.color = '#c8302c' }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(13,27,42,0.20)'; e.currentTarget.style.color = '#0D1B2A' }}>
+                <FileText size={14} /> Press release
+              </Link>
+              <Link to={EUROPE_2026}
+                className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-6 py-3 transition-all duration-200"
+                style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.20)', color: '#0D1B2A', textDecoration: 'none' }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#c8302c'; e.currentTarget.style.color = '#c8302c' }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(13,27,42,0.20)'; e.currentTarget.style.color = '#0D1B2A' }}>
+                Event recap <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function Home() {
   useScrollAnimations()
   const location = useLocation()
@@ -1498,9 +1616,11 @@ export default function Home() {
 
   return (
     <>
-      <HeroSlideshow />
+      {/* HeroSection is the new white/cream-based hero. To revert to the
+          photo slideshow, swap <HeroSection /> with <HeroSlideshow /> — the
+          component is preserved on disk. */}
+      <HeroSection />
       <UpcomingEventSection />
-      <PixelDivider color="#1a0000" layers={4} height={90} speed={0.5} />
       <EventsSection />
       <ByTheNumbersSection />
       <PixelDivider color="#FFFFFF" layers={4} height={110} speed={0.6} />
@@ -1509,6 +1629,9 @@ export default function Home() {
       <SpeakersShowcase />
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
       <TestimonialsSection />
+      {/* Amsterdam past-tense recap sits down here — out of the upcoming
+          flow, points to press release + event page. */}
+      <EuropeRecapSection />
       <SocialProofSection />
       <ProudSponsorSection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
