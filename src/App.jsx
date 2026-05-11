@@ -19,8 +19,6 @@ const PressRelease = lazy(() => import('./pages/PressRelease'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
 const InsightsList = lazy(() => import('./pages/InsightsList'))
 const InsightArticle = lazy(() => import('./pages/InsightArticle'))
-const ContentPillars = lazy(() => import('./pages/ContentPillars'))
-const ContentPillar = lazy(() => import('./pages/ContentPillar'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
 const TermsConditions = lazy(() => import('./pages/TermsConditions'))
 const CookiePolicy = lazy(() => import('./pages/CookiePolicy'))
@@ -50,8 +48,6 @@ function App() {
           <Route path="/app" element={<SoccerexApp />} />
           <Route path="/insights" element={<InsightsList />} />
           <Route path="/insights/:slug" element={<InsightArticle />} />
-          <Route path="/pillars" element={<ContentPillars />} />
-          <Route path="/pillars/:slug" element={<ContentPillar />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/europe-2026" element={<Europe2026 />} />
           <Route path="/miami-2026" element={<Miami2026 />} />

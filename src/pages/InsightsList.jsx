@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Search, Calendar, Mail, ChevronRight } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import {
+  getContentPillars, getArticlesByPillar,
+} from '../lib/soccerexApi'
+import { isTestModeFromUrl } from '../lib/testMode'
 
 function useScrollAnimations(dep) {
   useEffect(() => {
@@ -37,10 +41,55 @@ export default function InsightsList() {
     window.scrollTo(0, 0)
   }, [])
 
+  /* Articles come from two sources:
+       1. The static /insights-manifest.json (legacy WP export)
+       2. The Soccerex marketing CMS — each content pillar surfaces its
+          long-form articles via getArticlesByPillar(slug). Pillars are
+          treated as an internal taxonomy; visitors only see articles, with
+          the pillar name reused as the article's category so existing
+          filtering and search work without changes.
+     We merge both lists, dedupe by slug, and sort newest first. The page
+     paints as soon as either source resolves so visitors aren't waiting
+     on the slowest network. */
   useEffect(() => {
+    let cancelled = false
+    const test = isTestModeFromUrl()
+    let manifest = []
+    let cms = []
+
+    const merge = () => {
+      if (cancelled) return
+      const seen = new Set()
+      const out = []
+      ;[...cms, ...manifest].forEach((a) => {
+        if (!a || !a.slug || seen.has(a.slug)) return
+        seen.add(a.slug)
+        out.push(a)
+      })
+      out.sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+      setArticles(out)
+    }
+
     fetch('/insights-manifest.json')
       .then((r) => r.json())
-      .then(setArticles)
+      .then((data) => { if (!cancelled) { manifest = Array.isArray(data) ? data : []; merge() } })
+      .catch(() => { /* missing manifest is fine; CMS still paints */ })
+
+    getContentPillars({ test })
+      .then(async (pillars) => {
+        if (cancelled || !Array.isArray(pillars)) return
+        const lists = await Promise.all(pillars.map((p) =>
+          getArticlesByPillar(p.slug, { test })
+            .catch(() => [])
+            .then((items) => ({ pillar: p, items: Array.isArray(items) ? items : [] }))
+        ))
+        if (cancelled) return
+        cms = lists.flatMap(({ pillar, items }) => items.map((a) => normalizeCmsArticle(a, pillar)))
+        merge()
+      })
+      .catch(() => { /* CMS unreachable; manifest still paints */ })
+
+    return () => { cancelled = true }
   }, [])
 
   useEffect(() => { setPage(1) }, [activeCategory, searchQuery])
@@ -260,8 +309,12 @@ export default function InsightsList() {
               }}>
                 <h4 className="font-heading font-bold mb-5" style={{ fontSize: '1.1rem', color: '#09203e' }}>Recent Posts</h4>
                 <div className="flex flex-col gap-4">
-                  {articles.slice(0, 5).map((a) => (
-                    <Link key={a.id} to={`/insights/${a.slug}`} className="group block" style={{ textDecoration: 'none' }}>
+                  {articles.slice(0, 5).map((a) => {
+                    const LinkTag = a.externalUrl
+                      ? ({ children, ...rest }) => <a href={a.externalUrl} target="_blank" rel="noreferrer" {...rest}>{children}</a>
+                      : ({ children, ...rest }) => <Link to={`/insights/${a.slug}`} {...rest}>{children}</Link>
+                    return (
+                    <LinkTag key={a.id} className="group block" style={{ textDecoration: 'none' }}>
                       <p className="font-mono uppercase" style={{ fontSize: '0.62rem', color: 'var(--color-gold)', letterSpacing: '0.1em', marginBottom: '4px' }}>{a.date}</p>
                       <p className="font-heading font-bold leading-snug transition-colors duration-200" style={{ fontSize: '0.88rem', color: '#09203e' }}
                         onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
@@ -269,8 +322,8 @@ export default function InsightsList() {
                       >
                         {a.title}
                       </p>
-                    </Link>
-                  ))}
+                    </LinkTag>
+                  )})}
                 </div>
               </div>
             </div>
@@ -281,13 +334,45 @@ export default function InsightsList() {
   )
 }
 
+/* Normalize a CMS article into the manifest's shape:
+   { id, slug, title, excerpt, date, categories, featuredImage }
+   Pillar name (or audience, as a fallback) becomes the article's category so
+   the existing sidebar filter buckets CMS articles correctly. */
+function normalizeCmsArticle(a, pillar) {
+  const slug = a.slug || a.id || ''
+  const title = a.title || a.name || 'Untitled'
+  const excerpt = a.excerpt || a.summary || a.dek || ''
+  const date = (a.published_at || a.date || '').slice(0, 10)
+  const image = a.hero_image_url || a.featured_image || a.image || ''
+  const pillarLabel = pillar?.name || pillar?.audience || null
+  const categories = [pillarLabel, ...(Array.isArray(a.categories) ? a.categories : [])].filter(Boolean)
+  return {
+    id: `cms-${slug}`,
+    slug,
+    title,
+    excerpt,
+    date,
+    categories: categories.length ? categories : ['Insight'],
+    featuredImage: image,
+    /* Preserve the CMS-hosted canonical URL when one is provided so the row
+       can open it externally instead of routing through /insights/:slug. */
+    externalUrl: a.url || null,
+  }
+}
+
 // ─── Article row (image when available, text-forward otherwise) ─────────────
 function ArticleRow({ article, index }) {
   const displayCats = article.categories.filter((c) => c !== 'Uncategorized')
   const hasImage = !!article.featuredImage
+  /* CMS-hosted articles ship a canonical external URL; the legacy manifest
+     content lives at /insights/:slug. ArticleLink hides that difference. */
+  const isExternal = !!article.externalUrl
+  const ArticleLink = ({ children, className, style }) => isExternal
+    ? <a href={article.externalUrl} target="_blank" rel="noreferrer" className={className} style={style}>{children}</a>
+    : <Link to={`/insights/${article.slug}`} className={className} style={style}>{children}</Link>
   return (
     <div className="fade-up" style={{ marginBottom: '40px', paddingBottom: '40px', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
-      <Link to={`/insights/${article.slug}`} className="block" style={{ textDecoration: 'none' }}>
+      <ArticleLink className="block" style={{ textDecoration: 'none' }}>
         {/* Show image when available */}
         {hasImage && (
           <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', marginBottom: '20px', aspectRatio: '16/8' }}>
@@ -300,7 +385,7 @@ function ArticleRow({ article, index }) {
             />
           </div>
         )}
-      </Link>
+      </ArticleLink>
 
       {/* Category + date */}
       <div className="flex flex-wrap items-center gap-3 mb-3">
@@ -318,14 +403,14 @@ function ArticleRow({ article, index }) {
       </div>
 
       {/* Title */}
-      <Link to={`/insights/${article.slug}`} style={{ textDecoration: 'none' }}>
+      <ArticleLink style={{ textDecoration: 'none' }}>
         <h2 className="font-heading font-bold leading-snug mb-3 transition-colors duration-200" style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)', color: '#09203e' }}
           onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
           onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
         >
           {article.title}
         </h2>
-      </Link>
+      </ArticleLink>
 
       {/* Excerpt */}
       <p className="font-body leading-relaxed mb-5" style={{ fontSize: '0.95rem', color: '#555' }}>
@@ -333,13 +418,10 @@ function ArticleRow({ article, index }) {
       </p>
 
       {/* Read link */}
-      <Link to={`/insights/${article.slug}`} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ fontSize: '0.78rem', color: 'var(--color-gold)', textDecoration: 'none', transition: 'color 0.2s' }}
-        onMouseEnter={(e) => { e.currentTarget.style.color = '#09203e' }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
-      >
+      <ArticleLink className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+        style={{ fontSize: '0.78rem', color: 'var(--color-gold)', textDecoration: 'none', transition: 'color 0.2s' }}>
         Continue Reading <ArrowRight size={14} />
-      </Link>
+      </ArticleLink>
     </div>
   )
 }
