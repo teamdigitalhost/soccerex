@@ -457,9 +457,6 @@ function EventsSection() {
 
   return (
     <section id="events" className="relative overflow-hidden" style={{ background: '#FFFFFF' }}>
-      {/* Section number watermark */}
-      <div className="absolute top-8 right-8 font-heading font-bold pointer-events-none select-none" style={{ fontSize: 'clamp(8rem, 20vw, 16rem)', lineHeight: 1, color: 'rgba(13,27,42,0.04)' }}>03</div>
-
       <div className="relative z-10" style={{ maxWidth: '1400px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div className="mb-14">
           <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-gold)', fontWeight: 600 }}>WHERE WE GATHER</p>
@@ -558,7 +555,22 @@ function EventsSection() {
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px', display: 'flex', flexDirection: 'column' }}>
                     {/* Status chip sits above the city name, out of the top strip */}
                     {event.status === 'soon' && (
-                      <div style={{ alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px', background: isMiami ? '#E91E63' : 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: isMiami ? '1px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.2)', borderRadius: '100px', color: '#fff', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                      <div style={{
+                        alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px',
+                        background: isMiami ? '#E91E63' : 'rgba(255,255,255,0.1)',
+                        backdropFilter: 'blur(8px)',
+                        border: isMiami ? '1px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.2)',
+                        borderRadius: '100px',
+                        color: '#fff', fontSize: '10px', fontWeight: 700,
+                        letterSpacing: '0.15em', textTransform: 'uppercase',
+                        /* Stacked outer glow so the pill reads against any
+                           photo frame underneath. Miami pill gets a pink
+                           glow that matches its fill; others get a white
+                           glow to lift against dark imagery. */
+                        boxShadow: isMiami
+                          ? '0 0 0 1px rgba(255,255,255,0.25), 0 2px 8px rgba(0,0,0,0.35), 0 0 16px rgba(233,30,99,0.55), 0 0 36px rgba(233,30,99,0.40), 0 0 72px rgba(233,30,99,0.22)'
+                          : '0 2px 8px rgba(0,0,0,0.35), 0 0 14px rgba(255,255,255,0.30), 0 0 36px rgba(255,255,255,0.18)',
+                      }}>
                         Coming Soon
                       </div>
                     )}
