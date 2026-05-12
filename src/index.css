@@ -660,15 +660,18 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   background-size: 400% 400%;
   background-position: 170% 170%;
   mix-blend-mode: screen;
-  animation: badge-shine 11s ease-in-out infinite;
+  animation: badge-shine 16s ease-in-out infinite;
   animation-delay: 2s;
   opacity: 0; /* hidden until the entrance has resolved */
 }
 .hero-text-visible .hero-crest-shine { opacity: 1; }
+/* Sweep portion lengthens (47% × 16s = ~7.5s, was ~5s — about 50%
+   slower across the badge). Pause stays roughly the same wall-clock
+   time (6% × 16s ≈ 0.96s, was 1.1s) so the waits don't grow. */
 @keyframes badge-shine {
   0%   { background-position: 170% 170%; }
-  45%  { background-position: -70% -70%; }
-  55%  { background-position: -70% -70%; }
+  47%  { background-position: -70% -70%; }
+  53%  { background-position: -70% -70%; }
   100% { background-position: 170% 170%; }
 }
 
