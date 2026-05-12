@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Mail, MapPin } from 'lucide-react'
-import { HOME, PROFILE_ACCESS, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS, EUROPE_2026, GALLERY, DEAL_NETWORK } from '../lib/routes'
+import {
+  HOME, PROFILE_ACCESS, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS, EUROPE_2026,
+  GALLERY, DEAL_NETWORK, MIAMI_2026, RIYADH_2027,
+} from '../lib/routes'
+
+/* Route-aware accent. Mirrors the navbar's ctaThemeFor() so the
+   footer's section headers, hover colours, top border, and social
+   pills match the event page they're sitting on. First prefix match
+   wins. Off-event pages fall back to brand gold. */
+const FOOTER_ACCENTS = [
+  { match: MIAMI_2026,  color: '#E91E63', hover: '#f24a8a' }, // Miami pink
+  { match: EUROPE_2026, color: '#c8302c', hover: '#e0524f' }, // Europe red
+  { match: RIYADH_2027, color: '#f2e93c', hover: '#fff36b' }, // Riyadh yellow
+]
+const FOOTER_DEFAULT = { color: 'var(--color-gold)', hover: '#d4c78e' }
+function footerAccentFor(pathname) {
+  return FOOTER_ACCENTS.find((t) => pathname.startsWith(t.match)) || FOOTER_DEFAULT
+}
 
 // Inline brand SVGs (lucide does not ship brand icons)
 const BrandIcons = {
@@ -55,10 +72,22 @@ const CONTACTS = [
 ]
 
 export default function Footer() {
+  const { pathname } = useLocation()
+  const accent = footerAccentFor(pathname)
+  /* Expose the accent as CSS variables on the <footer> so children
+     can reference --footer-accent / --footer-accent-hover instead of
+     hard-coding the gold. Falling back to the brand gold keeps the
+     footer identical on non-event pages. */
+  const cssVars = {
+    '--footer-accent': accent.color,
+    '--footer-accent-hover': accent.hover,
+    background: '#050d1a',
+    color: '#fff',
+  }
   return (
-    <footer className="relative overflow-hidden" style={{ background: '#050d1a', color: '#fff' }}>
-      {/* Gold top border */}
-      <div style={{ height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold) 20%, var(--color-gold) 80%, transparent)' }} />
+    <footer className="relative overflow-hidden" style={cssVars}>
+      {/* Accent top border — colour follows the active event */}
+      <div style={{ height: '3px', background: 'linear-gradient(90deg, transparent, var(--footer-accent) 20%, var(--footer-accent) 80%, transparent)' }} />
 
       {/* Main footer content */}
       <div style={{ maxWidth: '1300px', margin: '0 auto', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,60px) 40px' }}>
@@ -91,10 +120,10 @@ export default function Footer() {
               The global leader in the business of football since 1996. Connecting the industry across three continents.
             </p>
             <div className="flex items-start gap-2" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.85rem' }}>
-              <MapPin size={16} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--color-gold)' }} />
+              <MapPin size={16} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--footer-accent)' }} />
               <a href="https://maps.app.goo.gl/j51i1u3YtsbJuopm8" target="_blank" rel="noopener noreferrer"
                  style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', lineHeight: 1.6, transition: 'color 0.2s' }}
-                 onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
+                 onMouseEnter={e => { e.currentTarget.style.color = 'var(--footer-accent)' }}
                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}
               >
                 Soccerex LLC<br />
@@ -106,7 +135,7 @@ export default function Footer() {
 
           {/* Column 2: Explore */}
           <div>
-            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--color-gold)', fontWeight: 600 }}>Explore</h4>
+            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--footer-accent)', fontWeight: 600 }}>Explore</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {[
                 { label: 'Home', to: HOME },
@@ -129,7 +158,7 @@ export default function Footer() {
                     fontFamily: 'Inter, sans-serif',
                     transition: 'color 0.2s',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--footer-accent)' }}
                   onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}
                   >{l.label}</Link>
                 </li>
@@ -139,7 +168,7 @@ export default function Footer() {
 
           {/* Column 3: Contact */}
           <div>
-            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--color-gold)', fontWeight: 600 }}>Get in Touch</h4>
+            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--footer-accent)', fontWeight: 600 }}>Get in Touch</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {CONTACTS.map(c => (
                 <li key={c.email} style={{ marginBottom: '16px' }}>
@@ -148,7 +177,7 @@ export default function Footer() {
                   </p>
                   <a href={`mailto:${c.email}`} className="inline-flex items-center gap-2"
                      style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
-                     onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
+                     onMouseEnter={e => { e.currentTarget.style.color = 'var(--footer-accent)' }}
                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
                   >
                     <Mail size={13} /> {c.email}
@@ -160,7 +189,7 @@ export default function Footer() {
 
           {/* Column 4: Connect/Socials */}
           <div>
-            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--color-gold)', fontWeight: 600 }}>Connect</h4>
+            <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--footer-accent)', fontWeight: 600 }}>Connect</h4>
             <p className="font-body leading-relaxed mb-5" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)' }}>
               Follow us for the latest from the business of football.
             </p>
@@ -173,12 +202,12 @@ export default function Footer() {
                       width: '40px', height: '40px', borderRadius: '50%',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(191,177,112,0.2)',
+                      border: '1px solid color-mix(in srgb, var(--footer-accent) 24%, transparent)',
                       color: 'rgba(255,255,255,0.75)',
                       transition: 'all 0.25s',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.color = '#09203e' }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.2)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'var(--footer-accent)'; e.currentTarget.style.borderColor = 'var(--footer-accent)'; e.currentTarget.style.color = '#09203e' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--footer-accent) 24%, transparent)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
                   >
                     <Icon />
                   </a>
@@ -190,14 +219,14 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{ borderTop: '1px solid rgba(191,177,112,0.15)' }}>
+      <div style={{ borderTop: '1px solid color-mix(in srgb, var(--footer-accent) 18%, transparent)' }}>
         <div className="flex flex-col md:flex-row items-center justify-between gap-4" style={{ maxWidth: '1300px', margin: '0 auto', padding: '24px clamp(24px,5vw,60px)' }}>
           <p className="font-body text-center md:text-left" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.45)' }}>
             © 2026 Soccerex. All Rights Reserved. Powered by{' '}
             <a href="https://digitalhost.co" target="_blank" rel="noopener noreferrer"
-              style={{ color: 'var(--color-gold)', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#d4c78e' }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
+              style={{ color: 'var(--footer-accent)', textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--footer-accent-hover)' }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--footer-accent)' }}
             >Digital Host</a>.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
@@ -209,7 +238,7 @@ export default function Footer() {
             ].map(l => (
               <Link key={l.to} to={l.to}
                 style={{ color: 'rgba(255,255,255,0.45)', textDecoration: 'none', fontSize: '0.78rem', transition: 'color 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--footer-accent)' }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.45)' }}
               >{l.label}</Link>
             ))}
