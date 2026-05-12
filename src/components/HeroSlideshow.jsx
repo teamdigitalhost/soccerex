@@ -37,7 +37,7 @@ function buildPlaylist(heritage, modern) {
 
 // ─── Static tagline (CEO-approved statement) ────────────────────────────────
 // Rotating taglines archived in HeroSlideshow.baseline.jsx for future reuse.
-const HERO_STATEMENT = 'The Longest-Running Football Business Platform.'
+const HERO_STATEMENT = 'The Longest-Running Football Business Platform, Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership.'
 
 // ─── Letter-by-letter component ─────────────────────────────────────────────
 function CascadingText({ text, visible, className = '' }) {
