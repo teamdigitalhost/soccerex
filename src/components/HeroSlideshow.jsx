@@ -37,7 +37,8 @@ function buildPlaylist(heritage, modern) {
 
 // ─── Static tagline (CEO-approved statement) ────────────────────────────────
 // Rotating taglines archived in HeroSlideshow.baseline.jsx for future reuse.
-const HERO_STATEMENT = 'The Longest-Running Football Business Platform, Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership.'
+const HERO_TITLE    = 'The Longest-Running Football Business Platform'
+const HERO_SUBTITLE = 'Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership'
 
 // ─── Letter-by-letter component ─────────────────────────────────────────────
 function CascadingText({ text, visible, className = '' }) {
@@ -447,21 +448,33 @@ export default function HeroSlideshow() {
         {/* Gold divider */}
         <div className="hero-divider" />
 
-        {/* Static CEO-approved tagline — the marketing line for the landing
-            page. Treat it as a sub-headline: large display weight,
-            generous max-width, sits over the cream dissolve below. */}
+        {/* Title + subtitle. Title is the headline-weight marketing line;
+            subtitle qualifies it in lighter body weight. Both sit over the
+            cream dissolve below, so the photo never competes with them. */}
         <p
           className="hero-static-tagline font-heading leading-tight"
           style={{
             fontSize: 'clamp(1.5rem, 3.2vw, 2.6rem)',
             maxWidth: '960px',
-            margin: '1.75rem auto 2.5rem',
+            margin: '1.75rem auto 0.75rem',
             fontWeight: 700,
-            lineHeight: 1.18,
+            lineHeight: 1.15,
             letterSpacing: '-0.005em',
           }}
         >
-          {HERO_STATEMENT}
+          {HERO_TITLE}
+        </p>
+        <p
+          className="hero-static-subtitle font-body leading-relaxed"
+          style={{
+            fontSize: 'clamp(0.95rem, 1.4vw, 1.15rem)',
+            maxWidth: '720px',
+            margin: '0 auto 2.5rem',
+            fontWeight: 400,
+            lineHeight: 1.5,
+          }}
+        >
+          {HERO_SUBTITLE}
         </p>
 
         {/* CTAs */}
