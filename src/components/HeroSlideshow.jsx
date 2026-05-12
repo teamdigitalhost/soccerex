@@ -110,12 +110,13 @@ function ParticleField() {
         const tangentVx = -Math.sin(angle) * speed * spinStrength * spinDir
         const tangentVy = Math.cos(angle) * speed * spinStrength * spinDir
         const life = 90 + Math.random() * 120
-        // Confetti colors: gold, white, silver
+        // Confetti colors: gold tones only — three shades for depth without
+        // breaking the gold story (deep, brand gold, warm highlight).
         const colorRoll = Math.random()
         let color
-        if (colorRoll < 0.45) color = 'gold'
-        else if (colorRoll < 0.75) color = 'white'
-        else color = 'silver'
+        if (colorRoll < 0.5) color = 'gold'           // brand gold
+        else if (colorRoll < 0.8) color = 'gold-warm' // warm highlight
+        else color = 'gold-deep'                       // deeper amber
         return {
           x, y,
           vx: radialVx + tangentVx,
@@ -186,9 +187,9 @@ function ParticleField() {
         alpha *= p.burst ? 0.65 : 0.35
 
         if (p.burst) {
-          if (p.color === 'gold') ctx.fillStyle = `rgba(197, 165, 114, ${alpha})`
-          else if (p.color === 'white') ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`
-          else ctx.fillStyle = `rgba(190, 200, 210, ${alpha})` // silver
+          if (p.color === 'gold')           ctx.fillStyle = `rgba(197, 165, 114, ${alpha})` // brand gold
+          else if (p.color === 'gold-warm') ctx.fillStyle = `rgba(240, 220, 168, ${alpha})` // warm highlight
+          else                              ctx.fillStyle = `rgba(160, 130,  82, ${alpha})` // gold-deep / amber
         } else {
           // Ambient: always gold tones
           ctx.fillStyle = p.gold
@@ -268,20 +269,23 @@ function Hero30SVG() {
 }
 
 // ─── Oversized animated outline "30" background elements ────────────────────
+/* Three drifting outline "30"s sit behind the crest. On the light hero they
+   read as ambient brand colour. Two blue layers (Soccerex navy → mid-blue)
+   bracket one ember-orange layer in the middle — the orange becomes the
+   visual hook, the blues anchor the brand. */
 function OutlineThirty() {
-  // SVG path for "30" — oversized, thin stroke, section-spanning
-  // Using a simplified geometric path for the numerals
   return (
     <div className="hero-outline-30s" aria-hidden="true">
-      {/* Layer 1: Shifted left, slower animation */}
+      {/* Layer 1: deep brand navy, drifting slowly. Higher opacity so it
+          actually reads against the cream wash. */}
       <svg className="hero-outline-svg hero-outline-1" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="outline1Grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#c5a572" stopOpacity="0" />
-            <stop offset="40%" stopColor="#c5a572" stopOpacity="0.12" />
-            <stop offset="50%" stopColor="#f0dca8" stopOpacity="0.2" />
-            <stop offset="60%" stopColor="#c5a572" stopOpacity="0.12" />
-            <stop offset="100%" stopColor="#c5a572" stopOpacity="0" />
+            <stop offset="0%"  stopColor="#09203e" stopOpacity="0" />
+            <stop offset="40%" stopColor="#09203e" stopOpacity="0.32" />
+            <stop offset="50%" stopColor="#1a3fbf" stopOpacity="0.46" />
+            <stop offset="60%" stopColor="#09203e" stopOpacity="0.32" />
+            <stop offset="100%" stopColor="#09203e" stopOpacity="0" />
             <animateTransform attributeName="gradientTransform" type="translate" from="-1.5 0" to="1.5 0" dur="6s" repeatCount="indefinite" />
           </linearGradient>
         </defs>
@@ -292,34 +296,36 @@ function OutlineThirty() {
         </text>
       </svg>
 
-      {/* Layer 2: Shifted right, different timing */}
+      {/* Layer 2: Soccerex ember orange — the warm accent that drifts the
+          other direction. */}
       <svg className="hero-outline-svg hero-outline-2" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="outline2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#1a3fbf" stopOpacity="0" />
-            <stop offset="35%" stopColor="#1a3fbf" stopOpacity="0.08" />
-            <stop offset="50%" stopColor="#4a7aef" stopOpacity="0.15" />
-            <stop offset="65%" stopColor="#1a3fbf" stopOpacity="0.08" />
-            <stop offset="100%" stopColor="#1a3fbf" stopOpacity="0" />
+            <stop offset="0%"  stopColor="#ff6b35" stopOpacity="0" />
+            <stop offset="35%" stopColor="#ff6b35" stopOpacity="0.30" />
+            <stop offset="50%" stopColor="#ff8a5b" stopOpacity="0.46" />
+            <stop offset="65%" stopColor="#ff6b35" stopOpacity="0.30" />
+            <stop offset="100%" stopColor="#ff6b35" stopOpacity="0" />
             <animateTransform attributeName="gradientTransform" type="translate" from="1.5 0" to="-1.5 0" dur="8s" repeatCount="indefinite" />
           </linearGradient>
         </defs>
         <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
           className="hero-outline-numeral"
-          stroke="url(#outline2Grad)" fill="none" strokeWidth="0.8">
+          stroke="url(#outline2Grad)" fill="none" strokeWidth="1.0">
           30
         </text>
       </svg>
 
-      {/* Layer 3: Centered, very subtle, different phase */}
+      {/* Layer 3: lighter mid-blue, third phase. Slightly heavier stroke so
+          its slow drift reads as the calm background layer. */}
       <svg className="hero-outline-svg hero-outline-3" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="outline3Grad" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#c5a572" stopOpacity="0" />
-            <stop offset="40%" stopColor="#c5a572" stopOpacity="0.06" />
-            <stop offset="50%" stopColor="#d4c78e" stopOpacity="0.1" />
-            <stop offset="60%" stopColor="#c5a572" stopOpacity="0.06" />
-            <stop offset="100%" stopColor="#c5a572" stopOpacity="0" />
+            <stop offset="0%"  stopColor="#1a3fbf" stopOpacity="0" />
+            <stop offset="40%" stopColor="#1a3fbf" stopOpacity="0.22" />
+            <stop offset="50%" stopColor="#4a7aef" stopOpacity="0.34" />
+            <stop offset="60%" stopColor="#1a3fbf" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#1a3fbf" stopOpacity="0" />
             <animateTransform attributeName="gradientTransform" type="translate" from="-1 -0.5" to="1 0.5" dur="10s" repeatCount="indefinite" />
           </linearGradient>
         </defs>
