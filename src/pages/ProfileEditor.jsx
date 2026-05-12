@@ -593,20 +593,33 @@ function AssetList({ profile }) {
 }
 
 function AssetThumb({ asset }) {
+  /* The backend serializer may surface the asset's URL under any of these
+     keys depending on whether it's a public file, a signed temporary URL,
+     or a thumbnail. Resolve in priority order so we never render an empty
+     image box while a usable URL is sitting in the payload. */
+  const previewUrl = asset.preview_url || asset.thumbnail_url || asset.url
+    || asset.file_url || asset.download_url || asset.public_url
+    || asset.original_url || asset.src
+    || (asset.urls && (asset.urls.thumbnail || asset.urls.preview || asset.urls.original))
+    || asset.path
+    || ''
+  const filename = asset.filename || asset.name || asset.original_name || ''
   const isImage = (asset.kind && ['logo', 'photo', 'headshot', 'banner', 'artwork', 'signage'].includes(asset.kind))
-    || /\.(png|jpe?g|webp|gif|svg|avif)$/i.test(asset.url || asset.path || '')
+    || /\.(png|jpe?g|webp|gif|svg|avif)$/i.test(previewUrl || filename)
+  /* Make the whole thumb clickable when we have a URL so the user can
+     open the original in a new tab and verify it. */
+  const Wrapper = ({ children }) => previewUrl
+    ? <a href={previewUrl} target="_blank" rel="noreferrer" style={thumbWrapStyle}>{children}</a>
+    : <div style={thumbWrapStyle}>{children}</div>
+
   return (
-    <div style={{
-      border: '1px solid rgba(13,27,42,0.10)', borderRadius: 10, padding: 10,
-      display: 'flex', flexDirection: 'column', gap: 8, background: '#FFFFFF',
-      position: 'relative',
-    }}>
+    <Wrapper>
       <div style={{
         aspectRatio: '4/3', borderRadius: 6, overflow: 'hidden',
         background: 'rgba(13,27,42,0.06)', display: 'grid', placeItems: 'center',
       }}>
-        {isImage && asset.url ? (
-          <img src={asset.url} alt={asset.alt_text || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        {isImage && previewUrl ? (
+          <img src={previewUrl} alt={asset.alt_text || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
         ) : (
           <FileText size={28} style={{ color: '#607186' }} />
         )}
@@ -615,8 +628,21 @@ function AssetThumb({ asset }) {
         <span style={{ color: '#0D1B2A', textTransform: 'capitalize' }}>{asset.kind || 'file'}</span>
         {asset.featured && <span style={{ color: 'var(--event-primary)' }}><Star size={11} /></span>}
       </div>
-    </div>
+      {filename && (
+        <p title={filename} style={{ fontSize: 10.5, color: '#607186', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0 }}>
+          {filename}
+        </p>
+      )}
+    </Wrapper>
   )
+}
+
+const thumbWrapStyle = {
+  border: '1px solid rgba(13,27,42,0.10)', borderRadius: 10, padding: 10,
+  display: 'flex', flexDirection: 'column', gap: 8, background: '#FFFFFF',
+  position: 'relative',
+  textDecoration: 'none', color: 'inherit',
+}
 }
 
 /* ─── Layout primitives ─────────────────────────────────────────────────── */
