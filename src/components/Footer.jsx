@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Mail, MapPin } from 'lucide-react'
-import { HOME } from '../lib/routes'
+import { HOME, PROFILE_ACCESS, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS, EUROPE_2026, GALLERY } from '../lib/routes'
 
 // Inline brand SVGs (lucide does not ship brand icons)
 const BrandIcons = {
@@ -109,13 +109,16 @@ export default function Footer() {
             <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--color-gold)', fontWeight: 600 }}>Explore</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {[
-                { label: 'Home', to: '/' },
-                { label: 'Events', to: '/events' },
-                { label: 'About', to: '/about' },
-                { label: 'Global Network', to: '/global-network' },
-                { label: 'Insights', to: '/insights' },
-                { label: 'Europe 2026', to: '/europe-2026' },
-                { label: 'Gallery', to: '/gallery' },
+                { label: 'Home', to: HOME },
+                { label: 'Events', to: EVENTS },
+                { label: 'About', to: ABOUT },
+                { label: 'Global Network', to: GLOBAL_NETWORK },
+                { label: 'Insights', to: INSIGHTS },
+                { label: 'Europe 2026', to: EUROPE_2026 },
+                { label: 'Gallery', to: GALLERY },
+                /* Self-service entry point for speakers, delegates,
+                   rights-holders, and sponsor/exhibitor companies. */
+                { label: 'Manage your profile', to: PROFILE_ACCESS },
               ].map(l => (
                 <li key={l.to} style={{ marginBottom: '12px' }}>
                   <Link to={l.to} style={{

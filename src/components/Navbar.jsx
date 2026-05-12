@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, INSIGHTS,
-  MIAMI_2026, EUROPE_2026, RIYADH_2027,
+  MIAMI_2026, EUROPE_2026, RIYADH_2027, PROFILE_ACCESS,
 } from '../lib/routes'
 
 const navLinks = [
@@ -85,14 +85,25 @@ export default function Navbar() {
             ))}
           </div>
 
-          <Link to={CONTACT}
-            className="hidden lg:inline-flex items-center gap-2 font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
-            style={{ background: cta.bg, border: `1px solid ${cta.bg}`, color: cta.text, textDecoration: 'none' }}
-            onMouseEnter={e => { e.currentTarget.style.background = cta.hover; e.currentTarget.style.borderColor = cta.hover }}
-            onMouseLeave={e => { e.currentTarget.style.background = cta.bg; e.currentTarget.style.borderColor = cta.bg }}
-          >
-            Get in Touch
-          </Link>
+          <div className="hidden lg:flex items-center gap-5">
+            {/* Low-emphasis self-service entry — speakers, delegates,
+                rights-holders and company portals all go through here. */}
+            <Link to={PROFILE_ACCESS}
+              className="font-body font-medium text-xs uppercase tracking-[0.12em] transition-colors duration-200 whitespace-nowrap"
+              style={{ color: 'rgba(255,255,255,0.55)', textDecoration: 'none' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#fff' }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)' }}>
+              Sign in
+            </Link>
+            <Link to={CONTACT}
+              className="inline-flex items-center gap-2 font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
+              style={{ background: cta.bg, border: `1px solid ${cta.bg}`, color: cta.text, textDecoration: 'none' }}
+              onMouseEnter={e => { e.currentTarget.style.background = cta.hover; e.currentTarget.style.borderColor = cta.hover }}
+              onMouseLeave={e => { e.currentTarget.style.background = cta.bg; e.currentTarget.style.borderColor = cta.bg }}
+            >
+              Get in Touch
+            </Link>
+          </div>
 
           <button onClick={() => setMenuOpen(true)} className="lg:hidden w-11 h-11 flex items-center justify-center text-white bg-transparent border-none cursor-pointer" aria-label="Open menu">
             <Menu size={22} />
@@ -120,6 +131,11 @@ export default function Navbar() {
             className="nav-mobile-link inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] px-8 py-4 mt-6 cursor-pointer border-none"
             style={{ background: cta.bg, color: cta.text, textDecoration: 'none', transitionDelay: menuOpen ? `${150 + navLinks.length * 80}ms` : '0ms' }}>
             Get in Touch
+          </Link>
+          <Link to={PROFILE_ACCESS} onClick={() => setMenuOpen(false)}
+            className="nav-mobile-link font-mono uppercase tracking-[0.2em] mt-4 cursor-pointer"
+            style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.7rem', textDecoration: 'none', transitionDelay: menuOpen ? `${150 + (navLinks.length + 1) * 80}ms` : '0ms' }}>
+            Sign in
           </Link>
         </div>
       </div>
