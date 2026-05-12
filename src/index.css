@@ -504,6 +504,23 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
+/* Lift the hero text siblings ABOVE the crest wrapper (z-index: 2).
+   Without this, the wrapper's radial-gradient halo (which extends
+   past the wrapper bounds via negative inset) visually bleeds onto
+   the title/subtitle below it, washing them out. The whole
+   .hero-crest-wrap stacking context composites above its siblings
+   inside .hero-text, so bumping the text elements to z-index 3
+   pulls them on top of the halo bleed. */
+.hero-static-tagline,
+.hero-static-subtitle,
+.hero-divider,
+.hero-ctas,
+.hero-eyebrow,
+.hero-subline {
+  position: relative;
+  z-index: 3;
+}
+
 /* ─── Text reveal sequence via CSS class ─────────────────────────────────── */
 .hero-eyebrow,
 .hero-subline,
