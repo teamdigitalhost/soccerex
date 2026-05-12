@@ -76,12 +76,21 @@ function ParticleField() {
     const BURST_COUNT = 350 // dense confetti coverage
 
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
+      const w = canvas.offsetWidth
+      const h = canvas.offsetHeight
+      if (w === 0 || h === 0) return /* parent not laid out yet — try again next frame */
+      canvas.width = w * 2
+      canvas.height = h * 2
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
       ctx.scale(2, 2)
     }
     resize()
     window.addEventListener('resize', resize)
+    /* The crest image grows the parent after it loads, so observe size
+       changes and re-fit the canvas — otherwise it stays at its initial
+       (possibly 0x0) dimensions and never renders. */
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : null
+    if (ro) ro.observe(canvas)
 
     const W = () => canvas.offsetWidth
     const H = () => canvas.offsetHeight
@@ -183,18 +192,23 @@ function ParticleField() {
         } else {
           alpha = 1 - (progress - 0.08) / 0.92
         }
-        // Burst particles are brighter, ambient are subtler
-        alpha *= p.burst ? 0.65 : 0.35
+        // Boosted from 0.65/0.35 so gold particles still register on the
+        // cream-washed light hero. The canvas itself uses mix-blend-mode
+        // multiply in CSS for light theme — these alphas drive how dark
+        // each particle stamps the cream below.
+        alpha *= p.burst ? 0.95 : 0.55
 
         if (p.burst) {
-          if (p.color === 'gold')           ctx.fillStyle = `rgba(197, 165, 114, ${alpha})` // brand gold
-          else if (p.color === 'gold-warm') ctx.fillStyle = `rgba(240, 220, 168, ${alpha})` // warm highlight
-          else                              ctx.fillStyle = `rgba(160, 130,  82, ${alpha})` // gold-deep / amber
+          /* Saturated gold tones so the multiply blend punches warm spots
+             through the cream overlay. */
+          if (p.color === 'gold')           ctx.fillStyle = `rgba(176, 137,  60, ${alpha})` // brand gold (deeper)
+          else if (p.color === 'gold-warm') ctx.fillStyle = `rgba(212, 175,  85, ${alpha})` // warm highlight
+          else                              ctx.fillStyle = `rgba(122,  88,  35, ${alpha})` // amber
         } else {
           // Ambient: always gold tones
           ctx.fillStyle = p.gold
-            ? `rgba(197, 165, 114, ${alpha})`
-            : `rgba(240, 220, 168, ${alpha})`
+            ? `rgba(176, 137, 60, ${alpha})`
+            : `rgba(212, 175, 85, ${alpha})`
         }
 
         ctx.beginPath()
@@ -209,6 +223,7 @@ function ParticleField() {
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', resize)
+      if (ro) ro.disconnect()
     }
   }, [])
 

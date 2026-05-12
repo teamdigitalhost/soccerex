@@ -281,6 +281,11 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   pointer-events: none;
   z-index: 0;
 }
+/* Light theme: blend so gold particles read as warm amber punching
+   through the cream wash. Without this they fade into the background. */
+.hero-slideshow[data-theme="light"] .hero-particles {
+  mix-blend-mode: multiply;
+}
 
 /* 30-year anniversary crest — entrance animation + ember glow halo */
 .hero-crest-wrap {
