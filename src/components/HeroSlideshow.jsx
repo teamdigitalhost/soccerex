@@ -484,11 +484,11 @@ export default function HeroSlideshow() {
         <p
           className="hero-static-subtitle font-body leading-relaxed"
           style={{
-            fontSize: 'clamp(1.05rem, 1.8vw, 1.4rem)',
-            maxWidth: '820px',
+            fontSize: 'clamp(1.15rem, 2vw, 1.55rem)',
+            maxWidth: '840px',
             margin: '0 auto 2.5rem',
-            fontWeight: 500,
-            lineHeight: 1.45,
+            fontWeight: 600,
+            lineHeight: 1.4,
           }}
         >
           {HERO_SUBTITLE}
