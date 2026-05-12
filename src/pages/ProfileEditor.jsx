@@ -466,7 +466,13 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], limit
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-3 mb-6">
+    /* This is a <div>, not a <form>, because the whole editor is already
+       wrapped in the profile-patch <form>. HTML forbids nested forms — an
+       inner <form> gets ignored by the parser and the inner submit button
+       submits the OUTER form instead (which reloaded the page and made
+       the upload look like it did nothing). Triggering submit from the
+       button's onClick keeps the upload flow self-contained. */
+    <div className="flex flex-col gap-3 mb-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Field label="Asset kind">
           <select value={kind} onChange={(e) => setKind(e.target.value)} className="prog-input">
@@ -537,7 +543,8 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], limit
         )}
       </div>
       <div className="flex items-center gap-3 flex-wrap">
-        <button type="submit" disabled={status === 'uploading' || files.length === 0} className="event-btn-outline-light">
+        <button type="button" onClick={submit}
+          disabled={status === 'uploading' || files.length === 0} className="event-btn-outline-light">
           {status === 'uploading' ? <><Loader2 size={14} className="prog-spin" /> Uploading</> : <><Upload size={14} /> Upload</>}
         </button>
         {status === 'success' && (
@@ -566,7 +573,7 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], limit
           </div>
         </div>
       )}
-    </form>
+    </div>
   )
 }
 
