@@ -35,7 +35,7 @@ const WHY_ATTEND = [
   { title: 'The Americas Converge', desc: 'MLS, Liga MX, CONCACAF, CONMEBOL and the investors reshaping football in the Western Hemisphere, in one room.' },
   { title: 'World Cup Launchpad', desc: 'Nine months before the 2026 FIFA World Cup kicks off next door, Miami is the pre-tournament business hub.' },
   { title: 'Executive Networking', desc: 'Curated introductions with clubs, federations, leagues, rights holders, brands and capital partners.' },
-  { title: 'Signature Social Programme', desc: 'Evening receptions and VIP experiences set against the Miami waterfront and Freedom Park.' },
+  { title: 'Signature Social Programme', desc: 'Evening receptions and VIP experiences set against the Miami waterfront.' },
 ]
 
 const THEMES = [
@@ -43,7 +43,7 @@ const THEMES = [
   'Broadcasting, media rights and streaming',
   'Club ownership and investment in the Americas',
   'The 2026 World Cup: commercial and operational playbook',
-  'Stadium development, Miami Freedom Park and matchday experience',
+  'Stadium development and matchday experience in a World Cup host city',
   "Women's football in the USA, Canada and Mexico",
   'Fan engagement, creator economy and brand activation',
   'Talent pathways across North, Central and South America',
@@ -198,7 +198,7 @@ export default function Miami2026() {
             <div className="flex items-center gap-6 lg:gap-8 mb-8 flex-wrap">
               <div>
                 <p className="miami-subhead mb-1" style={{ color: '#607186', fontSize: '10px' }}><MapPin size={12} className="inline mr-1" /> Venue</p>
-                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.05rem', letterSpacing: '0.04em' }}>Miami Freedom Park</p>
+                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.05rem', letterSpacing: '0.04em' }}>Venue to be announced</p>
               </div>
               <div style={{ width: 7, height: 7, background: '#E91E63' }} />
               <div>
@@ -276,7 +276,7 @@ export default function Miami2026() {
                 What is <span style={{ color: '#E91E63' }}>Soccerex Miami</span>?
               </h2>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-                Soccerex Miami is the flagship gathering for the business of football across the Americas. Three days of high-impact content, executive networking, brand activation and industry insight, hosted at the new Miami Freedom Park on the doorstep of the 2026 FIFA World Cup.
+                Soccerex Miami is the flagship gathering for the business of football across the Americas. Three days of high-impact content, executive networking, brand activation and industry insight, on the doorstep of the 2026 FIFA World Cup.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
                 Clubs, leagues, federations, investors, rights holders and solution providers from across North, Central and South America come together to shape the commercial future of the sport in the region driving its next chapter.
