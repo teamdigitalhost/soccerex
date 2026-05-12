@@ -7,7 +7,7 @@ import TestModeBanner from './components/TestModeBanner'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, APP_PAGE,
   MIAMI_2026, EUROPE_2026, RIYADH_2027,
-  INSIGHTS, PROFILE_ACCESS,
+  INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
   ROUTE_PATTERNS,
 } from './lib/routes'
@@ -38,8 +38,9 @@ const ProfileAccess = lazy(() => import('./pages/ProfileAccess'))
 const ProfileEditor = lazy(() => import('./pages/ProfileEditor'))
 const CompanyPortal = lazy(() => import('./pages/CompanyPortal'))
 const PersonalPortal = lazy(() => import('./pages/PersonalPortal'))
+const DealNetworkPage = lazy(() => import('./pages/DealNetwork'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
-// Unreleased verticals (Deal Network, HerSoccerex, The Pitch) kept on disk but
+// Unreleased verticals (HerSoccerex, The Pitch) kept on disk but
 // no longer routed until announced. Restore routes in App.jsx when launching.
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
           <Route path={GLOBAL_NETWORK} element={<GlobalNetwork />} />
           <Route path={EVENTS} element={<Events />} />
           <Route path={CONTACT} element={<Contact />} />
+          <Route path={DEAL_NETWORK} element={<DealNetworkPage />} />
           <Route path={APP_PAGE} element={<SoccerexApp />} />
           <Route path={INSIGHTS} element={<InsightsList />} />
           <Route path={ROUTE_PATTERNS.insightArticle} element={<InsightArticle />} />

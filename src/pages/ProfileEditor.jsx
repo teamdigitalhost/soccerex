@@ -5,7 +5,7 @@ import {
   FileText, LogOut, Shield, Trash2,
 } from 'lucide-react'
 import {
-  getEditableProfile, updateEditableProfile, uploadProfileAssets, ApiError,
+  getEditableProfile, updateEditableProfile, uploadProfileAssets, deleteProfileAsset, ApiError,
 } from '../lib/soccerexApi'
 import {
   readProfileAccessSession, clearProfileAccessSession,
@@ -261,7 +261,14 @@ export default function ProfileEditor() {
                      without a manual refresh. */
                   onProfileRefreshed={(next) => { setProfile(next); setForm(toFormState(next)) }}
                 />
-                <AssetList profile={profile} />
+                <AssetList
+                  profile={profile}
+                  slug={slug}
+                  editToken={editToken}
+                  isTest={isTest}
+                  onProfileRefreshed={(next) => { setProfile(next); setForm(toFormState(next)) }}
+                  onUnauthorized={signOut}
+                />
               </FormCard>
             </form>
           )}
@@ -577,8 +584,33 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], limit
   )
 }
 
-function AssetList({ profile }) {
+function AssetList({ profile, slug, editToken, isTest, onProfileRefreshed, onUnauthorized }) {
   const assets = profile?.assets || []
+  const [deletingId, setDeletingId] = useState(null)
+  const [errorId, setErrorId] = useState(null)
+
+  async function handleDelete(asset) {
+    if (!asset?.id) return
+    if (typeof window !== 'undefined' && !window.confirm(`Delete ${asset.filename || asset.kind || 'this asset'}?`)) return
+    setErrorId(null)
+    setDeletingId(asset.id)
+    try {
+      const result = await deleteProfileAsset(slug, editToken, asset.id, { test: isTest })
+      const refreshed = result?.profile || result?.data?.profile
+      if (refreshed && typeof onProfileRefreshed === 'function') {
+        onProfileRefreshed(refreshed)
+      }
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401 && typeof onUnauthorized === 'function') {
+        onUnauthorized()
+        return
+      }
+      setErrorId(asset.id)
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
   if (assets.length === 0) {
     return <p className="miami-body" style={{ fontSize: 12, color: '#607186' }}>No assets uploaded yet.</p>
   }
@@ -586,13 +618,21 @@ function AssetList({ profile }) {
     <div>
       <p className="miami-subhead" style={{ fontSize: 11, color: 'var(--event-secondary)', marginBottom: 12 }}>Already uploaded</p>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-        {assets.map((a) => <AssetThumb key={a.id || a.url || a.path} asset={a} />)}
+        {assets.map((a) => (
+          <AssetThumb
+            key={a.id || a.url || a.path}
+            asset={a}
+            onDelete={a.id ? () => handleDelete(a) : undefined}
+            deleting={deletingId === a.id}
+            errored={errorId === a.id}
+          />
+        ))}
       </div>
     </div>
   )
 }
 
-function AssetThumb({ asset }) {
+function AssetThumb({ asset, onDelete, deleting, errored }) {
   /* The backend serializer may surface the asset's URL under any of these
      keys depending on whether it's a public file, a signed temporary URL,
      or a thumbnail. Resolve in priority order so we never render an empty
@@ -622,6 +662,27 @@ function AssetThumb({ asset }) {
 
   return (
     <Wrapper>
+      {onDelete && (
+        <button
+          type="button"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (!deleting) onDelete() }}
+          disabled={deleting}
+          title={errored ? 'Delete failed, try again' : 'Delete asset'}
+          aria-label="Delete asset"
+          style={{
+            position: 'absolute', top: 6, right: 6, zIndex: 2,
+            width: 26, height: 26, borderRadius: 6,
+            display: 'grid', placeItems: 'center',
+            background: errored ? '#fee2e2' : 'rgba(255,255,255,0.92)',
+            border: `1px solid ${errored ? '#fca5a5' : 'rgba(13,27,42,0.14)'}`,
+            color: errored ? '#b91c1c' : '#0D1B2A',
+            cursor: deleting ? 'not-allowed' : 'pointer',
+            opacity: deleting ? 0.6 : 1,
+          }}
+        >
+          {deleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+        </button>
+      )}
       <div style={{
         aspectRatio: '4/3', borderRadius: 6, overflow: 'hidden',
         background: 'rgba(13,27,42,0.06)', display: 'grid', placeItems: 'center',

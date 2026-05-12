@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Mail, MapPin } from 'lucide-react'
-import { HOME, PROFILE_ACCESS, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS, EUROPE_2026, GALLERY } from '../lib/routes'
+import { HOME, PROFILE_ACCESS, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS, EUROPE_2026, GALLERY, DEAL_NETWORK } from '../lib/routes'
 
 // Inline brand SVGs (lucide does not ship brand icons)
 const BrandIcons = {
@@ -113,6 +113,7 @@ export default function Footer() {
                 { label: 'Events', to: EVENTS },
                 { label: 'About', to: ABOUT },
                 { label: 'Global Network', to: GLOBAL_NETWORK },
+                { label: 'Deal Network', to: DEAL_NETWORK },
                 { label: 'Insights', to: INSIGHTS },
                 { label: 'Europe 2026', to: EUROPE_2026 },
                 { label: 'Gallery', to: GALLERY },

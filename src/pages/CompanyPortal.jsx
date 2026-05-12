@@ -9,6 +9,7 @@ import { getCompanyPortal, assignCompanyPass, postDeliverableUpdate, ApiError } 
 import { readProfileAccessSession, clearProfileAccessSession } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
+import DealNetworkPortalSection from '../components/DealNetworkPortalSection'
 
 /* The portal payload is rendered as-is. The backend strips internal-only
    fields (deal margin, staff notes) before serialising; this view never
@@ -83,6 +84,12 @@ export default function CompanyPortal() {
             <div className="flex flex-col gap-6">
               <ProfileSummary profile={profile} slug={slug} />
               <NextActions actions={portal.next_actions} />
+              <DealNetworkPortalSection
+                slug={slug}
+                editToken={editToken}
+                isTest={isTest}
+                onUnauthorized={signOut}
+              />
               <Deliverables data={portal.deliverables} slug={slug} editToken={editToken} isTest={isTest} onRefresh={refresh} />
               <AssetLibrary data={portal.asset_library} slug={slug} />
               <PassAllocation

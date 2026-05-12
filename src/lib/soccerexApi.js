@@ -149,6 +149,19 @@ export async function preregisterLead(payload, opts = {}) {
   }))
 }
 
+/* ───── Deal Network (public concierge intake) ──────────────────────────────
+ * Soccerex-curated commercial introductions. The public intake is open
+ * (rate-limited server-side); the per-member portal lives behind the
+ * profile-access edit_token below.
+ */
+export async function submitDealNetworkIntake(payload, opts = {}) {
+  return unwrap(await request('/deal-network/intakes', {
+    method: 'POST',
+    body: payload,
+    test: opts.test,
+  }))
+}
+
 /* ───── Profile self-service (auth via short-lived edit_token) ───────────── */
 
 async function authedRequest(path, { method = 'GET', body, token, signal, formData, test } = {}) {
@@ -239,6 +252,13 @@ export async function uploadProfileAssets(slug, editToken, fields, opts = {}) {
   return unwrap(await authedRequest(
     `/profile-access/profiles/${encodeURIComponent(slug)}/assets`,
     { method: 'POST', formData: fd, token: editToken, test: opts.test },
+  ))
+}
+
+export async function deleteProfileAsset(slug, editToken, assetId, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/assets/${assetId}`,
+    { method: 'DELETE', token: editToken, test: opts.test },
   ))
 }
 
@@ -360,6 +380,39 @@ export async function getVipPortal(slug, editToken, opts = {}) {
 export async function rsvpVipExperience(slug, editToken, experienceId, body, opts = {}) {
   return unwrap(await authedRequest(
     `/profile-access/profiles/${encodeURIComponent(slug)}/vip-portal/experiences/${encodeURIComponent(experienceId)}/rsvp`,
+    { method: 'POST', body, token: editToken, test: opts.test },
+  ))
+}
+
+/* ───── Deal Network member portal ─────────────────────────────────────────
+ * Aggregates membership, intakes (the user's briefs), curated matches, and
+ * concierge-scheduled meetings for an authenticated profile manager. All
+ * mutations return the refreshed portal payload alongside the changed entity.
+ */
+export async function getDealNetworkPortal(slug, editToken, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/deal-network-portal`,
+    { token: editToken, test: opts.test },
+  ))
+}
+
+export async function submitDealNetworkPortalIntake(slug, editToken, payload, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/deal-network-portal/intakes`,
+    { method: 'POST', body: payload, token: editToken, test: opts.test },
+  ))
+}
+
+export async function updateDealNetworkPortalIntake(slug, editToken, intakeId, patch, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/deal-network-portal/intakes/${encodeURIComponent(intakeId)}`,
+    { method: 'PATCH', body: patch, token: editToken, test: opts.test },
+  ))
+}
+
+export async function respondToDealNetworkMeeting(slug, editToken, meetingId, body, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/deal-network-portal/meetings/${encodeURIComponent(meetingId)}/response`,
     { method: 'POST', body, token: editToken, test: opts.test },
   ))
 }

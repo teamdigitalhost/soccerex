@@ -3,14 +3,15 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, INSIGHTS,
-  MIAMI_2026, EUROPE_2026, RIYADH_2027, PROFILE_ACCESS,
+  MIAMI_2026, EUROPE_2026, RIYADH_2027, PROFILE_ACCESS, DEAL_NETWORK,
 } from '../lib/routes'
 
 const navLinks = [
-  { label: 'About',    to: ABOUT },
-  { label: 'Events',   to: EVENTS },
-  { label: 'Network',  to: GLOBAL_NETWORK },
-  { label: 'Insights', to: INSIGHTS },
+  { label: 'About',        to: ABOUT },
+  { label: 'Events',       to: EVENTS },
+  { label: 'Network',      to: GLOBAL_NETWORK },
+  { label: 'Deal Network', to: DEAL_NETWORK },
+  { label: 'Insights',     to: INSIGHTS },
 ]
 
 /* CTA accent color is route-aware so each event page's "Get in Touch" button

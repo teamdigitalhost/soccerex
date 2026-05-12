@@ -25,6 +25,7 @@ export const CONTACT         = '/contact'
 export const GLOBAL_NETWORK  = '/global-network'
 export const GALLERY         = '/gallery'
 export const APP_PAGE        = '/app'
+export const DEAL_NETWORK    = '/deal-network'
 
 /* ─── Event landing pages ──────────────────────────────────────────────── */
 export const MIAMI_2026      = '/miami-2026'
