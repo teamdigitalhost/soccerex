@@ -599,10 +599,18 @@ function AssetThumb({ asset }) {
      image box while a usable URL is sitting in the payload. */
   const previewUrl = asset.preview_url || asset.thumbnail_url || asset.url
     || asset.file_url || asset.download_url || asset.public_url
-    || asset.original_url || asset.src
+    || asset.original_url || asset.src || asset.href || asset.location
     || (asset.urls && (asset.urls.thumbnail || asset.urls.preview || asset.urls.original))
+    || (asset.links && (asset.links.preview || asset.links.original || asset.links.self))
+    || (asset.thumbnail && (asset.thumbnail.url || asset.thumbnail.href || asset.thumbnail))
     || asset.path
     || ''
+  /* Until we know which field carries the URL on the live backend, log
+     the unresolved shape to the console so we can see what's there. */
+  if (!previewUrl && typeof window !== 'undefined') {
+    // eslint-disable-next-line no-console
+    console.warn('[AssetThumb] no URL found in asset payload, keys:', Object.keys(asset), asset)
+  }
   const filename = asset.filename || asset.name || asset.original_name || ''
   const isImage = (asset.kind && ['logo', 'photo', 'headshot', 'banner', 'artwork', 'signage'].includes(asset.kind))
     || /\.(png|jpe?g|webp|gif|svg|avif)$/i.test(previewUrl || filename)
@@ -620,8 +628,15 @@ function AssetThumb({ asset }) {
       }}>
         {isImage && previewUrl ? (
           <img src={previewUrl} alt={asset.alt_text || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
-        ) : (
+        ) : previewUrl ? (
           <FileText size={28} style={{ color: '#607186' }} />
+        ) : (
+          /* No URL resolved — surface the keys we received so the
+             missing field name is immediately obvious in the UI. */
+          <div style={{ padding: 8, textAlign: 'center', fontSize: 9, lineHeight: 1.35, color: '#b91c1c', fontFamily: 'IBM Plex Mono, monospace', overflow: 'hidden' }}>
+            <p style={{ fontWeight: 700, marginBottom: 4 }}>No URL in payload</p>
+            <p style={{ wordBreak: 'break-word' }}>{Object.keys(asset).slice(0, 8).join(', ')}</p>
+          </div>
         )}
       </div>
       <div className="flex items-center justify-between gap-2" style={{ fontSize: 11 }}>
