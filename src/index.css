@@ -638,21 +638,27 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 /* Sweeping shine. A div positioned over the badge image, masked to the
    badge silhouette via the same SVG, filled with an animated linear
    gradient that slides diagonally across the silhouette. Blended with
-   `screen` so the highlight lightens the black crest where it passes. */
+   `screen` so the highlight lightens the black crest where it passes.
+
+   background-repeat: no-repeat is critical — without it the gradient
+   tiles and the seams form a visible cross over the badge. The very
+   large background-size (400%) keeps the stripe boundaries well off the
+   visible mask area at every keyframe. */
 .hero-crest-shine {
   position: absolute;
   inset: 0;
   pointer-events: none;
   -webkit-mask: url('/brand/crests/crest-main-black.svg') center / contain no-repeat;
           mask: url('/brand/crests/crest-main-black.svg') center / contain no-repeat;
-  background: linear-gradient(115deg,
-    transparent 30%,
-    rgba(255, 245, 215, 0.45) 44%,
+  background-image: linear-gradient(115deg,
+    transparent 38%,
+    rgba(255, 245, 215, 0.45) 47%,
     rgba(255, 255, 255, 0.95) 50%,
-    rgba(255, 220, 140, 0.55) 56%,
-    transparent 70%);
-  background-size: 260% 260%;
-  background-position: 130% 130%;
+    rgba(255, 220, 140, 0.55) 53%,
+    transparent 62%);
+  background-repeat: no-repeat;
+  background-size: 400% 400%;
+  background-position: 170% 170%;
   mix-blend-mode: screen;
   animation: badge-shine 5.5s ease-in-out infinite;
   animation-delay: 2s;
@@ -660,10 +666,10 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 }
 .hero-text-visible .hero-crest-shine { opacity: 1; }
 @keyframes badge-shine {
-  0%   { background-position: 130% 130%; }
-  45%  { background-position: -40% -40%; }
-  55%  { background-position: -40% -40%; }
-  100% { background-position: 130% 130%; }
+  0%   { background-position: 170% 170%; }
+  45%  { background-position: -70% -70%; }
+  55%  { background-position: -70% -70%; }
+  100% { background-position: 170% 170%; }
 }
 
 /* ─── Oversized outline "30" background elements ─────────────────────────── */
