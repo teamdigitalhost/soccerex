@@ -143,16 +143,24 @@ function ParticleField() {
           burst: true,
         }
       }
-      // Ambient particles: slow, gentle, wide reach
+      // Ambient particles: slow drift, but sized + coloured like burst
+      // particles so they read with the same presence (just at a calmer
+      // pace and direction).
       const speed = 0.2 + Math.random() * 0.6
+      const colorRoll = Math.random()
+      let color
+      if (colorRoll < 0.5) color = 'gold'
+      else if (colorRoll < 0.8) color = 'gold-warm'
+      else color = 'gold-deep'
       return {
         x, y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
         life: 150 + Math.random() * 250,
         maxLife: 150 + Math.random() * 250,
-        size: (0.5 + Math.random() * 2) * SCALE,
-        gold: Math.random() > 0.25,
+        size: (1 + Math.random() * 3.5) * SCALE, /* matches burst range */
+        color,
+        gold: true,
         burst: false,
       }
     }
@@ -204,18 +212,11 @@ function ParticleField() {
         // higher density carry the effect further across the hero.
         alpha *= p.burst ? 1.0 : 1.0
 
-        if (p.burst) {
-          /* Punchier ember-gold tones for the burst, so the multiply
-             blend leaves clearly-visible warm stamps. */
-          if (p.color === 'gold')           ctx.fillStyle = `rgba(160, 110,  35, ${alpha})` // brand gold (deeper)
-          else if (p.color === 'gold-warm') ctx.fillStyle = `rgba(200, 155,  60, ${alpha})` // warm highlight
-          else                              ctx.fillStyle = `rgba(100,  65,  20, ${alpha})` // amber
-        } else {
-          // Ambient: always warm gold tones
-          ctx.fillStyle = p.gold
-            ? `rgba(160, 110, 35, ${alpha})`
-            : `rgba(200, 155, 60, ${alpha})`
-        }
+        /* Same three ember-gold tones for burst AND ambient — only
+           speed and lifetime differ between the two. */
+        if (p.color === 'gold')           ctx.fillStyle = `rgba(160, 110,  35, ${alpha})` // brand gold (deeper)
+        else if (p.color === 'gold-warm') ctx.fillStyle = `rgba(200, 155,  60, ${alpha})` // warm highlight
+        else                              ctx.fillStyle = `rgba(100,  65,  20, ${alpha})` // amber
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
@@ -442,11 +443,22 @@ export default function HeroSlideshow() {
         style={{ maxWidth: '900px', padding: 'clamp(40px,6vw,90px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
 
         {/* Anniversary crest. In light mode we use the black crest so it
-            reads against the cream-washed photos. */}
+            reads against the cream-washed photos.
+
+            Layout: .hero-crest-wrap handles the entrance fade/scale.
+            .hero-crest-float is an inner element that runs a continuous
+            slow float so the float never fights the entrance transition.
+            .hero-crest-shine sits on top of the badge image with a mask
+            shaped to the badge silhouette + a sweeping gradient
+            background that's blended onto the black SVG, producing a
+            "polished metal" highlight that drifts across the crest. */}
         <div className="hero-30-with-particles">
           <ParticleField />
           <div className="hero-crest-wrap">
-            <Crest variant="main" color="black" size={280} decorative />
+            <div className="hero-crest-float">
+              <Crest variant="main" color="black" size={280} decorative />
+              <div className="hero-crest-shine" aria-hidden="true" />
+            </div>
           </div>
         </div>
 

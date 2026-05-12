@@ -583,7 +583,10 @@ html, body { overflow-x: hidden; max-width: 100vw; }
    Photoshop's "Outer Glow" with white at decreasing opacity over
    increasing radius. Because drop-shadow respects the SVG's actual
    silhouette, the halo radiates from the badge shape itself rather
-   than a rectangular box. Soft and local, not hard. */
+   than a rectangular box. Soft and local, not hard.
+
+   Light theme also animates the glow intensity so the badge appears
+   to softly pulse. */
 .hero-slideshow[data-theme="light"] .hero-crest-wrap {
   filter:
     drop-shadow(0 0 10px  rgba(255, 255, 255, 0.85))
@@ -591,6 +594,76 @@ html, body { overflow-x: hidden; max-width: 100vw; }
     drop-shadow(0 0 72px  rgba(255, 255, 255, 0.45))
     drop-shadow(0 0 140px rgba(255, 255, 255, 0.28))
     drop-shadow(0 12px 32px rgba(13, 27, 42, 0.18));
+  animation: badge-glow-pulse 7s ease-in-out infinite;
+  animation-delay: 1.8s; /* settle after entrance transition */
+}
+@keyframes badge-glow-pulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 10px  rgba(255, 255, 255, 0.85))
+      drop-shadow(0 0 28px  rgba(255, 255, 255, 0.65))
+      drop-shadow(0 0 72px  rgba(255, 255, 255, 0.45))
+      drop-shadow(0 0 140px rgba(255, 255, 255, 0.28))
+      drop-shadow(0 12px 32px rgba(13, 27, 42, 0.18));
+  }
+  50% {
+    /* Glow bloom — wider, brighter, with a warm gold tint. */
+    filter:
+      drop-shadow(0 0 14px  rgba(255, 255, 255, 0.95))
+      drop-shadow(0 0 40px  rgba(255, 252, 235, 0.80))
+      drop-shadow(0 0 100px rgba(255, 235, 170, 0.55))
+      drop-shadow(0 0 180px rgba(255, 220, 130, 0.38))
+      drop-shadow(0 14px 36px rgba(13, 27, 42, 0.20));
+  }
+}
+
+/* Inner float container — handles continuous hover motion so it never
+   fights the entrance transition on .hero-crest-wrap. */
+.hero-crest-float {
+  position: relative;
+  display: inline-block;
+  /* Subtle 3D tilt + lift, slow and breathing. */
+  animation: badge-float 6.5s ease-in-out infinite;
+  animation-delay: 2s; /* start after entrance settles */
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0)    rotate(0deg)    perspective(800px) rotateX(0)   rotateY(0); }
+  25%      { transform: translateY(-6px) rotate(0.4deg)  perspective(800px) rotateX(2deg) rotateY(-1.5deg); }
+  50%      { transform: translateY(-10px) rotate(0deg)   perspective(800px) rotateX(3deg) rotateY(0); }
+  75%      { transform: translateY(-6px) rotate(-0.4deg) perspective(800px) rotateX(2deg) rotateY(1.5deg); }
+}
+
+/* Sweeping shine. A div positioned over the badge image, masked to the
+   badge silhouette via the same SVG, filled with an animated linear
+   gradient that slides diagonally across the silhouette. Blended with
+   `screen` so the highlight lightens the black crest where it passes. */
+.hero-crest-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: url('/brand/crests/crest-main-black.svg') center / contain no-repeat;
+          mask: url('/brand/crests/crest-main-black.svg') center / contain no-repeat;
+  background: linear-gradient(115deg,
+    transparent 30%,
+    rgba(255, 245, 215, 0.45) 44%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(255, 220, 140, 0.55) 56%,
+    transparent 70%);
+  background-size: 260% 260%;
+  background-position: 130% 130%;
+  mix-blend-mode: screen;
+  animation: badge-shine 5.5s ease-in-out infinite;
+  animation-delay: 2s;
+  opacity: 0; /* hidden until the entrance has resolved */
+}
+.hero-text-visible .hero-crest-shine { opacity: 1; }
+@keyframes badge-shine {
+  0%   { background-position: 130% 130%; }
+  45%  { background-position: -40% -40%; }
+  55%  { background-position: -40% -40%; }
+  100% { background-position: 130% 130%; }
 }
 
 /* ─── Oversized outline "30" background elements ─────────────────────────── */
