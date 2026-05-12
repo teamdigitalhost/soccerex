@@ -11,7 +11,14 @@ import { isTestModeFromUrl } from '../lib/testMode'
 import { Loader2 } from 'lucide-react'
 
 // ═══ INQUIRY TYPES ════════════════════════════════════════════════════════════
-// Each type routes to the correct email and shows relevant conditional fields.
+/* Each inquiry type maps to a backend lead endpoint:
+     partner / exhibit → /api/v1/leads/sponsorship-inquiry
+     speaker           → /api/v1/leads/speaker-inquiry
+     press / volunteer / host / general → /api/v1/leads/contact
+
+   The `fields` array drives which conditional inputs render below the
+   shared name/email block. Wire-key translation (UI key → backend key)
+   happens inside handleSubmit's CONTACT_KEY_MAP. */
 const INQUIRY_TYPES = [
   {
     id: 'partner',
@@ -19,7 +26,7 @@ const INQUIRY_TYPES = [
     icon: Handshake,
     email: 'partner@soccerex.com',
     desc: 'Sponsorship, strategic partnerships, and commercial opportunities.',
-    fields: ['organisation', 'country'],
+    fields: ['organisation', 'role', 'country', 'partnershipType', 'budget', 'event', 'attendeeCount'],
   },
   {
     id: 'speaker',
@@ -27,7 +34,7 @@ const INQUIRY_TYPES = [
     icon: Mic,
     email: 'talks@soccerex.com',
     desc: 'Propose yourself or someone you represent as a Soccerex speaker.',
-    fields: ['organisation', 'speakerBio', 'linkedin'],
+    fields: ['organisation', 'role', 'topic', 'topicArea', 'speakerBio', 'proposal', 'linkedin', 'event'],
   },
   {
     id: 'press',
@@ -35,7 +42,7 @@ const INQUIRY_TYPES = [
     icon: Newspaper,
     email: 'press@soccerex.com',
     desc: 'Media accreditation, interview requests, and press releases.',
-    fields: ['organisation', 'role', 'outlet', 'deadline'],
+    fields: ['organisation', 'role', 'outlet', 'deadline', 'event'],
   },
   {
     id: 'exhibit',
@@ -43,7 +50,7 @@ const INQUIRY_TYPES = [
     icon: Store,
     email: 'exhibit@soccerex.com',
     desc: 'Stand space, brand activations, and exhibitor packages.',
-    fields: ['organisation', 'role', 'country', 'productType'],
+    fields: ['organisation', 'role', 'country', 'productType', 'budget', 'event'],
   },
   {
     id: 'volunteer',
@@ -51,7 +58,7 @@ const INQUIRY_TYPES = [
     icon: Heart,
     email: 'enquiries@soccerex.com',
     desc: 'Join the Soccerex crew and help deliver our flagship events.',
-    fields: ['role', 'country', 'availability', 'languages'],
+    fields: ['role', 'country', 'availability', 'languages', 'event'],
   },
   {
     id: 'host',
@@ -59,7 +66,7 @@ const INQUIRY_TYPES = [
     icon: MapPin,
     email: 'partner@soccerex.com',
     desc: 'Bring a Soccerex event to your city, region, or venue.',
-    fields: ['organisation', 'role', 'country', 'venueName'],
+    fields: ['organisation', 'role', 'country', 'venueCity', 'venueName', 'event'],
   },
   {
     id: 'general',
@@ -67,15 +74,31 @@ const INQUIRY_TYPES = [
     icon: MessageCircle,
     email: 'enquiries@soccerex.com',
     desc: 'Anything else on your mind. We will route it to the right team.',
-    fields: [],
+    fields: ['subject', 'organisation'],
   },
 ]
 
-// Conditional field definitions
+/* Inquiry kinds that require a message body (the rest treat it as
+   optional because their structured fields carry the substance). */
+const MESSAGE_REQUIRED = new Set(['press', 'volunteer', 'host', 'general'])
+
+/* Event select options use { value, label } so we send actual event
+   slugs to the backend (event_slug column) but show human labels. */
+const EVENT_OPTIONS = [
+  { value: '', label: 'Select an event' },
+  { value: 'soccerex-miami-2026',  label: 'Soccerex Miami 2026' },
+  { value: 'soccerex-europe-2026', label: 'Soccerex Europe 2026 (Amsterdam)' },
+  { value: 'soccerex-mena-2027',   label: 'Soccerex MENA 2027' },
+  { value: 'multiple',             label: 'Multiple events' },
+  { value: 'unsure',               label: 'Not sure yet' },
+]
+
+// Conditional field definitions. UI-only labels; wire keys live in CONTACT_KEY_MAP.
 const FIELD_DEFS = {
   organisation: { label: 'Organisation / Company', placeholder: 'Your company or organisation', type: 'text' },
-  role: { label: 'Your Role', placeholder: 'Title or position', type: 'text' },
-  country: { label: 'Country', placeholder: 'Where you are based', type: 'text' },
+  role:         { label: 'Your Role',              placeholder: 'Title or position',           type: 'text' },
+  country:      { label: 'Country',                placeholder: 'Where you are based',          type: 'text' },
+  subject:      { label: 'Subject',                placeholder: 'A short line on what this is about', type: 'text' },
   partnershipType: {
     label: 'Partnership Type', type: 'select',
     options: ['', 'Title / Headline Sponsor', 'Category Sponsor', 'Media Partner', 'Technology Partner', 'Hospitality Partner', 'Other'],
@@ -86,24 +109,27 @@ const FIELD_DEFS = {
   },
   event: {
     label: 'Which Event', type: 'select',
-    options: ['', 'Soccerex Europe 2026 (Amsterdam)', 'Soccerex Miami', 'Soccerex MENA', 'Multiple events', 'Not sure yet'],
+    options: EVENT_OPTIONS,
   },
   attendeeCount: {
     label: 'Approx. Number of Attendees', type: 'select',
     options: ['', '1', '2 – 5', '6 – 10', '11 – 25', '25+'],
   },
+  topic:     { label: 'Talk Topic / Title', placeholder: 'A working title for your talk',      type: 'text' },
   topicArea: {
     label: 'Speaking Topic Area', type: 'select',
     options: ['', 'Commercial & Sponsorship', 'Broadcasting & Media', 'Technology & Innovation', 'Performance & Analytics', 'Fan Engagement', 'Governance & Regulation', 'Ownership & Investment', 'Women\'s Football', 'Youth Development', 'Other'],
   },
-  speakerBio: { label: 'Short Bio', placeholder: 'A few sentences about the speaker\'s background', type: 'textarea', rows: 3 },
-  linkedin: { label: 'LinkedIn URL', placeholder: 'https://linkedin.com/in/...', type: 'url' },
-  outlet: { label: 'Publication / Outlet', placeholder: 'Name of your media outlet', type: 'text' },
-  deadline: { label: 'Deadline (if any)', placeholder: 'e.g. next Friday', type: 'text' },
-  productType: { label: 'Product / Service Category', placeholder: 'What you plan to showcase', type: 'text' },
-  availability: { label: 'Event Availability', placeholder: 'Which events and dates you are available for', type: 'text' },
-  languages: { label: 'Languages Spoken', placeholder: 'e.g. English, Spanish, Arabic', type: 'text' },
-  venueName: { label: 'Venue / City', placeholder: 'Proposed host city or venue', type: 'text' },
+  speakerBio: { label: 'Short Bio',   placeholder: 'A few sentences about the speaker\'s background', type: 'textarea', rows: 3 },
+  proposal:   { label: 'Talk Proposal (optional)', placeholder: 'A paragraph or two on the talk you\'d give — angle, audience, takeaway.', type: 'textarea', rows: 4 },
+  linkedin:   { label: 'LinkedIn URL', placeholder: 'https://linkedin.com/in/...', type: 'url' },
+  outlet:     { label: 'Publication / Outlet', placeholder: 'Name of your media outlet', type: 'text' },
+  deadline:   { label: 'Deadline (if any)',    placeholder: 'e.g. next Friday',          type: 'text' },
+  productType:{ label: 'Product / Service Category', placeholder: 'What you plan to showcase', type: 'text' },
+  availability:{ label: 'Event Availability',  placeholder: 'Which events and dates you are available for', type: 'text' },
+  languages:  { label: 'Languages Spoken',     placeholder: 'e.g. English, Spanish, Arabic', type: 'text' },
+  venueCity:  { label: 'Proposed City',        placeholder: 'e.g. Mexico City',          type: 'text' },
+  venueName:  { label: 'Proposed Venue',       placeholder: 'Name of the venue, if known', type: 'text' },
 }
 
 // ═══ Scroll animations ═══════════════════════════════════════════════════════
@@ -153,9 +179,16 @@ export default function Contact() {
 
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  /* Backend response (data.id / kind / status / received_at) — surfaced in
+     the success state. */
+  const [submitResult, setSubmitResult] = useState(null)
 
-  /* Map each inquiry type to the backend lead endpoint that handles it.
-     Falls back to generic /leads/contact when there's no specialised path. */
+  /* Map each inquiry type to the backend lead endpoint. Partner + exhibit
+     both hit /leads/sponsorship-inquiry (backend stores exhibit as
+     exhibitor_inquiry). Speaker goes to /leads/speaker-inquiry; the rest
+     go to the generic /leads/contact (where the backend further tags
+     them by inquiry_type — press → media_inquiry, host → host_event_inquiry
+     marked urgent, etc.). */
   const leadKindFor = (id) => {
     if (id === 'partner' || id === 'exhibit') return 'sponsorship-inquiry'
     if (id === 'speaker') return 'speaker-inquiry'
@@ -166,42 +199,54 @@ export default function Contact() {
     e.preventDefault()
     setSubmitting(true); setSubmitError('')
 
-    /* Build a payload whose keys match the handoff doc's canonical shape for
-       the chosen lead-kind:
-         - `name`, `email`, `phone`, `message`, `source`, `source_url`
-         - sponsorship: + `organisation`, `role`, `country`, `partnership_type`,
-                          `budget_range`, `event`, `attendee_count`, `product_type`
-         - speaker:     + `topic`, `linkedin`, `organisation`, `role`
-         - contact:     + everything else as free-form
-       The form's internal field IDs (`speakerBio`, `partnershipType`, …) are
-       mapped to the canonical wire keys here so the backend never sees the
-       Contact-page's UI-only naming. */
+    /* Translate UI field IDs → backend wire keys. The backend accepts
+       company/organisation as aliases; we prefer `company`. Likewise
+       `linkedin_url` (not `linkedin`), `event_slug` (not `event`),
+       `venue_name` / `venue_city` (snake_case), and `short_bio` (the
+       speaker bio used to wrongly map to `topic`). */
     const CONTACT_KEY_MAP = {
-      speakerBio: 'topic',
+      organisation:    'company',
       partnershipType: 'partnership_type',
-      budget: 'budget_range',
-      attendeeCount: 'attendee_count',
-      topicArea: 'topic_area',
-      productType: 'product_type',
-      venueName: 'venue_name',
+      budget:          'budget_range',
+      attendeeCount:   'attendee_count',
+      topicArea:       'topic_area',
+      productType:     'product_type',
+      venueName:       'venue_name',
+      venueCity:       'venue_city',
+      speakerBio:      'short_bio',
+      linkedin:        'linkedin_url',
+      event:           'event_slug',
     }
+
+    /* Backend will combine first_name + last_name into name, but it also
+       accepts `name` directly — send both so the value is the same
+       regardless of which the backend prefers. Build name from the parts
+       (cleaner than parsing the combined). */
+    const firstName = form.firstName?.trim() || undefined
+    const lastName  = form.lastName?.trim() || undefined
+    const fullName  = [firstName, lastName].filter(Boolean).join(' ') || undefined
+
     const payload = {
       inquiry_type: inquiry.id,
-      name: `${form.firstName || ''} ${form.lastName || ''}`.trim() || undefined,
-      email: form.email || undefined,
+      first_name: firstName,
+      last_name:  lastName,
+      name:       fullName,
+      email: form.email?.trim() || undefined,
       phone: form.phone || undefined,
       message: form.message || undefined,
       source: `contact-${inquiry.id}`,
       source_url: typeof window !== 'undefined' ? window.location.href : undefined,
     }
     inquiry.fields.forEach((key) => {
-      if (!form[key]) return
+      const value = form[key]
+      if (value === undefined || value === null || value === '') return
       const wireKey = CONTACT_KEY_MAP[key] || key
-      payload[wireKey] = form[key]
+      payload[wireKey] = value
     })
 
     try {
-      await submitLead(leadKindFor(inquiry.id), payload, { test: isTestModeFromUrl() })
+      const result = await submitLead(leadKindFor(inquiry.id), payload, { test: isTestModeFromUrl() })
+      setSubmitResult(result || null)
       setSubmitted(true)
     } catch (err) {
       setSubmitError(err?.message || `We couldn't submit your message. Please email ${inquiry.email} directly.`)
@@ -359,9 +404,14 @@ export default function Contact() {
                           onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.background = '#fff' }}
                           onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
                         >
-                          {def.options.map((opt) => (
-                            <option key={opt} value={opt}>{opt || 'Select an option'}</option>
-                          ))}
+                          {def.options.map((opt) => {
+                            /* Options can be plain strings (label === value)
+                               or { value, label } objects. The event field
+                               uses the object form so we POST event slugs. */
+                            const value = typeof opt === 'string' ? opt : opt.value
+                            const label = typeof opt === 'string' ? (opt || 'Select an option') : opt.label
+                            return <option key={value || label} value={value}>{label}</option>
+                          })}
                         </select>
                       </div>
                     )
@@ -388,15 +438,26 @@ export default function Contact() {
               </div>
             )}
 
-            {/* Message */}
+            {/* Message — required only for inquiry kinds where the
+                message body carries the substance (press, volunteer, host,
+                general). Partner / exhibit / speaker carry their info in
+                structured fields so the message is optional context. */}
             <div className="mb-6">
               <FormField
                 icon={MessageCircle}
-                label="Your Message"
-                required
+                label={MESSAGE_REQUIRED.has(inquiry.id) ? 'Your Message' : 'Your Message (optional)'}
+                required={MESSAGE_REQUIRED.has(inquiry.id)}
                 textarea
                 rows={5}
-                placeholder="Tell us more about what you have in mind..."
+                placeholder={
+                  inquiry.id === 'host'      ? 'Tell us about your city, why now, and what success would look like.' :
+                  inquiry.id === 'press'     ? 'What story or angle are you working on?' :
+                  inquiry.id === 'volunteer' ? 'Tell us a bit about you and what you\'d like to help with.' :
+                  inquiry.id === 'speaker'   ? 'Anything else we should know? (Your topic and bio above cover the basics.)' :
+                  inquiry.id === 'partner'   ? 'Anything else we should know? (Optional — the fields above carry the basics.)' :
+                  inquiry.id === 'exhibit'   ? 'Anything else we should know? (Optional — the fields above carry the basics.)' :
+                                               'Tell us more about what you have in mind...'
+                }
                 value={form.message || ''}
                 onChange={(v) => updateField('message', v)}
               />
@@ -404,9 +465,19 @@ export default function Contact() {
 
             {/* Submit */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
-              <p className="font-body" style={{ fontSize: '0.78rem', color: '#888', maxWidth: '400px', lineHeight: 1.5 }}>
+              <p className="font-body" style={{ fontSize: '0.78rem', color: '#888', maxWidth: '420px', lineHeight: 1.5 }}>
                 {submitted
-                  ? <>Thanks — your message is with the Soccerex team. We'll follow up by email.</>
+                  ? (
+                    <>
+                      Thanks — your message is with the Soccerex team. We'll follow up by email.
+                      {submitResult?.id && (
+                        <span className="block font-mono uppercase mt-1" style={{ fontSize: '0.62rem', letterSpacing: '0.14em', color: '#aaa' }}>
+                          Ref #{submitResult.id}
+                          {submitResult.kind && <> · {String(submitResult.kind).replace(/_/g, ' ')}</>}
+                        </span>
+                      )}
+                    </>
+                  )
                   : <>We'll route your message to the right team and reply by email.</>}
               </p>
               <button type="submit" disabled={submitting || submitted} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
