@@ -196,6 +196,10 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 .hero-slideshow {
   background: #050d1a;
 }
+/* Light theme — cream wash, photos sit lighter, dark text reads on top. */
+.hero-slideshow[data-theme="light"] {
+  background: #FFF8F4;
+}
 
 /* Image layer — CSS transition crossfade */
 .hero-image-layer {
@@ -209,6 +213,13 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   transition: opacity 0.8s ease-in-out;
   animation: hero-ken-burns 4s ease-in-out infinite alternate;
 }
+.hero-slideshow[data-theme="light"] .hero-image-layer {
+  /* Lighter, warmer treatment — photos read as ambient texture under the
+     cream overlay rather than dominating with dark imagery. */
+  filter: saturate(0.55) sepia(0.10) brightness(1.10) contrast(0.92);
+  opacity: 0.55;
+}
+.hero-slideshow[data-theme="light"] .hero-img-hidden { opacity: 0; }
 .hero-img-visible { opacity: 1; }
 .hero-img-hidden { opacity: 0; }
 
@@ -238,6 +249,15 @@ html, body { overflow-x: hidden; max-width: 100vw; }
     linear-gradient(180deg, rgba(5, 13, 26, 0.55) 0%, rgba(5, 13, 26, 0.5) 35%, rgba(5, 13, 26, 0.6) 65%, rgba(9, 32, 62, 0.88) 100%);
   z-index: 2;
   pointer-events: none;
+}
+/* Light overlay — cream wash with a soft gold halo and a creamy fade into
+   the white section below. The center stays clear enough for the photo's
+   subject to show through; the edges blur cream so dark text + the black
+   crest read crisply. */
+.hero-slideshow[data-theme="light"] .hero-overlay {
+  background:
+    radial-gradient(ellipse at center 45%, rgba(255,248,244,0.55) 0%, rgba(255,248,244,0.30) 45%, rgba(255,248,244,0.65) 80%, rgba(255,248,244,0.92) 100%),
+    radial-gradient(ellipse at center 40%, rgba(191,177,112,0.12) 0%, transparent 60%);
 }
 
 /* ─── Hero text shadows ──────────────────────────────────────────────────── */
@@ -510,6 +530,30 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 .hero-cta-outline:hover {
   border-color: var(--color-gold);
   color: var(--color-gold);
+}
+
+/* ─── Light-theme overrides for text, divider, tagline, CTAs ─────────────── */
+.hero-slideshow[data-theme="light"] .hero-text {
+  color: #0D1B2A;
+}
+.hero-slideshow[data-theme="light"] .hero-static-tagline {
+  color: #1a2a3a !important;
+  text-shadow: 0 1px 0 rgba(255,248,244,0.6);
+}
+.hero-slideshow[data-theme="light"] .hero-cta-outline {
+  border-color: rgba(13, 27, 42, 0.30);
+  color: #0D1B2A;
+  background: rgba(255, 255, 255, 0.85);
+}
+.hero-slideshow[data-theme="light"] .hero-cta-outline:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: #FFFFFF;
+}
+/* The black crest gets a soft drop-shadow so it sits forward of the
+   cream-washed photo without looking pasted on. */
+.hero-slideshow[data-theme="light"] .hero-crest-wrap {
+  filter: drop-shadow(0 12px 32px rgba(13, 27, 42, 0.18)) drop-shadow(0 0 60px rgba(191, 177, 112, 0.18));
 }
 
 /* ─── Oversized outline "30" background elements ─────────────────────────── */

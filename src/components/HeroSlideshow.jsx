@@ -387,7 +387,13 @@ export default function HeroSlideshow() {
   // (Rotating tagline logic retired. Kept baseline copy in HeroSlideshow.baseline.jsx.)
 
   return (
-    <section ref={sectionRef} className="hero-slideshow relative overflow-hidden flex items-center justify-center" style={{ minHeight: '100dvh' }}>
+    /* data-theme="light" flips the slideshow to a cream/white treatment.
+       To revert to the original dark cinematic look, change to "dark" — the
+       full CSS for both themes lives in index.css and animations are
+       identical between modes. */
+    <section ref={sectionRef} data-theme="light"
+      className="hero-slideshow relative overflow-hidden flex items-center justify-center"
+      style={{ minHeight: '100dvh' }}>
       {/* Image layer — CSS transition driven */}
       <div
         className={`hero-image-layer ${showImage ? 'hero-img-visible' : 'hero-img-hidden'}`}
@@ -401,18 +407,19 @@ export default function HeroSlideshow() {
       {/* Gold/blue transition flash at loop boundary */}
       <div className={`hero-loop-transition ${transitioning ? 'hero-loop-active' : ''}`} aria-hidden="true" />
 
-      {/* Dark gradient overlay */}
+      {/* Gradient overlay — light/dark variant driven by [data-theme] in CSS */}
       <div className="hero-overlay" aria-hidden="true" />
 
       {/* Text content — crest-led anniversary edition lockup */}
       <div className={`hero-text relative z-10 text-center ${textReady ? 'hero-text-visible' : ''}`}
         style={{ maxWidth: '900px', padding: 'clamp(40px,6vw,90px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
 
-        {/* Anniversary crest (already says SOCCEREX + EST.1996 | 30 YEARS — no eyebrow needed) */}
+        {/* Anniversary crest. In light mode we use the black crest so it
+            reads against the cream-washed photos. */}
         <div className="hero-30-with-particles">
           <ParticleField />
           <div className="hero-crest-wrap">
-            <Crest variant="main" color="white" size={280} decorative />
+            <Crest variant="main" color="black" size={280} decorative />
           </div>
         </div>
 
@@ -421,7 +428,7 @@ export default function HeroSlideshow() {
 
         {/* Static CEO-approved tagline */}
         <p
-          className="hero-static-tagline font-body text-white/80 leading-relaxed"
+          className="hero-static-tagline font-body leading-relaxed"
           style={{
             fontSize: 'clamp(1rem, 1.5vw, 1.2rem)',
             maxWidth: '760px',
@@ -435,12 +442,12 @@ export default function HeroSlideshow() {
 
         {/* CTAs */}
         <div className="hero-ctas flex flex-wrap items-center justify-center gap-4">
-          <a href="/events" style={{ textDecoration: "none" }}
+          <a href="/events" style={{ textDecoration: 'none' }}
             className="hero-cta-gold inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none">
             Explore Events <ArrowRight size={16} />
           </a>
           <a href="/contact"
-            className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
+            className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer"
             style={{ textDecoration: 'none' }}>
             Join Soccerex
           </a>
