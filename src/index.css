@@ -583,8 +583,15 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   text-shadow: 0 1px 0 rgba(255,248,244,0.5), 0 2px 18px rgba(255,248,244,0.45);
 }
 .hero-slideshow[data-theme="light"] .hero-static-subtitle {
-  color: #3a4a5a !important;
-  text-shadow: 0 1px 0 rgba(255,248,244,0.5), 0 1px 12px rgba(255,248,244,0.4);
+  /* Was #3a4a5a — washed against the bottom cream dissolve and the
+     bright crest halo above. Pull it closer to the title's navy so
+     it holds; hierarchy is carried by font-weight + size, not by
+     a near-grey tone that disappears on busy photo frames. */
+  color: #1d2a3d !important;
+  text-shadow:
+    0 1px 0 rgba(255,248,244,0.65),
+    0 1px 14px rgba(255,248,244,0.55),
+    0 2px 24px rgba(255,248,244,0.35);
 }
 .hero-slideshow[data-theme="light"] .hero-cta-outline {
   border-color: rgba(13, 27, 42, 0.30);
