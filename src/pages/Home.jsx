@@ -1641,7 +1641,11 @@ export default function Home() {
       <EuropeRecapSection />
       <SocialProofSection />
       <ProudSponsorSection />
-      <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
+      {/* White waves cresting down into the navy FinalCTA. `color` is the
+          divider's solid fill — match it to the section ABOVE (white)
+          so the solid top blends seamlessly with ProudSponsor and only
+          the wavy crest is visible against the navy below. */}
+      <PixelDivider color="#FFFFFF" layers={4} height={90} speed={0.5} />
       <FinalCTASection />
     </>
   )
