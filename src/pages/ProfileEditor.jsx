@@ -643,7 +643,6 @@ const thumbWrapStyle = {
   position: 'relative',
   textDecoration: 'none', color: 'inherit',
 }
-}
 
 /* ─── Layout primitives ─────────────────────────────────────────────────── */
 
