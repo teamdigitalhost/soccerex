@@ -26,6 +26,20 @@
   .text-balance { text-wrap: balance; }
 }
 
+/* App-wide chrome heights. The navbar is fixed at 72px tall; the test
+   mode banner publishes its 36px height into --app-banner-height when
+   visible (see TestModeBanner.jsx). Page-level sticky headers consume
+   --app-top-offset so they stack cleanly under banner + navbar instead
+   of fighting them for top: 0. */
+:root {
+  --app-nav-height: 72px;
+  --app-banner-height: 0px;
+}
+@media (max-width: 640px) {
+  :root { --app-banner-height: 0px; } /* keep override consistent on narrow */
+}
+:root { --app-top-offset: calc(var(--app-nav-height) + var(--app-banner-height)); }
+
 /* Prevent accidental horizontal scroll on mobile from hero particle effects */
 html, body { overflow-x: hidden; max-width: 100vw; }
 

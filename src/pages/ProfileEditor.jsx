@@ -153,7 +153,15 @@ export default function ProfileEditor() {
   if (!editToken) return null /* redirect in flight */
 
   return (
-    <div className="event-page theme-soccerex" style={{ background: '#FAFBFC', minHeight: '100vh' }}>
+    <div className="event-page theme-soccerex" style={{
+      background: '#FAFBFC',
+      minHeight: '100vh',
+      /* Push the page (and the sticky EditorHeader below) clear of
+         the fixed navbar + test banner so the title strip stops
+         fighting them for top: 0. --app-top-offset is published
+         from index.css and bumped by the test banner when active. */
+      paddingTop: 'var(--app-top-offset)',
+    }}>
       <EditorHeader profile={profile} session={session} onSignOut={signOut} />
 
       <section style={{ padding: 'clamp(24px,3vw,40px) clamp(24px,5vw,60px) clamp(80px,10vw,120px)' }}>
@@ -284,7 +292,10 @@ function EditorHeader({ profile, session, onSignOut }) {
   const expiresAt = session?.expires_at ? new Date(session.expires_at) : null
   return (
     <header style={{
-      position: 'sticky', top: 0, zIndex: 20,
+      /* Sticks just below the navbar (and test banner when active),
+         not at viewport top: 0. The navbar at z-index 50 would
+         otherwise cover the title strip. */
+      position: 'sticky', top: 'var(--app-top-offset)', zIndex: 20,
       background: '#FFFFFF',
       borderBottom: '1px solid rgba(13,27,42,0.08)',
       padding: 'clamp(14px, 2vw, 22px) clamp(24px, 5vw, 60px)',

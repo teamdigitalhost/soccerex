@@ -321,7 +321,9 @@ function Shell({ children }) {
       minHeight: '100vh',
       background: 'linear-gradient(180deg, #FFFFFF 0%, #FAFBFC 100%)',
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      padding: 'clamp(40px,6vw,80px) clamp(24px,4vw,40px)',
+      /* Reserve room for the fixed navbar (+ test banner when active) so
+         the page chrome doesn't tuck under it. */
+      padding: 'calc(var(--app-top-offset) + clamp(40px,6vw,80px)) clamp(24px,4vw,40px) clamp(40px,6vw,80px)',
     }}>
       {children}
     </div>
