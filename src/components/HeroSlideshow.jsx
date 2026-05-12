@@ -74,7 +74,8 @@ function ParticleField() {
     let particles = []
     let frame = 0
     const BURST_DURATION = 150 // frames for intro burst (~2.5s, celebratory)
-    const BURST_COUNT = 350 // dense confetti coverage
+    const BURST_COUNT = 520 // dense confetti coverage (up ~50% from 350)
+    const AMBIENT_CAP = 160 // active ambient particles (up from 100)
 
     const resize = () => {
       const w = canvas.offsetWidth
@@ -96,14 +97,18 @@ function ParticleField() {
     const W = () => canvas.offsetWidth
     const H = () => canvas.offsetHeight
 
+    // 30% scale-up applied to spawn radius + particle sizes.
+    const SCALE = 1.3
+
     // Spawn a particle radiating outward from around the "30"
     function spawn(isBurst = false) {
       const cx = W() / 2
       const cy = H() / 2
       const angle = Math.random() * Math.PI * 2
-      // Start near the digits
-      const rx = 60 + Math.random() * 50
-      const ry = 40 + Math.random() * 30
+      // Start near the digits — radius scaled up so the burst pattern is
+      // visibly wider around the badge.
+      const rx = (60 + Math.random() * 50) * SCALE
+      const ry = (40 + Math.random() * 30) * SCALE
       const x = cx + Math.cos(angle) * rx
       const y = cy + Math.sin(angle) * ry
 
@@ -133,7 +138,7 @@ function ParticleField() {
           vy: radialVy + tangentVy,
           life,
           maxLife: life,
-          size: 1 + Math.random() * 3.5,
+          size: (1 + Math.random() * 3.5) * SCALE,
           color,
           burst: true,
         }
@@ -146,7 +151,7 @@ function ParticleField() {
         vy: Math.sin(angle) * speed,
         life: 150 + Math.random() * 250,
         maxLife: 150 + Math.random() * 250,
-        size: 0.5 + Math.random() * 2,
+        size: (0.5 + Math.random() * 2) * SCALE,
         gold: Math.random() > 0.25,
         burst: false,
       }
@@ -165,9 +170,10 @@ function ParticleField() {
       }
 
       // Ambient: continuous gentle emission
-      if (particles.length < 100) {
+      if (particles.length < AMBIENT_CAP) {
         particles.push(spawn(false))
         if (Math.random() > 0.4) particles.push(spawn(false))
+        if (Math.random() > 0.6) particles.push(spawn(false))
       }
 
       for (let i = particles.length - 1; i >= 0; i--) {
@@ -193,11 +199,10 @@ function ParticleField() {
         } else {
           alpha = 1 - (progress - 0.08) / 0.92
         }
-        // Boosted further — the cream overlay is much thinner now, so the
-        // confetti can run hotter without competing with overlay opacity.
-        // Multiply blend in CSS still keeps them as warm spots, not
-        // garish dots.
-        alpha *= p.burst ? 1.0 : 0.85
+        // Run at full opacity for burst and ambient. The multiply blend
+        // keeps the gold warm rather than garish, and the larger sizes +
+        // higher density carry the effect further across the hero.
+        alpha *= p.burst ? 1.0 : 1.0
 
         if (p.burst) {
           /* Punchier ember-gold tones for the burst, so the multiply
