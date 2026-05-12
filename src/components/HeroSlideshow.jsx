@@ -484,12 +484,15 @@ export default function HeroSlideshow() {
         <p
           className="hero-static-tagline font-heading leading-tight"
           style={{
-            fontSize: 'clamp(1.35rem, 2.8vw, 2.3rem)',
+            /* Mobile floor pushed up so the title reads as a hero
+               headline, not body copy. Scales aggressively from
+               ~31px on phones up to ~42px on desktop. */
+            fontSize: 'clamp(1.95rem, 5vw, 2.6rem)',
             maxWidth: '900px',
             margin: '1.5rem auto 0.85rem',
             fontWeight: 700,
-            lineHeight: 1.15,
-            letterSpacing: '-0.005em',
+            lineHeight: 1.12,
+            letterSpacing: '-0.01em',
           }}
         >
           {HERO_TITLE}
