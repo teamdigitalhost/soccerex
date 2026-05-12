@@ -465,15 +465,15 @@ export default function HeroSlideshow() {
         {/* Gold divider */}
         <div className="hero-divider" />
 
-        {/* Title + subtitle. Title is the headline-weight marketing line;
-            subtitle qualifies it in lighter body weight. Both sit over the
-            cream dissolve below, so the photo never competes with them. */}
+        {/* Title + subtitle. Title eased down a notch; subtitle pulled up
+            so it reads as a proper deck/subtitle pair, not headline + fine
+            print. Both sit over the cream dissolve below. */}
         <p
           className="hero-static-tagline font-heading leading-tight"
           style={{
-            fontSize: 'clamp(1.5rem, 3.2vw, 2.6rem)',
-            maxWidth: '960px',
-            margin: '1.75rem auto 0.75rem',
+            fontSize: 'clamp(1.35rem, 2.8vw, 2.3rem)',
+            maxWidth: '900px',
+            margin: '1.5rem auto 0.85rem',
             fontWeight: 700,
             lineHeight: 1.15,
             letterSpacing: '-0.005em',
@@ -484,11 +484,11 @@ export default function HeroSlideshow() {
         <p
           className="hero-static-subtitle font-body leading-relaxed"
           style={{
-            fontSize: 'clamp(0.95rem, 1.4vw, 1.15rem)',
-            maxWidth: '720px',
+            fontSize: 'clamp(1.05rem, 1.8vw, 1.4rem)',
+            maxWidth: '820px',
             margin: '0 auto 2.5rem',
-            fontWeight: 400,
-            lineHeight: 1.5,
+            fontWeight: 500,
+            lineHeight: 1.45,
           }}
         >
           {HERO_SUBTITLE}
