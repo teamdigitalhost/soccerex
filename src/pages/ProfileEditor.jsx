@@ -215,7 +215,17 @@ export default function ProfileEditor() {
               </FormCard>
 
               <FormCard title="Other links" subtitle="Press, papers, talks, anything else worth pointing at.">
-                <LinksEditor value={form.links} onChange={(v) => updateRaw('links', v)} />
+                <LinksEditor
+                  /* The Brand Assets card owns links tagged
+                     category: 'asset' (Dropbox / Drive folders for
+                     internal review). Don't surface those here, and
+                     preserve them on save by merging back in. */
+                  value={(form.links || []).filter((l) => !l || l.category !== 'asset')}
+                  onChange={(v) => {
+                    const assetLinks = (form.links || []).filter((l) => l && l.category === 'asset')
+                    updateRaw('links', [...v.map((l) => ({ ...l, category: undefined })), ...assetLinks])
+                  }}
+                />
               </FormCard>
 
               <FormCard title="Search tags"
@@ -270,6 +280,14 @@ export default function ProfileEditor() {
                   onProfileRefreshed={(next) => { setProfile(next); setForm(toFormState(next)) }}
                 />
                 <AssetList
+                  profile={profile}
+                  slug={slug}
+                  editToken={editToken}
+                  isTest={isTest}
+                  onProfileRefreshed={(next) => { setProfile(next); setForm(toFormState(next)) }}
+                  onUnauthorized={signOut}
+                />
+                <SharedAssetLinks
                   profile={profile}
                   slug={slug}
                   editToken={editToken}
@@ -595,6 +613,163 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], limit
   )
 }
 
+/* ─── Shared asset links (Dropbox / Drive / WeTransfer / etc.) ──────────────
+ * Lives inside the Brand Assets card. Stores entries in profile.links
+ * tagged with `category: 'asset'` so they don't collide with the public
+ * "Other links" list (press, papers, talks). Has its own save action so
+ * link edits don't depend on the main form's submit button above. */
+function SharedAssetLinks({ profile, slug, editToken, isTest, onProfileRefreshed, onUnauthorized }) {
+  const allLinks = Array.isArray(profile?.links) ? profile.links : []
+  const initial = allLinks.filter((l) => l && l.category === 'asset')
+  const [rows, setRows] = useState(initial.length > 0 ? initial : [])
+  const [saving, setSaving] = useState(false)
+  const [status, setStatus] = useState(null)
+
+  /* Reset local state when the upstream profile changes (e.g. after a
+     refresh from an upload elsewhere). */
+  useEffect(() => {
+    setRows(allLinks.filter((l) => l && l.category === 'asset'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(allLinks)])
+
+  const add = () => setRows((r) => [...r, { label: '', url: '', category: 'asset', note: '' }])
+  const update = (i, field, val) => setRows((r) => {
+    const next = r.slice()
+    next[i] = { ...next[i], [field]: val }
+    return next
+  })
+  const remove = (i) => setRows((r) => r.filter((_, idx) => idx !== i))
+
+  const dirty = JSON.stringify(rows) !== JSON.stringify(initial)
+
+  async function save() {
+    if (saving) return
+    setSaving(true); setStatus(null)
+    try {
+      /* Merge: keep all NON-asset links from upstream untouched,
+         append the cleaned asset rows. Drop blank URLs. */
+      const otherLinks = allLinks.filter((l) => !l || l.category !== 'asset')
+      const cleanedAssets = rows
+        .map((r) => ({
+          label: (r.label || '').trim(),
+          url: (r.url || '').trim(),
+          note: (r.note || '').trim(),
+          category: 'asset',
+        }))
+        .filter((r) => r.url)
+      const merged = [...otherLinks, ...cleanedAssets]
+      const updated = await updateEditableProfile(slug, editToken, { links: merged }, { test: isTest })
+      if (updated && typeof onProfileRefreshed === 'function') onProfileRefreshed(updated)
+      setStatus({ kind: 'success', message: 'Submitted for review.' })
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401 && typeof onUnauthorized === 'function') {
+        onUnauthorized()
+        return
+      }
+      const detail = err instanceof ApiError && err.body?.errors
+        ? Object.values(err.body.errors).flat().join(' ')
+        : err.message
+      setStatus({ kind: 'error', message: detail || 'Could not save the links.' })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div style={{ borderTop: '1px solid rgba(13,27,42,0.08)', paddingTop: 22, marginTop: 22 }}>
+      <div className="mb-3">
+        <p className="miami-subhead" style={{ fontSize: 10, color: 'var(--event-secondary, #BFA46F)', letterSpacing: '0.22em', marginBottom: 6 }}>
+          OFF-PLATFORM ASSETS
+        </p>
+        <h3 className="miami-headline" style={{ fontSize: '0.98rem', color: '#0D1B2A', marginBottom: 4 }}>
+          Shared links to assets hosted elsewhere
+        </h3>
+        <p className="miami-body" style={{ fontSize: 12.5, color: '#586778', lineHeight: 1.55 }}>
+          Use this for large decks, full brand packages, video, or any folder you'd rather host on Dropbox, Google Drive, WeTransfer, Box, Notion, or similar. The Soccerex team reviews these alongside your uploaded files.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {rows.length === 0 && (
+          <p className="miami-body" style={{ fontSize: 12, color: '#7a8896' }}>
+            No shared links yet. Add a Dropbox or Drive URL below.
+          </p>
+        )}
+        {rows.map((row, i) => (
+          <div key={i} style={{
+            background: '#FAFBF8',
+            border: '1px solid rgba(13,27,42,0.07)',
+            borderRadius: 10,
+            padding: 14,
+          }}>
+            <div className="grid gap-2" style={{ gridTemplateColumns: 'minmax(160px, 1fr) 2fr auto', alignItems: 'end' }}>
+              <Field label="Label">
+                <input
+                  value={row.label || ''}
+                  onChange={(e) => update(i, 'label', e.target.value)}
+                  className="prog-input"
+                  placeholder="Brand package, signage files…"
+                />
+              </Field>
+              <Field label="Shared URL">
+                <input
+                  type="url"
+                  value={row.url || ''}
+                  onChange={(e) => update(i, 'url', e.target.value)}
+                  className="prog-input"
+                  placeholder="https://drive.google.com/…  ·  https://dropbox.com/…"
+                />
+              </Field>
+              <button type="button" onClick={() => remove(i)} aria-label="Remove link" style={removeBtnStyle}>
+                <Trash2 size={15} />
+              </button>
+            </div>
+            <Field label="Note (optional)">
+              <input
+                value={row.note || ''}
+                onChange={(e) => update(i, 'note', e.target.value)}
+                className="prog-input"
+                placeholder="What's in the folder, password if any, expiry, etc."
+              />
+            </Field>
+          </div>
+        ))}
+
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <button type="button" onClick={add} className="event-btn-outline-light" style={{ alignSelf: 'flex-start' }}>
+            <Plus size={14} /> Add shared link
+          </button>
+          <div className="flex items-center gap-3 flex-wrap">
+            {status?.kind === 'success' && (
+              <span className="flex items-center gap-1.5" style={{ fontSize: 12.5, color: '#10b981' }}>
+                <Check size={13} /> {status.message}
+              </span>
+            )}
+            {status?.kind === 'error' && (
+              <span className="flex items-center gap-1.5" style={{ fontSize: 12.5, color: '#b91c1c' }}>
+                <AlertCircle size={13} /> {status.message}
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={save}
+              disabled={saving || !dirty}
+              className="miami-pill-primary"
+              style={{ opacity: saving || !dirty ? 0.6 : 1 }}
+            >
+              {saving ? <><Loader2 size={14} className="prog-spin" /> Saving</> : <><Save size={14} /> Save shared links</>}
+            </button>
+          </div>
+        </div>
+        <p className="miami-body" style={{ fontSize: 11.5, color: '#7a8896', marginTop: 4 }}>
+          <Shield size={11} style={{ display: 'inline', marginRight: 4 }} />
+          Link edits are submitted for admin review, same as profile changes above.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 function AssetList({ profile, slug, editToken, isTest, onProfileRefreshed, onUnauthorized }) {
   const assets = profile?.assets || []
   const [deletingId, setDeletingId] = useState(null)
@@ -800,9 +975,19 @@ function toApiPatch(form) {
   const socials = {}
   Object.entries(form.socials || {}).forEach(([k, v]) => { if (v && v.trim()) socials[k] = v.trim() })
 
-  /* Drop link rows missing url. */
+  /* Drop link rows missing url. Preserve `category` and `note` so
+     asset-category links (Shared asset links section) survive the
+     round-trip alongside the public "Other links". */
   const links = (form.links || [])
-    .map((row) => ({ label: (row.label || '').trim(), url: (row.url || '').trim() }))
+    .map((row) => {
+      const cleaned = {
+        label: (row.label || '').trim(),
+        url: (row.url || '').trim(),
+      }
+      if (row.category) cleaned.category = row.category
+      if (row.note) cleaned.note = String(row.note).trim()
+      return cleaned
+    })
     .filter((row) => row.url)
 
   const search_tags = form.search_tags_input
