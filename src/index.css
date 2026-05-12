@@ -660,7 +660,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   background-size: 400% 400%;
   background-position: 170% 170%;
   mix-blend-mode: screen;
-  animation: badge-shine 5.5s ease-in-out infinite;
+  animation: badge-shine 11s ease-in-out infinite;
   animation-delay: 2s;
   opacity: 0; /* hidden until the entrance has resolved */
 }
