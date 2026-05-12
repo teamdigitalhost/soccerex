@@ -493,6 +493,18 @@ function EventsSection() {
               : isPast
                 ? 'grayscale(0.55) brightness(0.7) contrast(1.05)'
                 : 'saturate(1.1) brightness(0.85)'
+            /* Photoshop-style stacked outer glow behind each card. The
+               cards sit on a white section, so without a glow they
+               read as noisy color blocks. Stack a tight drop-shadow
+               for grounding + two wider tinted halos for brand lift.
+               Miami leans pink (matches its accent), Riyadh leans
+               warm gold, Amsterdam stays neutral cool to read as a
+               recap. */
+            const cardGlow = isMiami
+              ? '0 32px 72px -20px rgba(13,27,42,0.32), 0 0 48px rgba(233,30,99,0.42), 0 0 120px rgba(255,180,106,0.30)'
+              : event.city === 'RIYADH'
+                ? '0 32px 72px -20px rgba(13,27,42,0.30), 0 0 48px rgba(242,233,60,0.32), 0 0 110px rgba(242,233,60,0.20)'
+                : '0 28px 60px -20px rgba(13,27,42,0.32), 0 0 48px rgba(13,27,42,0.18), 0 0 110px rgba(13,27,42,0.10)'
             return (
               <div
                 key={event.city}
@@ -506,7 +518,7 @@ function EventsSection() {
                     width: '100%',
                     borderRadius: '14px',
                     display: 'block',
-                    boxShadow: isMiami ? '0 24px 60px -28px rgba(233,30,99,0.5)' : 'none',
+                    boxShadow: cardGlow,
                   }}
                 >
                   {/* Background image */}
