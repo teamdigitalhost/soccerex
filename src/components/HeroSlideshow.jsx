@@ -447,15 +447,18 @@ export default function HeroSlideshow() {
         {/* Gold divider */}
         <div className="hero-divider" />
 
-        {/* Static CEO-approved tagline */}
+        {/* Static CEO-approved tagline — the marketing line for the landing
+            page. Treat it as a sub-headline: large display weight,
+            generous max-width, sits over the cream dissolve below. */}
         <p
-          className="hero-static-tagline font-body leading-relaxed"
+          className="hero-static-tagline font-heading leading-tight"
           style={{
-            fontSize: 'clamp(1rem, 1.5vw, 1.2rem)',
-            maxWidth: '760px',
-            margin: '1.5rem auto 2rem',
-            fontWeight: 400,
-            lineHeight: 1.55,
+            fontSize: 'clamp(1.5rem, 3.2vw, 2.6rem)',
+            maxWidth: '960px',
+            margin: '1.75rem auto 2.5rem',
+            fontWeight: 700,
+            lineHeight: 1.18,
+            letterSpacing: '-0.005em',
           }}
         >
           {HERO_STATEMENT}
