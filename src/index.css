@@ -251,13 +251,11 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   z-index: 2;
   pointer-events: none;
 }
-/* Light overlay — only a soft gold halo right around the crest, so the
-   photos run full colour everywhere else. No global cream wash anymore;
-   the tagline-area contrast is handled by the taller bottom dissolve
-   below this rule. */
+/* Light overlay — none. The crest carries its own stacked outer-glow
+   filter so the halo is locally shaped to the badge silhouette, not a
+   rectangle. The bottom-dissolve below carries the tagline contrast. */
 .hero-slideshow[data-theme="light"] .hero-overlay {
-  background:
-    radial-gradient(ellipse 38% 32% at center 38%, rgba(191,177,112,0.18) 0%, transparent 70%);
+  background: transparent;
 }
 /* Dreamy dissolve — much taller now so it does double duty: a clean
    cream-to-photo gradient at the top that ALSO serves as the backdrop
@@ -577,10 +575,18 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   color: var(--color-gold);
   background: #FFFFFF;
 }
-/* The black crest gets a soft drop-shadow so it sits forward of the
-   cream-washed photo without looking pasted on. */
+/* The black crest gets a stacked outer-glow filter — equivalent to
+   Photoshop's "Outer Glow" with white at decreasing opacity over
+   increasing radius. Because drop-shadow respects the SVG's actual
+   silhouette, the halo radiates from the badge shape itself rather
+   than a rectangular box. Soft and local, not hard. */
 .hero-slideshow[data-theme="light"] .hero-crest-wrap {
-  filter: drop-shadow(0 12px 32px rgba(13, 27, 42, 0.18)) drop-shadow(0 0 60px rgba(191, 177, 112, 0.18));
+  filter:
+    drop-shadow(0 0 10px  rgba(255, 255, 255, 0.85))
+    drop-shadow(0 0 28px  rgba(255, 255, 255, 0.65))
+    drop-shadow(0 0 72px  rgba(255, 255, 255, 0.45))
+    drop-shadow(0 0 140px rgba(255, 255, 255, 0.28))
+    drop-shadow(0 12px 32px rgba(13, 27, 42, 0.18));
 }
 
 /* ─── Oversized outline "30" background elements ─────────────────────────── */
