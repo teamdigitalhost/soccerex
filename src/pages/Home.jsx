@@ -269,15 +269,19 @@ function ByTheNumbersSection() {
                 transitionDelay: `${i * 40}ms`,
               }}
             >
-              {/* Background image */}
+              {/* Background image — light treatment: bright + slightly
+                  desaturated so the photo reads as airy texture under
+                  the cream wash above. */}
               <img src={s.bg} alt=""
                 style={{
                   position: 'absolute', inset: 0, width: '100%', height: '100%',
-                  objectFit: 'cover', filter: 'grayscale(0.6) brightness(0.3)',
+                  objectFit: 'cover', filter: 'saturate(0.75) brightness(1.05) contrast(0.92)',
                 }}
               />
-              {/* Overlay */}
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(9,15,25,0.25) 0%, rgba(9,15,25,0.85) 100%)' }} />
+              {/* Cream wash overlay — lighter at top, fuller at the bottom
+                  where the number + label sit so they always have a
+                  legible backdrop regardless of which photo is behind. */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(255,250,245,0.55) 0%, rgba(255,250,245,0.78) 55%, rgba(255,250,245,0.96) 100%)' }} />
               {/* Content: number stacked above label, left-aligned, roomy padding */}
               <div style={{
                 position: 'relative',
@@ -293,15 +297,16 @@ function ByTheNumbersSection() {
                   fontSize: 'clamp(3rem, 5.5vw, 4.25rem)',
                   lineHeight: 0.95,
                   letterSpacing: '-0.03em',
-                  textShadow: '0 2px 30px rgba(0,0,0,0.4)',
+                  textShadow: '0 1px 0 rgba(255,250,245,0.6), 0 2px 14px rgba(255,250,245,0.45)',
                 }}>
                   {s.num}
                 </span>
                 <span className="font-heading uppercase tracking-widest" style={{
-                  color: '#fff',
+                  color: '#0D1B2A',
                   fontSize: 'clamp(0.85rem, 1vw, 1rem)',
                   fontWeight: 600,
                   letterSpacing: '0.14em',
+                  textShadow: '0 1px 0 rgba(255,250,245,0.5)',
                 }}>
                   {s.label}
                 </span>
