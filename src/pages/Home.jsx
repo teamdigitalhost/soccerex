@@ -115,7 +115,10 @@ function UpcomingEventSection() {
 
   return (
     <section className="relative overflow-hidden" style={{
-      background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF8F4 100%)',
+      /* Starts at the hero's cream dissolve colour so there's no seam
+         between the slideshow and this section, then transitions to a
+         purer white as you scroll into the content. */
+      background: 'linear-gradient(180deg, #FFF8F4 0%, #FFFAF6 35%, #FFFFFF 100%)',
     }}>
       {/* Faint retro grid + Miami-pink/aqua corner washes for warmth without dominating */}
       <div className="absolute inset-0 pointer-events-none" style={{

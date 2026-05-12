@@ -37,7 +37,7 @@ function buildPlaylist(heritage, modern) {
 
 // ─── Static tagline (CEO-approved statement) ────────────────────────────────
 // Rotating taglines archived in HeroSlideshow.baseline.jsx for future reuse.
-const HERO_STATEMENT = 'as the Longest-Running Football Business Platform, Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership.'
+const HERO_STATEMENT = 'The Longest-Running Football Business Platform.'
 
 // ─── Letter-by-letter component ─────────────────────────────────────────────
 function CascadingText({ text, visible, className = '' }) {
@@ -192,23 +192,23 @@ function ParticleField() {
         } else {
           alpha = 1 - (progress - 0.08) / 0.92
         }
-        // Boosted from 0.65/0.35 so gold particles still register on the
-        // cream-washed light hero. The canvas itself uses mix-blend-mode
-        // multiply in CSS for light theme — these alphas drive how dark
-        // each particle stamps the cream below.
-        alpha *= p.burst ? 0.95 : 0.55
+        // Boosted further — the cream overlay is much thinner now, so the
+        // confetti can run hotter without competing with overlay opacity.
+        // Multiply blend in CSS still keeps them as warm spots, not
+        // garish dots.
+        alpha *= p.burst ? 1.0 : 0.85
 
         if (p.burst) {
-          /* Saturated gold tones so the multiply blend punches warm spots
-             through the cream overlay. */
-          if (p.color === 'gold')           ctx.fillStyle = `rgba(176, 137,  60, ${alpha})` // brand gold (deeper)
-          else if (p.color === 'gold-warm') ctx.fillStyle = `rgba(212, 175,  85, ${alpha})` // warm highlight
-          else                              ctx.fillStyle = `rgba(122,  88,  35, ${alpha})` // amber
+          /* Punchier ember-gold tones for the burst, so the multiply
+             blend leaves clearly-visible warm stamps. */
+          if (p.color === 'gold')           ctx.fillStyle = `rgba(160, 110,  35, ${alpha})` // brand gold (deeper)
+          else if (p.color === 'gold-warm') ctx.fillStyle = `rgba(200, 155,  60, ${alpha})` // warm highlight
+          else                              ctx.fillStyle = `rgba(100,  65,  20, ${alpha})` // amber
         } else {
-          // Ambient: always gold tones
+          // Ambient: always warm gold tones
           ctx.fillStyle = p.gold
-            ? `rgba(176, 137, 60, ${alpha})`
-            : `rgba(212, 175, 85, ${alpha})`
+            ? `rgba(160, 110, 35, ${alpha})`
+            : `rgba(200, 155, 60, ${alpha})`
         }
 
         ctx.beginPath()
