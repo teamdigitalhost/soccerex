@@ -109,6 +109,11 @@ export default function ProfileEditor() {
     ? assetOptions.featured_kinds
     : (isCompany ? FALLBACK_FEATURED_COMPANY : FALLBACK_FEATURED_PERSON)
   const kindOptions = allowedKinds.map((k) => ({ value: k, label: KIND_LABELS[k] || prettyKey(k) }))
+  /* Upload limits + the large-file guidance disclaimer surface inside the
+     uploader. limits is preferred at the top level of the profile; the
+     guidance can also arrive via asset_options. */
+  const uploadLimits = profile?.limits || {}
+  const largeFileGuidance = uploadLimits.large_file_guidance || assetOptions.large_file_guidance || null
 
   const update = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
   const updateRaw = (k, v) => setForm((f) => ({ ...f, [k]: v }))
@@ -247,8 +252,14 @@ export default function ProfileEditor() {
                 <AssetUploader
                   slug={slug} editToken={editToken} kindOptions={kindOptions}
                   featuredKinds={featuredKinds}
+                  limits={uploadLimits}
+                  largeFileGuidance={largeFileGuidance}
                   isTest={isTest}
                   onUnauthorized={signOut}
+                  /* Upload response now carries a refreshed profile. Lift
+                     it into editor state so the asset list re-renders
+                     without a manual refresh. */
+                  onProfileRefreshed={(next) => { setProfile(next); setForm(toFormState(next)) }}
                 />
                 <AssetList profile={profile} />
               </FormCard>
@@ -381,7 +392,7 @@ function LinksEditor({ value, onChange }) {
 
 /* ─── Asset uploader ────────────────────────────────────────────────────── */
 
-function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], isTest, onUnauthorized }) {
+function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], limits = {}, largeFileGuidance, isTest, onUnauthorized, onProfileRefreshed }) {
   const [kind, setKind] = useState(kindOptions[0]?.value || 'photo')
   const [featured, setFeatured] = useState(false)
   const featuredAllowed = featuredKinds.includes(kind)
@@ -395,7 +406,23 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], isTes
   const [files, setFiles] = useState([])
   const [status, setStatus] = useState('idle')
   const [message, setMessage] = useState('')
+  /* The most-recent upload's response data.assets[] — surfaced as a
+     "Just uploaded" preview row inline above the full asset list. */
+  const [recentUploads, setRecentUploads] = useState([])
   const inputRef = useRef(null)
+
+  /* Build the file input's `accept` attribute from the backend's allowed
+     types so the OS file picker filters correctly. Falls back to images
+     only when limits don't list documents (e.g., a person profile that
+     can't upload PDFs/decks). */
+  const allowedImageTypes = Array.isArray(limits.allowed_image_types) ? limits.allowed_image_types : []
+  const allowedDocumentTypes = Array.isArray(limits.allowed_document_types) ? limits.allowed_document_types : []
+  const acceptAttr = [...allowedImageTypes, ...allowedDocumentTypes]
+    .map((t) => t.includes('/') ? t : `.${t.replace(/^\./, '')}`)
+    .join(',')
+  const maxFiles = Number.isFinite(limits.max_files_per_upload) ? limits.max_files_per_upload : null
+  const maxImageMb = limits.max_image_mb ?? null
+  const maxDocMb = limits.max_document_mb ?? null
 
   const reset = () => {
     setFiles([]); setAltText(''); setTagsInput(''); setFeatured(false)
@@ -405,13 +432,28 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], isTes
   const submit = async (e) => {
     e.preventDefault()
     if (files.length === 0) return
+    if (maxFiles != null && files.length > maxFiles) {
+      setStatus('error')
+      setMessage(`You can upload up to ${maxFiles} file${maxFiles === 1 ? '' : 's'} at a time. Remove a few and try again.`)
+      return
+    }
     setStatus('uploading'); setMessage('')
     try {
       const tags = tagsInput.split(/[,\n]/).map((t) => t.trim()).filter(Boolean)
-      await uploadProfileAssets(slug, editToken, { kind, featured, alt_text: altText, tags, files }, { test: isTest })
+      const result = await uploadProfileAssets(slug, editToken, { kind, featured, alt_text: altText, tags, files }, { test: isTest })
+      const newAssets = Array.isArray(result?.assets) ? result.assets : []
+      const refreshedProfile = result?.profile || null
+
       setStatus('success')
-      const featuredMsg = featured ? ' Submitted for review.' : ' Uploaded.'
-      setMessage(`${files.length} file${files.length === 1 ? '' : 's'}${featuredMsg}`)
+      const featuredMsg = featured ? ' Submitted for review.' : ' Added to your library.'
+      setMessage(`${files.length} file${files.length === 1 ? '' : 's'} uploaded.${featuredMsg}`)
+      setRecentUploads(newAssets)
+
+      /* Lift the refreshed profile up so the asset list and any new
+         limits/options re-render without a manual refresh. */
+      if (refreshedProfile && typeof onProfileRefreshed === 'function') {
+        onProfileRefreshed(refreshedProfile)
+      }
       reset()
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) return onUnauthorized()
@@ -446,8 +488,40 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], isTes
           ? <>Make this the featured {kind} (featured changes go through review)</>
           : <>Featured uploads are only available for: {featuredKinds.join(', ') || 'no kinds'}</>}
       </label>
+      {/* Upload limits + large-file guidance disclaimer. Renders the
+          backend-provided constraints so the user knows what they can
+          send before they pick anything. */}
+      {(maxFiles != null || maxImageMb || maxDocMb || largeFileGuidance) && (
+        <div style={{
+          background: '#FAFBFC',
+          border: '1px solid rgba(13,27,42,0.08)',
+          borderRadius: 8,
+          padding: '10px 14px',
+        }}>
+          <p className="font-mono uppercase mb-1.5" style={{ fontSize: 10, letterSpacing: '0.18em', color: '#607186' }}>
+            Upload limits
+          </p>
+          <div className="flex flex-wrap gap-x-5 gap-y-1" style={{ fontSize: 12, color: '#3a4a5a' }}>
+            {maxFiles != null && <span><strong style={{ color: '#0D1B2A' }}>{maxFiles}</strong> file{maxFiles === 1 ? '' : 's'} per upload</span>}
+            {maxImageMb && <span>Images up to <strong style={{ color: '#0D1B2A' }}>{maxImageMb} MB</strong></span>}
+            {maxDocMb && <span>Documents up to <strong style={{ color: '#0D1B2A' }}>{maxDocMb} MB</strong></span>}
+          </div>
+          {(allowedImageTypes.length > 0 || allowedDocumentTypes.length > 0) && (
+            <p className="font-body mt-1.5" style={{ fontSize: 11.5, color: '#607186' }}>
+              Accepted: {[...allowedImageTypes, ...allowedDocumentTypes].join(', ')}
+            </p>
+          )}
+          {largeFileGuidance && (
+            <p className="font-body mt-2" style={{ fontSize: 12, color: '#3a4a5a', borderLeft: '2px solid var(--event-primary)', paddingLeft: 10 }}>
+              {largeFileGuidance}
+            </p>
+          )}
+        </div>
+      )}
+
       <div className="profile-uploader-drop">
-        <input ref={inputRef} type="file" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} style={{ display: 'block' }} />
+        <input ref={inputRef} type="file" multiple accept={acceptAttr || undefined}
+          onChange={(e) => setFiles(Array.from(e.target.files || []))} style={{ display: 'block' }} />
         {files.length > 0 && (
           <ul className="mt-2 flex flex-col gap-1">
             {files.map((f, i) => (
@@ -477,6 +551,21 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], isTes
           </span>
         )}
       </div>
+
+      {/* Just-uploaded preview row. Renders the assets returned by the
+          POST response so the user sees their new files immediately,
+          without having to scroll down to the full library. */}
+      {status === 'success' && recentUploads.length > 0 && (
+        <div style={{ borderTop: '1px solid rgba(13,27,42,0.08)', paddingTop: 14, marginTop: 6 }}>
+          <p className="miami-subhead mb-2" style={{ fontSize: 11, color: '#10b981', letterSpacing: '0.16em' }}>
+            <Check size={11} style={{ display: 'inline', marginRight: 4 }} />
+            Just uploaded
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {recentUploads.map((a) => <AssetThumb key={a.id || a.url || a.path} asset={a} />)}
+          </div>
+        </div>
+      )}
     </form>
   )
 }
