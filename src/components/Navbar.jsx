@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, INSIGHTS,
@@ -28,25 +28,15 @@ function ctaThemeFor(pathname) {
 }
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
-  const navigate = useNavigate()
-  const isHome = location.pathname === '/'
-  const solid = scrolled || !isHome
+  /* Home navbar used to be transparent at the top of the dark hero,
+     but the hero is now light/cream — a transparent navbar makes the
+     white wordmark and nav links invisible against the cream and lets
+     the hero crest overlap the top of the page. Keep the solid navy
+     band on every route, every scroll position. */
+  const solid = true
   const cta = ctaThemeFor(location.pathname)
-
-  useEffect(() => {
-    let ticking = false
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => { setScrolled(window.scrollY > 80); ticking = false })
-        ticking = true
-      }
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   useEffect(() => {
     if (!location.state?.scrollTo) window.scrollTo(0, 0)

@@ -69,13 +69,24 @@ function ParticleField() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
+    /* Respect users who've asked the OS to dial down motion — skip
+       the canvas animation entirely for them. */
+    if (typeof window !== 'undefined'
+        && window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+    /* Mobile GPUs choke on the full ~520 burst + 160 ambient particle
+       budget plus the shine + photo carousel. Scale the budgets down
+       on small viewports so the page stops dropping frames. */
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
     const ctx = canvas.getContext('2d')
     let animId
     let particles = []
     let frame = 0
     const BURST_DURATION = 150 // frames for intro burst (~2.5s, celebratory)
-    const BURST_COUNT = 520 // dense confetti coverage (up ~50% from 350)
-    const AMBIENT_CAP = 160 // active ambient particles (up from 100)
+    const BURST_COUNT = isMobile ? 180 : 520
+    const AMBIENT_CAP = isMobile ? 60  : 160
 
     const resize = () => {
       const w = canvas.offsetWidth
@@ -97,8 +108,10 @@ function ParticleField() {
     const W = () => canvas.offsetWidth
     const H = () => canvas.offsetHeight
 
-    // 30% scale-up applied to spawn radius + particle sizes.
-    const SCALE = 1.3
+    /* SCALE governs the burst radius and particle sizes. Hold the
+       full 1.3 on desktop; drop it back to ~1.0 on mobile so the
+       smaller particle budget still reads as confetti. */
+    const SCALE = isMobile ? 1.0 : 1.3
 
     // Spawn a particle radiating outward from around the "30"
     function spawn(isBurst = false) {
