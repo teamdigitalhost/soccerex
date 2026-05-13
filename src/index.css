@@ -1523,6 +1523,13 @@ html, body { overflow-x: hidden; max-width: 100vw; }
    tablets also get the lightweight hero. The JS perf knob in
    HeroSlideshow.jsx uses the same 1280px threshold. */
 @media (max-width: 1279px) {
+  /* Ken-burns is a transform: scale animation running constantly on
+     a full-viewport background image — one of the biggest GPU
+     bills on this page. Photos still crossfade between slides, just
+     without the continuous zoom. */
+  .hero-image-layer {
+    animation: none !important;
+  }
   /* Kill the mask-image based shine animation (very GPU heavy). */
   .hero-crest-shine {
     animation: none !important;
@@ -1532,6 +1539,13 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   }
   /* Stop the hover float keyframes from running continuously. */
   .hero-crest-float {
+    animation: none !important;
+  }
+  /* Stop the slow-drifting "30" outline SVGs in the background.
+     They're cheap per-frame but they keep the GPU compositor busy
+     on the largest layer; pausing them gives the canvas + photo
+     more headroom. */
+  .hero-outline-svg {
     animation: none !important;
   }
   /* Stop the GPU-expensive filter:drop-shadow pulse animation.

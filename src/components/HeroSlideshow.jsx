@@ -76,29 +76,44 @@ function ParticleField() {
         && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return
     }
-    /* Mobile + tablet GPUs choke on the full ~520 burst + 160 ambient
-       particle budget plus the shine + photo carousel. iPad lives at
-       ~1024-1366px wide in landscape and runs Safari, which struggles
-       just as much as phones on this canvas. Treat anything narrower
-       than typical laptop width (1280px) as a "low-perf" tier so it
-       gets the dialed-back hero. */
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1280
+    /* Three perf tiers, picked from viewport width + device hints.
+       Anything narrower than typical laptop (1280px) is treated as
+       "low-perf" — covers phones, iPads (landscape ~1024-1366),
+       and small tablets running Safari, which all struggle on the
+       full canvas + shine + scale-animated photo. Very-low-perf
+       (deviceMemory ≤ 4GB OR hardwareConcurrency ≤ 4) gets the
+       harshest cuts: 1x DPR canvas, half framerate, even fewer
+       particles. */
+    const lowPerf = typeof window !== 'undefined' && window.innerWidth < 1280
+    const dm = typeof navigator !== 'undefined' ? (navigator.deviceMemory || 8) : 8
+    const hc = typeof navigator !== 'undefined' ? (navigator.hardwareConcurrency || 8) : 8
+    const veryLowPerf = lowPerf && (dm <= 4 || hc <= 4)
+    const isMobile = lowPerf /* alias kept so existing knobs below still read */
     const ctx = canvas.getContext('2d')
     let animId
     let particles = []
     let frame = 0
     const BURST_DURATION = 150 // frames for intro burst (~2.5s, celebratory)
-    const BURST_COUNT = isMobile ? 180 : 520
-    const AMBIENT_CAP = isMobile ? 60  : 160
+    const BURST_COUNT = veryLowPerf ? 90  : isMobile ? 180 : 520
+    const AMBIENT_CAP = veryLowPerf ? 30  : isMobile ? 60  : 160
+    /* Half framerate on the weakest tier — visually fine for soft
+       confetti, halves CPU/GPU spend on this canvas. */
+    const FRAME_STEP = veryLowPerf ? 2 : 1
 
     const resize = () => {
       const w = canvas.offsetWidth
       const h = canvas.offsetHeight
       if (w === 0 || h === 0) return /* parent not laid out yet — try again next frame */
-      canvas.width = w * 2
-      canvas.height = h * 2
+      /* On low-perf tier we paint at 1x DPR. The canvas covers the
+         entire hero (often 1024×800+ on iPad) — running it at 2x
+         means ~3M pixels cleared and redrawn every frame. 1x is
+         visually indistinguishable for soft confetti circles and
+         cuts the per-frame fill rate by 4x. */
+      const dpr = lowPerf ? 1 : 2
+      canvas.width = w * dpr
+      canvas.height = h * dpr
       ctx.setTransform(1, 0, 0, 1, 0, 0)
-      ctx.scale(2, 2)
+      ctx.scale(dpr, dpr)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -181,7 +196,31 @@ function ParticleField() {
       }
     }
 
+    /* IntersectionObserver pauses the RAF loop once the hero scrolls
+       offscreen — no point burning frames on an invisible canvas. */
+    let visible = true
+    let io
+    if (typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver((entries) => {
+        visible = entries[0]?.isIntersecting ?? true
+      }, { threshold: 0.01 })
+      io.observe(canvas)
+    }
+
+    let frameSkip = 0
     function tick() {
+      if (!visible) {
+        animId = requestAnimationFrame(tick)
+        return
+      }
+      /* On very-low-perf, render every other RAF callback (~30fps). */
+      if (FRAME_STEP > 1) {
+        frameSkip = (frameSkip + 1) % FRAME_STEP
+        if (frameSkip !== 0) {
+          animId = requestAnimationFrame(tick)
+          return
+        }
+      }
       ctx.clearRect(0, 0, W(), H())
       frame++
 
@@ -247,6 +286,7 @@ function ParticleField() {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', resize)
       if (ro) ro.disconnect()
+      if (io) io.disconnect()
     }
   }, [])
 
