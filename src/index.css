@@ -1517,8 +1517,12 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 /* Mobile: kill the heaviest hero effects so the page stops dropping
    frames. The crest shine mask + 7s glow pulse + 6.5s float and the
    ParticleField canvas together overwhelm mobile GPUs. Keep the photo
-   crossfade and the cascading text — those are cheap. */
-@media (max-width: 768px) {
+   crossfade and the cascading text — those are cheap.
+
+   Cut-off raised to 1279px so iPad landscape (~1024-1366px) and other
+   tablets also get the lightweight hero. The JS perf knob in
+   HeroSlideshow.jsx uses the same 1280px threshold. */
+@media (max-width: 1279px) {
   /* Kill the mask-image based shine animation (very GPU heavy). */
   .hero-crest-shine {
     animation: none !important;

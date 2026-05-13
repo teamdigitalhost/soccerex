@@ -76,10 +76,13 @@ function ParticleField() {
         && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return
     }
-    /* Mobile GPUs choke on the full ~520 burst + 160 ambient particle
-       budget plus the shine + photo carousel. Scale the budgets down
-       on small viewports so the page stops dropping frames. */
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+    /* Mobile + tablet GPUs choke on the full ~520 burst + 160 ambient
+       particle budget plus the shine + photo carousel. iPad lives at
+       ~1024-1366px wide in landscape and runs Safari, which struggles
+       just as much as phones on this canvas. Treat anything narrower
+       than typical laptop width (1280px) as a "low-perf" tier so it
+       gets the dialed-back hero. */
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1280
     const ctx = canvas.getContext('2d')
     let animId
     let particles = []
