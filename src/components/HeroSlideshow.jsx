@@ -454,25 +454,42 @@ export default function HeroSlideshow() {
   // ── Fast image cycling (waits for manifest) ────────────────────────────
   useEffect(() => {
     if (!imagesLoaded || ALL_IMAGES.length === 0) return
-    /* Freeze the carousel on the low-perf tier (phones/tablets).
-       The crossfade transitions two full-viewport background-image
-       layers — even without ken-burns it's expensive to keep
-       composited every 4 seconds while the user is reading the
-       rest of the page. A single static hero photo reads cleaner
-       and lets the GPU rest. */
-    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
-      return
+    /* Three-tier cadence so iPad / phones don't burn cycles on a 4s
+       crossfade while the user is reading. The slideshow IS the
+       hero — never freeze it — but on low-perf devices we hold each
+       photo longer so the per-frame compositor cost is amortized
+       over a calmer cadence. */
+    const lowPerf = typeof window !== 'undefined' && window.innerWidth < 1280
+    const SLIDE_HOLD_MS = lowPerf ? 7000 : 4000   // time per image
+    const FADE_OUT_MS   = lowPerf ? 500  : 800    // crossfade duration
+
+    /* Pause the cycle while the hero is offscreen so the user
+       scrolling the rest of the page isn't paying for transitions
+       they can't see. */
+    let isVisible = true
+    let io
+    const section = sectionRef.current
+    if (section && typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver((entries) => {
+        isVisible = entries[0]?.isIntersecting ?? true
+      }, { threshold: 0.05 })
+      io.observe(section)
     }
+
     const interval = setInterval(() => {
+      if (!isVisible) return
       setShowImage(false) // fade out
       setTimeout(() => {
         setCurrentImage((prev) => {
           const next = (prev + 1) % ALL_IMAGES.length
-          // Rolling preload: preload the 2 images ahead
+          /* Preload one image ahead (was two). Two parallel decodes
+             on iPad can spike memory/jank during the crossfade. */
           const ahead1 = (next + 1) % ALL_IMAGES.length
-          const ahead2 = (next + 2) % ALL_IMAGES.length
           new Image().src = ALL_IMAGES[ahead1]
-          new Image().src = ALL_IMAGES[ahead2]
+          if (!lowPerf) {
+            const ahead2 = (next + 2) % ALL_IMAGES.length
+            new Image().src = ALL_IMAGES[ahead2]
+          }
           // At loop boundary, trigger gold flash
           if (next === 0) {
             setTransitioning(true)
@@ -481,10 +498,13 @@ export default function HeroSlideshow() {
           return next
         })
         setShowImage(true) // fade in new image
-      }, 800) // wait for fade-out
-    }, 4000) // 4s per image — fast cycling through 304 images
+      }, FADE_OUT_MS) // wait for fade-out
+    }, SLIDE_HOLD_MS) // photo cadence
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      if (io) io.disconnect()
+    }
   }, [imagesLoaded])
 
   // (Rotating tagline logic retired. Kept baseline copy in HeroSlideshow.baseline.jsx.)
