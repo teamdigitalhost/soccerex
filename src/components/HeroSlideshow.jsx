@@ -426,17 +426,23 @@ function OutlineThirty() {
 // ─── Main component ─────────────────────────────────────────────────────────
 export default function HeroSlideshow() {
   const sectionRef = useRef(null)
-  /* Two-layer crossfade. Each cycle we load the next image into
-     the inactive slot, then flip `activeSlot` to swap which is
-     opacity 1. The two layers cross-opacity past each other so the
-     viewer always sees one image solidly — no flash to the cream
-     background underneath. */
+  /* Two-layer crossfade. Both layers permanently render at
+     opacity 1 — the "top" layer occludes the "back" layer when
+     it's fully opaque. Each cycle: load the next image into the
+     currently-back layer, swap which is on top, then call
+     layer.animate() to fade the new top layer's opacity from 0
+     to 1. The back layer stays at opacity 1 throughout, so during
+     the fade the user sees the previous image (back, fully opaque)
+     blending through into the next image (top, opacity rising) —
+     never the cream section background. */
   const [slotAIndex, setSlotAIndex] = useState(0)
   const [slotBIndex, setSlotBIndex] = useState(1)
-  const [activeSlot, setActiveSlot] = useState('A')
-  /* currentImage is the index currently fully visible — kept for
-     legacy callers (loop-boundary gold flash) below. */
-  const currentImage = activeSlot === 'A' ? slotAIndex : slotBIndex
+  const [topSlot, setTopSlot] = useState('A')
+  const layerARef = useRef(null)
+  const layerBRef = useRef(null)
+  /* currentImage is the index currently on top — kept for legacy
+     callers (loop-boundary gold flash) below. */
+  const currentImage = topSlot === 'A' ? slotAIndex : slotBIndex
   const [textReady, setTextReady] = useState(false)
   const [transitioning, setTransitioning] = useState(false) // gold/blue fade between cycles
 
@@ -483,13 +489,13 @@ export default function HeroSlideshow() {
 
     /* Tick state lives outside React so the interval reads a fresh
        view every cycle without re-binding the closure. */
-    let nowActive = activeSlot
+    let nowTop = topSlot
     let nowSlotA = slotAIndex
     let nowSlotB = slotBIndex
 
     const interval = setInterval(() => {
       if (!isVisible) return
-      const visibleIndex = nowActive === 'A' ? nowSlotA : nowSlotB
+      const visibleIndex = nowTop === 'A' ? nowSlotA : nowSlotB
       const nextIndex = (visibleIndex + 1) % ALL_IMAGES.length
 
       /* Preload ahead so the upcoming image is already decoded by
@@ -505,19 +511,36 @@ export default function HeroSlideshow() {
         setTimeout(() => setTransitioning(false), 1200)
       }
 
-      /* Load nextIndex into the INACTIVE slot, then flip activeSlot
-         so the new layer fades in while the old layer fades out. */
-      if (nowActive === 'A') {
-        nowSlotB = nextIndex
-        setSlotBIndex(nextIndex)
-        nowActive = 'B'
-        setActiveSlot('B')
-      } else {
+      /* Determine which slot is about to become the new top. Load
+         the next image into THAT slot before swapping, then call
+         animate() on the new top layer's DOM node to fade opacity
+         0 → 1. The old top stays at opacity 1 underneath (now back)
+         so the cream background never shows through. */
+      const newTop = nowTop === 'A' ? 'B' : 'A'
+      if (newTop === 'A') {
         nowSlotA = nextIndex
         setSlotAIndex(nextIndex)
-        nowActive = 'A'
-        setActiveSlot('A')
+      } else {
+        nowSlotB = nextIndex
+        setSlotBIndex(nextIndex)
       }
+      nowTop = newTop
+      setTopSlot(newTop)
+
+      /* Trigger the fade-in after React renders the new image into
+         the slot. Two RAFs: the first lets React commit the DOM,
+         the second ensures the browser has painted the layer at
+         z-index 2 with the new bg-image before we start the fade. */
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const el = newTop === 'A' ? layerARef.current : layerBRef.current
+          if (!el || typeof el.animate !== 'function') return
+          el.animate(
+            [{ opacity: 0 }, { opacity: 1 }],
+            { duration: FADE_OUT_MS, easing: 'ease-in-out', fill: 'backwards' },
+          )
+        })
+      })
     }, SLIDE_HOLD_MS) // photo cadence
 
     return () => {
@@ -536,20 +559,28 @@ export default function HeroSlideshow() {
     <section ref={sectionRef} data-theme="light"
       className="hero-slideshow relative overflow-hidden flex items-center justify-center"
       style={{ minHeight: '100dvh' }}>
-      {/* Two image layers crossfading past each other. Each cycle
-          the inactive layer's background-image is updated to the
-          next photo, then activeSlot flips so the new layer fades
-          in while the previous fades out. The viewer always has
-          at least one layer at full opacity — no flash to the
-          cream background between slides. */}
+      {/* Two image layers, both permanently at opacity 1. z-index
+          says which is on top. Each cycle the new top layer's
+          opacity is animated 0 → 1 via Web Animations API (in the
+          cycling useEffect) while the old top stays at opacity 1
+          underneath — so the section background never bleeds
+          through during the fade. */}
       <div
-        className={`hero-image-layer ${activeSlot === 'A' ? 'hero-img-visible' : 'hero-img-hidden'}`}
-        style={{ backgroundImage: ALL_IMAGES.length ? `url(${ALL_IMAGES[slotAIndex]})` : 'none' }}
+        ref={layerARef}
+        className="hero-image-layer hero-img-visible"
+        style={{
+          backgroundImage: ALL_IMAGES.length ? `url(${ALL_IMAGES[slotAIndex]})` : 'none',
+          zIndex: topSlot === 'A' ? 2 : 1,
+        }}
         aria-hidden="true"
       />
       <div
-        className={`hero-image-layer ${activeSlot === 'B' ? 'hero-img-visible' : 'hero-img-hidden'}`}
-        style={{ backgroundImage: ALL_IMAGES.length ? `url(${ALL_IMAGES[slotBIndex]})` : 'none' }}
+        ref={layerBRef}
+        className="hero-image-layer hero-img-visible"
+        style={{
+          backgroundImage: ALL_IMAGES.length ? `url(${ALL_IMAGES[slotBIndex]})` : 'none',
+          zIndex: topSlot === 'B' ? 2 : 1,
+        }}
         aria-hidden="true"
       />
 
