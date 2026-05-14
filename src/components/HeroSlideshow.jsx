@@ -426,8 +426,17 @@ function OutlineThirty() {
 // ─── Main component ─────────────────────────────────────────────────────────
 export default function HeroSlideshow() {
   const sectionRef = useRef(null)
-  const [currentImage, setCurrentImage] = useState(0)
-  const [showImage, setShowImage] = useState(true)
+  /* Two-layer crossfade. Each cycle we load the next image into
+     the inactive slot, then flip `activeSlot` to swap which is
+     opacity 1. The two layers cross-opacity past each other so the
+     viewer always sees one image solidly — no flash to the cream
+     background underneath. */
+  const [slotAIndex, setSlotAIndex] = useState(0)
+  const [slotBIndex, setSlotBIndex] = useState(1)
+  const [activeSlot, setActiveSlot] = useState('A')
+  /* currentImage is the index currently fully visible — kept for
+     legacy callers (loop-boundary gold flash) below. */
+  const currentImage = activeSlot === 'A' ? slotAIndex : slotBIndex
   const [textReady, setTextReady] = useState(false)
   const [transitioning, setTransitioning] = useState(false) // gold/blue fade between cycles
 
@@ -472,29 +481,43 @@ export default function HeroSlideshow() {
       io.observe(section)
     }
 
+    /* Tick state lives outside React so the interval reads a fresh
+       view every cycle without re-binding the closure. */
+    let nowActive = activeSlot
+    let nowSlotA = slotAIndex
+    let nowSlotB = slotBIndex
+
     const interval = setInterval(() => {
       if (!isVisible) return
-      setShowImage(false) // fade out
-      setTimeout(() => {
-        setCurrentImage((prev) => {
-          const next = (prev + 1) % ALL_IMAGES.length
-          /* Preload one image ahead (was two). Two parallel decodes
-             on iPad can spike memory/jank during the crossfade. */
-          const ahead1 = (next + 1) % ALL_IMAGES.length
-          new Image().src = ALL_IMAGES[ahead1]
-          if (!lowPerf) {
-            const ahead2 = (next + 2) % ALL_IMAGES.length
-            new Image().src = ALL_IMAGES[ahead2]
-          }
-          // At loop boundary, trigger gold flash
-          if (next === 0) {
-            setTransitioning(true)
-            setTimeout(() => setTransitioning(false), 1200)
-          }
-          return next
-        })
-        setShowImage(true) // fade in new image
-      }, FADE_OUT_MS) // wait for fade-out
+      const visibleIndex = nowActive === 'A' ? nowSlotA : nowSlotB
+      const nextIndex = (visibleIndex + 1) % ALL_IMAGES.length
+
+      /* Preload ahead so the upcoming image is already decoded by
+         the time it's its turn to fade in. */
+      const ahead1 = (nextIndex + 1) % ALL_IMAGES.length
+      new Image().src = ALL_IMAGES[ahead1]
+      if (!lowPerf) {
+        const ahead2 = (nextIndex + 2) % ALL_IMAGES.length
+        new Image().src = ALL_IMAGES[ahead2]
+      }
+      if (nextIndex === 0) {
+        setTransitioning(true)
+        setTimeout(() => setTransitioning(false), 1200)
+      }
+
+      /* Load nextIndex into the INACTIVE slot, then flip activeSlot
+         so the new layer fades in while the old layer fades out. */
+      if (nowActive === 'A') {
+        nowSlotB = nextIndex
+        setSlotBIndex(nextIndex)
+        nowActive = 'B'
+        setActiveSlot('B')
+      } else {
+        nowSlotA = nextIndex
+        setSlotAIndex(nextIndex)
+        nowActive = 'A'
+        setActiveSlot('A')
+      }
     }, SLIDE_HOLD_MS) // photo cadence
 
     return () => {
@@ -513,10 +536,20 @@ export default function HeroSlideshow() {
     <section ref={sectionRef} data-theme="light"
       className="hero-slideshow relative overflow-hidden flex items-center justify-center"
       style={{ minHeight: '100dvh' }}>
-      {/* Image layer — CSS transition driven */}
+      {/* Two image layers crossfading past each other. Each cycle
+          the inactive layer's background-image is updated to the
+          next photo, then activeSlot flips so the new layer fades
+          in while the previous fades out. The viewer always has
+          at least one layer at full opacity — no flash to the
+          cream background between slides. */}
       <div
-        className={`hero-image-layer ${showImage ? 'hero-img-visible' : 'hero-img-hidden'}`}
-        style={{ backgroundImage: ALL_IMAGES.length ? `url(${ALL_IMAGES[currentImage]})` : 'none' }}
+        className={`hero-image-layer ${activeSlot === 'A' ? 'hero-img-visible' : 'hero-img-hidden'}`}
+        style={{ backgroundImage: ALL_IMAGES.length ? `url(${ALL_IMAGES[slotAIndex]})` : 'none' }}
+        aria-hidden="true"
+      />
+      <div
+        className={`hero-image-layer ${activeSlot === 'B' ? 'hero-img-visible' : 'hero-img-hidden'}`}
+        style={{ backgroundImage: ALL_IMAGES.length ? `url(${ALL_IMAGES[slotBIndex]})` : 'none' }}
         aria-hidden="true"
       />
 
