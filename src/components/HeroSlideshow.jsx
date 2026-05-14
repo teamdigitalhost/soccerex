@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
+import Crest from './Crest'
+
+/* Static hero copy. The dark slideshow used to rotate through six
+   taglines letter-by-letter; that's retired in favour of the static
+   title + subtitle the light version landed on. */
+const HERO_TITLE = 'The Longest-Running Football Business Platform'
+const HERO_SUBTITLE = 'Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership'
 
 // ─── Hero images — built from manifest, shuffled fresh each visit ────────────
 let ALL_IMAGES = []
@@ -295,8 +302,6 @@ export default function HeroSlideshow() {
   const sectionRef = useRef(null)
   const [currentImage, setCurrentImage] = useState(0)
   const [showImage, setShowImage] = useState(true)
-  const [taglineIndex, setTaglineIndex] = useState(0)
-  const [taglineVisible, setTaglineVisible] = useState(false)
   const [textReady, setTextReady] = useState(false)
   const [transitioning, setTransitioning] = useState(false) // gold/blue fade between cycles
 
@@ -347,32 +352,7 @@ export default function HeroSlideshow() {
     return () => clearInterval(interval)
   }, [imagesLoaded])
 
-  // ── Rotating tagline cycle ────────────────────────────────────────────
-  useEffect(() => {
-    let interval
-    // Show first tagline after intro animations settle
-    const showTimer = setTimeout(() => {
-      // Letters already rendered hidden; trigger cascade on next frame
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setTaglineVisible(true))
-      })
-      // Start cycling only after first tagline is shown
-      interval = setInterval(() => {
-        setTaglineVisible(false)
-        setTimeout(() => {
-          // Step 1: render new letters (hidden)
-          setTaglineIndex((prev) => (prev + 1) % TAGLINES.length)
-          // Step 2: on next frame, trigger the cascade-in transition
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              setTaglineVisible(true)
-            })
-          })
-        }, 1200)
-      }, 3300)
-    }, 2500)
-    return () => { clearTimeout(showTimer); if (interval) clearInterval(interval) }
-  }, [])
+  /* Rotating tagline cycle retired — static title + subtitle now. */
 
   return (
     <section ref={sectionRef} className="hero-slideshow relative overflow-hidden flex items-center justify-center" style={{ minHeight: '100dvh' }}>
@@ -401,31 +381,56 @@ export default function HeroSlideshow() {
           SOCCEREX &middot; EST. 1996
         </p>
 
-        {/* 3D SVG "30" with particles radiating from behind */}
+        {/* Anniversary crest, replaces the old large "30 / YEARS"
+            lockup. White silhouette + stacked white drop-shadow halo
+            (CSS, .hero-crest-wrap) for the outer glow. Confetti
+            still radiates from behind via ParticleField. */}
         <div className="hero-30-with-particles">
           <ParticleField />
-          <Hero30SVG />
+          <div className="hero-crest-wrap">
+            <Crest variant="main" color="white" size={280} decorative />
+          </div>
         </div>
-
-        {/* "Years" under the 30 */}
-        <div className="hero-years">YEARS</div>
 
         {/* Gold divider */}
         <div className="hero-divider" />
 
-        {/* Rotating tagline with letter-by-letter cascade */}
-        <div className="hero-tagline-wrapper">
-          <CascadingText
-            text={TAGLINES[taglineIndex]}
-            visible={taglineVisible}
-            className="hero-tagline"
-          />
-        </div>
+        {/* Title — replaces the rotating tagline. Same large clamp
+            sizing as the light version. */}
+        <p
+          className="hero-static-tagline font-heading leading-tight"
+          style={{
+            fontSize: 'clamp(1.95rem, 5vw, 2.6rem)',
+            maxWidth: '900px',
+            margin: '1.5rem auto 0.85rem',
+            fontWeight: 700,
+            lineHeight: 1.12,
+            letterSpacing: '-0.01em',
+            /* Sits over the cream-wash bottom of the overlay — dark
+               navy reads cleanly. Soft cream halo lifts it off any
+               photo detail that's still showing through. */
+            color: '#0D1B2A',
+            textShadow: '0 1px 0 rgba(255,248,244,0.7), 0 2px 18px rgba(255,248,244,0.55)',
+          }}
+        >
+          {HERO_TITLE}
+        </p>
 
-        {/* Subline */}
-        <p className="hero-subline font-body text-white/45 leading-relaxed mt-6 mb-10"
-          style={{ fontSize: 'clamp(0.8rem, 1.2vw, 0.95rem)', maxWidth: '500px', margin: '1.5rem auto 2.5rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          The World's Premier Football Business Event
+        {/* Subtitle — replaces the old "World's Premier…" eyebrow-
+            style subline. */}
+        <p
+          className="hero-static-subtitle font-body leading-relaxed"
+          style={{
+            fontSize: 'clamp(1.15rem, 2vw, 1.55rem)',
+            maxWidth: '840px',
+            margin: '0 auto 2.5rem',
+            fontWeight: 600,
+            lineHeight: 1.4,
+            color: '#1d2a3d',
+            textShadow: '0 1px 0 rgba(255,248,244,0.65), 0 1px 14px rgba(255,248,244,0.5)',
+          }}
+        >
+          {HERO_SUBTITLE}
         </p>
 
         {/* CTAs */}

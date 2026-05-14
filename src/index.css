@@ -222,7 +222,10 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: saturate(0.3) sepia(0.15) brightness(0.85);
+  /* Photos run brighter + closer to full colour so the white wash
+     overlay produces a luminous, sunlit composition rather than a
+     muted dark wash. */
+  filter: saturate(0.85) brightness(1.0);
   transform-origin: center;
   transition: opacity 0.8s ease-in-out;
   animation: hero-ken-burns 4s ease-in-out infinite alternate;
@@ -267,12 +270,20 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 .hero-loop-active { opacity: 1; transition: opacity 0.3s ease; }
 
 /* Dark gradient overlay */
+/* White wash overlay — turns the dark hero into a brighter mood
+   without changing the section background. Keeps the soft centered
+   highlight behind the crest and adds a cream bottom gradient that
+   doubles as the contrast backdrop for the title + subtitle below. */
 .hero-overlay {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at center 45%, rgba(5, 13, 26, 0.55) 0%, transparent 70%),
-    linear-gradient(180deg, rgba(5, 13, 26, 0.55) 0%, rgba(5, 13, 26, 0.5) 35%, rgba(5, 13, 26, 0.6) 65%, rgba(9, 32, 62, 0.88) 100%);
+    radial-gradient(ellipse at center 45%, rgba(255, 248, 244, 0.55) 0%, transparent 65%),
+    linear-gradient(180deg,
+      rgba(255, 248, 244, 0.25) 0%,
+      rgba(255, 248, 244, 0.30) 35%,
+      rgba(255, 248, 244, 0.55) 65%,
+      rgba(255, 248, 244, 0.85) 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -330,14 +341,21 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   mix-blend-mode: multiply;
 }
 
-/* 30-year anniversary crest — entrance animation + ember glow halo */
+/* 30-year anniversary crest — entrance animation + white outer-glow
+   halo. The white silhouette is lifted off the photo by a stacked
+   drop-shadow filter that hugs the crest shape, not a rectangle. */
 .hero-crest-wrap {
   position: relative;
   z-index: 2;
   opacity: 0;
   transform: scale(0.88) translateY(8px);
   transition: opacity 1.2s ease, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 8px 40px rgba(255, 107, 53, 0.35)) drop-shadow(0 0 90px rgba(255, 183, 3, 0.18));
+  filter:
+    drop-shadow(0 0 12px  rgba(255, 255, 255, 0.85))
+    drop-shadow(0 0 32px  rgba(255, 255, 255, 0.70))
+    drop-shadow(0 0 80px  rgba(255, 255, 255, 0.45))
+    drop-shadow(0 0 160px rgba(255, 255, 255, 0.28))
+    drop-shadow(0 12px 36px rgba(13, 27, 42, 0.22));
   /* Aggressive negative margins claw back the SVG's intrinsic whitespace
      (the viewBox has ~20% empty space above and below the visible content). */
   margin-top: clamp(-140px, -13vh, -40px);
