@@ -511,23 +511,20 @@ export default function HeroSlideshow() {
         setTimeout(() => setTransitioning(false), 1200)
       }
 
-      /* Determine which slot is about to become the new top. Load
-         the next image into THAT slot, then drive the fade-in with
-         a CSS class double-RAF trick:
-           - Add .hero-img-emerging (opacity 0, transition: none) so
-             the new top layer snaps invisible while React swaps
-             the bg-image and z-index.
-           - After two RAFs (React commits, browser paints), remove
-             .hero-img-emerging — the base .hero-image-layer rule
-             takes over with `transition: opacity 0.5s` and the
-             opacity animates 0 → 1.
-         The old top stays at opacity 1 underneath (now z-index 1)
-         so the cream background never shows through during the
-         fade. iOS Safari runs CSS transitions on opacity reliably
-         where it sometimes drops Web Animations API frames. */
+      /* Determine which slot is about to become the new top, push
+         the next image into that slot via React state, then drive
+         the fade-in IMPERATIVELY on the DOM ref with the
+         "set initial → force reflow → set target" pattern.
+
+         iOS Safari's known flicker bug: when opacity changes via
+         class swap or React style change in the same commit as
+         other property changes (background-image, z-index), Safari
+         frequently skips the transition entirely — the element
+         snaps to the target value. Forcing a reflow between
+         setting opacity:0 (with transition:none) and opacity:1
+         (with transition:opacity 0.5s) creates a clean separation
+         that Safari can't optimise away. */
       const newTop = nowTop === 'A' ? 'B' : 'A'
-      const emergingEl = newTop === 'A' ? layerARef.current : layerBRef.current
-      if (emergingEl) emergingEl.classList.add('hero-img-emerging')
 
       if (newTop === 'A') {
         nowSlotA = nextIndex
@@ -539,9 +536,28 @@ export default function HeroSlideshow() {
       nowTop = newTop
       setTopSlot(newTop)
 
+      /* Wait for React to commit the new bg-image into the DOM
+         before manipulating the element. */
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          if (emergingEl) emergingEl.classList.remove('hero-img-emerging')
+          const el = newTop === 'A' ? layerARef.current : layerBRef.current
+          if (!el) return
+          /* 1. Snap to invisible with transition disabled. */
+          el.style.transition = 'none'
+          el.style.opacity = '0'
+          /* 2. Force a synchronous reflow so the browser commits
+                the opacity:0 state before we change it again. */
+          /* eslint-disable-next-line no-unused-expressions */
+          el.offsetWidth
+          /* 3. Re-enable the transition and target opacity:1 — the
+                browser sees a property change from 0 → 1 with an
+                active transition and animates it. Paired with a
+                no-op transform so Safari doesn't optimise the
+                single-property transition away (a documented
+                workaround for the iOS flicker bug). */
+          el.style.transition = `opacity ${FADE_OUT_MS}ms ease-in-out, transform ${FADE_OUT_MS}ms ease-in-out`
+          el.style.transform = 'translateZ(0)'
+          el.style.opacity = '1'
         })
       })
     }, SLIDE_HOLD_MS) // photo cadence
