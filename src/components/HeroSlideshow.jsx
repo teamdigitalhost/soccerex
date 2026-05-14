@@ -76,8 +76,12 @@ function ParticleField() {
         && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return
     }
-    /* Confetti stays on every tier — it's part of the 30-year
-       celebration mood. Counts are tuned per tier below. */
+    /* Confetti canvas off on the low-perf tier. The RAF loop on a
+       full-viewport canvas was the dominant frame-time cost on
+       iPad Safari. Desktop keeps the full effect below. */
+    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
+      return
+    }
     /* Three perf tiers, picked from viewport width + device hints.
        Anything narrower than typical laptop (1280px) is treated as
        "low-perf" — covers phones, iPads (landscape ~1024-1366),
