@@ -76,6 +76,16 @@ function ParticleField() {
         && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return
     }
+    /* Hard skip on the low-perf tier (anything under typical laptop
+       width — phones, iPads, small tablets). Even with reduced
+       particle counts + 1x DPR + frame-skip + offscreen pause, the
+       canvas RAF loop alone keeps the compositor busy enough on
+       iPad Safari to drop frames in the rest of the hero. Static
+       hero composition (cream wash + photo + crest + halo + text)
+       reads cleaner without the moving confetti anyway. */
+    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
+      return
+    }
     /* Three perf tiers, picked from viewport width + device hints.
        Anything narrower than typical laptop (1280px) is treated as
        "low-perf" — covers phones, iPads (landscape ~1024-1366),
@@ -444,6 +454,15 @@ export default function HeroSlideshow() {
   // ── Fast image cycling (waits for manifest) ────────────────────────────
   useEffect(() => {
     if (!imagesLoaded || ALL_IMAGES.length === 0) return
+    /* Freeze the carousel on the low-perf tier (phones/tablets).
+       The crossfade transitions two full-viewport background-image
+       layers — even without ken-burns it's expensive to keep
+       composited every 4 seconds while the user is reading the
+       rest of the page. A single static hero photo reads cleaner
+       and lets the GPU rest. */
+    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
+      return
+    }
     const interval = setInterval(() => {
       setShowImage(false) // fade out
       setTimeout(() => {
