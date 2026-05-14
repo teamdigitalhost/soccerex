@@ -76,16 +76,8 @@ function ParticleField() {
         && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return
     }
-    /* Hard skip on the low-perf tier (anything under typical laptop
-       width — phones, iPads, small tablets). Even with reduced
-       particle counts + 1x DPR + frame-skip + offscreen pause, the
-       canvas RAF loop alone keeps the compositor busy enough on
-       iPad Safari to drop frames in the rest of the hero. Static
-       hero composition (cream wash + photo + crest + halo + text)
-       reads cleaner without the moving confetti anyway. */
-    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
-      return
-    }
+    /* Confetti stays on every tier — it's part of the 30-year
+       celebration mood. Counts are tuned per tier below. */
     /* Three perf tiers, picked from viewport width + device hints.
        Anything narrower than typical laptop (1280px) is treated as
        "low-perf" — covers phones, iPads (landscape ~1024-1366),
@@ -104,8 +96,8 @@ function ParticleField() {
     let particles = []
     let frame = 0
     const BURST_DURATION = 150 // frames for intro burst (~2.5s, celebratory)
-    const BURST_COUNT = veryLowPerf ? 90  : isMobile ? 180 : 520
-    const AMBIENT_CAP = veryLowPerf ? 30  : isMobile ? 60  : 160
+    const BURST_COUNT = veryLowPerf ? 50  : isMobile ? 100 : 520
+    const AMBIENT_CAP = veryLowPerf ? 18  : isMobile ? 35  : 160
     /* Half framerate on the weakest tier — visually fine for soft
        confetti, halves CPU/GPU spend on this canvas. */
     const FRAME_STEP = veryLowPerf ? 2 : 1
