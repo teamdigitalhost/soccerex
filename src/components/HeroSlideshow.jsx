@@ -512,11 +512,23 @@ export default function HeroSlideshow() {
       }
 
       /* Determine which slot is about to become the new top. Load
-         the next image into THAT slot before swapping, then call
-         animate() on the new top layer's DOM node to fade opacity
-         0 → 1. The old top stays at opacity 1 underneath (now back)
-         so the cream background never shows through. */
+         the next image into THAT slot, then drive the fade-in with
+         a CSS class double-RAF trick:
+           - Add .hero-img-emerging (opacity 0, transition: none) so
+             the new top layer snaps invisible while React swaps
+             the bg-image and z-index.
+           - After two RAFs (React commits, browser paints), remove
+             .hero-img-emerging — the base .hero-image-layer rule
+             takes over with `transition: opacity 0.5s` and the
+             opacity animates 0 → 1.
+         The old top stays at opacity 1 underneath (now z-index 1)
+         so the cream background never shows through during the
+         fade. iOS Safari runs CSS transitions on opacity reliably
+         where it sometimes drops Web Animations API frames. */
       const newTop = nowTop === 'A' ? 'B' : 'A'
+      const emergingEl = newTop === 'A' ? layerARef.current : layerBRef.current
+      if (emergingEl) emergingEl.classList.add('hero-img-emerging')
+
       if (newTop === 'A') {
         nowSlotA = nextIndex
         setSlotAIndex(nextIndex)
@@ -527,18 +539,9 @@ export default function HeroSlideshow() {
       nowTop = newTop
       setTopSlot(newTop)
 
-      /* Trigger the fade-in after React renders the new image into
-         the slot. Two RAFs: the first lets React commit the DOM,
-         the second ensures the browser has painted the layer at
-         z-index 2 with the new bg-image before we start the fade. */
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          const el = newTop === 'A' ? layerARef.current : layerBRef.current
-          if (!el || typeof el.animate !== 'function') return
-          el.animate(
-            [{ opacity: 0 }, { opacity: 1 }],
-            { duration: FADE_OUT_MS, easing: 'ease-in-out', fill: 'backwards' },
-          )
+          if (emergingEl) emergingEl.classList.remove('hero-img-emerging')
         })
       })
     }, SLIDE_HOLD_MS) // photo cadence

@@ -237,6 +237,17 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 .hero-slideshow[data-theme="light"] .hero-img-hidden { opacity: 0; }
 .hero-img-visible { opacity: 1; }
 .hero-img-hidden { opacity: 0; }
+/* Two-layer crossfade: the just-promoted top layer briefly carries
+   .hero-img-emerging while React swaps its bg-image + z-index. The
+   class snaps opacity to 0 with NO transition, so the layer is
+   invisible the instant it's promoted. Once removed (two RAFs
+   later), the base .hero-image-layer transition: opacity 0.5s
+   carries opacity from 0 → 1, giving a real crossfade over the
+   previous top (which stays at opacity 1 behind). */
+.hero-img-emerging {
+  opacity: 0 !important;
+  transition: none !important;
+}
 
 @keyframes hero-ken-burns {
   from { transform: scale(1); }
@@ -1539,16 +1550,23 @@ html, body { overflow-x: hidden; max-width: 100vw; }
             mask-image: none !important;
     opacity: 0 !important;
   }
-  /* Stop the hover float keyframes from running continuously. */
+  /* Stop the hover float keyframes from running continuously. Also
+     clear `will-change: transform` and `transform-style: preserve-3d`
+     from the base rule — they force the crest into its own
+     compositing layer to prep for the float animation, but with the
+     animation disabled they're just wasted GPU bookkeeping. */
   .hero-crest-float {
     animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+    transform-style: flat !important;
   }
-  /* Stop the slow-drifting "30" outline SVGs in the background.
-     They're cheap per-frame but they keep the GPU compositor busy
-     on the largest layer; pausing them gives the canvas + photo
-     more headroom. */
-  .hero-outline-svg {
-    animation: none !important;
+  /* Hide the giant "30" outline SVGs entirely on iPad/phone. They
+     were designed as very-subtle desktop ambience and don't read
+     at all on these sizes — and they were still consuming compositor
+     layers + animation cycles. Faster + cleaner without them. */
+  .hero-outline-30s {
+    display: none !important;
   }
   /* Stop the GPU-expensive filter:drop-shadow pulse animation.
      iOS Safari also drops the static drop-shadow when the child
