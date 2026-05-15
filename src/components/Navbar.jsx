@@ -19,7 +19,7 @@ const navLinks = [
 const CTA_THEMES = [
   { match: MIAMI_2026,  bg: '#E91E63', hover: '#c81b58', text: '#FFFFFF' },
   { match: EUROPE_2026, bg: '#c8302c', hover: '#a72824', text: '#FFFFFF' },
-  { match: RIYADH_2027, bg: '#f2e93c', hover: '#d9d128', text: '#0D1B2A' },
+  { match: RIYADH_2027, bg: '#bfb170', hover: '#d4c78e', text: '#0D1B2A' },
 ]
 const CTA_DEFAULT = { bg: 'var(--color-gold)', hover: '#d4c78e', text: 'var(--color-navy, #0D1B2A)' }
 
