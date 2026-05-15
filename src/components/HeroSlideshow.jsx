@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import { CONTACT } from '../lib/routes'
+import { withTestSearch } from '../lib/testMode'
 
 /* Static hero copy. The dark slideshow used to rotate through six
    taglines letter-by-letter; that's retired in favour of the static
@@ -451,10 +454,13 @@ export default function HeroSlideshow() {
             className="hero-cta-gold inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none">
             Explore Events <ArrowRight size={16} />
           </button>
-          <button onClick={() => document.querySelector('#partner')?.scrollIntoView({ behavior: 'smooth' })}
-            className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white">
+          <Link
+            to={withTestSearch(CONTACT)}
+            className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
+            style={{ textDecoration: 'none' }}
+          >
             Partner with Soccerex
-          </button>
+          </Link>
         </div>
       </div>
     </section>
