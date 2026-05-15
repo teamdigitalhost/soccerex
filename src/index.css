@@ -6,9 +6,11 @@
   --color-navy: #09203e;
   --color-navy-light: #0e2a4f;
   --color-navy-dark: #061729;
-  /* Ember palette — primary ember orange, secondary golden yellow */
-  --color-gold: #ff6b35;
-  --color-gold-light: #ff8a5f;
+  /* Base brand accent. Temporarily set to Miami pink so the default
+     Soccerex chrome matches the active Miami push. Swap back here when
+     the brand wants a different anchor color. */
+  --color-gold: #E91E63;
+  --color-gold-light: #ff5b8a;
   --color-red: #ffb703;
   --color-red-light: #ffd166;
   --color-blue-accent: #1a3fbf;
