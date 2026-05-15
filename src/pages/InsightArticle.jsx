@@ -4,6 +4,8 @@ import { ArrowLeft, ArrowRight, Calendar, Tag } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { INSIGHTS, insightArticle } from '../lib/routes'
+import { getArticle } from '../lib/soccerexApi'
+import { isTestModeFromUrl } from '../lib/testMode'
 
 export default function InsightArticle() {
   const { slug } = useParams()
@@ -13,13 +15,34 @@ export default function InsightArticle() {
   useEffect(() => { window.scrollTo(0, 0) }, [slug])
 
   useEffect(() => {
+    let cancelled = false
+    const test = isTestModeFromUrl()
+
+    setArticle(null)
+    setAllArticles([])
+
     fetch('/insights-manifest.json')
       .then((r) => r.json())
       .then((data) => {
+        if (cancelled) return
         setAllArticles(data)
         const found = data.find((a) => a.slug === slug)
         setArticle(found || null)
       })
+
+    getArticle(slug, { test })
+      .then((data) => {
+        if (cancelled || !data) return
+        const cmsArticle = normalizeCmsArticleDetail(data)
+        setArticle(cmsArticle)
+        setAllArticles((current) => {
+          if (current.some((a) => a.slug === cmsArticle.slug)) return current
+          return [cmsArticle, ...current]
+        })
+      })
+      .catch(() => { /* Static manifest remains the fallback for legacy articles. */ })
+
+    return () => { cancelled = true }
   }, [slug])
 
   if (!article) {
@@ -53,14 +76,14 @@ export default function InsightArticle() {
             background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
           }} />
         )}
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.12} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.12} />
 
         <div className="relative z-10 flex flex-col items-center justify-end" style={{ minHeight: article.featuredImage ? '50vh' : '40vh', padding: 'clamp(130px,12vw,170px) clamp(24px,5vw,80px) clamp(50px,6vw,80px)' }}>
           <div style={{ maxWidth: '860px', textAlign: 'center' }}>
             <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
               {article.categories.filter((c) => c !== 'Uncategorized').map((cat) => (
                 <span key={cat} className="font-mono uppercase tracking-[0.15em]" style={{
-                  fontSize: '0.65rem', color: 'var(--color-gold)', fontWeight: 600,
+                  fontSize: '0.65rem', color: 'var(--color-brand-accent)', fontWeight: 600,
                   background: 'rgba(191,177,112,0.12)', padding: '5px 14px', borderRadius: '6px',
                   border: '1px solid rgba(191,177,112,0.2)',
                 }}>
@@ -86,7 +109,7 @@ export default function InsightArticle() {
           {/* Back link */}
           <Link to={INSIGHTS} className="inline-flex items-center gap-2 mb-10 font-mono uppercase tracking-[0.15em]"
             style={{ fontSize: '0.72rem', color: '#09203e', textDecoration: 'none', transition: 'color 0.2s' }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
             onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
           >
             <ArrowLeft size={14} /> Back to Insights
@@ -94,7 +117,7 @@ export default function InsightArticle() {
 
           {/* Excerpt as lede */}
           {article.excerpt && (
-            <p className="font-body leading-relaxed mb-8" style={{ fontSize: '1.2rem', color: '#09203e', fontWeight: 500, borderLeft: '4px solid var(--color-gold)', paddingLeft: '20px' }}>
+            <p className="font-body leading-relaxed mb-8" style={{ fontSize: '1.2rem', color: '#09203e', fontWeight: 500, borderLeft: '4px solid var(--color-brand-accent)', paddingLeft: '20px' }}>
               {article.excerpt}
             </p>
           )}
@@ -125,13 +148,13 @@ export default function InsightArticle() {
         <>
           <PixelDivider color="#09203e" layers={4} height={90} speed={0.5} />
           <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-            <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
+            <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
             <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
               <div className="text-center mb-12">
                 <p className="section-label text-gold mb-4">KEEP READING</p>
                 <h2 className="font-heading font-bold text-white leading-tight" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)' }}>
                   Related{' '}
-                  <span style={{ color: 'var(--color-gold)' }}>Articles</span>
+                  <span style={{ color: 'var(--color-brand-accent)' }}>Articles</span>
                 </h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -155,7 +178,7 @@ export default function InsightArticle() {
                       <div style={{ padding: '20px' }}>
                         <p className="font-mono" style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.45)', marginBottom: '8px' }}>{r.date}</p>
                         <h3 className="font-heading font-bold text-white leading-snug mb-3" style={{ fontSize: '1rem' }}>{r.title}</h3>
-                        <span className="inline-flex items-center gap-1 font-body font-semibold uppercase tracking-[0.1em]" style={{ fontSize: '0.72rem', color: 'var(--color-gold)' }}>
+                        <span className="inline-flex items-center gap-1 font-body font-semibold uppercase tracking-[0.1em]" style={{ fontSize: '0.72rem', color: 'var(--color-brand-accent)' }}>
                           Read <ArrowRight size={12} />
                         </span>
                       </div>
@@ -169,4 +192,33 @@ export default function InsightArticle() {
       )}
     </div>
   )
+}
+
+function normalizeCmsArticleDetail(a) {
+  const slug = a.slug || ''
+  const title = a.title || 'Untitled'
+  const category = a.pillar?.name || a.category || 'Insight'
+  return {
+    id: `cms-${a.id || slug}`,
+    slug,
+    title,
+    excerpt: a.excerpt || '',
+    categories: [category].filter(Boolean),
+    date: formatCmsDate(a.published_at),
+    featuredImage: a.hero_image_url || a.og_image_url || '',
+    paragraphs: bodyToParagraphs(a.body),
+    inlineImages: [],
+  }
+}
+
+function formatCmsDate(value) {
+  if (!value) return ''
+  return String(value).slice(0, 10)
+}
+
+function bodyToParagraphs(body) {
+  return String(body || '')
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean)
 }

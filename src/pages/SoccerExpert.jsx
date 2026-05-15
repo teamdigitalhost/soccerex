@@ -42,18 +42,18 @@ export default function SoccerExpert() {
           filter: 'saturate(0.45) brightness(0.3)',
         }} />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(5,13,26,0.55) 0%, rgba(9,32,62,0.85) 100%)' }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.15} />
 
         <div className="relative z-10 w-full" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(120px,15vw,180px) clamp(24px,5vw,80px)' }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="font-mono uppercase tracking-[0.2em] mb-4 fade-up" style={{ color: 'var(--color-gold)', fontSize: '0.8rem', fontWeight: 600 }}>
+              <p className="font-mono uppercase tracking-[0.2em] mb-4 fade-up" style={{ color: 'var(--color-brand-accent)', fontSize: '0.8rem', fontWeight: 600 }}>
                 The Football Business E-Newsletter
               </p>
               <h1 className="font-heading font-bold text-white leading-[1.02] fade-up mb-6" style={{ fontSize: 'clamp(2.8rem, 6.5vw, 5.2rem)', letterSpacing: '-0.02em' }}>
-                SOCCER<span style={{ color: 'var(--color-gold)' }}>EXPERT</span>
+                SOCCER<span style={{ color: 'var(--color-brand-accent)' }}>EXPERT</span>
               </h1>
-              <div className="fade-up mb-6" style={{ width: '120px', height: '3px', background: 'var(--color-gold)' }} />
+              <div className="fade-up mb-6" style={{ width: '120px', height: '3px', background: 'var(--color-brand-accent)' }} />
               <p className="font-body text-white/85 leading-relaxed fade-up mb-4" style={{ fontSize: 'clamp(1.15rem, 1.6vw, 1.3rem)', fontWeight: 500 }}>
                 Three decades of commercial relationships. Now in your inbox.
               </p>
@@ -79,11 +79,11 @@ export default function SoccerExpert() {
                   display: 'inline-flex', alignItems: 'center', gap: '8px',
                   padding: '6px 12px', background: 'rgba(191,177,112,0.15)',
                   border: '1px solid rgba(191,177,112,0.3)',
-                  borderRadius: '100px', color: 'var(--color-gold)',
+                  borderRadius: '100px', color: 'var(--color-brand-accent)',
                   fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em',
                   textTransform: 'uppercase', marginBottom: '20px',
                 }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--color-gold)' }} />
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--color-brand-accent)' }} />
                   Free forever
                 </div>
                 <h2 className="font-heading font-bold text-white mb-2" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 1.9rem)' }}>
@@ -122,7 +122,7 @@ export default function SoccerExpert() {
                   disabled={status === 'submitting'}
                   className="w-full inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
                   style={{
-                    background: 'linear-gradient(135deg, var(--color-gold), var(--color-red))',
+                    background: 'linear-gradient(135deg, var(--color-brand-accent), var(--color-red))',
                     color: '#09203e',
                     padding: '16px 28px',
                     fontSize: '0.88rem',
@@ -161,10 +161,10 @@ export default function SoccerExpert() {
       <section style={{ background: 'linear-gradient(180deg, #0a172b 0%, #050d1a 100%)', padding: 'clamp(80px,10vw,130px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="text-center mb-14">
-            <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-gold)', fontWeight: 600 }}>WHAT YOU GET</p>
+            <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-brand-accent)', fontWeight: 600 }}>WHAT YOU GET</p>
             <h2 className="font-heading font-bold text-white leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
               Why subscribe to{' '}
-              <span style={{ color: 'var(--color-gold)' }}>SoccerExpert</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>SoccerExpert</span>
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -179,7 +179,7 @@ export default function SoccerExpert() {
                     padding: '28px 26px',
                     height: '100%',
                   }}>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-gold), var(--color-red))', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-brand-accent), var(--color-red))', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                       <Icon size={22} color="#09203e" strokeWidth={2} />
                     </div>
                     <h3 className="font-heading font-bold mb-2" style={{ color: '#fff', fontSize: '1.1rem' }}>{p.title}</h3>

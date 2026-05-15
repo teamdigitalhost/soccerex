@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react'
  * Ambient network-node background animation.
  *
  * `color`       — base color as hex (e.g. "#ffffff") OR a CSS variable
- *                 reference (e.g. "var(--color-gold)"). CSS vars are
+ *                 reference (e.g. "var(--color-brand-accent)"). CSS vars are
  *                 resolved at mount time to avoid canvas NaN bugs.
  * `accentColor` — optional hex/var for a small percentage of nodes.
  *                 Makes the field feel less monochrome and more "alive."

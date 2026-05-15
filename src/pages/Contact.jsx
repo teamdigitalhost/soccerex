@@ -263,7 +263,7 @@ export default function Contact() {
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={35} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={35} opacity={0.15} />
         <div className="absolute pointer-events-none" style={{ top: '15%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)' }}>
           <div className="inner-hero-crest flex justify-center fade-up">
@@ -273,9 +273,9 @@ export default function Contact() {
           <p className="section-label text-gold mb-5 fade-up">GET IN TOUCH</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             Let's Talk{' '}
-            <span style={{ color: 'var(--color-gold)' }}>Football Business</span>
+            <span style={{ color: 'var(--color-brand-accent)' }}>Football Business</span>
           </h1>
-          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/70 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', maxWidth: '680px' }}>
             Partner with us, join as a speaker, register as press, volunteer, or just ask a question. Tell us who you are and we'll route your message to the right team.
           </p>
@@ -320,7 +320,7 @@ export default function Contact() {
                     }}
                     onMouseEnter={(e) => {
                       if (!active) {
-                        e.currentTarget.style.borderColor = 'var(--color-gold)'
+                        e.currentTarget.style.borderColor = 'var(--color-brand-accent)'
                         e.currentTarget.style.transform = 'translateY(-3px)'
                         e.currentTarget.style.boxShadow = '0 12px 28px rgba(9,32,62,0.12)'
                       }
@@ -335,11 +335,11 @@ export default function Contact() {
                   >
                     <div style={{
                       width: '38px', height: '38px', borderRadius: '9px',
-                      background: active ? 'var(--color-gold)' : 'rgba(191,177,112,0.12)',
+                      background: active ? 'var(--color-brand-accent)' : 'rgba(191,177,112,0.12)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       marginBottom: '12px',
                     }}>
-                      <Icon size={18} color={active ? '#09203e' : 'var(--color-gold)'} strokeWidth={2.2} />
+                      <Icon size={18} color={active ? '#09203e' : 'var(--color-brand-accent)'} strokeWidth={2.2} />
                     </div>
                     <p className="font-heading font-bold" style={{ fontSize: '1rem' }}>{t.label}</p>
                   </button>
@@ -359,11 +359,11 @@ export default function Contact() {
             boxShadow: '0 20px 60px rgba(9,32,62,0.08)',
           }}>
             <div className="flex items-start gap-3 mb-8" style={{ paddingBottom: '22px', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'linear-gradient(135deg, var(--color-gold), #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <inquiry.icon size={20} color="#09203e" strokeWidth={2.2} />
               </div>
               <div>
-                <p className="font-mono uppercase tracking-[0.12em]" style={{ fontSize: '0.68rem', color: 'var(--color-gold)', fontWeight: 600, marginBottom: '4px' }}>
+                <p className="font-mono uppercase tracking-[0.12em]" style={{ fontSize: '0.68rem', color: 'var(--color-brand-accent)', fontWeight: 600, marginBottom: '4px' }}>
                   Step 2 : Your Details
                 </p>
                 <h3 className="font-heading font-bold" style={{ fontSize: '1.25rem', color: '#09203e', marginBottom: '2px' }}>{inquiry.label}</h3>
@@ -401,7 +401,7 @@ export default function Contact() {
                             outline: 'none', transition: 'border-color 0.2s, background 0.2s',
                             cursor: 'pointer',
                           }}
-                          onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.background = '#fff' }}
+                          onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
                           onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
                         >
                           {def.options.map((opt) => {
@@ -481,9 +481,9 @@ export default function Contact() {
                   : <>We'll route your message to the right team and reply by email.</>}
               </p>
               <button type="submit" disabled={submitting || submitted} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
-                style={{ background: 'var(--color-gold)', color: '#09203e', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: submitting ? 'wait' : 'pointer', transition: 'all 0.25s', opacity: submitting ? 0.7 : 1 }}
+                style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: submitting ? 'wait' : 'pointer', transition: 'all 0.25s', opacity: submitting ? 0.7 : 1 }}
                 onMouseEnter={(e) => { if (!submitting) e.currentTarget.style.background = '#d4c78e' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-gold)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >
                 {submitting ? <><Loader2 size={16} className="prog-spin" /> Sending</>
                   : submitted ? <><Check size={16} /> Sent</>
@@ -504,7 +504,7 @@ export default function Contact() {
               borderRadius: '16px',
               background: 'rgba(255,255,255,0.5)',
             }}>
-              <p className="font-mono uppercase tracking-[0.15em]" style={{ fontSize: '0.72rem', color: 'var(--color-gold)', fontWeight: 600, marginBottom: '10px' }}>
+              <p className="font-mono uppercase tracking-[0.15em]" style={{ fontSize: '0.72rem', color: 'var(--color-brand-accent)', fontWeight: 600, marginBottom: '10px' }}>
                 ← Pick a category above
               </p>
               <p className="font-body" style={{ fontSize: '0.95rem', color: '#666' }}>
@@ -527,7 +527,7 @@ export default function Contact() {
               ].map((l) => (
                 <a key={l.email} href={`mailto:${l.email}`} className="inline-flex items-center gap-1.5"
                   style={{ color: '#09203e', textDecoration: 'none', fontSize: '0.82rem', transition: 'color 0.2s', fontFamily: 'Inter, sans-serif' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
                 >
                   <Mail size={13} /> {l.label}
@@ -546,11 +546,11 @@ function FormField({ icon: Icon, label, placeholder, type = 'text', required, te
   return (
     <div>
       <label className="font-mono uppercase tracking-[0.1em] block mb-2" style={{ fontSize: '0.68rem', color: '#09203e', fontWeight: 600 }}>
-        {label}{required && <span style={{ color: 'var(--color-gold)', marginLeft: '4px' }}>*</span>}
+        {label}{required && <span style={{ color: 'var(--color-brand-accent)', marginLeft: '4px' }}>*</span>}
       </label>
       <div style={{ position: 'relative' }}>
         {Icon && !textarea && (
-          <Icon size={15} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-gold)', pointerEvents: 'none' }} />
+          <Icon size={15} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-brand-accent)', pointerEvents: 'none' }} />
         )}
         {textarea ? (
           <textarea
@@ -568,7 +568,7 @@ function FormField({ icon: Icon, label, placeholder, type = 'text', required, te
               outline: 'none', transition: 'border-color 0.2s, background 0.2s',
               resize: 'vertical', minHeight: '100px',
             }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.background = '#fff' }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
             onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
           />
         ) : (
@@ -586,7 +586,7 @@ function FormField({ icon: Icon, label, placeholder, type = 'text', required, te
               borderRadius: '8px', color: '#09203e',
               outline: 'none', transition: 'border-color 0.2s, background 0.2s',
             }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.background = '#fff' }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
             onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
           />
         )}

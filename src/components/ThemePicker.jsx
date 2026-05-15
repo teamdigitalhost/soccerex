@@ -95,8 +95,8 @@ function loadState() {
 function applyTheme(state) {
   const root = document.documentElement
   // Soccerex global vars
-  root.style.setProperty('--color-gold', state.soccerex.primary)
-  root.style.setProperty('--color-gold-light', shade(state.soccerex.primary, 20))
+  root.style.setProperty('--color-brand-accent', state.soccerex.primary)
+  root.style.setProperty('--color-brand-accent-light', shade(state.soccerex.primary, 20))
   root.style.setProperty('--color-red', state.soccerex.secondary)
   root.style.setProperty('--color-red-light', shade(state.soccerex.secondary, 20))
 

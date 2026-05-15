@@ -14,7 +14,7 @@ const FOOTER_ACCENTS = [
   { match: EUROPE_2026, color: '#c8302c', hover: '#e0524f' }, // Europe red
   { match: RIYADH_2027, color: '#f2e93c', hover: '#fff36b' }, // Riyadh yellow
 ]
-const FOOTER_DEFAULT = { color: 'var(--color-gold)', hover: '#d4c78e' }
+const FOOTER_DEFAULT = { color: 'var(--color-brand-accent)', hover: '#d4c78e' }
 function footerAccentFor(pathname) {
   return FOOTER_ACCENTS.find((t) => pathname.startsWith(t.match)) || FOOTER_DEFAULT
 }

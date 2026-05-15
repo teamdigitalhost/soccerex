@@ -58,9 +58,9 @@
 /* ─── Europe (Amsterdam) — Red & White ───────────────────────────────────── */
 .theme-europe {
   /* Override the global brand accent so navbar + footer + any
-     --color-gold consumer adopts the Europe red on this route. */
-  --color-gold: #c8302c;
-  --color-gold-light: #e8504c;
+     --color-brand-accent consumer adopts the Europe red on this route. */
+  --color-brand-accent: #c8302c;
+  --color-brand-accent-light: #e8504c;
 
   --event-primary: #c8302c;
   --event-primary-light: #e8504c;
@@ -90,9 +90,9 @@
 
   /* Brand palette per Soccerex Miami 2026 brand sheet */
   /* Override the global brand accent so navbar + footer + any
-     --color-gold consumer adopts the Miami pink on this route. */
-  --color-gold: #E91E63;
-  --color-gold-light: #ff5b8a;
+     --color-brand-accent consumer adopts the Miami pink on this route. */
+  --color-brand-accent: #E91E63;
+  --color-brand-accent-light: #ff5b8a;
 
   --event-primary: #E91E63;            /* Miami Pink (primary accent) */
   --event-primary-light: #ff5b8a;
@@ -720,11 +720,11 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
 /* ─── Middle East (Riyadh) — Green with Yellow Highlights ───────────────── */
 .theme-riyadh {
   /* Override the global brand accent so navbar + footer + any
-     --color-gold consumer adopts Saudi green on this route. We use the
+     --color-brand-accent consumer adopts Saudi green on this route. We use the
      Saudi green secondary (rather than the highlighter yellow event
      primary) because the yellow renders lime/illegible on light chrome. */
-  --color-gold: #0f8f52;
-  --color-gold-light: #2db876;
+  --color-brand-accent: #0f8f52;
+  --color-brand-accent-light: #2db876;
 
   --event-primary: #f2e93c;            /* highlighter yellow (accent) */
   --event-primary-light: #fff26e;

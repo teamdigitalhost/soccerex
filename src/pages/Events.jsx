@@ -214,33 +214,33 @@ function EventCard({ event, index, dark = false }) {
         </div>
       </div>
       <div className={`${isEven ? 'lg:order-2 slide-right' : 'lg:order-1 slide-left'}`}>
-        <p className="font-mono uppercase tracking-[0.18em] mb-3 fade-up" style={{ fontSize: '0.72rem', color: 'var(--color-gold)', fontWeight: 600 }}>
+        <p className="font-mono uppercase tracking-[0.18em] mb-3 fade-up" style={{ fontSize: '0.72rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
           {event.label}
         </p>
         <h3 className="font-heading font-bold leading-tight mb-4 fade-up" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: dark ? '#fff' : '#09203e' }}>
           {event.dates}
         </h3>
         <div className="flex items-center gap-2 mb-6 fade-up" style={{ color: dark ? 'rgba(255,255,255,0.65)' : '#555' }}>
-          <MapPin size={16} style={{ color: 'var(--color-gold)' }} />
+          <MapPin size={16} style={{ color: 'var(--color-brand-accent)' }} />
           <span className="font-body" style={{ fontSize: '0.95rem' }}>{event.city}</span>
         </div>
-        <div className="mb-8 fade-up" style={{ width: '60px', height: '3px', background: dark ? 'linear-gradient(90deg, var(--color-gold), rgba(191,177,112,0.3))' : 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
+        <div className="mb-8 fade-up" style={{ width: '60px', height: '3px', background: dark ? 'linear-gradient(90deg, var(--color-brand-accent), rgba(191,177,112,0.3))' : 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
         {CopyArray.map((p, i) => (
           <p key={i} className="font-body leading-relaxed mb-4 fade-up" style={{ fontSize: '1rem', color: dark ? 'rgba(255,255,255,0.75)' : '#444' }}>
             {p}
           </p>
         ))}
         {event.comingSoon && (
-          <span className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.15em] fade-up mt-4" style={{ fontSize: '0.72rem', color: 'var(--color-gold)', background: 'rgba(191,177,112,0.1)', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
+          <span className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.15em] fade-up mt-4" style={{ fontSize: '0.72rem', color: 'var(--color-brand-accent)', background: 'rgba(191,177,112,0.1)', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
             Coming Soon
           </span>
         )}
         {event.link && !event.comingSoon && (
           event.internal ? (
             <Link to={event.link} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up mt-4"
-              style={{ background: 'var(--color-gold)', color: '#09203e', padding: '16px 36px', fontSize: '0.8rem', textDecoration: 'none', transition: 'all 0.3s' }}
+              style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.8rem', textDecoration: 'none', transition: 'all 0.3s' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
             >
               View Details <ArrowRight size={16} />
             </Link>
@@ -248,19 +248,19 @@ function EventCard({ event, index, dark = false }) {
             <a href={event.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up mt-4"
               style={{
                 background: dark ? 'transparent' : '#09203e',
-                color: dark ? 'var(--color-gold)' : '#fff',
+                color: dark ? 'var(--color-brand-accent)' : '#fff',
                 padding: '16px 36px',
                 fontSize: '0.8rem',
                 textDecoration: 'none',
-                border: dark ? '1px solid var(--color-gold)' : '1px solid #09203e',
+                border: dark ? '1px solid var(--color-brand-accent)' : '1px solid #09203e',
                 transition: 'all 0.3s',
               }}
               onMouseEnter={e => {
-                if (dark) { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.color = '#09203e' }
+                if (dark) { e.currentTarget.style.background = 'var(--color-brand-accent)'; e.currentTarget.style.color = '#09203e' }
                 else { e.currentTarget.style.background = '#0d2b52' }
               }}
               onMouseLeave={e => {
-                if (dark) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--color-gold)' }
+                if (dark) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--color-brand-accent)' }
                 else { e.currentTarget.style.background = '#09203e' }
               }}
             >
@@ -331,7 +331,7 @@ export default function Events() {
         <div className="absolute inset-0" style={{
           background: 'linear-gradient(180deg, rgba(5,13,26,0.6) 0%, rgba(9,32,62,0.7) 40%, rgba(5,13,26,0.95) 100%)',
         }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={45} opacity={0.18} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={45} opacity={0.18} />
         {/* Floating color orbs (unique to Events) */}
         <div className="ev-orb" style={{ top: '10%', left: '15%', width: '400px', height: '400px', background: 'rgba(191,177,112,0.12)', animationDelay: '0s' }} />
         <div className="ev-orb" style={{ top: '50%', right: '10%', width: '350px', height: '350px', background: 'rgba(200,48,44,0.08)', animationDelay: '-7s' }} />
@@ -345,9 +345,9 @@ export default function Events() {
           <p className="section-label text-gold mb-6 fade-up">OUR EVENTS</p>
           <h1 className="font-heading font-bold text-white leading-[1.02] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.5rem, 6.5vw, 5.5rem)' }}>
             Where the Football{' '}
-            <span style={{ color: 'var(--color-gold)' }}>World Meets</span>
+            <span style={{ color: 'var(--color-brand-accent)' }}>World Meets</span>
           </h1>
-          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/75 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', maxWidth: '740px' }}>
             Each Soccerex event is built as a global gateway, connecting international stakeholders to key markets and the people shaping the future of football within them.
           </p>
@@ -376,12 +376,12 @@ export default function Events() {
 
       {/* ═══ UPCOMING EVENTS — WFS-style city cards ══════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#050d1a', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={22} opacity={0.08} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={22} opacity={0.08} />
         <div className="relative z-10" style={{ maxWidth: '1400px', margin: '0 auto' }}>
           <div className="mb-14">
-            <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-gold)', fontWeight: 600 }}>SOCCEREX 2026</p>
+            <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-brand-accent)', fontWeight: 600 }}>SOCCEREX 2026</p>
             <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', color: '#fff' }}>
-              Upcoming <span style={{ color: 'var(--color-gold)' }}>Events</span>
+              Upcoming <span style={{ color: 'var(--color-brand-accent)' }}>Events</span>
             </h2>
             <p className="font-body text-white/60 leading-relaxed fade-up mt-4" style={{ fontSize: '1rem', maxWidth: '720px' }}>
               Three events. Three cities. One platform shaping the global football business calendar.
@@ -409,20 +409,20 @@ export default function Events() {
                 >
                   <img src={e.image} alt={cityName} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.1) brightness(0.85)' }} />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(5,13,26,0.2) 0%, rgba(5,13,26,0.5) 50%, rgba(5,13,26,0.95) 100%)' }} />
-                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'var(--color-gold)' }} />
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'var(--color-brand-accent)' }} />
                   {e.comingSoon ? (
                     <div style={{ position: 'absolute', top: 20, right: 20, padding: '6px 12px', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '100px', color: '#fff', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                       Coming Soon
                     </div>
                   ) : (
-                    <div style={{ position: 'absolute', top: 20, right: 20, padding: '6px 12px', background: 'var(--color-gold)', borderRadius: '100px', color: '#09203e', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                    <div style={{ position: 'absolute', top: 20, right: 20, padding: '6px 12px', background: 'var(--color-brand-accent)', borderRadius: '100px', color: '#09203e', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                       Registration Open
                     </div>
                   )}
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '28px', display: 'flex', flexDirection: 'column' }}>
                     <h3 className="font-heading font-bold leading-none" style={{
                       fontSize: 'clamp(2.4rem, 5vw, 3.6rem)',
-                      color: 'var(--color-gold)',
+                      color: 'var(--color-brand-accent)',
                       textShadow: '0 2px 20px rgba(0,0,0,0.4)',
                       marginBottom: '12px',
                       letterSpacing: '-0.02em',
@@ -432,7 +432,7 @@ export default function Events() {
                     <p style={{ color: '#fff', fontSize: '0.9rem', fontWeight: 600, marginBottom: '4px' }}>{e.dates}</p>
                     <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.85rem' }}>{e.venue || e.city}</p>
                     <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.18em', marginTop: '14px' }}>{e.label}</p>
-                    <div style={{ marginTop: '14px', minHeight: '20px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-gold)', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                    <div style={{ marginTop: '14px', minHeight: '20px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-brand-accent)', fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
                       {e.link && e.internal ? <>Explore event <ArrowRight size={14} /></> : null}
                     </div>
                   </div>
@@ -459,7 +459,7 @@ export default function Events() {
             <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>LEGACY</p>
             <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: '#09203e' }}>
               Recent{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Events</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>Events</span>
             </h2>
             <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           </div>
@@ -471,7 +471,7 @@ export default function Events() {
 
       {/* ═══ TESTIMONIALS (scrolling ticker) ═════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)', padding: 'clamp(80px,10vw,120px) 0' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.1} />
         {/* Floating orbs for testimonial section */}
         <div className="ev-orb" style={{ top: '20%', right: '5%', width: '250px', height: '250px', background: 'rgba(191,177,112,0.08)', animationDelay: '-5s' }} />
         <div className="ev-orb" style={{ bottom: '10%', left: '10%', width: '200px', height: '200px', background: 'rgba(200,48,44,0.06)', animationDelay: '-12s' }} />
@@ -480,9 +480,9 @@ export default function Events() {
             <p className="section-label text-gold mb-4 fade-up">TESTIMONIALS</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               What the Industry{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Says</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>Says</span>
             </h2>
-            <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+            <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           </div>
           {/* Horizontal ticker */}
           <div className="fade-up" style={{ overflow: 'hidden', maskImage: 'linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%)' }}>
@@ -519,14 +519,14 @@ export default function Events() {
           filter: 'brightness(0.4) saturate(0.7)',
         }} />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(5,13,26,0.85) 0%, rgba(9,32,62,0.8) 100%)' }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.12} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.12} />
         <div className="relative z-10 flex items-center justify-center" style={{ minHeight: '55vh', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
           <div className="text-center" style={{ maxWidth: '1000px' }}>
             <h2 className="font-heading font-bold text-white leading-[1.2] fade-up text-glow" style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', fontStyle: 'italic' }}>
               &ldquo;Take care of the game and the{' '}
-              <span style={{ color: 'var(--color-gold)' }}>business will take care of itself</span>.&rdquo;
+              <span style={{ color: 'var(--color-brand-accent)' }}>business will take care of itself</span>.&rdquo;
             </h2>
-            <div className="fade-up mx-auto mt-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+            <div className="fade-up mx-auto mt-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           </div>
         </div>
       </section>
@@ -544,7 +544,7 @@ export default function Events() {
             <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>THE VOICES OF THE GAME</p>
             <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: '#09203e' }}>
               Soccerex{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Speakers</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>Speakers</span>
             </h2>
             <div className="fade-up mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
             <p className="font-body fade-up mx-auto" style={{ fontSize: '1.05rem', color: '#555', maxWidth: '720px' }}>

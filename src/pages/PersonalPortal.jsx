@@ -224,10 +224,10 @@ function VipSection({ data, slug, editToken, isTest, onRefresh }) {
     <section className="portal-section portal-section--vip mb-6">
       <div className="flex items-center gap-3 mb-4">
         <div style={{ width: 38, height: 38, background: 'linear-gradient(135deg, #0D1B2A, #1f2f48)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
-          <Crown size={18} style={{ color: 'var(--color-gold, #bfb170)' }} />
+          <Crown size={18} style={{ color: 'var(--color-brand-accent, #bfb170)' }} />
         </div>
         <div>
-          <p className="font-mono uppercase" style={{ fontSize: 10, color: 'var(--color-gold)', letterSpacing: '0.24em' }}>VIP</p>
+          <p className="font-mono uppercase" style={{ fontSize: 10, color: 'var(--color-brand-accent)', letterSpacing: '0.24em' }}>VIP</p>
           <h2 className="font-heading font-bold" style={{ fontSize: '1.25rem', color: '#0D1B2A' }}>
             {data?.welcome_title || 'Welcome to the VIP programme'}
           </h2>
@@ -559,7 +559,7 @@ function ApplicationStatus({ status, review }) {
 function CompPassCard({ pass: p }) {
   return (
     <div style={{ background: 'linear-gradient(160deg, #0D1B2A 0%, #1a2f4a 100%)', color: '#fff', padding: 22 }}>
-      <p className="font-mono uppercase" style={{ fontSize: 10, color: 'var(--color-gold, #bfb170)', letterSpacing: '0.2em' }}>Complimentary</p>
+      <p className="font-mono uppercase" style={{ fontSize: 10, color: 'var(--color-brand-accent, #bfb170)', letterSpacing: '0.2em' }}>Complimentary</p>
       <p className="font-heading font-bold mt-1" style={{ fontSize: 18, lineHeight: 1.15 }}>
         {p.pass_type || p.type || 'Delegate pass'}
       </p>
@@ -570,7 +570,7 @@ function CompPassCard({ pass: p }) {
       <div className="flex gap-2 mt-4 flex-wrap">
         {p.qr_url && (
           <a href={p.qr_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5"
-            style={{ fontSize: 11, color: 'var(--color-gold)', textDecoration: 'none', border: '1px solid rgba(191,177,112,0.4)', padding: '6px 12px' }}>
+            style={{ fontSize: 11, color: 'var(--color-brand-accent)', textDecoration: 'none', border: '1px solid rgba(191,177,112,0.4)', padding: '6px 12px' }}>
             <ExternalLink size={11} /> View pass
           </a>
         )}
@@ -664,7 +664,7 @@ function TicketCard({ ticket: t }) {
       border: isVip ? 'none' : '1px solid rgba(13,27,42,0.10)',
       padding: 22,
     }}>
-      <p className="font-mono uppercase" style={{ fontSize: 10, color: isVip ? 'var(--color-gold)' : 'var(--event-primary)', letterSpacing: '0.2em' }}>
+      <p className="font-mono uppercase" style={{ fontSize: 10, color: isVip ? 'var(--color-brand-accent)' : 'var(--event-primary)', letterSpacing: '0.2em' }}>
         {isVip ? 'VIP pass' : 'Delegate pass'}
       </p>
       <p className="font-heading font-bold mt-1" style={{ fontSize: 17 }}>

@@ -45,7 +45,7 @@ export default function Gallery() {
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(191,177,112,0.04) 0%, transparent 60%)' }} />
         <Link to={HOME} className="gallery-back-link" style={{
           position: 'absolute', top: 'clamp(80px,10vw,120px)', left: 'clamp(24px,5vw,80px)',
-          color: 'var(--color-gold)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px',
+          color: 'var(--color-brand-accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px',
           fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase',
         }}>
           <ArrowLeft size={16} /> Back to Home

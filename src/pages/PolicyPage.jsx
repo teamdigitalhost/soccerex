@@ -12,14 +12,14 @@ export default function PolicyPage({ title, eyebrow, lastUpdated, sections }) {
     <div style={{ background: '#f4f3f0' }}>
       {/* Hero */}
       <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '45vh', background: 'linear-gradient(135deg, #09203e 0%, #0d2b52 50%, #050d1a 100%)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.12} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.12} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(140px,15vw,180px) clamp(24px,5vw,60px) clamp(60px,8vw,100px)' }}>
           {eyebrow && <p className="section-label text-gold mb-4" style={{ opacity: 0.9 }}>{eyebrow}</p>}
           <h1 className="font-heading font-bold text-white leading-tight mb-6 text-glow" style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)' }}>
             {title}
           </h1>
-          <div className="mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           {lastUpdated && (
             <p className="font-mono uppercase tracking-widest" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)' }}>
               Last updated: {lastUpdated}
@@ -35,7 +35,7 @@ export default function PolicyPage({ title, eyebrow, lastUpdated, sections }) {
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <Link to={HOME} className="inline-flex items-center gap-2 mb-10 font-mono uppercase tracking-[0.15em]"
             style={{ fontSize: '0.72rem', color: '#09203e', textDecoration: 'none', transition: 'color 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-gold)' }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
             onMouseLeave={e => { e.currentTarget.style.color = '#09203e' }}
           >
             <ArrowLeft size={14} /> Back to home

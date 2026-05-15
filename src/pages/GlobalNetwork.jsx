@@ -359,7 +359,7 @@ export default function GlobalNetwork() {
         <div className="absolute inset-0" style={{
           background: 'linear-gradient(180deg, rgba(5,13,26,0.65) 0%, rgba(9,32,62,0.75) 40%, rgba(5,13,26,0.9) 100%)',
         }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={45} opacity={0.18} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={45} opacity={0.18} />
         {/* Radial gold glow */}
         <div className="absolute pointer-events-none" style={{ top: '15%', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
 
@@ -371,10 +371,10 @@ export default function GlobalNetwork() {
           <p className="section-label text-gold mb-6 fade-up">GLOBAL NETWORK</p>
           <h1 className="font-heading font-bold text-white leading-[1.02] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 6rem)' }}>
             The Global Leader in the{' '}
-            <span style={{ color: 'var(--color-gold)' }}>Business of Football</span>{' '}
-            <span style={{ color: 'var(--color-gold)' }}>Since 1996</span>
+            <span style={{ color: 'var(--color-brand-accent)' }}>Business of Football</span>{' '}
+            <span style={{ color: 'var(--color-brand-accent)' }}>Since 1996</span>
           </h1>
-          <div className="fade-up mx-auto mb-8" style={{ width: '120px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-8" style={{ width: '120px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/85 leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: 'clamp(1.15rem, 1.8vw, 1.4rem)', maxWidth: '840px', lineHeight: 1.55 }}>
             Soccerex events provide the industry&apos;s leading professionals with a variety of formal and informal networking platforms, building and strengthening the relationships that shape the global football industry.
           </p>
@@ -398,7 +398,7 @@ export default function GlobalNetwork() {
           <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.3rem)', color: '#09203e' }}>
             Soccerex isn't just a company.
           </h2>
-          <h3 className="font-heading font-bold leading-tight mb-8 fade-up" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', color: 'var(--color-gold)' }}>
+          <h3 className="font-heading font-bold leading-tight mb-8 fade-up" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', color: 'var(--color-brand-accent)' }}>
             We're a comprehensive ecosystem.
           </h3>
           <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
@@ -413,15 +413,15 @@ export default function GlobalNetwork() {
 
       {/* ═══ FOUR PILLARS ═══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={28} opacity={0.12} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={28} opacity={0.12} />
         <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div className="text-center mb-16">
             <p className="section-label text-gold mb-4 fade-up">FOUR WAYS TO ENGAGE</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               Tap into Three Decades of{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Connections</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>Connections</span>
             </h2>
-            <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+            <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {PILLARS.map((p) => {
@@ -438,7 +438,7 @@ export default function GlobalNetwork() {
                       border: '1px solid rgba(191,177,112,0.15)',
                       backdropFilter: 'blur(10px)',
                     }}>
-                      <div style={{ width: '64px', height: '64px', borderRadius: '14px', background: 'var(--color-gold)', boxShadow: '0 8px 20px rgba(255,107,53,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                      <div style={{ width: '64px', height: '64px', borderRadius: '14px', background: 'var(--color-brand-accent)', boxShadow: '0 8px 20px rgba(255,107,53,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                         <Icon size={30} color="#09203e" strokeWidth={2.2} />
                       </div>
                       <h3 className="font-heading font-bold mb-3" style={{ fontSize: '1.4rem', color: '#fff', letterSpacing: '0.02em' }}>{p.label}</h3>
@@ -455,7 +455,7 @@ export default function GlobalNetwork() {
                       <img src={p.img} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(9,32,62,0.15) 40%, rgba(9,32,62,0.95) 100%)' }} />
                       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '24px' }}>
-                        <span style={{ display: 'inline-block', padding: '4px 10px', background: 'var(--color-gold)', color: '#09203e', borderRadius: '100px', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '12px' }}>
+                        <span style={{ display: 'inline-block', padding: '4px 10px', background: 'var(--color-brand-accent)', color: '#09203e', borderRadius: '100px', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '12px' }}>
                           Live at Soccerex
                         </span>
                         <h3 className="font-heading font-bold" style={{ color: '#fff', fontSize: '1.25rem', letterSpacing: '0.02em' }}>{p.label}</h3>
@@ -474,7 +474,7 @@ export default function GlobalNetwork() {
 
       {/* ═══ STATS BAR ══════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: '#09203e', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.12} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.12} />
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {NETWORK_STATS.map((s) => (
             <div key={s.label} className="text-center scale-up">
@@ -496,7 +496,7 @@ export default function GlobalNetwork() {
           <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>THREE DECADES OF CONNECTIONS</p>
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: '#09203e' }}>
             Partners Across the{' '}
-            <span style={{ color: 'var(--color-gold)' }}>Football World</span>
+            <span style={{ color: 'var(--color-brand-accent)' }}>Football World</span>
           </h2>
           <div className="fade-up mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           <p className="font-body fade-up mx-auto" style={{ fontSize: '1.05rem', color: '#555', maxWidth: '700px' }}>
@@ -516,17 +516,17 @@ export default function GlobalNetwork() {
 
       {/* ═══ LOGO GRID ══════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
           <div className="text-center mb-16" style={{ maxWidth: '960px', margin: '0 auto 64px' }}>
             <p className="section-label text-gold mb-6 fade-up">THREE DECADES OF CONNECTIONS</p>
             <h2 className="font-heading font-semibold text-white leading-[1.25] fade-up" style={{ fontSize: 'clamp(1.35rem, 2.4vw, 2.1rem)' }}>
               Soccerex events provide the industry's leading professionals with a variety of{' '}
-              <span style={{ color: 'var(--color-gold)' }}>formal and informal networking platforms</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>formal and informal networking platforms</span>
               {' '}to help build and strengthen{' '}
-              <span style={{ color: 'var(--color-gold)' }}>professional relationships</span>.
+              <span style={{ color: 'var(--color-brand-accent)' }}>professional relationships</span>.
             </h2>
-            <div className="fade-up mx-auto mt-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+            <div className="fade-up mx-auto mt-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 md:gap-4">
             {visibleGrid.map((src, i) => (
@@ -540,9 +540,9 @@ export default function GlobalNetwork() {
               <button
                 onClick={() => setShowAll(true)}
                 className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] cursor-pointer border-none"
-                style={{ background: 'var(--color-gold)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', transition: 'all 0.3s' }}
+                style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >
                 Show more <ArrowRight size={16} />
               </button>
@@ -571,9 +571,9 @@ export default function GlobalNetwork() {
             <div style={{ maxWidth: '520px' }}>
               <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>THE FOOTBALL BUSINESS E-NEWSLETTER</p>
               <h2 className="font-heading font-bold leading-tight mb-3 fade-up" style={{ fontSize: 'clamp(2rem, 3.8vw, 2.8rem)', color: '#09203e', letterSpacing: '-0.01em' }}>
-                SOCCER<span style={{ color: 'var(--color-gold)' }}>EXPERT</span>
+                SOCCER<span style={{ color: 'var(--color-brand-accent)' }}>EXPERT</span>
               </h2>
-              <div className="fade-up mb-6" style={{ width: '60px', height: '3px', background: 'var(--color-gold)' }} />
+              <div className="fade-up mb-6" style={{ width: '60px', height: '3px', background: 'var(--color-brand-accent)' }} />
               <p className="font-body leading-relaxed mb-3 fade-up" style={{ fontSize: '1.15rem', color: '#09203e', fontWeight: 600 }}>
                 Tap in to three decades of connections.
               </p>
@@ -603,14 +603,14 @@ export default function GlobalNetwork() {
                     borderRadius: '8px', color: '#09203e', outline: 'none',
                     transition: 'border-color 0.2s',
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.15)' }}
                 />
                 <button
                   type="submit"
                   className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] cursor-pointer border-none"
                   style={{ background: '#09203e', color: '#fff', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.color = '#09203e' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)'; e.currentTarget.style.color = '#09203e' }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e'; e.currentTarget.style.color = '#fff' }}
                 >
                   <Mail size={15} /> Subscribe
@@ -626,7 +626,7 @@ export default function GlobalNetwork() {
 
       {/* ═══ INSIGHTS ═══════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.1} />
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 items-stretch">
           {/* Copy */}
           <div className="slide-left flex items-center" style={{ padding: 'clamp(80px,10vw,140px) clamp(32px,6vw,90px)' }}>
@@ -635,17 +635,17 @@ export default function GlobalNetwork() {
               <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
                 Soccerex's Insights
               </h2>
-              <h3 className="font-heading font-semibold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 1.9rem)', color: 'var(--color-gold)' }}>
+              <h3 className="font-heading font-semibold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 1.9rem)', color: 'var(--color-brand-accent)' }}>
                 Stay informed, stay relevant.
               </h3>
-              <div className="fade-up mb-6" style={{ width: '60px', height: '3px', background: 'var(--color-gold)' }} />
+              <div className="fade-up mb-6" style={{ width: '60px', height: '3px', background: 'var(--color-brand-accent)' }} />
               <p className="font-body leading-relaxed mb-8 fade-up" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.75)' }}>
                 Keeping abreast of the rapidly changing football business environment is key. Our comprehensive newsfeed provides the latest trends and updates from influential industry players. Consider it your one-stop solution for all football industry news.
               </p>
               <Link to={INSIGHTS} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
-                style={{ background: 'var(--color-gold)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
+                style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >
                 <Newspaper size={16} /> Read Soccerex Articles
               </Link>
@@ -674,34 +674,34 @@ export default function GlobalNetwork() {
           backgroundSize: 'cover', backgroundPosition: 'center',
         }} />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(5,13,26,0.88) 0%, rgba(9,32,62,0.78) 50%, rgba(5,13,26,0.9) 100%)' }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.15} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.12) 0%, transparent 60%)' }} />
 
         <div className="relative z-10 flex items-center justify-center" style={{ minHeight: '520px', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
           <div className="text-center" style={{ maxWidth: '900px' }}>
-            <div className="fade-up" style={{ display: 'inline-flex', width: '64px', height: '64px', borderRadius: '14px', background: 'linear-gradient(135deg, var(--color-gold), #d4c78e)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+            <div className="fade-up" style={{ display: 'inline-flex', width: '64px', height: '64px', borderRadius: '14px', background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
               <MapPin size={30} color="#09203e" strokeWidth={2.2} />
             </div>
             <p className="section-label text-gold mb-4 fade-up">PARTNERSHIP OPPORTUNITIES</p>
             <h2 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
               To Enquire About Hosting a{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Soccerex Event in Your City</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex Event in Your City</span>
             </h2>
-            <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+            <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
             <p className="font-body text-white/75 leading-relaxed fade-up mb-10 mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.2rem)', maxWidth: '700px' }}>
               Bring the global football industry to your doorstep. Soccerex events drive economic impact, tourism, and international visibility for their host cities.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
               <Link to={`${CONTACT}?type=host`} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-                style={{ background: 'var(--color-gold)', color: '#09203e', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
+                style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-red)' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >
                 Contact Us <ArrowRight size={16} />
               </Link>
               <Link to={ABOUT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
                 style={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.3s' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.color = 'var(--color-gold)' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.color = 'var(--color-brand-accent)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = '#fff' }}
               >
                 About Soccerex

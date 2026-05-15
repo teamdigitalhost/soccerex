@@ -67,7 +67,7 @@ export default function SoccerexApp() {
         <div className="absolute inset-0" style={{
           background: 'linear-gradient(180deg, rgba(5,13,26,0.5) 0%, rgba(9,32,62,0.7) 40%, rgba(5,13,26,0.95) 100%)',
         }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.15} />
         <div className="absolute pointer-events-none" style={{ top: '15%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
 
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)' }}>
@@ -78,9 +78,9 @@ export default function SoccerexApp() {
           <p className="section-label text-gold mb-5 fade-up">OUR APP</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             The Official{' '}
-            <span style={{ color: 'var(--color-gold)' }}>Soccerex Events</span>{' '}App
+            <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex Events</span>{' '}App
           </h1>
-          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/70 leading-relaxed fade-up mx-auto mb-10" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', maxWidth: '640px' }}>
             Stay connected and enhance your Soccerex event experience. Access schedules, speaker details, networking opportunities, and more.
           </p>
@@ -88,7 +88,7 @@ export default function SoccerexApp() {
             <a href={PLAY_STORE} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.12em]"
               style={{ background: '#fff', color: '#09203e', padding: '16px 28px', fontSize: '0.82rem', textDecoration: 'none', borderRadius: '10px', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               onMouseLeave={e => { e.currentTarget.style.background = '#fff' }}
             >
               <img src="/images/app/google-play-icon.webp" alt="Google Play" style={{ height: '22px', width: 'auto' }} />
@@ -97,7 +97,7 @@ export default function SoccerexApp() {
             <a href={APP_STORE} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-3 font-body font-semibold uppercase tracking-[0.12em]"
               style={{ background: '#fff', color: '#09203e', padding: '16px 28px', fontSize: '0.82rem', textDecoration: 'none', borderRadius: '10px', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               onMouseLeave={e => { e.currentTarget.style.background = '#fff' }}
             >
               <img src="/images/app/apple-icon.png" alt="App Store" style={{ height: '22px', width: 'auto' }} />
@@ -127,7 +127,7 @@ export default function SoccerexApp() {
           </div>
           {/* Copy */}
           <div className="slide-right">
-            <div style={{ borderLeft: '4px solid var(--color-gold)', paddingLeft: '24px', marginBottom: '32px' }}>
+            <div style={{ borderLeft: '4px solid var(--color-brand-accent)', paddingLeft: '24px', marginBottom: '32px' }}>
               <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
                 Download the Official Soccerex Events App
               </h2>
@@ -166,7 +166,7 @@ export default function SoccerexApp() {
             </div>
             <p className="font-body fade-up" style={{ fontSize: '0.9rem', color: '#666' }}>
               Or, visit the web portal at{' '}
-              <a href={WEB_PORTAL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-gold)', textDecoration: 'underline', fontWeight: 600 }}>
+              <a href={WEB_PORTAL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-brand-accent)', textDecoration: 'underline', fontWeight: 600 }}>
                 soccerexmena2025.eventify.io
               </a>
             </p>
@@ -178,15 +178,15 @@ export default function SoccerexApp() {
 
       {/* ═══ HOW TO ACCESS ══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div className="text-center mb-16">
             <p className="section-label text-gold mb-4 fade-up">GETTING STARTED</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               How to Access the{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Soccerex Events</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex Events</span>
             </h2>
-            <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+            <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {STEPS.map((step, i) => {
@@ -208,14 +208,14 @@ export default function SoccerexApp() {
                   >
                     <div style={{
                       width: '60px', height: '60px', borderRadius: '50%',
-                      background: 'linear-gradient(135deg, var(--color-gold), #d4c78e)',
+                      background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       margin: '0 auto 20px',
                     }}>
                       <Icon size={26} color="#09203e" strokeWidth={2} />
                     </div>
                     <div style={{ width: '28px', height: '28px', borderRadius: '50%', border: '2px solid rgba(191,177,112,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                      <span className="font-heading font-bold" style={{ fontSize: '0.85rem', color: 'var(--color-gold)' }}>{i + 1}</span>
+                      <span className="font-heading font-bold" style={{ fontSize: '0.85rem', color: 'var(--color-brand-accent)' }}>{i + 1}</span>
                     </div>
                     <h3 className="font-heading font-bold mb-3" style={{ fontSize: '1.15rem', color: '#fff' }}>{step.title}</h3>
                     <p className="font-body leading-relaxed" style={{ fontSize: '0.92rem', color: 'rgba(255,255,255,0.65)' }}>{step.desc}</p>
@@ -237,13 +237,13 @@ export default function SoccerexApp() {
         }} />
         <div className="relative z-10" style={{ maxWidth: '700px', margin: '0 auto' }}>
           <div className="text-center mb-12">
-            <div className="fade-up" style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, var(--color-gold), #d4c78e)', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+            <div className="fade-up" style={{ display: 'inline-flex', width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
               <HelpCircle size={26} color="#09203e" strokeWidth={2.2} />
             </div>
             <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>NEED HELP?</p>
             <h2 className="font-heading font-bold leading-tight mb-4 fade-up" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
               Soccerex App{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Support</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>Support</span>
             </h2>
             <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
             <p className="font-body fade-up" style={{ fontSize: '1rem', color: '#555' }}>
@@ -260,34 +260,34 @@ export default function SoccerexApp() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label className="font-mono uppercase tracking-[0.1em] block mb-2" style={{ fontSize: '0.68rem', color: '#09203e', fontWeight: 600 }}>
-                  First Name<span style={{ color: 'var(--color-gold)', marginLeft: '4px' }}>*</span>
+                  First Name<span style={{ color: 'var(--color-brand-accent)', marginLeft: '4px' }}>*</span>
                 </label>
                 <input type="text" required value={supportForm.firstName}
                   onChange={e => setSupportForm(p => ({ ...p, firstName: e.target.value }))}
                   style={{ width: '100%', padding: '13px 14px', fontSize: '0.92rem', fontFamily: 'Inter, sans-serif', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: '8px', color: '#09203e', outline: 'none', transition: 'border-color 0.2s' }}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
                   onBlur={e => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
                 />
               </div>
               <div>
                 <label className="font-mono uppercase tracking-[0.1em] block mb-2" style={{ fontSize: '0.68rem', color: '#09203e', fontWeight: 600 }}>
-                  Last Name<span style={{ color: 'var(--color-gold)', marginLeft: '4px' }}>*</span>
+                  Last Name<span style={{ color: 'var(--color-brand-accent)', marginLeft: '4px' }}>*</span>
                 </label>
                 <input type="text" required value={supportForm.lastName}
                   onChange={e => setSupportForm(p => ({ ...p, lastName: e.target.value }))}
                   style={{ width: '100%', padding: '13px 14px', fontSize: '0.92rem', fontFamily: 'Inter, sans-serif', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: '8px', color: '#09203e', outline: 'none', transition: 'border-color 0.2s' }}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
                   onBlur={e => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
                 />
               </div>
               <div>
                 <label className="font-mono uppercase tracking-[0.1em] block mb-2" style={{ fontSize: '0.68rem', color: '#09203e', fontWeight: 600 }}>
-                  Email<span style={{ color: 'var(--color-gold)', marginLeft: '4px' }}>*</span>
+                  Email<span style={{ color: 'var(--color-brand-accent)', marginLeft: '4px' }}>*</span>
                 </label>
                 <input type="email" required value={supportForm.email}
                   onChange={e => setSupportForm(p => ({ ...p, email: e.target.value }))}
                   style={{ width: '100%', padding: '13px 14px', fontSize: '0.92rem', fontFamily: 'Inter, sans-serif', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: '8px', color: '#09203e', outline: 'none', transition: 'border-color 0.2s' }}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
                   onBlur={e => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
                 />
               </div>
@@ -298,27 +298,27 @@ export default function SoccerexApp() {
                 <input type="tel" value={supportForm.phone}
                   onChange={e => setSupportForm(p => ({ ...p, phone: e.target.value }))}
                   style={{ width: '100%', padding: '13px 14px', fontSize: '0.92rem', fontFamily: 'Inter, sans-serif', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: '8px', color: '#09203e', outline: 'none', transition: 'border-color 0.2s' }}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
                   onBlur={e => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
                 />
               </div>
             </div>
             <div className="mb-6">
               <label className="font-mono uppercase tracking-[0.1em] block mb-2" style={{ fontSize: '0.68rem', color: '#09203e', fontWeight: 600 }}>
-                Your Message<span style={{ color: 'var(--color-gold)', marginLeft: '4px' }}>*</span>
+                Your Message<span style={{ color: 'var(--color-brand-accent)', marginLeft: '4px' }}>*</span>
               </label>
               <textarea required rows={5} value={supportForm.message}
                 onChange={e => setSupportForm(p => ({ ...p, message: e.target.value }))}
                 placeholder="Describe the issue you're experiencing..."
                 style={{ width: '100%', padding: '13px 14px', fontSize: '0.92rem', fontFamily: 'Inter, sans-serif', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: '8px', color: '#09203e', outline: 'none', resize: 'vertical', minHeight: '120px', transition: 'border-color 0.2s' }}
-                onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+                onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
                 onBlur={e => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
               />
             </div>
             <button type="submit" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] w-full justify-center"
-              style={{ background: 'var(--color-gold)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', border: 'none', cursor: 'pointer', borderRadius: '8px', transition: 'all 0.3s' }}
+              style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', border: 'none', cursor: 'pointer', borderRadius: '8px', transition: 'all 0.3s' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
             >
               {submitted ? 'Sent!' : 'Submit Form'} {!submitted && <ArrowRight size={16} />}
             </button>

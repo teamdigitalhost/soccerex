@@ -14,7 +14,7 @@ import {
 
 /* Map pathname to a theme class. Applied at app root so the navbar
    and footer (which sit outside the page component) pick up the
-   event's --color-gold override. Non-event routes get no class and
+   event's --color-brand-accent override. Non-event routes get no class and
    fall through to the base brand color defined in :root. */
 function themeClassFor(pathname) {
   if (!pathname) return ''

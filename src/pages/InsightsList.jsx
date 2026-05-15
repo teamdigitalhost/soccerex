@@ -137,7 +137,7 @@ export default function InsightsList() {
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.15} />
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)' }}>
           <div className="inner-hero-crest inner-hero-crest--lg flex justify-center fade-up">
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
@@ -146,9 +146,9 @@ export default function InsightsList() {
           <p className="section-label text-gold mb-5 fade-up">INSIGHTS</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             The Football Industry's{' '}
-            <span style={{ color: 'var(--color-gold)' }}>Pulse</span>
+            <span style={{ color: 'var(--color-brand-accent)' }}>Pulse</span>
           </h1>
-          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/70 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', maxWidth: '640px' }}>
             The latest trends and updates from influential industry players. Your one-stop solution for all football industry news.
           </p>
@@ -203,7 +203,7 @@ export default function InsightsList() {
               {/* Search */}
               <div className="mb-8 fade-up">
                 <div style={{ position: 'relative' }}>
-                  <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-gold)', pointerEvents: 'none' }} />
+                  <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-brand-accent)', pointerEvents: 'none' }} />
                   <input
                     type="text"
                     placeholder="Search articles..."
@@ -216,7 +216,7 @@ export default function InsightsList() {
                       borderRadius: '10px', color: '#09203e', outline: 'none',
                       transition: 'border-color 0.2s',
                     }}
-                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
                   />
                 </div>
@@ -231,7 +231,7 @@ export default function InsightsList() {
                 scrollMarginTop: '120px',
               }}>
                 <h3 className="font-heading font-bold text-white mb-2" style={{ fontSize: '1.5rem', letterSpacing: '-0.01em' }}>
-                  SOCCER<span style={{ color: 'var(--color-gold)' }}>EXPERT</span>
+                  SOCCER<span style={{ color: 'var(--color-brand-accent)' }}>EXPERT</span>
                 </h3>
                 <p className="font-mono uppercase tracking-[0.12em] mb-4" style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.45)' }}>
                   THE FOOTBALL BUSINESS E-NEWSLETTER
@@ -271,7 +271,7 @@ export default function InsightsList() {
                       onMouseLeave={(e) => { if (cat !== activeCategory) e.currentTarget.style.background = 'transparent' }}
                     >
                       {cat}
-                      {cat === activeCategory && <ChevronRight size={14} style={{ color: 'var(--color-gold)' }} />}
+                      {cat === activeCategory && <ChevronRight size={14} style={{ color: 'var(--color-brand-accent)' }} />}
                     </button>
                   ))}
                 </div>
@@ -293,9 +293,9 @@ export default function InsightsList() {
                       : ({ children, ...rest }) => <Link to={insightArticle(a.slug)} {...rest}>{children}</Link>
                     return (
                     <LinkTag key={a.id} className="group block" style={{ textDecoration: 'none' }}>
-                      <p className="font-mono uppercase" style={{ fontSize: '0.62rem', color: 'var(--color-gold)', letterSpacing: '0.1em', marginBottom: '4px' }}>{a.date}</p>
+                      <p className="font-mono uppercase" style={{ fontSize: '0.62rem', color: 'var(--color-brand-accent)', letterSpacing: '0.1em', marginBottom: '4px' }}>{a.date}</p>
                       <p className="font-heading font-bold leading-snug transition-colors duration-200" style={{ fontSize: '0.88rem', color: '#09203e' }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
                         onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
                       >
                         {a.title}
@@ -340,7 +340,7 @@ function NewsletterForm() {
   if (status === 'success') {
     return (
       <div className="flex items-center gap-2 font-body" style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)' }}>
-        <Check size={16} style={{ color: 'var(--color-gold)' }} /> You're subscribed.
+        <Check size={16} style={{ color: 'var(--color-brand-accent)' }} /> You're subscribed.
       </div>
     )
   }
@@ -362,14 +362,14 @@ function NewsletterForm() {
           borderRadius: '8px', color: '#fff', outline: 'none',
           marginBottom: '12px', transition: 'border-color 0.2s',
         }}
-        onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+        onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
         onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.25)' }}
       />
       <button type="submit" disabled={status === 'submitting'}
         className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] w-full cursor-pointer border-none"
-        style={{ background: 'var(--color-gold)', color: '#09203e', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s', opacity: status === 'submitting' ? 0.7 : 1 }}
+        style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s', opacity: status === 'submitting' ? 0.7 : 1 }}
         onMouseEnter={(e) => { if (status !== 'submitting') e.currentTarget.style.background = '#d4c78e' }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-gold)' }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
       >
         {status === 'submitting' ? <><Loader2 size={15} className="prog-spin" /> Subscribing</> : <><Mail size={15} /> Subscribe</>}
       </button>
@@ -435,7 +435,7 @@ function ArticleRow({ article, index }) {
       <div className="flex flex-wrap items-center gap-3 mb-3">
         {displayCats.map((cat) => (
           <span key={cat} className="font-mono uppercase tracking-[0.12em]" style={{
-            fontSize: '0.62rem', color: 'var(--color-gold)', fontWeight: 600,
+            fontSize: '0.62rem', color: 'var(--color-brand-accent)', fontWeight: 600,
             background: 'rgba(191,177,112,0.1)', padding: '4px 10px', borderRadius: '4px',
           }}>
             {cat}
@@ -449,7 +449,7 @@ function ArticleRow({ article, index }) {
       {/* Title */}
       <ArticleLink style={{ textDecoration: 'none' }}>
         <h2 className="font-heading font-bold leading-snug mb-3 transition-colors duration-200" style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)', color: '#09203e' }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-gold)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
           onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
         >
           {article.title}
@@ -463,7 +463,7 @@ function ArticleRow({ article, index }) {
 
       {/* Read link */}
       <ArticleLink className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ fontSize: '0.78rem', color: 'var(--color-gold)', textDecoration: 'none', transition: 'color 0.2s' }}>
+        style={{ fontSize: '0.78rem', color: 'var(--color-brand-accent)', textDecoration: 'none', transition: 'color 0.2s' }}>
         Continue Reading <ArrowRight size={14} />
       </ArticleLink>
     </div>
