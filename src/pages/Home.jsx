@@ -461,8 +461,8 @@ function EventsSection() {
       ctaHref: '/riyadh-2027#pre-register',
       ctaExternal: false,
       status: 'soon',
-      accent: 'var(--color-gold)',
-      ctaTextColor: '#09203e',
+      accent: '#0f8f52',
+      ctaTextColor: '#fff',
     },
   ]
 
