@@ -1162,8 +1162,8 @@ function TestimonialsSection() {
           </h2>
         </div>
 
-        {/* Testimonial card */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-0 fade-up" style={{ borderRadius: '16px', overflow: 'hidden', minHeight: '400px' }}>
+        {/* Testimonial card — pink rim, white fill */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-0 fade-up" style={{ borderRadius: '16px', overflow: 'hidden', minHeight: '400px', border: '2px solid var(--color-brand-accent)', boxShadow: '0 18px 48px -28px rgba(233,30,99,0.45)' }}>
           {/* Photo side */}
           <div className="md:col-span-5 relative" style={{ minHeight: '300px' }}>
             {TESTIMONIALS.map((item, i) => {
@@ -1187,10 +1187,12 @@ function TestimonialsSection() {
           </div>
 
           {/* Quote side */}
-          <div className="md:col-span-7 relative" style={{ background: 'var(--color-brand-accent)', padding: 'clamp(40px, 6vw, 72px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            {/* Decorative quote marks (pushed to corners, behind text) */}
-            <span className="font-heading font-bold absolute pointer-events-none" style={{ top: '10px', left: '16px', fontSize: 'clamp(4rem, 6vw, 6rem)', color: 'rgba(9,32,62,0.08)', lineHeight: 1 }}>"</span>
-            <span className="font-heading font-bold absolute pointer-events-none" style={{ bottom: '10px', right: '16px', fontSize: 'clamp(4rem, 6vw, 6rem)', color: 'rgba(9,32,62,0.08)', lineHeight: 1 }}>"</span>
+          <div className="md:col-span-7 relative" style={{ background: '#FFFFFF', padding: 'clamp(40px, 6vw, 72px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            {/* Decorative quote marks — now pink so they pick up the brand
+                accent against the white fill (was dark navy at 0.08 alpha,
+                which disappears on white). */}
+            <span className="font-heading font-bold absolute pointer-events-none" style={{ top: '10px', left: '16px', fontSize: 'clamp(4rem, 6vw, 6rem)', color: 'var(--color-brand-accent)', opacity: 0.18, lineHeight: 1 }}>"</span>
+            <span className="font-heading font-bold absolute pointer-events-none" style={{ bottom: '10px', right: '16px', fontSize: 'clamp(4rem, 6vw, 6rem)', color: 'var(--color-brand-accent)', opacity: 0.18, lineHeight: 1 }}>"</span>
 
             <div style={{ position: 'relative', zIndex: 1 }}>
               <p className="font-body leading-relaxed mb-8" style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)', color: '#1a1a1a' }}>
