@@ -11,6 +11,26 @@ import { submitDealNetworkIntake } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { CONTACT, MIAMI_2026, PROFILE_ACCESS } from '../lib/routes'
 
+/* Reveal-on-scroll observer. Without this, every .fade-up element on the
+   page stays at opacity:0 and the whole page renders blank (the bug this
+   fixes). Mirrors the implementation in Home.jsx / Events.jsx. */
+function useScrollAnimations() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('visible')
+        })
+      },
+      { threshold: 0.01, rootMargin: '0px 0px 200px 0px' }
+    )
+    document
+      .querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal, .underline-grow, .section-divider')
+      .forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+}
+
 /* ═══ Deal Network — public concierge intake ════════════════════════════════
  * Soccerex curates introductions. This page is the front door for brands,
  * properties, agencies, and rights holders who want to be considered. It is
@@ -139,6 +159,8 @@ export default function DealNetwork() {
   const [submitResult, setSubmitResult] = useState(null)
   const isTest = isTestModeFromUrl()
 
+  useScrollAnimations()
+
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.title = 'Soccerex Deal Network — Concierge Introductions'
@@ -224,7 +246,7 @@ export default function DealNetwork() {
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
               style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
-          <p className="section-label text-gold mb-5 fade-up">SOCCEREX DEAL NETWORK</p>
+          <p className="section-label text-white mb-5 fade-up" style={{ opacity: 0.85 }}>SOCCEREX DEAL NETWORK</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             Concierge introductions{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>for serious commercial work.</span>
@@ -243,7 +265,7 @@ export default function DealNetwork() {
 
           <div className="fade-up mt-10">
             <a href="#intake" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '15px 32px', fontSize: '0.78rem', textDecoration: 'none' }}>
+              style={{ background: 'var(--color-brand-accent)', color: '#ffffff', padding: '15px 32px', fontSize: '0.78rem', textDecoration: 'none' }}>
               Submit a brief <ArrowRight size={15} />
             </a>
           </div>
@@ -500,7 +522,7 @@ function ConfirmationView({ result, side }) {
           }}>
             <Check size={36} color="#09203e" strokeWidth={2.5} />
           </div>
-          <p className="section-label text-gold mb-4">Brief received</p>
+          <p className="section-label text-brand-accent mb-4">Brief received</p>
           <h1 className="font-heading font-bold text-white leading-tight mb-6" style={{ fontSize: 'clamp(1.9rem, 4vw, 3.1rem)' }}>
             Thank you. The Soccerex team takes it from here.
           </h1>

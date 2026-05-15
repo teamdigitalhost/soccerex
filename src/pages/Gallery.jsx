@@ -54,7 +54,7 @@ export default function Gallery() {
           <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
             style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
         </div>
-        <p className="section-label text-gold mb-4" style={{ position: 'relative', zIndex: 1 }}>
+        <p className="section-label text-brand-accent mb-4" style={{ position: 'relative', zIndex: 1 }}>
           THE SOCCEREX GALLERY
         </p>
         <h1 className="font-heading font-bold text-white" style={{

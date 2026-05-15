@@ -15,7 +15,7 @@ export default function PolicyPage({ title, eyebrow, lastUpdated, sections }) {
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.12} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(140px,15vw,180px) clamp(24px,5vw,60px) clamp(60px,8vw,100px)' }}>
-          {eyebrow && <p className="section-label text-gold mb-4" style={{ opacity: 0.9 }}>{eyebrow}</p>}
+          {eyebrow && <p className="section-label text-brand-accent mb-4" style={{ opacity: 0.9 }}>{eyebrow}</p>}
           <h1 className="font-heading font-bold text-white leading-tight mb-6 text-glow" style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)' }}>
             {title}
           </h1>

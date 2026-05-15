@@ -75,7 +75,7 @@ export default function SoccerexApp() {
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
               style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
-          <p className="section-label text-gold mb-5 fade-up">OUR APP</p>
+          <p className="section-label text-brand-accent mb-5 fade-up">OUR APP</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             The Official{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex Events</span>{' '}App
@@ -181,7 +181,7 @@ export default function SoccerexApp() {
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div className="text-center mb-16">
-            <p className="section-label text-gold mb-4 fade-up">GETTING STARTED</p>
+            <p className="section-label text-brand-accent mb-4 fade-up">GETTING STARTED</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               How to Access the{' '}
               <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex Events</span>

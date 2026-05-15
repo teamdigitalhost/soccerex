@@ -397,7 +397,7 @@ export default function HeroSlideshow() {
         style={{ maxWidth: '900px', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
 
         {/* Eyebrow */}
-        <p className="hero-eyebrow section-label text-gold mb-2">
+        <p className="hero-eyebrow section-label text-brand-accent mb-2">
           SOCCEREX &middot; EST. 1996
         </p>
 

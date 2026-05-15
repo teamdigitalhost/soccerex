@@ -125,7 +125,7 @@ export default function HerSoccerex() {
         }} />
 
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(140px,15vw,200px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
-          <p className="section-label text-gold mb-5 fade-up">HERSOCCEREX</p>
+          <p className="section-label text-brand-accent mb-5 fade-up">HERSOCCEREX</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             Women's Football Is Entering Its{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>Commercialization Era.</span>
@@ -230,7 +230,7 @@ export default function HerSoccerex() {
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div className="text-center mb-16">
-            <p className="section-label text-gold mb-4 fade-up">WHAT WE DO</p>
+            <p className="section-label text-brand-accent mb-4 fade-up">WHAT WE DO</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               Four Pillars of{' '}
               <span style={{ color: '#bfb170' }}>HerSoccerex</span>
@@ -329,7 +329,7 @@ export default function HerSoccerex() {
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div className="text-center mb-16">
-            <p className="section-label text-gold mb-4 fade-up">LONG-TERM VISION</p>
+            <p className="section-label text-brand-accent mb-4 fade-up">LONG-TERM VISION</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               Where HerSoccerex{' '}
               <span style={{ color: '#bfb170' }}>Is Going</span>
@@ -481,7 +481,7 @@ export default function HerSoccerex() {
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={15} opacity={0.08} />
         <div className="relative z-10 text-center fade-up" style={{ maxWidth: '700px', margin: '0 auto' }}>
-          <p className="section-label text-gold mb-6">COMING SOON</p>
+          <p className="section-label text-brand-accent mb-6">COMING SOON</p>
           <p className="font-body text-white/80 leading-relaxed mb-4" style={{ fontSize: '1.1rem' }}>
             HerSoccerex programming debuts at <strong style={{ color: '#bfb170' }}>Amsterdam 2026</strong>.
           </p>

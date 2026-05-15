@@ -391,7 +391,7 @@ function ValuePillarsSection() {
 
       <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div className="text-center mb-16">
-          <p className="section-label text-gold mb-4 fade-up">02 &middot; WHAT WE DO</p>
+          <p className="section-label text-brand-accent mb-4 fade-up">02 &middot; WHAT WE DO</p>
           <h2 className="font-heading font-bold text-white leading-tight fade-up gold-underline mx-auto" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', maxWidth: '600px' }}>
             Built Around How the Game Actually Works
           </h2>
@@ -1329,7 +1329,7 @@ function HeritageMapSection() {
   return (
     <section className="relative" style={{ background: 'linear-gradient(135deg, #050d1a 0%, #0B213D 50%, #061729 100%)', overflow: 'visible' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px) 0', position: 'relative', zIndex: 3 }}>
-        <p className="section-label text-gold mb-4 fade-up">GLOBAL REACH</p>
+        <p className="section-label text-brand-accent mb-4 fade-up">GLOBAL REACH</p>
         <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up gold-underline mx-auto" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
           57 Events. 21 Cities. 30 Years.
         </h2>
@@ -1356,7 +1356,7 @@ function WhySoccerexSection() {
       <div className="absolute top-8 right-8 font-heading font-bold text-white/[0.03] pointer-events-none select-none" style={{ fontSize: 'clamp(8rem, 20vw, 16rem)', lineHeight: 1 }}>05</div>
 
       <div className="relative z-10" style={{ maxWidth: '800px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <p className="section-label text-gold mb-4 fade-up">05 &middot; WHY SOCCEREX</p>
+        <p className="section-label text-brand-accent mb-4 fade-up">05 &middot; WHY SOCCEREX</p>
         <h2 className="font-heading font-bold text-white leading-tight mb-8 fade-up gold-underline" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
           Why Soccerex
         </h2>
@@ -1369,7 +1369,7 @@ function WhySoccerexSection() {
         <p className="font-body text-white/65 leading-relaxed mb-2 fade-up" style={{ fontSize: '1.05rem' }}>
           We are not built around scale for the sake of it.
         </p>
-        <p className="font-heading font-semibold text-gold leading-relaxed fade-up" style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)' }}>
+        <p className="font-heading font-semibold text-brand-accent leading-relaxed fade-up" style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)' }}>
           We are built around relevance.
         </p>
       </div>
@@ -1405,7 +1405,7 @@ function HeritageGallerySection() {
       <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         {/* Header */}
         <div style={{ maxWidth: '700px', marginBottom: 'clamp(2rem, 4vw, 3.5rem)' }}>
-          <p className="section-label text-gold mb-4 fade-up">06 &middot; HERITAGE</p>
+          <p className="section-label text-brand-accent mb-4 fade-up">06 &middot; HERITAGE</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up gold-underline" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
             Three Decades of Serving the Game
           </h2>
@@ -1533,7 +1533,7 @@ function VerticalsShowcase() {
       <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.1} />
       <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div className="text-center mb-14">
-          <p className="section-label text-gold mb-4 fade-up">NEW VERTICALS</p>
+          <p className="section-label text-brand-accent mb-4 fade-up">NEW VERTICALS</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>
             Introducing the{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex Platform</span>

@@ -151,7 +151,7 @@ export default function InsightArticle() {
             <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
             <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
               <div className="text-center mb-12">
-                <p className="section-label text-gold mb-4">KEEP READING</p>
+                <p className="section-label text-brand-accent mb-4">KEEP READING</p>
                 <h2 className="font-heading font-bold text-white leading-tight" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)' }}>
                   Related{' '}
                   <span style={{ color: 'var(--color-brand-accent)' }}>Articles</span>

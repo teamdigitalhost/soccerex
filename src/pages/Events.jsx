@@ -342,7 +342,7 @@ export default function Events() {
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
               style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
-          <p className="section-label text-gold mb-6 fade-up">OUR EVENTS</p>
+          <p className="section-label text-brand-accent mb-6 fade-up">OUR EVENTS</p>
           <h1 className="font-heading font-bold text-white leading-[1.02] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.5rem, 6.5vw, 5.5rem)' }}>
             Where the Football{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>World Meets</span>
@@ -477,7 +477,7 @@ export default function Events() {
         <div className="ev-orb" style={{ bottom: '10%', left: '10%', width: '200px', height: '200px', background: 'rgba(200,48,44,0.06)', animationDelay: '-12s' }} />
         <div className="relative z-10">
           <div className="text-center mb-14 px-6">
-            <p className="section-label text-gold mb-4 fade-up">TESTIMONIALS</p>
+            <p className="section-label text-brand-accent mb-4 fade-up">TESTIMONIALS</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               What the Industry{' '}
               <span style={{ color: 'var(--color-brand-accent)' }}>Says</span>

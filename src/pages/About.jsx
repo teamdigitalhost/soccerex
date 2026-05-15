@@ -227,7 +227,7 @@ export default function About() {
               }}
             />
           </div>
-          <p className="section-label text-gold mb-6 fade-up">ABOUT SOCCEREX</p>
+          <p className="section-label text-brand-accent mb-6 fade-up">ABOUT SOCCEREX</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 5.4rem)' }}>
             The Global Leader in the{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>Business of Football</span>
@@ -341,7 +341,7 @@ export default function About() {
             { num: '5k+', display: '5k+', label: 'Brands', sub: 'Sport, media, and technology worldwide' },
           ].map((s) => (
             <div key={s.label} className="text-center scale-up">
-              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1 }}>
+              <p className="font-heading font-bold text-brand-accent" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1 }}>
                 <AnimatedCounter target={s.display || s.num} />
               </p>
               <p className="font-heading font-bold text-white text-sm uppercase tracking-widest mt-3">{s.label}</p>

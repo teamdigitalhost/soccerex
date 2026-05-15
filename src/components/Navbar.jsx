@@ -113,7 +113,7 @@ export default function Navbar() {
         <div className="flex-1 flex flex-col items-start justify-center gap-1 px-8">
           {navLinks.map((link, i) => (
             <Link key={link.to} to={link.to} onClick={() => setMenuOpen(false)}
-              className="nav-mobile-link font-heading font-bold text-white py-3 uppercase tracking-[0.05em] hover:text-gold transition-colors cursor-pointer text-left"
+              className="nav-mobile-link font-heading font-bold text-white py-3 uppercase tracking-[0.05em] hover:text-brand-accent transition-colors cursor-pointer text-left"
               style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', textDecoration: 'none', display: 'block', transitionDelay: menuOpen ? `${150 + i * 80}ms` : '0ms' }}>
               {link.label}
             </Link>

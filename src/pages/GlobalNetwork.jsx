@@ -368,7 +368,7 @@ export default function GlobalNetwork() {
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
               style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
-          <p className="section-label text-gold mb-6 fade-up">GLOBAL NETWORK</p>
+          <p className="section-label text-brand-accent mb-6 fade-up">GLOBAL NETWORK</p>
           <h1 className="font-heading font-bold text-white leading-[1.02] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 6rem)' }}>
             The Global Leader in the{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>Business of Football</span>{' '}
@@ -416,7 +416,7 @@ export default function GlobalNetwork() {
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={28} opacity={0.12} />
         <div className="relative z-10" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div className="text-center mb-16">
-            <p className="section-label text-gold mb-4 fade-up">FOUR WAYS TO ENGAGE</p>
+            <p className="section-label text-brand-accent mb-4 fade-up">FOUR WAYS TO ENGAGE</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               Tap into Three Decades of{' '}
               <span style={{ color: 'var(--color-brand-accent)' }}>Connections</span>
@@ -478,7 +478,7 @@ export default function GlobalNetwork() {
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {NETWORK_STATS.map((s) => (
             <div key={s.label} className="text-center scale-up">
-              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: 1 }}>
+              <p className="font-heading font-bold text-brand-accent" style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: 1 }}>
                 <AnimatedCounter target={s.num} />
               </p>
               <p className="font-body text-white/50 text-xs uppercase tracking-widest mt-3">{s.label}</p>
@@ -519,7 +519,7 @@ export default function GlobalNetwork() {
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
           <div className="text-center mb-16" style={{ maxWidth: '960px', margin: '0 auto 64px' }}>
-            <p className="section-label text-gold mb-6 fade-up">THREE DECADES OF CONNECTIONS</p>
+            <p className="section-label text-brand-accent mb-6 fade-up">THREE DECADES OF CONNECTIONS</p>
             <h2 className="font-heading font-semibold text-white leading-[1.25] fade-up" style={{ fontSize: 'clamp(1.35rem, 2.4vw, 2.1rem)' }}>
               Soccerex events provide the industry's leading professionals with a variety of{' '}
               <span style={{ color: 'var(--color-brand-accent)' }}>formal and informal networking platforms</span>
@@ -631,7 +631,7 @@ export default function GlobalNetwork() {
           {/* Copy */}
           <div className="slide-left flex items-center" style={{ padding: 'clamp(80px,10vw,140px) clamp(32px,6vw,90px)' }}>
             <div style={{ maxWidth: '560px' }}>
-              <p className="section-label text-gold mb-4 fade-up">THE FOOTBALL INDUSTRY'S PULSE</p>
+              <p className="section-label text-brand-accent mb-4 fade-up">THE FOOTBALL INDUSTRY'S PULSE</p>
               <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
                 Soccerex's Insights
               </h2>
@@ -682,7 +682,7 @@ export default function GlobalNetwork() {
             <div className="fade-up" style={{ display: 'inline-flex', width: '64px', height: '64px', borderRadius: '14px', background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
               <MapPin size={30} color="#09203e" strokeWidth={2.2} />
             </div>
-            <p className="section-label text-gold mb-4 fade-up">PARTNERSHIP OPPORTUNITIES</p>
+            <p className="section-label text-brand-accent mb-4 fade-up">PARTNERSHIP OPPORTUNITIES</p>
             <h2 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
               To Enquire About Hosting a{' '}
               <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex Event in Your City</span>

@@ -183,7 +183,7 @@ export default function ThePitch() {
         <div className="absolute pointer-events-none" style={{ top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
 
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(140px,15vw,200px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
-          <p className="section-label text-gold mb-6 fade-up">THE PITCH</p>
+          <p className="section-label text-brand-accent mb-6 fade-up">THE PITCH</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.8rem)' }}>
             Where Football Innovation Meets{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>Institutional Capital.</span>
@@ -227,7 +227,7 @@ export default function ThePitch() {
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.06) 0%, transparent 70%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <p className="section-label text-gold mb-4 fade-up text-center">THREE TIERS</p>
+          <p className="section-label text-brand-accent mb-4 fade-up text-center">THREE TIERS</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             A Structured Path to <span style={{ color: 'var(--color-brand-accent)' }}>Capital</span>
           </h2>
@@ -340,7 +340,7 @@ export default function ThePitch() {
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '720px', margin: '0 auto' }}>
-          <p className="section-label text-gold mb-4 fade-up text-center">APPLY NOW</p>
+          <p className="section-label text-brand-accent mb-4 fade-up text-center">APPLY NOW</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-center text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             Apply to <span style={{ color: '#bfb170' }}>The Pitch</span>
           </h2>
