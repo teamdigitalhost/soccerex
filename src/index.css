@@ -43,6 +43,11 @@
 /* Prevent accidental horizontal scroll on mobile from hero particle effects */
 html, body { overflow-x: hidden; max-width: 100vw; }
 
+/* Force light color scheme across all breakpoints and devices.
+   Prevents iOS Safari (and other browsers) from applying automatic
+   dark mode recoloring when the user's system is in dark mode. */
+:root { color-scheme: light; }
+
 /* Fade-up animation via IntersectionObserver */
 .fade-up {
   opacity: 0;
