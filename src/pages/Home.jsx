@@ -1663,9 +1663,6 @@ export default function Home() {
           pixel content — any wave/edge effect inevitably reveals a seam.
           The hero's overlay already feathers softly into white at its base. */}
       <UpcomingEventSection />
-      {/* Beige-to-white wavy handoff — the subtle detail. The cream Miami
-          band crests into the pure-white Events section. */}
-      <PixelDivider color="#FFF1EB" layers={4} height={80} speed={0.4} />
       <EventsSection />
       <ByTheNumbersSection />
       <PixelDivider color="#FFFFFF" layers={4} height={110} speed={0.6} />
