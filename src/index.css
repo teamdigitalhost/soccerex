@@ -374,6 +374,20 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   clip-path: inset(18% 0 18% 0);
 }
 
+/* Square-badge variant — the new blue badge has a 100×100 viewBox
+   (no top/bottom whitespace), so we cap both dimensions and skip
+   the clip-path. Negative margins are also unnecessary because the
+   SVG fills its viewBox edge-to-edge. */
+.hero-crest-wrap--square {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.hero-crest-wrap--square img {
+  height: clamp(260px, min(70vw, 55dvh), 560px) !important;
+  width: clamp(260px, min(70vw, 55dvh), 560px) !important;
+  clip-path: none !important;
+}
+
 /* Narrow viewports: don't force a full 100dvh hero. That wastes vertical space
    and makes the crest feel "lost" in an empty container. Let the content drive
    the height with a comfortable minimum. */

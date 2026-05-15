@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
-import Crest from './Crest'
 
 /* Static hero copy. The dark slideshow used to rotate through six
    taglines letter-by-letter; that's retired in favour of the static
@@ -381,14 +380,19 @@ export default function HeroSlideshow() {
           SOCCEREX &middot; EST. 1996
         </p>
 
-        {/* Anniversary crest, replaces the old large "30 / YEARS"
-            lockup. White silhouette + stacked white drop-shadow halo
-            (CSS, .hero-crest-wrap) for the outer glow. Confetti
-            still radiates from behind via ParticleField. */}
+        {/* Anniversary badge — new square blue design, replaces the
+            old large "30 / YEARS" lockup. Square viewBox (100×100)
+            so we render at 1:1; .hero-crest-wrap CSS handles the
+            stacked white drop-shadow halo for the outer glow. */}
         <div className="hero-30-with-particles">
           <ParticleField />
-          <div className="hero-crest-wrap">
-            <Crest variant="main" color="white" size={280} decorative />
+          <div className="hero-crest-wrap hero-crest-wrap--square">
+            <img
+              src="/brand/crests/crest-main-blue.svg"
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+            />
           </div>
         </div>
 
