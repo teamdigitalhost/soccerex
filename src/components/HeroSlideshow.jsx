@@ -376,7 +376,15 @@ export default function HeroSlideshow() {
         style={{ maxWidth: '900px', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
 
         {/* Eyebrow */}
-        <p className="hero-eyebrow section-label text-gold mb-2">
+        <p
+          className="hero-eyebrow section-label mb-2"
+          style={{
+            /* Soccerex brand navy. Cream halo lifts it off whatever
+               photo + white-wash is showing beneath. */
+            color: '#09203e',
+            textShadow: '0 1px 0 rgba(255,248,244,0.7), 0 1px 12px rgba(255,248,244,0.55)',
+          }}
+        >
           SOCCEREX &middot; EST. 1996
         </p>
 
