@@ -52,7 +52,7 @@ export default function Gallery() {
         </Link>
         <div className="inner-hero-crest flex justify-center" style={{ position: 'relative', zIndex: 1 }}>
           <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
-            style={{ filter: 'drop-shadow(0 8px 40px rgba(255,107,53,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
+            style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
         </div>
         <p className="section-label text-gold mb-4" style={{ position: 'relative', zIndex: 1 }}>
           THE SOCCEREX GALLERY

@@ -11,9 +11,9 @@ if (import.meta.hot) {
 }
 
 /* ─── Defaults ────────────────────────────────────────────────────────────── */
-/* Ember palette: primary orange + secondary golden yellow */
+/* Base palette: brand accent (pink) + golden yellow secondary */
 const DEFAULTS = {
-  soccerex: { primary: '#ff6b35', secondary: '#ffb703' },
+  soccerex: { primary: '#E91E63', secondary: '#ffb703' },
   europe:   { primary: '#c8302c', secondary: '#e8504c' },
   miami:    { primary: '#e84393', secondary: '#fd79a8' },
   riyadh:   { primary: '#d4a853', secondary: '#e8c878' },
@@ -30,7 +30,7 @@ const PRESETS = {
   soccerex: [
     { name: 'Classic', primary: '#bfb170', secondary: '#c8302c' },
     { name: 'Electric', primary: '#d4ff00', secondary: '#00d4ff' },
-    { name: 'Ember', primary: '#ff6b35', secondary: '#ffd166' },
+    { name: 'Ember', primary: '#E91E63', secondary: '#ffd166' },
     { name: 'Pitch', primary: '#00ff9d', secondary: '#09203e' },
     { name: 'Night Club', primary: '#a259ff', secondary: '#ff2e93' },
     { name: 'Citrus', primary: '#ffd60a', secondary: '#ff006e' },

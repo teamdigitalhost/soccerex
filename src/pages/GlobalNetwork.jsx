@@ -366,7 +366,7 @@ export default function GlobalNetwork() {
         <div className="relative z-10 text-center" style={{ maxWidth: '1100px', padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
           <div className="inner-hero-crest inner-hero-crest--xl flex justify-center fade-up">
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
-              style={{ filter: 'drop-shadow(0 8px 40px rgba(255,107,53,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
+              style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
           <p className="section-label text-gold mb-6 fade-up">GLOBAL NETWORK</p>
           <h1 className="font-heading font-bold text-white leading-[1.02] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 6rem)' }}>
@@ -438,7 +438,7 @@ export default function GlobalNetwork() {
                       border: '1px solid rgba(191,177,112,0.15)',
                       backdropFilter: 'blur(10px)',
                     }}>
-                      <div style={{ width: '64px', height: '64px', borderRadius: '14px', background: 'var(--color-brand-accent)', boxShadow: '0 8px 20px rgba(255,107,53,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                      <div style={{ width: '64px', height: '64px', borderRadius: '14px', background: 'var(--color-brand-accent)', boxShadow: '0 8px 20px rgba(233, 30, 99,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                         <Icon size={30} color="#09203e" strokeWidth={2.2} />
                       </div>
                       <h3 className="font-heading font-bold mb-3" style={{ fontSize: '1.4rem', color: '#fff', letterSpacing: '0.02em' }}>{p.label}</h3>

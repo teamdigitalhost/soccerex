@@ -222,7 +222,7 @@ function ActionCard({ action }) {
   const body = (
     <>
       <div className="flex items-start gap-3">
-        <Icon size={18} style={{ color: action.completed ? '#10b981' : 'var(--event-primary, #ff6b35)', marginTop: 2, flexShrink: 0 }} />
+        <Icon size={18} style={{ color: action.completed ? '#10b981' : 'var(--event-primary, #E91E63)', marginTop: 2, flexShrink: 0 }} />
         <div style={{ minWidth: 0, flex: 1 }}>
           <p className="miami-headline" style={{ fontSize: 14, color: '#0D1B2A', textDecoration: action.completed ? 'line-through' : 'none' }}>
             {action.title || action.label}
@@ -569,7 +569,7 @@ function PassAllocation({ data, events, slug, editToken, isTest, onRefresh }) {
                   </p>
                 </div>
                 <div style={{ height: 6, background: 'rgba(13,27,42,0.08)', overflow: 'hidden' }}>
-                  <div style={{ width: `${pct}%`, height: '100%', background: 'var(--event-primary, #ff6b35)' }} />
+                  <div style={{ width: `${pct}%`, height: '100%', background: 'var(--event-primary, #E91E63)' }} />
                 </div>
                 <div className="flex justify-between mt-3 font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.18em', color: '#607186' }}>
                   <span>Assigned <span style={{ color: '#0D1B2A' }}>{assigned}</span></span>

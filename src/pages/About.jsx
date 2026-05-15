@@ -86,7 +86,7 @@ function FlipCard({ icon: Icon, title, desc, img, variant = 'centered' }) {
             height: variant === 'centered' ? '64px' : '60px',
             borderRadius: '14px',
             background: 'var(--color-brand-accent)',
-            boxShadow: '0 8px 20px rgba(255,107,53,0.25)',
+            boxShadow: '0 8px 20px rgba(233, 30, 99,0.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '18px',
           }}>
@@ -223,7 +223,7 @@ export default function About() {
               alt=""
               aria-hidden="true"
               style={{
-                filter: 'drop-shadow(0 8px 40px rgba(255, 107, 53, 0.35)) drop-shadow(0 0 90px rgba(255, 183, 3, 0.18))',
+                filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99, 0.35)) drop-shadow(0 0 90px rgba(255, 183, 3, 0.18))',
               }}
             />
           </div>

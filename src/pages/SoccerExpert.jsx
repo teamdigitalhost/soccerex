@@ -131,7 +131,7 @@ export default function SoccerExpert() {
                     cursor: status === 'submitting' ? 'wait' : 'pointer',
                     transition: 'transform 0.2s, box-shadow 0.2s',
                   }}
-                  onMouseEnter={(e) => { if (status !== 'submitting') { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 14px 30px rgba(255,107,53,0.35)' } }}
+                  onMouseEnter={(e) => { if (status !== 'submitting') { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 14px 30px rgba(233, 30, 99,0.35)' } }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
                 >
                   <Mail size={16} /> Subscribe

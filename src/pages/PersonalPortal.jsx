@@ -870,7 +870,7 @@ function SectionHeader({ Icon, kicker, title }) {
   return (
     <div className="flex items-center gap-3 mb-4">
       <div style={{ width: 38, height: 38, background: '#FAFBFC', border: '1px solid rgba(13,27,42,0.08)', display: 'grid', placeItems: 'center' }}>
-        <Icon size={18} style={{ color: 'var(--event-primary, #ff6b35)' }} />
+        <Icon size={18} style={{ color: 'var(--event-primary, #E91E63)' }} />
       </div>
       <div>
         <p className="font-mono uppercase" style={{ fontSize: 10, color: 'var(--event-primary)', letterSpacing: '0.24em' }}>{kicker}</p>
@@ -903,7 +903,7 @@ function Readiness({ data, editLink }) {
       </div>
       {pct != null && (
         <div style={{ height: 6, background: 'rgba(13,27,42,0.08)' }}>
-          <div style={{ width: `${Math.max(0, Math.min(100, pct))}%`, height: '100%', background: 'var(--event-primary, #ff6b35)' }} />
+          <div style={{ width: `${Math.max(0, Math.min(100, pct))}%`, height: '100%', background: 'var(--event-primary, #E91E63)' }} />
         </div>
       )}
       {items.length > 0 && (
