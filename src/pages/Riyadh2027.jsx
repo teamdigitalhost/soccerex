@@ -121,7 +121,7 @@ export default function Riyadh2027() {
             <span className="event-badge"><span className="event-badge-dot" /> Coming Soon, Riyadh</span>
           </div>
 
-          <div className="inner-hero-crest inner-hero-crest--xl flex justify-center fade-up">
+          <div className="inner-hero-crest inner-hero-crest--xl flex justify-center">
             <img
               src="/brand/crests/crest-main-white.svg"
               alt="Soccerex, Est. 1996, 30 Years"
