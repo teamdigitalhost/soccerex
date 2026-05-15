@@ -123,9 +123,9 @@ export default function Riyadh2027() {
 
           <div className="inner-hero-crest inner-hero-crest--xl flex justify-center fade-up">
             <img
-              src="/brand/crests/crest-riyadh-white.svg"
-              alt="Soccerex Middle East, Est. 1996, 30 Years"
-              style={{ filter: 'drop-shadow(0 10px 50px rgba(242, 233, 60, 0.55)) drop-shadow(0 0 110px rgba(15, 143, 82, 0.35))' }}
+              src="/brand/crests/crest-main-white.svg"
+              alt="Soccerex, Est. 1996, 30 Years"
+              style={{ filter: 'drop-shadow(0 0 18px rgba(255,255,255,0.7)) drop-shadow(0 0 60px rgba(255,255,255,0.45)) drop-shadow(0 12px 40px rgba(0,0,0,0.5))' }}
             />
           </div>
 

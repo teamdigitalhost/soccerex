@@ -431,6 +431,8 @@ function EventsSection() {
       ctaExternal: false,
       status: 'past',
       pastLabel: 'Thank you!',
+      accent: '#c8302c',
+      ctaTextColor: '#fff',
     },
     {
       city: 'MIAMI',
@@ -444,6 +446,8 @@ function EventsSection() {
       ctaHref: '/miami-2026#pre-register',
       ctaExternal: false,
       status: 'soon',
+      accent: '#E91E63',
+      ctaTextColor: '#fff',
     },
     {
       city: 'RIYADH',
@@ -457,6 +461,8 @@ function EventsSection() {
       ctaHref: '/riyadh-2027#pre-register',
       ctaExternal: false,
       status: 'soon',
+      accent: 'var(--color-gold)',
+      ctaTextColor: '#09203e',
     },
   ]
 
@@ -477,7 +483,7 @@ function EventsSection() {
           {events.map((event) => {
             const isMiami = event.city === 'MIAMI'
             const isPast = event.status === 'past'
-            const cityColor = isMiami ? '#E91E63' : isPast ? 'rgba(255,255,255,0.85)' : 'var(--color-gold)'
+            const cityColor = event.accent
             const accentStripe = isMiami
               ? 'linear-gradient(90deg, #007C91 0%, #E91E63 50%, #FFB46A 100%)'
               : isPast
@@ -635,6 +641,7 @@ function EventsSection() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="home-event-cta home-event-cta--solid"
+                          style={{ background: event.accent, borderColor: event.accent, color: event.ctaTextColor }}
                         >
                           {event.ctaLabel}
                         </a>
@@ -642,6 +649,7 @@ function EventsSection() {
                         <Link
                           to={event.ctaHref}
                           className="home-event-cta home-event-cta--solid"
+                          style={{ background: event.accent, borderColor: event.accent, color: event.ctaTextColor }}
                         >
                           {event.ctaLabel}
                         </Link>

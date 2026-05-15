@@ -456,10 +456,10 @@ export default function HeroSlideshow() {
           </button>
           <Link
             to={withTestSearch(CONTACT)}
-            className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer text-white"
-            style={{ textDecoration: 'none' }}
+            className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer"
+            style={{ textDecoration: 'none', color: '#09203e', borderColor: '#09203e' }}
           >
-            Partner with Soccerex
+            Contact Soccerex
           </Link>
         </div>
       </div>
