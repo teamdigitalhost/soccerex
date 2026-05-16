@@ -3,20 +3,7 @@ import { ArrowRight, Users, Eye, Radio, Film, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-
-// ─── Scroll animations ──────────────────────────────────────────────────────
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.01, rootMargin: '0px 0px 200px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up').forEach((el) => {
-      if (!el.classList.contains('visible')) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
-}
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 const PILLARS = [
   {

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { CONTACT, EUROPE_2026 } from '../lib/routes'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ─── Timeline data ──────────────────────────────────────────────────────────
 const TIMELINE = [
@@ -184,17 +185,6 @@ function AnimatedCounter({ target, suffix = '' }) {
   return <span ref={ref}>0</span>
 }
 
-// ─── Scroll animations ─────────────────────────────────────────────────────
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal').forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-}
 
 export default function About() {
   useScrollAnimations()

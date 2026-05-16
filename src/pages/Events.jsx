@@ -6,6 +6,7 @@ import PixelDivider from '../components/PixelDivider'
 import { CONTACT, EUROPE_2026 } from '../lib/routes'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema, speakerSchema } from '../lib/leadSchemas'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ═══ UPCOMING EVENTS (2 featured) ════════════════════════════════════════════
 const UPCOMING = [
@@ -175,19 +176,6 @@ const SPEAKERS = [
 
 const BROCHURE_LINK = 'https://soccerex.hflip.co/ebrochure.html'
 
-// ─── Scroll animations ──────────────────────────────────────────────────────
-function useScrollAnimations(dep) {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal').forEach((el) => {
-      if (!el.classList.contains('visible')) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [dep])
-}
 
 // ─── Event card (large, alternating layout) ────────────────────────────────
 function EventCard({ event, index, dark = false }) {

@@ -8,30 +8,9 @@ import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
 import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, GALLERY, pressRelease, eventAgendaConcept } from '../lib/routes'
 import ImageGrid from '../components/ImageGrid'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { lazy, Suspense } from 'react'
 const InteractiveGlobe = lazy(() => import('../components/InteractiveGlobe'))
-
-// Intersection Observer for fade-up animations
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
-        })
-      },
-      { threshold: 0.01, rootMargin: '0px 0px 200px 0px' }
-    )
-
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal, .underline-grow, .section-divider').forEach((el) => {
-      observer.observe(el)
-    })
-
-    return () => observer.disconnect()
-  }, [])
-}
 
 // ─── SECTION 1: HERO ─────────────────────────────────────────────────────────
 function HeroSection() {

@@ -4,6 +4,7 @@ import { Users, Globe, Handshake, Megaphone, ArrowRight, Mail, Newspaper, Trendi
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { ABOUT, CONTACT, INSIGHTS } from '../lib/routes'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ─── Full logo inventory (228 logos from soccerex.com/global-network) ───────
 const LOGOS = [
@@ -308,19 +309,6 @@ function AnimatedCounter({ target }) {
   return <span ref={ref}>0</span>
 }
 
-// ─── Scroll animations hook ────────────────────────────────────────────────
-function useScrollAnimations(dep) {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal').forEach((el) => {
-      if (!el.classList.contains('visible')) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [dep])
-}
 
 // ─── Marquee row ───────────────────────────────────────────────────────────
 function LogoMarquee({ logos, direction = 'left', duration = 80 }) {

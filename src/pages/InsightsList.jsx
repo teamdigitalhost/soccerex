@@ -9,19 +9,7 @@ import {
 import { isTestModeFromUrl } from '../lib/testMode'
 import { Loader2, Check } from 'lucide-react'
 import { insightArticle } from '../lib/routes'
-
-function useScrollAnimations(dep) {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.01, rootMargin: '0px 0px 200px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .scale-up').forEach((el) => {
-      if (!el.classList.contains('visible')) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [dep])
-}
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 const PAGE_SIZE = 15
 

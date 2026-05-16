@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Mail, Newspaper, TrendingUp, CheckCircle2, ArrowRight } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 export default function SoccerExpert() {
+  useScrollAnimations()
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   const [email, setEmail] = useState('')

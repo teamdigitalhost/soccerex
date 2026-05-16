@@ -3,6 +3,7 @@ import { ArrowRight, Download, Search, Mail, Smartphone, ShieldCheck, HelpCircle
 import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.teks.eventify&hl=en_US'
 const APP_STORE = 'https://apps.apple.com/us/app/soccerex-events/id6737689519'
@@ -15,19 +16,6 @@ const STEPS = [
   { icon: ShieldCheck, title: 'Get Your Passcode', desc: 'Your passcode will be emailed to you. Enter it to access the event.' },
 ]
 
-// ─── Scroll animations ──────────────────────────────────────────────────────
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.01, rootMargin: '0px 0px 200px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up').forEach((el) => {
-      if (!el.classList.contains('visible')) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
-}
 
 export default function SoccerexApp() {
   useScrollAnimations()

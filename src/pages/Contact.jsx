@@ -9,6 +9,7 @@ import PixelDivider from '../components/PixelDivider'
 import { submitLead } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { Loader2 } from 'lucide-react'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ═══ INQUIRY TYPES ════════════════════════════════════════════════════════════
 /* Each inquiry type maps to a backend lead endpoint:
@@ -132,19 +133,6 @@ const FIELD_DEFS = {
   venueName:  { label: 'Proposed Venue',       placeholder: 'Name of the venue, if known', type: 'text' },
 }
 
-// ═══ Scroll animations ═══════════════════════════════════════════════════════
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up').forEach((el) => {
-      if (!el.classList.contains('visible')) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
-}
 
 // ═══ Main component ═══════════════════════════════════════════════════════════
 export default function Contact() {

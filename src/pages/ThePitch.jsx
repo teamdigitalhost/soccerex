@@ -7,20 +7,7 @@ import {
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { CONTACT, EUROPE_2026 } from '../lib/routes'
-
-// Scroll animations (same pattern as other pages)
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up').forEach((el) => {
-      if (!el.classList.contains('visible')) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
-}
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // Tier data
 const TIERS = [

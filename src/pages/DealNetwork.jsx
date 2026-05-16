@@ -10,26 +10,7 @@ import PixelDivider from '../components/PixelDivider'
 import { submitDealNetworkIntake } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { CONTACT, MIAMI_2026, PROFILE_ACCESS } from '../lib/routes'
-
-/* Reveal-on-scroll observer. Without this, every .fade-up element on the
-   page stays at opacity:0 and the whole page renders blank (the bug this
-   fixes). Mirrors the implementation in Home.jsx / Events.jsx. */
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('visible')
-        })
-      },
-      { threshold: 0.01, rootMargin: '0px 0px 200px 0px' }
-    )
-    document
-      .querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal, .underline-grow, .section-divider')
-      .forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-}
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 /* ═══ Deal Network — public concierge intake ════════════════════════════════
  * Soccerex curates introductions. This page is the front door for brands,
