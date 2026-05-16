@@ -9,7 +9,7 @@ import {
 const navLinks = [
   { label: 'About',        to: ABOUT },
   { label: 'Events',       to: EVENTS },
-  { label: 'Network',      to: GLOBAL_NETWORK },
+  { label: 'Reach',        to: GLOBAL_NETWORK },
   { label: 'Deal Network', to: DEAL_NETWORK },
   { label: 'Insights',     to: INSIGHTS },
 ]
