@@ -11,6 +11,7 @@ import {
   respondToDealNetworkMeeting,
   ApiError,
 } from '../lib/soccerexApi'
+import { NEED_OFFER_OPTIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
 
 /* ═══ Deal Network Portal Section ══════════════════════════════════════════
  * Embeds inside CompanyPortal as one of the dashboard cards. Concierge tone:
@@ -583,6 +584,10 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
     meeting_format_preference: intake?.meeting_format_preference || '',
     specific_people_to_meet: intake?.specific_people_to_meet || '',
     named_targets: Array.isArray(intake?.named_targets) ? intake.named_targets.join('\n') : '',
+    looking_for: Array.isArray(intake?.signals?.need) ? intake.signals.need : [],
+    can_offer: Array.isArray(intake?.signals?.offer) ? intake.signals.offer : [],
+    pain_points: Array.isArray(intake?.signals?.pain) ? intake.signals.pain : [],
+    pain_point_detail: intake?.signals?.pain_detail || '',
   }))
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -607,6 +612,10 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
       named_targets: form.named_targets
         .split(/[\n,]+/g).map((s) => s.trim()).filter(Boolean),
       currency: limits?.default_currency || 'USD',
+      looking_for: form.looking_for,
+      can_offer: form.can_offer,
+      pain_points: form.pain_points,
+      pain_point_detail: form.pain_point_detail || undefined,
     }
     try {
       if (isEditing) {
@@ -738,6 +747,58 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
             style={textareaStyle}
           />
         </Field>
+
+        {(() => {
+          const chip = (active) => ({
+            background: active ? '#09203e' : '#f1f0ec',
+            color: active ? '#fff' : '#09203e',
+            border: `1px solid ${active ? '#09203e' : 'rgba(9,32,62,0.14)'}`,
+            borderRadius: 999, padding: '7px 13px', fontSize: '0.8rem',
+            cursor: 'pointer', marginRight: 8, marginBottom: 8,
+          })
+          const toggle = (field, key) => setForm((f) => ({
+            ...f,
+            [field]: f[field].includes(key) ? f[field].filter((k) => k !== key) : [...f[field], key],
+          }))
+          const ready = (form.looking_for || []).length > 0 && (form.pain_points || []).length > 0
+          return (
+            <div style={{ marginTop: 18, marginBottom: 18 }}>
+              <div style={{
+                marginBottom: 14, padding: '10px 14px', borderRadius: 8,
+                background: ready ? 'rgba(34,139,87,0.12)' : 'rgba(233,30,99,0.10)',
+                border: `1px solid ${ready ? 'rgba(34,139,87,0.4)' : 'rgba(233,30,99,0.35)'}`,
+                fontSize: '0.85rem', color: '#09203e',
+              }}>
+                {ready
+                  ? 'Match-ready: you have declared what you need and a pain point.'
+                  : 'Not match-ready yet. Add at least one "looking for" and one pain point so Soccerex can match you.'}
+              </div>
+
+              <p style={{ fontWeight: 600, fontSize: '0.8rem', margin: '0 0 8px' }}>What you are looking for</p>
+              <div>{NEED_OFFER_OPTIONS.map((o) => (
+                <button type="button" key={o.key} style={chip((form.looking_for || []).includes(o.key))} onClick={() => toggle('looking_for', o.key)}>{o.label}</button>
+              ))}</div>
+
+              <p style={{ fontWeight: 600, fontSize: '0.8rem', margin: '14px 0 8px' }}>What you can offer</p>
+              <div>{NEED_OFFER_OPTIONS.map((o) => (
+                <button type="button" key={o.key} style={chip((form.can_offer || []).includes(o.key))} onClick={() => toggle('can_offer', o.key)}>{o.label}</button>
+              ))}</div>
+
+              <p style={{ fontWeight: 600, fontSize: '0.8rem', margin: '14px 0 8px' }}>Pain points</p>
+              <div>{PAIN_OPTIONS.map((o) => (
+                <button type="button" key={o.key} style={chip((form.pain_points || []).includes(o.key))} onClick={() => toggle('pain_points', o.key)}>{o.label}</button>
+              ))}</div>
+
+              <textarea
+                value={form.pain_point_detail}
+                onChange={(e) => setForm((f) => ({ ...f, pain_point_detail: e.target.value }))}
+                placeholder="Pain point detail (optional): what is the real problem?"
+                rows={2}
+                style={{ width: '100%', marginTop: 12, padding: '10px 12px', border: '1px solid rgba(9,32,62,0.14)', borderRadius: 8, fontSize: '0.88rem' }}
+              />
+            </div>
+          )
+        })()}
 
         {error && (
           <p style={{ fontSize: 13, color: '#b91c1c', margin: '10px 0' }}>
