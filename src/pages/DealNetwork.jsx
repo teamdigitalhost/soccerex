@@ -523,7 +523,7 @@ function ConfirmationView({ result, side }) {
 
           <div className="mt-12 flex flex-wrap justify-center gap-3">
             <Link to={withTestSearch(MIAMI_2026)} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '15px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
+              style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '15px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
               Explore Miami 2026 <ChevronRight size={15} />
             </Link>
             <Link to={withTestSearch(CONTACT)} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"

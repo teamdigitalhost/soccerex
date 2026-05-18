@@ -21,7 +21,9 @@ const CTA_THEMES = [
   { match: EUROPE_2026, bg: '#c8302c', hover: '#a72824', text: '#FFFFFF' },
   { match: RIYADH_2027, bg: '#bfb170', hover: '#d4c78e', text: '#0D1B2A' },
 ]
-const CTA_DEFAULT = { bg: 'var(--color-brand-accent)', hover: '#d4c78e', text: 'var(--color-navy, #0D1B2A)' }
+// White reads cleanly on the pink brand accent; navy-on-pink was the
+// low-contrast base-Soccerex case (event themes already use white).
+const CTA_DEFAULT = { bg: 'var(--color-brand-accent)', hover: '#d4c78e', text: '#FFFFFF' }
 
 function ctaThemeFor(pathname) {
   return CTA_THEMES.find((t) => pathname.startsWith(t.match)) || CTA_DEFAULT

@@ -226,7 +226,7 @@ function EventCard({ event, index, dark = false }) {
         {event.link && !event.comingSoon && (
           event.internal ? (
             <Link to={event.link} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up mt-4"
-              style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.8rem', textDecoration: 'none', transition: 'all 0.3s' }}
+              style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '16px 36px', fontSize: '0.8rem', textDecoration: 'none', transition: 'all 0.3s' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
             >
@@ -403,7 +403,7 @@ export default function Events() {
                       Coming Soon
                     </div>
                   ) : (
-                    <div style={{ position: 'absolute', top: 20, right: 20, padding: '6px 12px', background: 'var(--color-brand-accent)', borderRadius: '100px', color: '#09203e', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                    <div style={{ position: 'absolute', top: 20, right: 20, padding: '6px 12px', background: 'var(--color-brand-accent)', borderRadius: '100px', color: '#fff', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                       Registration Open
                     </div>
                   )}

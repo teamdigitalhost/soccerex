@@ -617,7 +617,9 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 /* ─── CTA buttons ────────────────────────────────────────────────────────── */
 .hero-cta-gold {
   background: var(--color-brand-accent);
-  color: #09203e;
+  /* White reads cleanly on the Miami-pink accent; navy on pink was
+     low-contrast and hard to read. */
+  color: #fff;
 }
 .hero-cta-gold:hover {
   background: var(--color-brand-accent-light);
@@ -1718,7 +1720,9 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 }
 .home-event-cta--solid {
   background: var(--color-brand-accent, #bfb170);
-  color: #09203e;
+  /* White reads cleanly on the pink accent; navy on pink was
+     low-contrast and hard to read. */
+  color: #fff;
   border: 1px solid var(--color-brand-accent, #bfb170);
 }
 .home-event-cta--solid:hover {

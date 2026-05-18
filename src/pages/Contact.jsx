@@ -469,7 +469,7 @@ export default function Contact() {
                   : <>We'll route your message to the right team and reply by email.</>}
               </p>
               <button type="submit" disabled={submitting || submitted} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
-                style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: submitting ? 'wait' : 'pointer', transition: 'all 0.25s', opacity: submitting ? 0.7 : 1 }}
+                style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '16px 36px', fontSize: '0.82rem', border: 'none', cursor: submitting ? 'wait' : 'pointer', transition: 'all 0.25s', opacity: submitting ? 0.7 : 1 }}
                 onMouseEnter={(e) => { if (!submitting) e.currentTarget.style.background = '#d4c78e' }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >

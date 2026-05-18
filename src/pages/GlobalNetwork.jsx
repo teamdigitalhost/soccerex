@@ -443,7 +443,7 @@ export default function GlobalNetwork() {
                       <img src={p.img} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(9,32,62,0.15) 40%, rgba(9,32,62,0.95) 100%)' }} />
                       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '24px' }}>
-                        <span style={{ display: 'inline-block', padding: '4px 10px', background: 'var(--color-brand-accent)', color: '#09203e', borderRadius: '100px', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '12px' }}>
+                        <span style={{ display: 'inline-block', padding: '4px 10px', background: 'var(--color-brand-accent)', color: '#fff', borderRadius: '100px', fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '12px' }}>
                           Live at Soccerex
                         </span>
                         <h3 className="font-heading font-bold" style={{ color: '#fff', fontSize: '1.25rem', letterSpacing: '0.02em' }}>{p.label}</h3>
@@ -528,7 +528,7 @@ export default function GlobalNetwork() {
               <button
                 onClick={() => setShowAll(true)}
                 className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] cursor-pointer border-none"
-                style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', transition: 'all 0.3s' }}
+                style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '16px 36px', fontSize: '0.85rem', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >
@@ -631,7 +631,7 @@ export default function GlobalNetwork() {
                 Keeping abreast of the rapidly changing football business environment is key. Our comprehensive newsfeed provides the latest trends and updates from influential industry players. Consider it your one-stop solution for all football industry news.
               </p>
               <Link to={INSIGHTS} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up"
-                style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
+                style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '16px 36px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >
@@ -681,7 +681,7 @@ export default function GlobalNetwork() {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
               <Link to={`${CONTACT}?type=host`} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-                style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
+                style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-red)' }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >

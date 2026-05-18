@@ -510,7 +510,7 @@ export default function About() {
           </p>
           <div className="flex flex-wrap justify-center gap-4 fade-up">
             <Link to={EUROPE_2026} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
-              style={{ background: 'var(--color-brand-accent)', color: '#09203e', textDecoration: 'none' }}
+              style={{ background: 'var(--color-brand-accent)', color: '#fff', textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)'; e.currentTarget.style.transform = 'translateY(0)' }}>
               Next Event <ArrowRight size={16} />

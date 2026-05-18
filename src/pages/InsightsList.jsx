@@ -355,7 +355,7 @@ function NewsletterForm() {
       />
       <button type="submit" disabled={status === 'submitting'}
         className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] w-full cursor-pointer border-none"
-        style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s', opacity: status === 'submitting' ? 0.7 : 1 }}
+        style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '14px 24px', fontSize: '0.82rem', borderRadius: '8px', transition: 'all 0.3s', opacity: status === 'submitting' ? 0.7 : 1 }}
         onMouseEnter={(e) => { if (status !== 'submitting') e.currentTarget.style.background = '#d4c78e' }}
         onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
       >

@@ -304,7 +304,7 @@ export default function SoccerexApp() {
               />
             </div>
             <button type="submit" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] w-full justify-center"
-              style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.85rem', border: 'none', cursor: 'pointer', borderRadius: '8px', transition: 'all 0.3s' }}
+              style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '16px 36px', fontSize: '0.85rem', border: 'none', cursor: 'pointer', borderRadius: '8px', transition: 'all 0.3s' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
             >

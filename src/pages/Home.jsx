@@ -56,7 +56,7 @@ function HeroSection() {
         <div className="flex flex-wrap items-center justify-center gap-3 fade-up">
           <Link to={EVENTS}
             className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none"
-            style={{ background: 'var(--color-brand-accent)', color: '#0D1B2A', textDecoration: 'none' }}
+            style={{ background: 'var(--color-brand-accent)', color: '#fff', textDecoration: 'none' }}
             onMouseEnter={e => e.currentTarget.style.background = '#d4c78e'}
             onMouseLeave={e => e.currentTarget.style.background = 'var(--color-brand-accent)'}>
             Explore Events
@@ -577,7 +577,7 @@ function EventsSection() {
                       </div>
                     )}
                     {event.status === 'open' && (
-                      <div style={{ alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px', background: 'var(--color-brand-accent)', borderRadius: '100px', color: '#09203e', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                      <div style={{ alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px', background: 'var(--color-brand-accent)', borderRadius: '100px', color: '#fff', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                         Registration Open
                       </div>
                     )}
@@ -1428,7 +1428,7 @@ function FinalCTASection() {
         </h2>
         <div className="fade-up">
           <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-10 py-5 transition-all duration-300 cursor-pointer border-none"
-            style={{ background: 'var(--color-brand-accent)', color: '#09203e', fontSize: '0.95rem', textDecoration: 'none' }}
+            style={{ background: 'var(--color-brand-accent)', color: '#fff', fontSize: '0.95rem', textDecoration: 'none' }}
             onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)'; e.currentTarget.style.transform = 'translateY(0)' }}>
             Join Soccerex

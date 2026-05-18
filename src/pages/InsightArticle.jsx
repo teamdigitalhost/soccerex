@@ -117,7 +117,7 @@ export default function InsightArticle() {
 
           {/* Excerpt as lede */}
           {article.excerpt && (
-            <p className="font-body leading-relaxed mb-8" style={{ fontSize: '1.2rem', color: '#09203e', fontWeight: 500, borderLeft: '4px solid var(--color-brand-accent)', paddingLeft: '20px' }}>
+            <p className="font-body leading-relaxed mb-8" style={{ fontSize: '1.2rem', color: '#fff', fontWeight: 500, borderLeft: '4px solid var(--color-brand-accent)', paddingLeft: '20px' }}>
               {article.excerpt}
             </p>
           )}
