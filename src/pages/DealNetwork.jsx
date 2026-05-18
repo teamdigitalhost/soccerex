@@ -10,6 +10,7 @@ import PixelDivider from '../components/PixelDivider'
 import { submitDealNetworkIntake } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { CONTACT, MIAMI_2026, PROFILE_ACCESS } from '../lib/routes'
+import { NEED_OFFER_OPTIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 /* ═══ Deal Network — public concierge intake ════════════════════════════════
@@ -107,6 +108,10 @@ const EMPTY_FORM = {
   one_sentence_pitch: '',
   ideal_counterpart: '',
   named_targets: '',
+  looking_for: [],
+  can_offer: [],
+  pain_points: [],
+  pain_point_detail: '',
   primary_geography: '',
   leagues_competitions: [],
   excluded_regions: [],
@@ -184,6 +189,10 @@ export default function DealNetwork() {
         deal_description: form.deal_description.trim() || undefined,
         ideal_counterpart: form.ideal_counterpart.trim() || undefined,
         named_targets: splitCsv(form.named_targets),
+        looking_for: form.looking_for,
+        can_offer: form.can_offer,
+        pain_points: form.pain_points,
+        pain_point_detail: form.pain_point_detail.trim() || undefined,
         primary_geography: form.primary_geography || undefined,
         leagues_competitions: form.leagues_competitions,
         excluded_regions: form.excluded_regions,
@@ -200,7 +209,10 @@ export default function DealNetwork() {
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
       }
       const result = await submitDealNetworkIntake(payload, { test: isTest })
-      setSubmitResult(result || null)
+      setSubmitResult({
+        ...(result || {}),
+        _incomplete: form.looking_for.length === 0 || form.pain_points.length === 0,
+      })
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
       setSubmitError(err?.message || 'We could not submit your brief. Please email partner@soccerex.com directly.')
@@ -379,8 +391,32 @@ export default function DealNetwork() {
 
             <Divider />
 
-            {/* Section 3: Geography & shape */}
-            <SectionHeader number="03" title="Geography, budget, and timing" subtitle="Helps us avoid wasting your time on the wrong room." />
+            {/* Section: Commercial signals (optional now, completes your brief) */}
+            <SectionHeader number="03" title="What you need, what you bring, what hurts" subtitle="Optional now, but your brief is only matched once you have declared at least one need and one pain point. You can complete this later from your portal." />
+
+            <div className="mb-5">
+              <Label>What you are looking for</Label>
+              <KeyChipGroup options={NEED_OFFER_OPTIONS} value={form.looking_for} onChange={(v) => update('looking_for', v)} />
+            </div>
+
+            <div className="mb-5">
+              <Label>What you can offer</Label>
+              <KeyChipGroup options={NEED_OFFER_OPTIONS} value={form.can_offer} onChange={(v) => update('can_offer', v)} />
+            </div>
+
+            <div className="mb-5">
+              <Label>Pain points you are trying to solve</Label>
+              <KeyChipGroup options={PAIN_OPTIONS} value={form.pain_points} onChange={(v) => update('pain_points', v)} />
+            </div>
+
+            <div className="mb-2">
+              <FormField textarea rows={2} label="Pain point detail (optional)" value={form.pain_point_detail} onChange={(v) => update('pain_point_detail', v)} placeholder="In your words: what is the actual problem, and what would solving it unlock?" />
+            </div>
+
+            <Divider />
+
+            {/* Section 4: Geography & shape */}
+            <SectionHeader number="04" title="Geography, budget, and timing" subtitle="Helps us avoid wasting your time on the wrong room." />
 
             <div className="mb-5">
               <Label>Primary geography</Label>
@@ -399,8 +435,8 @@ export default function DealNetwork() {
 
             <Divider />
 
-            {/* Section 4: Event */}
-            <SectionHeader number="04" title="Soccerex event objectives" subtitle="If you have one in mind. If not, leave this blank." />
+            {/* Section 5: Event */}
+            <SectionHeader number="05" title="Soccerex event objectives" subtitle="If you have one in mind. If not, leave this blank." />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <SelectField icon={MapPin} label="Which Soccerex event" value={form.event_slug} onChange={(v) => update('event_slug', v)} options={EVENT_OPTIONS} />
@@ -417,8 +453,8 @@ export default function DealNetwork() {
 
             <Divider />
 
-            {/* Section 5: Context */}
-            <SectionHeader number="05" title="Anything else worth knowing" subtitle="Context, sensitivities, or supporting links." />
+            {/* Section 6: Context */}
+            <SectionHeader number="06" title="Anything else worth knowing" subtitle="Context, sensitivities, or supporting links." />
 
             <div className="grid grid-cols-1 gap-4 mb-4">
               <FormField textarea rows={3} label="Deeper context (optional)" value={form.deal_description} onChange={(v) => update('deal_description', v)} placeholder="Longer explanation if the one-line pitch doesn't capture it. History, scope, what 'good' looks like." />
@@ -513,6 +549,18 @@ function ConfirmationView({ result, side }) {
           <p className="font-body text-white/55 leading-relaxed mx-auto" style={{ fontSize: '0.92rem', maxWidth: '560px' }}>
             Expect to hear from a real person, usually within two business days. Nothing about your brief is public; we only share what is needed to make a single introduction make sense.
           </p>
+
+          {result?._incomplete && (
+            <div className="mt-8 mx-auto" style={{ maxWidth: '560px', background: 'rgba(233,30,99,0.12)', border: '1px solid rgba(233,30,99,0.35)', borderRadius: 12, padding: '18px 22px' }}>
+              <p className="font-body" style={{ fontSize: '0.92rem', color: '#fff', lineHeight: 1.55 }}>
+                Your brief is in, but it is not yet match-ready. Add at least one thing you are looking for and one pain point from your{' '}
+                <Link to={withTestSearch(PROFILE_ACCESS)} style={{ color: 'var(--color-brand-accent)', fontWeight: 600, textDecoration: 'underline' }}>
+                  Deal Network portal
+                </Link>{' '}
+                so we can start matching.
+              </p>
+            </div>
+          )}
 
           {data.id && (
             <p className="font-mono uppercase tracking-[0.18em] mt-8" style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.42)' }}>
@@ -660,6 +708,38 @@ function ChipGroup({ options, value, onChange, single = false }) {
             onMouseLeave={(e) => { if (!active) e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
           >
             {opt}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function KeyChipGroup({ options, value, onChange }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((opt) => {
+        const active = value.includes(opt.key)
+        return (
+          <button
+            key={opt.key}
+            type="button"
+            onClick={() => onChange(arrayToggle(value, opt.key))}
+            style={{
+              background: active ? '#09203e' : '#f8f7f4',
+              color: active ? '#fff' : '#09203e',
+              border: `1px solid ${active ? '#09203e' : 'rgba(9,32,62,0.12)'}`,
+              borderRadius: 999,
+              padding: '8px 14px',
+              fontSize: '0.82rem',
+              fontFamily: 'Inter, sans-serif',
+              cursor: 'pointer',
+              transition: 'all 0.18s',
+            }}
+            onMouseEnter={(e) => { if (!active) e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
+            onMouseLeave={(e) => { if (!active) e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
+          >
+            {opt.label}
           </button>
         )
       })}
