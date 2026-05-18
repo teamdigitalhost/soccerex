@@ -4,7 +4,7 @@ import { ArrowRight, Search, Calendar, Mail, ChevronRight } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import {
-  getContentPillars, getArticlesByPillar, submitLead,
+  getArticles, submitLead,
 } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { Loader2, Check } from 'lucide-react'
@@ -33,11 +33,9 @@ export default function InsightsList() {
 
   /* Articles come from two sources:
        1. The static /insights-manifest.json (legacy WP export)
-       2. The Soccerex marketing CMS — each content pillar surfaces its
-          long-form articles via getArticlesByPillar(slug). Pillars are
-          treated as an internal taxonomy; visitors only see articles, with
-          the pillar name reused as the article's category so existing
-          filtering and search work without changes.
+       2. The Soccerex CMS /articles endpoint. Internal editorial labels and
+          related events are flattened into normal Insight categories so
+          visitors only see articles under /insights.
      We merge both lists, dedupe by slug, and sort newest first. The page
      paints as soon as either source resolves so visitors aren't waiting
      on the slowest network. */
@@ -65,16 +63,10 @@ export default function InsightsList() {
       .then((data) => { if (!cancelled) { manifest = Array.isArray(data) ? data : []; merge() } })
       .catch(() => { /* missing manifest is fine; CMS still paints */ })
 
-    getContentPillars({ test })
-      .then(async (pillars) => {
-        if (cancelled || !Array.isArray(pillars)) return
-        const lists = await Promise.all(pillars.map((p) =>
-          getArticlesByPillar(p.slug, { test })
-            .catch(() => [])
-            .then((items) => ({ pillar: p, items: Array.isArray(items) ? items : [] }))
-        ))
-        if (cancelled) return
-        cms = lists.flatMap(({ pillar, items }) => items.map((a) => normalizeCmsArticle(a, pillar)))
+    getArticles({ limit: 100 }, { test })
+      .then((items) => {
+        if (cancelled || !Array.isArray(items)) return
+        cms = items.map((a) => normalizeCmsArticle(a))
         merge()
       })
       .catch(() => { /* CMS unreachable; manifest still paints */ })
@@ -367,17 +359,19 @@ function NewsletterForm() {
 }
 
 /* Normalize a CMS article into the manifest's shape:
-   { id, slug, title, excerpt, date, categories, featuredImage }
-   Pillar name (or audience, as a fallback) becomes the article's category so
-   the existing sidebar filter buckets CMS articles correctly. */
-function normalizeCmsArticle(a, pillar) {
+   { id, slug, title, excerpt, date, categories, featuredImage } */
+function normalizeCmsArticle(a) {
   const slug = a.slug || a.id || ''
   const title = a.title || a.name || 'Untitled'
   const excerpt = a.excerpt || a.summary || a.dek || ''
   const date = (a.published_at || a.date || '').slice(0, 10)
   const image = a.hero_image_url || a.featured_image || a.image || ''
-  const pillarLabel = pillar?.name || pillar?.audience || null
-  const categories = [pillarLabel, ...(Array.isArray(a.categories) ? a.categories : [])].filter(Boolean)
+  const categories = uniqueLabels([
+    a.category,
+    a.editorial_label?.name,
+    a.event?.name,
+    ...(Array.isArray(a.categories) ? a.categories : []),
+  ])
   return {
     id: `cms-${slug}`,
     slug,
@@ -386,18 +380,27 @@ function normalizeCmsArticle(a, pillar) {
     date,
     categories: categories.length ? categories : ['Insight'],
     featuredImage: image,
-    /* Preserve the CMS-hosted canonical URL when one is provided so the row
-       can open it externally instead of routing through /insights/:slug. */
-    externalUrl: a.url || null,
+    externalUrl: null,
   }
+}
+
+function uniqueLabels(values) {
+  const seen = new Set()
+  return values
+    .map((value) => String(value || '').trim())
+    .filter((value) => {
+      if (!value || seen.has(value)) return false
+      seen.add(value)
+      return true
+    })
 }
 
 // ─── Article row (image when available, text-forward otherwise) ─────────────
 function ArticleRow({ article, index }) {
   const displayCats = article.categories.filter((c) => c !== 'Uncategorized')
   const hasImage = !!article.featuredImage
-  /* CMS-hosted articles ship a canonical external URL; the legacy manifest
-     content lives at /insights/:slug. ArticleLink hides that difference. */
+  /* Legacy manifest records can still carry external URLs. Native CMS
+     articles always route through /insights/:slug. */
   const isExternal = !!article.externalUrl
   const ArticleLink = ({ children, className, style }) => isExternal
     ? <a href={article.externalUrl} target="_blank" rel="noreferrer" className={className} style={style}>{children}</a>

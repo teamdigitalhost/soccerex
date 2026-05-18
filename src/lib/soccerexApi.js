@@ -104,10 +104,23 @@ export async function submitProgrammingProposal(slug, payload, opts = {}) {
   }))
 }
 
-/* ───── Marketing CMS: content pillars + articles + social posts ─────────
-   The pillar is the strategy layer. Articles are owned long-form content
-   tied to a pillar. Social posts are platform-specific satellites of
-   either a pillar or an article. */
+/* ───── Insights CMS: articles + internal editorial labels + social posts ─
+   Articles are the public content type. Editorial labels remain an internal
+   planning taxonomy for filtering and social strategy, not a public section. */
+
+export async function getArticles(filters = {}, opts = {}) {
+  const { test: filterTest, ...queryFilters } = filters
+  const { test = filterTest, signal } = opts
+  const qs = new URLSearchParams()
+
+  Object.entries(queryFilters).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === '') return
+    qs.set(key, String(value))
+  })
+
+  const path = qs.toString() ? `/articles?${qs.toString()}` : '/articles'
+  return unwrap(await request(path, { test, signal }))
+}
 
 export async function getContentPillars(opts = {}) {
   return unwrap(await request('/content-pillars', opts))
@@ -118,7 +131,7 @@ export async function getContentPillar(slug, opts = {}) {
 }
 
 export async function getArticlesByPillar(slug, opts = {}) {
-  return unwrap(await request(`/articles?pillar=${encodeURIComponent(slug)}`, opts))
+  return getArticles({ label: slug }, opts)
 }
 
 export async function getArticle(slug, opts = {}) {

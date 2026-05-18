@@ -197,13 +197,18 @@ export default function InsightArticle() {
 function normalizeCmsArticleDetail(a) {
   const slug = a.slug || ''
   const title = a.title || 'Untitled'
-  const category = a.pillar?.name || a.category || 'Insight'
+  const categories = uniqueLabels([
+    a.category,
+    a.editorial_label?.name,
+    a.event?.name,
+    ...(Array.isArray(a.categories) ? a.categories : []),
+  ])
   return {
     id: `cms-${a.id || slug}`,
     slug,
     title,
     excerpt: a.excerpt || '',
-    categories: [category].filter(Boolean),
+    categories: categories.length ? categories : ['Insight'],
     date: formatCmsDate(a.published_at),
     featuredImage: a.hero_image_url || a.og_image_url || '',
     paragraphs: bodyToParagraphs(a.body),
@@ -221,4 +226,15 @@ function bodyToParagraphs(body) {
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean)
+}
+
+function uniqueLabels(values) {
+  const seen = new Set()
+  return values
+    .map((value) => String(value || '').trim())
+    .filter((value) => {
+      if (!value || seen.has(value)) return false
+      seen.add(value)
+      return true
+    })
 }
