@@ -138,6 +138,7 @@ export default function DealNetworkPortalSection({ slug, editToken, isTest, onUn
 
       {editorOpen && (
         <IntakeEditor
+          key={editingIntake?.id ?? 'new'}
           slug={slug}
           editToken={editToken}
           isTest={isTest}
@@ -794,7 +795,7 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
                 onChange={(e) => setForm((f) => ({ ...f, pain_point_detail: e.target.value }))}
                 placeholder="Pain point detail (optional): what is the real problem?"
                 rows={2}
-                style={{ width: '100%', marginTop: 12, padding: '10px 12px', border: '1px solid rgba(9,32,62,0.14)', borderRadius: 8, fontSize: '0.88rem' }}
+                style={{ width: '100%', marginTop: 12, padding: '10px 12px', border: '1px solid rgba(9,32,62,0.14)', borderRadius: 8, fontSize: '0.88rem', boxSizing: 'border-box' }}
               />
             </div>
           )
