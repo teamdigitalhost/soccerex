@@ -211,7 +211,7 @@ export default function DealNetwork() {
       const result = await submitDealNetworkIntake(payload, { test: isTest })
       setSubmitResult({
         ...(result || {}),
-        _incomplete: form.looking_for.length === 0 || form.pain_points.length === 0,
+        _uiIncomplete: form.looking_for.length === 0 || form.pain_points.length === 0,
       })
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
@@ -550,7 +550,7 @@ function ConfirmationView({ result, side }) {
             Expect to hear from a real person, usually within two business days. Nothing about your brief is public; we only share what is needed to make a single introduction make sense.
           </p>
 
-          {result?._incomplete && (
+          {result?._uiIncomplete && (
             <div className="mt-8 mx-auto" style={{ maxWidth: '560px', background: 'rgba(233,30,99,0.12)', border: '1px solid rgba(233,30,99,0.35)', borderRadius: 12, padding: '18px 22px' }}>
               <p className="font-body" style={{ fontSize: '0.92rem', color: '#fff', lineHeight: 1.55 }}>
                 Your brief is in, but it is not yet match-ready. Add at least one thing you are looking for and one pain point from your{' '}
