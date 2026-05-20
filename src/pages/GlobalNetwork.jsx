@@ -262,10 +262,10 @@ const ALL_SHUFFLED = shuffle(LOGOS, 101)
 
 // Pillars of engagement (flip to show contextual event imagery per pillar)
 const PILLARS = [
-  { icon: Users,     label: 'ATTEND',  desc: 'Tap into three decades of meaningful football business relationships.',   img: '/hero/160-NEW6-europe-packed-audience-soccerex-branding.jpg' },
-  { icon: Megaphone, label: 'SPONSOR', desc: 'Align your brand with the global leaders shaping football\'s future.',    img: '/events/europe/2026/sections/event-vip-reception.webp' },
-  { icon: Globe,     label: 'EXHIBIT', desc: 'Showcase your products and services to the industry\'s most influential buyers.', img: '/events/europe/2026/sections/event-exhibitor.jpg' },
-  { icon: Handshake, label: 'CONNECT', desc: 'Build the partnerships that will define the next era of the game.',       img: '/hero/174-NEW6-miami-networking-blue-purple-outdoor.jpg' },
+  { icon: Users,     label: 'ATTEND',  desc: "Join the leaders shaping football's commercial future across clubs, leagues, federations, brands, media, technology, investment, and impact.", img: '/hero/160-NEW6-europe-packed-audience-soccerex-branding.jpg' },
+  { icon: Megaphone, label: 'SPONSOR', desc: 'Position your brand at the center of the football business ecosystem through high-value visibility, executive access, and strategic activation.', img: '/events/europe/2026/sections/event-vip-reception.webp' },
+  { icon: Globe,     label: 'EXHIBIT', desc: 'Showcase your products, services, technology, and solutions to the decision-makers driving growth across the global game.', img: '/events/europe/2026/sections/event-exhibitor.jpg' },
+  { icon: Handshake, label: 'CONNECT', desc: 'Access curated introductions through Soccerex Deal Network, linking football decision-makers with capital partners, sponsors, investors, and strategic counterparties.', img: '/hero/174-NEW6-miami-networking-blue-purple-outdoor.jpg' },
 ]
 
 // Stats bar numbers
@@ -382,16 +382,17 @@ export default function GlobalNetwork() {
           backgroundSize: '60px 60px',
         }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <p className="section-label mb-6 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>GLOBAL EVENTS, WHERE THE FOOTBALL WORLD MEETS</p>
+          <p className="section-label mb-6 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>FROM EVENTS TO OUTCOMES</p>
           <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.3rem)', color: '#09203e' }}>
-            Soccerex isn't just a company.
+            Soccerex is the Global Football{' '}
+            <span style={{ color: 'var(--color-brand-accent)' }}>Business Ecosystem</span>
           </h2>
-          <h3 className="font-heading font-bold leading-tight mb-8 fade-up" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', color: 'var(--color-brand-accent)' }}>
-            We're a comprehensive ecosystem.
+          <h3 className="font-heading font-bold leading-tight mb-8 fade-up" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.2rem)', color: '#09203e' }}>
+            Where relationships become partnerships, and partnerships become business.
           </h3>
           <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.2rem)', color: '#333', maxWidth: '760px' }}>
-            Soccerex empowers and connects the global football industry. As the game continues to evolve, we're here leading the charge, helping to shape the future of football. Join us on this exciting journey.
+            Soccerex connects the people, capital, ideas, and organizations shaping the future of football. Through world-class events, Soccerex Deal Network, HerSoccerex, strategic partnerships, and market insight, we create the environment where the global football industry comes together to build, invest, grow, and drive lasting impact.
           </p>
         </div>
       </section>
@@ -406,8 +407,8 @@ export default function GlobalNetwork() {
           <div className="text-center mb-16">
             <p className="section-label text-brand-accent mb-4 fade-up">FOUR WAYS TO ENGAGE</p>
             <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
-              Tap into Three Decades of{' '}
-              <span style={{ color: 'var(--color-brand-accent)' }}>Connections</span>
+              Tap Into the Global Football{' '}
+              <span style={{ color: 'var(--color-brand-accent)' }}>Business Platform</span>
             </h2>
             <div className="fade-up mx-auto" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           </div>
@@ -481,14 +482,14 @@ export default function GlobalNetwork() {
       {/* ═══ LOGO MARQUEE ═══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(80px,10vw,140px) 0' }}>
         <div className="text-center mb-14 px-6">
-          <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>THREE DECADES OF CONNECTIONS</p>
+          <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>THE GLOBAL FOOTBALL BUSINESS ECOSYSTEM</p>
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: '#09203e' }}>
-            Partners Across the{' '}
-            <span style={{ color: 'var(--color-brand-accent)' }}>Football World</span>
+            Connecting the People and Partners{' '}
+            <span style={{ color: 'var(--color-brand-accent)' }}>Shaping Football&apos;s Future</span>
           </h2>
           <div className="fade-up mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
-          <p className="font-body fade-up mx-auto" style={{ fontSize: '1.05rem', color: '#555', maxWidth: '700px' }}>
-            Federations, leagues, clubs, brands, broadcasters, investors, technology innovators, and media partners. The global football industry, under one roof.
+          <p className="font-body fade-up mx-auto" style={{ fontSize: '1.05rem', color: '#555', maxWidth: '820px' }}>
+            Soccerex brings together clubs, leagues, federations, governing bodies, brands, broadcasters, investors, family offices, funds, lenders, rightsholders, technology innovators, agencies, advisors, venues, host cities, women&apos;s football leaders, and impact-driven organizations.
           </p>
         </div>
         <div className="fade-up" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
@@ -507,12 +508,12 @@ export default function GlobalNetwork() {
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
           <div className="text-center mb-16" style={{ maxWidth: '960px', margin: '0 auto 64px' }}>
-            <p className="section-label text-brand-accent mb-6 fade-up">THREE DECADES OF CONNECTIONS</p>
+            <p className="section-label text-brand-accent mb-6 fade-up">THREE DECADES OF GLOBAL FOOTBALL BUSINESS</p>
             <h2 className="font-heading font-semibold text-white leading-[1.25] fade-up" style={{ fontSize: 'clamp(1.35rem, 2.4vw, 2.1rem)' }}>
-              Soccerex events provide the industry's leading professionals with a variety of{' '}
-              <span style={{ color: 'var(--color-brand-accent)' }}>formal and informal networking platforms</span>
-              {' '}to help build and strengthen{' '}
-              <span style={{ color: 'var(--color-brand-accent)' }}>professional relationships</span>.
+              Soccerex is built for more than networking. It is built for{' '}
+              <span style={{ color: 'var(--color-brand-accent)' }}>outcomes</span>
+              , connecting football with capital, brands with rightsholders, clubs with investors, and ideas with the{' '}
+              <span style={{ color: 'var(--color-brand-accent)' }}>partners needed to scale them</span>.
             </h2>
             <div className="fade-up mx-auto mt-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           </div>

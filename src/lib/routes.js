@@ -33,6 +33,10 @@ export const EUROPE_2026     = '/europe-2026'
 export const RIYADH_2027     = '/riyadh-2027'
 
 /* ─── Per-event API-driven pages ───────────────────────────────────────── */
+// Public label for this page is "Program Themes". Internally and in the URL
+// it stays "agenda-concept" — that is Soccerex's planning-vocabulary name
+// for the upcoming program of themes. Keep the slug stable so external
+// links + internal scripts don't break.
 export const eventAgendaConcept = (slug) => `${EVENTS}/${encodeURIComponent(slug)}/agenda-concept`
 export const eventTopics        = (slug) => `${EVENTS}/${encodeURIComponent(slug)}/topics`
 export const eventAgenda        = (slug) => `${EVENTS}/${encodeURIComponent(slug)}/agenda`

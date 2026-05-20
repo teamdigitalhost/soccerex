@@ -32,21 +32,21 @@ const PILLARS_BRAND = [
 ]
 
 const WHY_ATTEND = [
-  { title: 'The Americas Converge', desc: 'MLS, Liga MX, CONCACAF, CONMEBOL and the investors reshaping football in the Western Hemisphere, in one room.' },
-  { title: 'After the Final Whistle', desc: 'Months after the 2026 FIFA World Cup, Miami is where the industry converts tournament momentum into lasting commercial growth.' },
-  { title: 'Executive Networking', desc: 'Curated introductions with clubs, federations, leagues, rightsholders, brands and capital partners.' },
-  { title: 'Signature Social Program', desc: 'Evening receptions and VIP experiences set against the Miami waterfront.' },
+  { title: 'Global Football in One Room', desc: 'Clubs, leagues, federations, rightsholders, brands, investors, financial institutions, technology leaders, and impact-driven organizations come together to shape the future of the global football economy.' },
+  { title: 'Where Momentum Becomes Business', desc: 'In the wake of the 2026 FIFA World Cup, Soccerex Miami turns global attention into commercial growth, strategic partnerships, investment opportunities, closed business, and measurable impact.' },
+  { title: 'Deal Network Access', desc: 'Through Soccerex Deal Network, attendees gain curated access to decision-makers, capital partners, strategic investors, family offices, funds, lenders, sponsors, and commercial counterparties focused on real outcomes.' },
+  { title: 'Capital, Impact, and Growth', desc: "Soccerex brings the financial industry closer to the business of football, creating a platform to fund growth, share insight, expand women's football, support innovation, and drive lasting commercial and social impact." },
 ]
 
 const THEMES = [
-  'CONCACAF, CONMEBOL, MLS, and LIGA MX growth engine',
-  'Broadcasting, media rights and streaming',
-  'Club ownership and investment in the Americas',
-  'The 2026 World Cup: commercial and operational playbook',
-  'Stadium development and matchday experience in a World Cup host city',
-  "Women's football in the USA, Canada and Mexico",
-  'Fan engagement, creator economy and brand activation',
-  'Talent pathways across North, Central and South America',
+  'The Global Football Economy: Clubs, Leagues, Federations, Brands, Investors, and Rightsholders',
+  'Capital, Investment, Club Ownership, and the Financial Future of Football',
+  'Soccerex Deal Network: Curated Introductions, Strategic Partnerships, and Closed Business',
+  'The 2026 FIFA World Cup and Beyond: Commercial Growth, Legacy, and Global Opportunity',
+  'Media Rights, Streaming, Content, Technology, and New Revenue Models',
+  'Stadiums, Venues, Matchday Experience, and Host City Development',
+  "HerSoccerex: Women's Football, Investment, Leadership, and Commercial Growth",
+  'Innovation, Impact, Fan Engagement, Brand Activation, and the Future of the Game',
 ]
 
 /* Generic Miami pre-register — quick path. Anyone who wants the launch ping. */
@@ -101,7 +101,7 @@ function RightsHolderForm() {
       theme="dark"
       submitLabel="Submit application"
       successTitle="Application received."
-      successBody="The Soccerex team reviews rights-holder eligibility and will email you. Passes are not issued automatically."
+      successBody="The Soccerex team reviews rightsholder eligibility and will email you. Passes are not issued automatically."
       extraPayload={{
         event_slug: 'soccerex-miami-2026',
         attendee_type: 'rights_holder',
@@ -186,11 +186,9 @@ export default function Miami2026() {
             {/* Primary brand lockup */}
             <img src={`${GFX}/logo-primary.svg`} alt="Soccerex Miami 2026" className="miami-hero-logo" />
 
-            {/* Tagline */}
-            <p className="miami-subhead mt-7 mb-2" style={{ color: '#007C91', fontSize: 'clamp(11px, 1vw, 13px)', letterSpacing: '0.28em' }}>
-              Where Global Football Meets Miami
-            </p>
-            <h1 className="miami-headline mb-8" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', color: '#0D1B2A', lineHeight: 1.15, letterSpacing: '0.01em', maxWidth: '640px' }}>
+            {/* Tagline removed per GN revisions doc. Hero now goes straight
+                from the brand lockup into the headline. */}
+            <h1 className="miami-headline mt-7 mb-8" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', color: '#0D1B2A', lineHeight: 1.15, letterSpacing: '0.01em', maxWidth: '640px' }}>
               The world came for the World Cup.<br />
               <span style={{ color: '#E91E63' }}>The industry stays for Soccerex.</span>
             </h1>
@@ -208,10 +206,25 @@ export default function Miami2026() {
             </div>
 
             <div className="flex flex-wrap gap-3 items-center">
-              <a href="#pre-register" className="miami-pill-primary"><Mail size={15} /> Pre-register Now</a>
+              <a
+                href="https://soccerexmiami2026.eventify.io/t2/tickets/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miami-pill-primary"
+              >
+                <Mail size={15} /> Buy Tickets
+              </a>
+              <a
+                href="https://soccerexmiami2026.eventify.io/t2/tickets/79DF37"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miami-pill-outline"
+              >
+                <Trophy size={15} /> Rightsholder Tickets
+              </a>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 mt-5" style={{ maxWidth: 560 }}>
+            <div className="grid grid-cols-2 gap-3 mt-5" style={{ maxWidth: 420 }}>
               <InquiryModalButton
                 kind="sponsorship-inquiry"
                 label="Sponsor"
@@ -238,19 +251,8 @@ export default function Miami2026() {
                 successBody="An exhibitor lead will follow up by email."
                 buttonClassName="miami-cta-box"
               />
-              <InquiryModalButton
-                kind="speaker-inquiry"
-                label="Speak"
-                modalTitle="Speak at Soccerex Miami"
-                eyebrow="Speaker interest"
-                intro="Tell us who you are and what you would talk about. The program team will reach out if there is a fit."
-                schema={speakerSchema}
-                extraPayload={{ event_slug: 'soccerex-miami-2026', inquiry_intent: 'speak', source: 'miami-hero-speak' }}
-                submitLabel="Send"
-                successTitle="Thanks, we have your details."
-                successBody="The program team will reach out if there is a fit."
-                buttonClassName="miami-cta-box"
-              />
+              {/* Speaker CTA removed per GN revisions doc — Miami hero now
+                  surfaces Sponsor + Exhibit only. */}
             </div>
           </div>
 
@@ -314,20 +316,22 @@ export default function Miami2026() {
               <div className="absolute" style={{ right: -14, bottom: -14, width: 96, height: 96, border: '2px solid #007C91', zIndex: -1 }} />
             </div>
             <div>
-              <p className="miami-kicker">Where global football meets Miami</p>
               <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
                 What is <span style={{ color: '#E91E63' }}>Soccerex Miami</span>?
               </h2>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-                Soccerex Miami is the flagship gathering for the business of football across the Americas. Three days of high-impact content, executive networking, brand activation and industry insight, in the wake of the 2026 FIFA World Cup.
+                Soccerex Miami is the flagship business platform for football across the Americas, bringing together clubs, leagues, federations, investors, brands, rightsholders, solution providers, and financial leaders at a defining moment for the game.
+              </p>
+              <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+                Across three days of world-class content, curated executive networking, brand activation, market insight, and dealmaking, Soccerex Miami creates the environment where relationships turn into partnerships and opportunities turn into closed business. Through Soccerex Deal Network, the event connects football decision-makers with capital, strategic partners, and the broader financial industry, helping drive commercial growth, investment, innovation, and measurable impact across the region.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-                Clubs, leagues, federations, investors, rightsholders and solution providers from across North, Central and South America come together to shape the commercial future of the sport in the region driving its next chapter.
+                In the wake of the 2026 FIFA World Cup, Soccerex Miami will be where the next chapter of football is shaped, funded, and accelerated.
               </p>
             </div>
           </div>
 
-          <h3 className="miami-headline mb-6" style={{ fontSize: 'clamp(1.2rem, 2vw, 1.5rem)', color: '#0D1B2A' }}>Three Days of Insightful Content</h3>
+          <h3 className="miami-headline mb-6" style={{ fontSize: 'clamp(1.2rem, 2vw, 1.5rem)', color: '#0D1B2A' }}>Three Days of Global Football Business, Dealmaking, and Impact</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {THEMES.map((theme) => (
               <div key={theme} className="flex items-center gap-4 px-5 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)' }}>
@@ -411,40 +415,58 @@ export default function Miami2026() {
         </div>
       </section>
 
-      {/* ─── PRE-REGISTER + RIGHTS HOLDERS (dark for form contrast) ─────── */}
-      <section id="pre-register" className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0D1B2A 0%, #102538 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+      {/* ─── TICKETS + RIGHTS HOLDERS (dark for contrast) ──────────────── */}
+      <section id="tickets" className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0D1B2A 0%, #102538 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <div className="absolute inset-0 miami-grid" style={{ opacity: 0.3 }} />
         <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="flex justify-center mb-3">
-            <span className="event-badge"><span className="event-badge-dot" /> Early Access</span>
+            <span className="event-badge"><span className="event-badge-dot" /> Now on sale</span>
           </div>
           <h2 className="miami-headline text-center text-white mb-3" style={{ fontSize: 'clamp(1.8rem, 3.6vw, 2.6rem)' }}>
-            Be first in line for <span className="miami-text-gradient">Soccerex Miami</span>
+            Get your tickets to <span className="miami-text-gradient">Soccerex Miami</span>
           </h2>
           <p className="miami-body text-center text-white/70 mx-auto mb-10" style={{ maxWidth: '640px' }}>
-            Registration, tickets, agenda and speakers open soon. Pre-register to get the announcement before the public release, plus priority access for rightsholders.
+            Tickets are live. Buy now to secure your place, or apply for a complimentary delegate pass if your organisation qualifies as a rightsholder.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--event-primary-border)', padding: 'clamp(24px, 3vw, 36px)' }}>
               <h3 className="miami-subhead text-white mb-2 flex items-center gap-2" style={{ fontSize: '1.05rem', letterSpacing: '0.1em' }}>
-                <Mail size={18} style={{ color: 'var(--event-primary-light)' }} /> Pre-register
+                <Mail size={18} style={{ color: 'var(--event-primary-light)' }} /> General Tickets
               </h3>
-              <p className="miami-body text-white/65 text-sm mb-6">Join the list and we'll send the launch email as soon as tickets go live.</p>
-              <PreRegisterForm />
+              <p className="miami-body text-white/65 text-sm mb-6">
+                Open to all delegates: brands, agencies, investors, service providers, and football industry professionals.
+              </p>
+              <a
+                href="https://soccerexmiami2026.eventify.io/t2/tickets/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miami-pill-primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                Buy Tickets <ArrowLeft size={15} style={{ transform: 'rotate(180deg)' }} />
+              </a>
             </div>
 
             <div style={{ background: 'linear-gradient(145deg, var(--event-primary-bg), rgba(255,255,255,0.02))', border: '1px solid var(--event-primary-border)', padding: 'clamp(24px, 3vw, 36px)' }}>
               <h3 className="miami-subhead text-white mb-2 flex items-center gap-2" style={{ fontSize: '1.05rem', letterSpacing: '0.1em' }}>
-                <Trophy size={18} style={{ color: 'var(--event-primary-light)' }} /> Rights holders
+                <Trophy size={18} style={{ color: 'var(--event-primary-light)' }} /> Rightsholders
               </h3>
               <div className="inline-flex items-center gap-2 px-3 py-1 mb-4" style={{ background: 'var(--event-primary)', color: '#fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                 Complimentary pass
               </div>
               <p className="miami-body text-white/75 text-sm mb-5 leading-relaxed">
-                Clubs, leagues, federations and national teams qualify for a complimentary delegate pass. Tell us about your organisation and we'll review eligibility.
+                Clubs, leagues, federations and national teams qualify for a complimentary delegate pass. Use the rightsholder link to register.
               </p>
-              <RightsHolderForm />
+              <a
+                href="https://soccerexmiami2026.eventify.io/t2/tickets/79DF37"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miami-pill-primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                Rightsholder Tickets <ArrowLeft size={15} style={{ transform: 'rotate(180deg)' }} />
+              </a>
             </div>
           </div>
 
@@ -452,10 +474,10 @@ export default function Miami2026() {
           <div className="mt-12 pt-10 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.10)' }}>
             <p className="miami-subhead mb-3" style={{ color: 'var(--event-primary-light)', fontSize: '11px' }}>Other ways to be there</p>
             <h3 className="miami-headline text-white mb-3" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 1.8rem)' }}>
-              Bring your brand. Bring your voice.
+              Bring your brand.
             </h3>
             <p className="miami-body mx-auto mb-6 text-white/70" style={{ maxWidth: 560, fontSize: 14 }}>
-              Partner with us, exhibit on the floor, or share what you're building from the stage.
+              Partner with us or exhibit on the floor.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <InquiryModalButton
@@ -471,19 +493,7 @@ export default function Miami2026() {
                 successBody="A partnerships lead will follow up by email."
                 buttonClassName="miami-pill-primary"
               />
-              <InquiryModalButton
-                kind="speaker-inquiry"
-                label="Speak in Miami"
-                modalTitle="Speak in Miami"
-                eyebrow="Speaker interest"
-                intro="Tell us who you are and what you'd talk about. The program team will reach out if there's a fit."
-                schema={speakerSchema}
-                extraPayload={{ event_slug: 'soccerex-miami-2026', source: 'miami-speaker-cta' }}
-                submitLabel="Send"
-                successTitle="Thanks — we have your details."
-                successBody="The program team will reach out if there's a fit."
-                buttonClassName="miami-pill-outline"
-              />
+              {/* "Speak in Miami" CTA removed per GN revisions doc. */}
             </div>
           </div>
         </div>

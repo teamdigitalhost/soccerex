@@ -61,7 +61,8 @@ const SOCIALS = [
   { Icon: BrandIcons.LinkedIn, href: 'https://www.linkedin.com/company/soccerex/', label: 'LinkedIn' },
   { Icon: BrandIcons.Instagram, href: 'https://www.instagram.com/Soccerex/', label: 'Instagram' },
   { Icon: BrandIcons.YouTube, href: 'https://youtube.com/user/soccerextelevision', label: 'YouTube' },
-  { Icon: BrandIcons.TikTok, href: 'https://www.tiktok.com/@soccerextv', label: 'TikTok' },
+  // TikTok removed per GN revisions doc. The BrandIcons.TikTok component above
+  // is left in place so we can re-add it cheaply if Soccerex changes mind.
 ]
 
 const CONTACTS = [

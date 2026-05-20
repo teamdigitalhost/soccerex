@@ -6,7 +6,7 @@ import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
-import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, GALLERY, pressRelease, eventAgendaConcept } from '../lib/routes'
+import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, GALLERY, pressRelease } from '../lib/routes'
 import ImageGrid from '../components/ImageGrid'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { lazy, Suspense } from 'react'
@@ -86,10 +86,14 @@ function HeroSection() {
    white-crisp aesthetic but stays compact for the homepage. The Amsterdam
    recap (past tense) now lives in its own slim band lower on the page. */
 function UpcomingEventSection() {
+  // Internal naming note: what we surface to the public as "Program Themes" is
+  // referred to internally and in routes/services as the "Agenda Concept"
+  // (see src/lib/routes.js -> eventAgendaConcept). The public-facing button
+  // for it was removed at Soccerex's request; the page itself still exists
+  // and is linked from the event-page tabs and from the Europe2026 callout.
   const eventLinks = [
-    { label: 'Pre-register Now',     to: `${MIAMI_2026}#pre-register`,             primary: true,  icon: Mail },
+    { label: 'Buy Tickets',          href: 'https://soccerexmiami2026.eventify.io/t2/tickets/', external: true, primary: true, icon: Mail },
     { label: 'Event Info',           to: MIAMI_2026,                                                 icon: Globe },
-    { label: 'Program Themes',     to: eventAgendaConcept('soccerex-miami-2026'),                  icon: FileText },
   ]
 
   return (
@@ -418,9 +422,9 @@ function EventsSection() {
       img: '/events/miami/2026/sections/miami-skyline.jpg',
       crest: '/brand/crests/crest-miami-white.svg',
       learnMoreTo: '/miami-2026',
-      ctaLabel: 'Pre-register',
-      ctaHref: '/miami-2026#pre-register',
-      ctaExternal: false,
+      ctaLabel: 'Buy Tickets',
+      ctaHref: 'https://soccerexmiami2026.eventify.io/t2/tickets/',
+      ctaExternal: true,
       status: 'soon',
       accent: '#E91E63',
       ctaTextColor: '#fff',
@@ -1419,10 +1423,13 @@ function FinalCTASection() {
     <section id="partner" className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #09203e 0%, #0e2a4f 50%, #061729 100%)' }}>
       <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, rgba(191,177,112,0.06) 0%, transparent 60%)' }} />
 
-      <div className="relative z-10 text-center" style={{ maxWidth: '700px', margin: '0 auto', padding: 'clamp(80px,12vw,140px) clamp(24px,5vw,80px)' }}>
-        <h2 className="font-heading font-bold text-white leading-tight mb-8 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-          Be Part of What's Next in Football
+      <div className="relative z-10 text-center" style={{ maxWidth: '780px', margin: '0 auto', padding: 'clamp(80px,12vw,140px) clamp(24px,5vw,80px)' }}>
+        <h2 className="font-heading font-bold text-white leading-tight mb-5 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+          The Global Football Business Platform
         </h2>
+        <p className="font-body text-white/75 leading-relaxed mb-10 fade-up mx-auto" style={{ fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)', maxWidth: '620px' }}>
+          Where deals, partnerships, and impact come to life.
+        </p>
         <div className="fade-up">
           <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-10 py-5 transition-all duration-300 cursor-pointer border-none"
             style={{ background: 'var(--color-brand-accent)', color: '#fff', fontSize: '0.95rem', textDecoration: 'none' }}
@@ -1646,11 +1653,14 @@ export default function Home() {
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <SpeakersShowcase />
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
+      {/* Soccerex Ecosystem moved above Testimonials per the GN revisions
+          doc so visitors see the breadth of the network before the social
+          proof / quotes. */}
+      <SocialProofSection />
       <TestimonialsSection />
       {/* Amsterdam past-tense recap sits down here — out of the upcoming
           flow, points to press release + event page. */}
       <EuropeRecapSection />
-      <SocialProofSection />
       <ProudSponsorSection />
       {/* White waves cresting down into the navy FinalCTA. `color` is the
           divider's solid fill — match it to the section ABOVE (white)

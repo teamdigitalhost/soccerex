@@ -7,8 +7,8 @@ import { withTestSearch } from '../lib/testMode'
 /* Static hero copy. The dark slideshow used to rotate through six
    taglines letter-by-letter; that's retired in favour of the static
    title + subtitle the light version landed on. */
-const HERO_TITLE = 'The Longest-Running Football Business Platform'
-const HERO_SUBTITLE = 'Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership'
+const HERO_TITLE = 'The Leading Global Football Business Platform'
+const HERO_SUBTITLE = 'Where World-Class Events Drive Deals, Partnerships, Innovation, and Impact Across the Game'
 
 // ─── Hero images — built from manifest, shuffled fresh each visit ────────────
 let ALL_IMAGES = []

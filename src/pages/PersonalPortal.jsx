@@ -489,7 +489,7 @@ function RightsHolderSection({ data, slug }) {
 
   return (
     <section className="portal-section mb-6">
-      <SectionHeader Icon={Shield} kicker="Rights-holder" title="Application & complimentary pass" />
+      <SectionHeader Icon={Shield} kicker="Rightsholder" title="Application & complimentary pass" />
 
       <ApplicationStatus status={status} review={data?.review || data?.application} />
 
@@ -503,7 +503,7 @@ function RightsHolderSection({ data, slug }) {
 
       {order && (
         <Subsection title="Receipt">
-          <OrderRow order={order} compNote="This is a complimentary rights-holder pass — no payment is required." />
+          <OrderRow order={order} compNote="This is a complimentary rightsholder pass, no payment is required." />
         </Subsection>
       )}
 

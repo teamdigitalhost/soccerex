@@ -3,6 +3,8 @@ import { ArrowLeft, MapPin, Calendar, Mail, Check, Users, Trophy, Briefcase, Sta
 import { Link } from 'react-router-dom'
 import PixelDivider from '../components/PixelDivider'
 import { HOME } from '../lib/routes'
+import { preregisterLead } from '../lib/soccerexApi'
+import { isTestModeFromUrl } from '../lib/testMode'
 
 const IMG = '/events/middle-east/2026'
 
@@ -31,29 +33,36 @@ const RIGHTS_HOLDER_POINTS = [
   'Build the credibility that opens doors across the ecosystem, from Jeddah to Doha to Dubai.',
 ]
 
-function encode(data) {
-  return Object.keys(data)
-    .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
-    .join('&')
-}
-
 function PreRegisterForm() {
-  const [form, setForm] = useState({ 'full-name': '', email: '', company: '', role: '', country: '' })
+  const [form, setForm] = useState({ name: '', email: '', company: '', role: '', country: '' })
   const [status, setStatus] = useState('idle')
+  const [errorMsg, setErrorMsg] = useState('')
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
   const submit = async (e) => {
     e.preventDefault()
     setStatus('submitting')
+    setErrorMsg('')
     try {
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({ 'form-name': 'riyadh-preregister', ...form }),
-      })
+      // Goes to the Soccerex backend (not Netlify Forms). The backend writes
+      // a LeadSubmission row, forwards to HubSpot, and sends an SES
+      // notification to maven@soccerex.com and enquiries@soccerex.com.
+      await preregisterLead({
+        name: form.name,
+        email: form.email,
+        company: form.company || undefined,
+        role: form.role || undefined,
+        country: form.country || undefined,
+        event_slug: 'soccerex-mena-2027',
+        attendee_type: 'delegate',
+        source: 'riyadh-2027-preregister',
+        source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+        marketing_opt_in: true,
+      }, { test: isTestModeFromUrl() })
       setStatus('success')
-    } catch {
+    } catch (err) {
       setStatus('error')
+      setErrorMsg(err?.message || 'We could not submit your details. Please email enquiries@soccerex.com.')
     }
   }
 
@@ -70,12 +79,9 @@ function PreRegisterForm() {
   }
 
   return (
-    <form name="riyadh-preregister" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={submit} className="flex flex-col gap-3">
-      <input type="hidden" name="form-name" value="riyadh-preregister" />
-      <p hidden><label>Leave blank: <input name="bot-field" /></label></p>
-
+    <form onSubmit={submit} className="flex flex-col gap-3" noValidate>
       <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Full name
-        <input required value={form['full-name']} onChange={update('full-name')} placeholder="Eve Moneypenny" className="pre-reg-input" />
+        <input required value={form.name} onChange={update('name')} placeholder="Eve Moneypenny" className="pre-reg-input" />
       </label>
       <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Email
         <input required type="email" value={form.email} onChange={update('email')} placeholder="eve@example.com" className="pre-reg-input" />
@@ -89,6 +95,10 @@ function PreRegisterForm() {
       <label className="font-mono text-[10px] uppercase tracking-widest text-white/50">Country
         <input value={form.country} onChange={update('country')} placeholder="Country" className="pre-reg-input" />
       </label>
+
+      {status === 'error' && errorMsg && (
+        <p className="font-body text-sm" style={{ color: '#ffb1b1' }}>{errorMsg}</p>
+      )}
 
       <button type="submit" disabled={status === 'submitting'} className="event-btn-primary mt-2 justify-center">
         {status === 'submitting' ? 'Sending, one moment' : 'Join the list'}
@@ -173,7 +183,7 @@ export default function Riyadh2027() {
                 Soccerex Middle East is the region's definitive event for the business of football. Hosted at Misk City, the Kingdom's purpose-built cultural district, it brings together the people building the Saudi Pro League, preparing for the 2034 FIFA World Cup, and reshaping the global game from the region outwards.
               </p>
               <p className="font-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#444' }}>
-                Federations, clubs, ministries, investors, rights holders and solution providers meet in one room to set the agenda for the most closely watched football market on earth.
+                Federations, clubs, ministries, investors, rightsholders and solution providers meet in one room to set the agenda for the most closely watched football market on earth.
               </p>
             </div>
           </div>
@@ -221,7 +231,7 @@ export default function Riyadh2027() {
             Be first in line for <span style={{ color: 'var(--event-primary-light)' }}>Soccerex Middle East</span>
           </h2>
           <p className="font-body text-center text-white/60 mx-auto mb-10" style={{ maxWidth: '640px' }}>
-            Registration, tickets, agenda and speakers open soon. Pre-register to get the announcement before the public release, plus priority access for rights holders.
+            Registration, tickets, agenda and speakers open soon. Pre-register to get the announcement before the public release, plus priority access for rightsholders.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -235,7 +245,7 @@ export default function Riyadh2027() {
 
             <div style={{ background: 'linear-gradient(145deg, var(--event-primary-bg), rgba(255,255,255,0.02))', border: '1px solid var(--event-primary-border)', borderRadius: '14px', padding: 'clamp(24px, 3vw, 36px)' }}>
               <h3 className="font-heading font-bold text-white text-xl mb-2 flex items-center gap-2">
-                <Trophy size={18} style={{ color: 'var(--event-primary-light)' }} /> Rights Holders
+                <Trophy size={18} style={{ color: 'var(--event-primary-light)' }} /> Rightsholders
               </h3>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-5" style={{ background: 'var(--event-primary)', color: '#031a10', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
                 Complimentary Pass
@@ -252,7 +262,7 @@ export default function Riyadh2027() {
                 ))}
               </ul>
               <p className="font-body text-white/50 text-xs mt-6">
-                Rights holder enquiries: <a href="mailto:enquiries@soccerex.com" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>enquiries@soccerex.com</a>
+                Rightsholder enquiries: <a href="mailto:enquiries@soccerex.com" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>enquiries@soccerex.com</a>
               </p>
             </div>
           </div>
