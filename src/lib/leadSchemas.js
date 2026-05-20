@@ -25,23 +25,15 @@ const ORG_TYPE_OPTIONS = [
 ]
 
 /* Sponsorship / exhibitor inquiry — two short steps. Field names follow the
-   handoff doc primary shape: `name`, `email`, `company`. */
+   handoff doc primary shape: `name`, `email`, `company`.
+   Budget dropdown removed: every placement of this form is awareness-stage
+   (home → event page → inquiry), and a budget question that early reads as
+   pretentious / scares off interest. Sales follow up by email anyway. */
 export const sponsorshipSchema = [
   {
     fields: [
       { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', options: ORG_TYPE_OPTIONS, span: 'full', autoFocus: true },
       { name: 'company', label: 'Organisation *', required: true, placeholder: 'Company name', span: 'full' },
-      { name: 'budget_range', label: 'Approximate budget (USD)', type: 'select', span: 'full',
-        options: [
-          { value: 'under-25k', label: 'Under $25k' },
-          { value: '25-75k',    label: '$25k–$75k' },
-          { value: '75-150k',   label: '$75k–$150k' },
-          { value: '150-300k',  label: '$150k–$300k' },
-          { value: '300k+',     label: '$300k or more' },
-          { value: 'unsure',    label: 'Not sure yet' },
-        ],
-        hint: 'A rough range helps us send the right partnership pack. We never use this for a price tag.',
-      },
     ],
   },
   {

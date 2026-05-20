@@ -48,7 +48,7 @@ const SPEAKERS = [
 
 const HIGHLIGHTS = [
   { title: 'Unrivalled Content', desc: 'Global decision-makers from clubs, leagues, federations, and brands took the stage across two packed days.', img: `${IMG}/sections/event-group-photo.jpg` },
-  { title: 'Strategic Networking', desc: 'New relationships were built with the people shaping football\'s commercial and operational landscape.', img: `${IMG}/sections/event-networking.jpg` },
+  { title: 'Strategic Networking', desc: 'New relationships were built with the people shaping football\'s commercial and operational landscape.', img: `/hero/152-MISC-rooftop-networking-wide-fairy-lights.jpg` },
   { title: 'Exhibitor Floor and Activations', desc: 'Solution providers showcased innovation and forged partnerships across the exhibitor floor.', img: `${IMG}/sections/event-exhibitor.jpg` },
   { title: 'Social Program and VIP Experiences', desc: 'Evening receptions and curated experiences turned conversations into commitments.', img: `${IMG}/sections/event-vip-reception.webp` },
 ]

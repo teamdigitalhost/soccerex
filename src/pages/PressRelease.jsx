@@ -96,7 +96,7 @@ export default function PressRelease() {
           <div style={{ borderTop: '1px solid #eee', paddingTop: '2rem', marginTop: '2.5rem' }}>
             <h3 className="font-heading font-bold text-lg mb-3" style={{ color: '#1a1a1a' }}>About Soccerex</h3>
             <p className="font-body leading-relaxed text-sm mb-4" style={{ color: '#666' }}>
-              Soccerex is the world's leading football business event platform, connecting the global football industry through conferences, exhibitions, media, and networking. For over 25 years, Soccerex has brought together the most influential stakeholders in the game to shape its commercial, strategic, and institutional future.
+              Soccerex is the world's leading football business event platform, connecting the global football industry through conferences, exhibitions, media, and networking. For 30 years, Soccerex has brought together the most influential stakeholders in the game to shape its commercial, strategic, and institutional future.
             </p>
             <p className="font-body text-sm" style={{ color: '#999' }}>
               Media Contact: <a href="mailto:press@soccerex.com" style={{ color: 'var(--color-red)', textDecoration: 'none' }}>press@soccerex.com</a>

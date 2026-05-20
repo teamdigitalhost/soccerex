@@ -279,23 +279,6 @@
     ]
   },
   {
-    "src": "/hero/155-MISC-woman-conversation-rooftop-terrace.jpg",
-    "caption": "After Hours",
-    "event": "Where conversations continue under the stars",
-    "categories": [
-      "on-stage",
-      "networking"
-    ]
-  },
-  {
-    "src": "/hero/156-MISC-crowd-networking-neon-sign-wide.jpg",
-    "caption": "Networking",
-    "event": "Relationships built at Soccerex last a lifetime",
-    "categories": [
-      "networking"
-    ]
-  },
-  {
     "src": "/hero/157-MISC-diverse-crowd-rooftop-networking.jpg",
     "caption": "Networking",
     "event": "Relationships built at Soccerex last a lifetime",
@@ -498,14 +481,6 @@
     "event": "People who make this community special",
     "categories": [
       "miami"
-    ]
-  },
-  {
-    "src": "/hero/18-TIER2-cruyff-arena-team.jpg",
-    "caption": "Cruyff Legacy",
-    "event": "Standing on the shoulders of giants",
-    "categories": [
-      "europe"
     ]
   },
   {
@@ -804,14 +779,6 @@
     "src": "/hero/212-NEW7-miami-futbol-infinito-broadcast.jpg",
     "caption": "On Air",
     "event": "Bringing the Soccerex story to the world",
-    "categories": [
-      "miami"
-    ]
-  },
-  {
-    "src": "/hero/213-NEW7-miami-soccerex-branded-interview.jpg",
-    "caption": "In Conversation",
-    "event": "Candid dialogue with football's decision makers",
     "categories": [
       "miami"
     ]
@@ -1160,15 +1127,6 @@
     ]
   },
   {
-    "src": "/hero/26-NEW-elevator-pitch-panel-miami.jpg",
-    "caption": "On Stage",
-    "event": "The conversations that drive the game forward",
-    "categories": [
-      "on-stage",
-      "miami"
-    ]
-  },
-  {
     "src": "/hero/260-NEW9-networking-lounge-crowd.jpg",
     "caption": "Networking",
     "event": "Relationships built at Soccerex last a lifetime",
@@ -1253,14 +1211,6 @@
     "categories": [
       "networking",
       "miami"
-    ]
-  },
-  {
-    "src": "/hero/27-NEW-interview-ajax-arena-seats.jpg",
-    "caption": "In Conversation",
-    "event": "Candid dialogue with football's decision makers",
-    "categories": [
-      "europe"
     ]
   },
   {
@@ -1535,25 +1485,9 @@
     ]
   },
   {
-    "src": "/hero/317-NEW9-europe24-sponsor-backdrop-duo.jpg",
-    "caption": "Partners",
-    "event": "The brands that believe in football",
-    "categories": [
-      "europe"
-    ]
-  },
-  {
     "src": "/hero/318-NEW9-europe24-session-rear-view-scale.jpg",
     "caption": "Soccerex Europe",
     "event": "Where the industry convenes",
-    "categories": [
-      "europe"
-    ]
-  },
-  {
-    "src": "/hero/319-NEW9-europe24-team-group-arena-vip.jpg",
-    "caption": "The Soccerex Family",
-    "event": "People who make this community special",
     "categories": [
       "europe"
     ]
@@ -1594,15 +1528,6 @@
     ]
   },
   {
-    "src": "/hero/324-NEW9-europe24-team-photo-stage.jpg",
-    "caption": "Soccerex Europe",
-    "event": "Where the industry convenes",
-    "categories": [
-      "on-stage",
-      "europe"
-    ]
-  },
-  {
     "src": "/hero/325-NEW9-europe24-financial-foulplay.jpg",
     "caption": "Financial Foul Play",
     "event": "Tackling football's financial challenges, Soccerex Europe 2024",
@@ -1615,23 +1540,6 @@
     "caption": "Fighting on Too Many Fronts",
     "event": "Nedum Onuoha and Gilberto Silva debate the calendar, Soccerex Europe 2024",
     "categories": [
-      "europe"
-    ]
-  },
-  {
-    "src": "/hero/327-NEW9-europe24-five-men-vip-arena.jpg",
-    "caption": "Soccerex Europe",
-    "event": "Where the industry convenes",
-    "categories": [
-      "europe"
-    ]
-  },
-  {
-    "src": "/hero/328-NEW9-europe24-premier-league-trophy.jpg",
-    "caption": "Football Heritage",
-    "event": "Where history meets the future",
-    "categories": [
-      "on-stage",
       "europe"
     ]
   },
@@ -1650,22 +1558,6 @@
     "event": "Candid dialogue with football's decision makers",
     "categories": [
       "miami"
-    ]
-  },
-  {
-    "src": "/hero/331-NEW9-europe24-laliga-one-on-one.jpg",
-    "caption": "Guillem Balague and Javier Tebas",
-    "event": "One-on-one with the LaLiga President, Soccerex Europe 2024",
-    "categories": [
-      "europe"
-    ]
-  },
-  {
-    "src": "/hero/332-NEW9-europe24-group-vip-lanyards.jpg",
-    "caption": "The Soccerex Family",
-    "event": "People who make this community special",
-    "categories": [
-      "europe"
     ]
   },
   {
@@ -1714,14 +1606,6 @@
     ]
   },
   {
-    "src": "/hero/340-NEW9-europe24-interview-stadium-red.jpg",
-    "caption": "In Conversation",
-    "event": "Candid dialogue with football's decision makers",
-    "categories": [
-      "europe"
-    ]
-  },
-  {
     "src": "/hero/341-NEW9-europe24-trust-process-audience.jpg",
     "caption": "Full House",
     "event": "When the football world gathers",
@@ -1763,14 +1647,6 @@
     "event": "The hard questions about football's money, Soccerex Europe 2024",
     "categories": [
       "on-stage",
-      "europe"
-    ]
-  },
-  {
-    "src": "/hero/346-NEW9-europe24-interview-stadium-wide.jpg",
-    "caption": "In Conversation",
-    "event": "Candid dialogue with football's decision makers",
-    "categories": [
       "europe"
     ]
   },
