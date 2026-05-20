@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Handshake, Calendar, Mic, Newspaper, Heart, Store, MessageCircle,
-  ArrowRight, Mail, MapPin, Check, User, Building2, Phone, FileText,
+  ArrowRight, Mail, MapPin, Check, User, Building2, Phone, FileText, Megaphone,
 } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
@@ -26,7 +26,7 @@ const INQUIRY_TYPES = [
     label: 'Partnership',
     icon: Handshake,
     email: 'partner@soccerex.com',
-    desc: 'Sponsorship, strategic partnerships, and commercial opportunities.',
+    desc: 'Strategic partnerships and commercial opportunities.',
     fields: ['organisation', 'role', 'country', 'partnershipType', 'budget', 'event', 'attendeeCount'],
   },
   {
@@ -38,20 +38,28 @@ const INQUIRY_TYPES = [
     fields: ['organisation', 'role', 'topic', 'topicArea', 'speakerBio', 'proposal', 'linkedin', 'event'],
   },
   {
+    id: 'exhibit',
+    label: 'Exhibitor',
+    icon: Store,
+    email: 'exhibit@soccerex.com',
+    desc: 'Stand space, brand activations, and exhibitor packages.',
+    fields: ['organisation', 'role', 'country', 'productType', 'budget', 'event'],
+  },
+  {
+    id: 'sponsor',
+    label: 'Sponsor',
+    icon: Megaphone,
+    email: 'partner@soccerex.com',
+    desc: 'Sponsorship packages and brand visibility at Soccerex events.',
+    fields: ['organisation', 'role', 'country', 'partnershipType', 'budget', 'event', 'attendeeCount'],
+  },
+  {
     id: 'press',
     label: 'Press & Media',
     icon: Newspaper,
     email: 'press@soccerex.com',
     desc: 'Media accreditation, interview requests, and press releases.',
     fields: ['organisation', 'role', 'outlet', 'deadline', 'event'],
-  },
-  {
-    id: 'exhibit',
-    label: 'Exhibit',
-    icon: Store,
-    email: 'exhibit@soccerex.com',
-    desc: 'Stand space, brand activations, and exhibitor packages.',
-    fields: ['organisation', 'role', 'country', 'productType', 'budget', 'event'],
   },
   {
     id: 'volunteer',
@@ -63,7 +71,7 @@ const INQUIRY_TYPES = [
   },
   {
     id: 'host',
-    label: 'Host an Event',
+    label: 'Event Host',
     icon: MapPin,
     email: 'partner@soccerex.com',
     desc: 'Bring a Soccerex event to your city, region, or venue.',
@@ -178,7 +186,7 @@ export default function Contact() {
      them by inquiry_type — press → media_inquiry, host → host_event_inquiry
      marked urgent, etc.). */
   const leadKindFor = (id) => {
-    if (id === 'partner' || id === 'exhibit') return 'sponsorship-inquiry'
+    if (id === 'partner' || id === 'exhibit' || id === 'sponsor') return 'sponsorship-inquiry'
     if (id === 'speaker') return 'speaker-inquiry'
     return 'contact'
   }

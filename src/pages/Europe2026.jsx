@@ -50,13 +50,13 @@ const HIGHLIGHTS = [
   { title: 'Unrivalled Content', desc: 'Global decision-makers from clubs, leagues, federations, and brands took the stage across two packed days.', img: `${IMG}/sections/event-group-photo.jpg` },
   { title: 'Strategic Networking', desc: 'New relationships were built with the people shaping football\'s commercial and operational landscape.', img: `${IMG}/sections/event-networking.jpg` },
   { title: 'Exhibitor Floor and Activations', desc: 'Solution providers showcased innovation and forged partnerships across the exhibitor floor.', img: `${IMG}/sections/event-exhibitor.jpg` },
-  { title: 'Social Programme and VIP Experiences', desc: 'Evening receptions and curated experiences turned conversations into commitments.', img: `${IMG}/sections/event-vip-reception.webp` },
+  { title: 'Social Program and VIP Experiences', desc: 'Evening receptions and curated experiences turned conversations into commitments.', img: `${IMG}/sections/event-vip-reception.webp` },
 ]
 
 const TIMELINE = [
   { day: 'Day 0', date: '11th May', title: 'VIP Reception', time: 'Evening', highlight: 'Royal Lounge, Floor 6, with views of the pitch' },
-  { day: 'Day 1', date: '12th May', title: 'Conference Day 1', time: 'Full day', highlight: 'Programme sessions plus the evening social' },
-  { day: 'Day 2', date: '13th May', title: 'Conference Day 2', time: 'Full day', highlight: 'Final panels and farewell programme' },
+  { day: 'Day 1', date: '12th May', title: 'Conference Day 1', time: 'Full day', highlight: 'Program sessions plus the evening social' },
+  { day: 'Day 2', date: '13th May', title: 'Conference Day 2', time: 'Full day', highlight: 'Final panels and farewell program' },
 ]
 
 const THEMES = [
@@ -67,7 +67,7 @@ const THEMES = [
 
 const STATS = [
   { num: '40+',  label: 'Speakers on stage' },
-  { num: '2',    label: 'Days of programme' },
+  { num: '2',    label: 'Days of program' },
   { num: '8',    label: 'Themes explored' },
   { num: '30+',  label: 'Countries represented' },
 ]
@@ -287,7 +287,7 @@ export default function Europe2026() {
           <p className="font-body mb-8" style={{ color: '#666' }}>Materials and the press record from Soccerex Europe 2026.</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to={eventAgenda(EVENT_API_SLUG)} className="event-btn-primary">
-              <Calendar size={16} /> Programme &amp; sessions
+              <Calendar size={16} /> Program &amp; sessions
             </Link>
             <a href="/events/europe/2026/agenda-concept.pdf" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 font-body font-semibold text-xs uppercase tracking-widest cursor-pointer"
@@ -336,7 +336,7 @@ export default function Europe2026() {
             </Link>
           </div>
           <p className="font-body text-white/40 text-sm mt-8">
-            Want to be on stage in Miami? <Link to={eventAgendaConcept('soccerex-miami-2026')} style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>Browse the programme themes</Link>.
+            Want to be on stage in Miami? <Link to={eventAgendaConcept('soccerex-miami-2026')} style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>Browse the program themes</Link>.
           </p>
           <p className="font-body text-white/30 text-xs mt-3">
             Partner enquiries: <a href="mailto:enquiries@soccerex.com" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>enquiries@soccerex.com</a>

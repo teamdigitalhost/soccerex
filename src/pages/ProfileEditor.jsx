@@ -229,7 +229,7 @@ export default function ProfileEditor() {
               </FormCard>
 
               <FormCard title="Search tags"
-                subtitle="Keywords that help the Soccerex programme team find this profile. Commas or returns separate them.">
+                subtitle="Keywords that help the Soccerex program team find this profile. Commas or returns separate them.">
                 <Field label="">
                   <input value={form.search_tags_input} onChange={update('search_tags_input')} className="prog-input"
                     placeholder="commercial, sponsorship, world-cup-2026" />
@@ -364,7 +364,7 @@ function PendingRevisionBanner({ profile }) {
           You have {count} {count === 1 ? 'change' : 'changes'} awaiting review
         </p>
         <p className="miami-body" style={{ fontSize: 12, color: '#3a4a5a', marginTop: 4 }}>
-          Your last submission is with the Soccerex programme team. Public visitors still see the previously published version until your changes are approved.
+          Your last submission is with the Soccerex program team. Public visitors still see the previously published version until your changes are approved.
         </p>
       </div>
     </div>

@@ -229,7 +229,7 @@ function VipSection({ data, slug, editToken, isTest, onRefresh }) {
         <div>
           <p className="font-mono uppercase" style={{ fontSize: 10, color: 'var(--color-brand-accent)', letterSpacing: '0.24em' }}>VIP</p>
           <h2 className="font-heading font-bold" style={{ fontSize: '1.25rem', color: '#0D1B2A' }}>
-            {data?.welcome_title || 'Welcome to the VIP programme'}
+            {data?.welcome_title || 'Welcome to the VIP program'}
           </h2>
         </div>
       </div>
@@ -402,7 +402,7 @@ function SpeakerSection({ data, slug }) {
           </div>
         </Subsection>
       ) : (
-        <Empty icon={Mic} title="No sessions assigned yet" body="When the programme team confirms a session for you, it'll show up here with green-room and AV details." />
+        <Empty icon={Mic} title="No sessions assigned yet" body="When the program team confirms a session for you, it'll show up here with green-room and AV details." />
       )}
     </section>
   )

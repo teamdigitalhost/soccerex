@@ -262,10 +262,10 @@ const ALL_SHUFFLED = shuffle(LOGOS, 101)
 
 // Pillars of engagement (flip to show contextual event imagery per pillar)
 const PILLARS = [
-  { icon: Users,     label: 'ATTEND',  desc: 'Tap into three decades of meaningful football business relationships.',   img: '/hero/22-NEW-soccerex-brasil-auditorium.jpg' },     // packed auditorium = delegates
-  { icon: Megaphone, label: 'SPONSOR', desc: 'Align your brand with the global leaders shaping football\'s future.',    img: '/events/europe/2026/sections/event-vip-reception.webp' }, // branded reception
-  { icon: Globe,     label: 'EXHIBIT', desc: 'Showcase your products and services to the industry\'s most influential buyers.', img: '/events/europe/2026/sections/event-exhibitor.jpg' }, // exhibition booth
-  { icon: Handshake, label: 'CONNECT', desc: 'Build the partnerships that will define the next era of the game.',       img: '/events/europe/2026/sections/event-networking.jpg' }, // networking shot
+  { icon: Users,     label: 'ATTEND',  desc: 'Tap into three decades of meaningful football business relationships.',   img: '/hero/160-NEW6-europe-packed-audience-soccerex-branding.jpg' },
+  { icon: Megaphone, label: 'SPONSOR', desc: 'Align your brand with the global leaders shaping football\'s future.',    img: '/events/europe/2026/sections/event-vip-reception.webp' },
+  { icon: Globe,     label: 'EXHIBIT', desc: 'Showcase your products and services to the industry\'s most influential buyers.', img: '/events/europe/2026/sections/event-exhibitor.jpg' },
+  { icon: Handshake, label: 'CONNECT', desc: 'Build the partnerships that will define the next era of the game.',       img: '/hero/174-NEW6-miami-networking-blue-purple-outdoor.jpg' },
 ]
 
 // Stats bar numbers
@@ -356,7 +356,7 @@ export default function GlobalNetwork() {
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
               style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
-          <p className="section-label text-brand-accent mb-6 fade-up">GLOBAL NETWORK</p>
+          <p className="section-label text-brand-accent mb-6 fade-up">COMMUNITY</p>
           <h1 className="font-heading font-bold text-white leading-[1.02] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 6rem)' }}>
             The Global Leader in the{' '}
             <span style={{ color: 'var(--color-brand-accent)' }}>Business of Football</span>{' '}

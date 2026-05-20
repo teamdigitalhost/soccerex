@@ -117,7 +117,7 @@ export default function Footer() {
               <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '30px', width: 'auto' }} />
             </Link>
             <p className="font-body leading-relaxed" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', marginBottom: '24px' }}>
-              The global leader in the business of football since 1996. Connecting the industry across three continents.
+              The global leader in the business of football since 1996. Connecting the industry across five continents.
             </p>
             <div className="flex items-start gap-2" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.85rem' }}>
               <MapPin size={16} style={{ flexShrink: 0, marginTop: '2px', color: 'var(--footer-accent)' }} />

@@ -14,8 +14,8 @@ const ECOSYSTEM_BRAND = [
   { label: 'Clubs', icon: 'clubs' },
   { label: 'Leagues', icon: 'leagues' },
   { label: 'Federations', icon: 'federations' },
+  { label: 'Confederations', icon: 'federations' },
   { label: 'Investors', icon: 'investors' },
-  { label: 'Private Equity', icon: 'private-equity' },
   { label: 'Governments', icon: 'governments' },
   { label: "Women's Football", icon: 'womens-football' },
   { label: 'Stadiums', icon: 'stadiums' },
@@ -33,13 +33,13 @@ const PILLARS_BRAND = [
 
 const WHY_ATTEND = [
   { title: 'The Americas Converge', desc: 'MLS, Liga MX, CONCACAF, CONMEBOL and the investors reshaping football in the Western Hemisphere, in one room.' },
-  { title: 'World Cup Launchpad', desc: 'Nine months before the 2026 FIFA World Cup kicks off next door, Miami is the pre-tournament business hub.' },
-  { title: 'Executive Networking', desc: 'Curated introductions with clubs, federations, leagues, rights holders, brands and capital partners.' },
-  { title: 'Signature Social Programme', desc: 'Evening receptions and VIP experiences set against the Miami waterfront.' },
+  { title: 'After the Final Whistle', desc: 'Months after the 2026 FIFA World Cup, Miami is where the industry converts tournament momentum into lasting commercial growth.' },
+  { title: 'Executive Networking', desc: 'Curated introductions with clubs, federations, leagues, rightsholders, brands and capital partners.' },
+  { title: 'Signature Social Program', desc: 'Evening receptions and VIP experiences set against the Miami waterfront.' },
 ]
 
 const THEMES = [
-  'MLS, Liga MX and the CONCACAF growth engine',
+  'CONCACAF, CONMEBOL, MLS, and LIGA MX growth engine',
   'Broadcasting, media rights and streaming',
   'Club ownership and investment in the Americas',
   'The 2026 World Cup: commercial and operational playbook',
@@ -278,10 +278,10 @@ export default function Miami2026() {
                 What is <span style={{ color: '#E91E63' }}>Soccerex Miami</span>?
               </h2>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-                Soccerex Miami is the flagship gathering for the business of football across the Americas. Three days of high-impact content, executive networking, brand activation and industry insight, on the doorstep of the 2026 FIFA World Cup.
+                Soccerex Miami is the flagship gathering for the business of football across the Americas. Three days of high-impact content, executive networking, brand activation and industry insight, in the wake of the 2026 FIFA World Cup.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-                Clubs, leagues, federations, investors, rights holders and solution providers from across North, Central and South America come together to shape the commercial future of the sport in the region driving its next chapter.
+                Clubs, leagues, federations, investors, rightsholders and solution providers from across North, Central and South America come together to shape the commercial future of the sport in the region driving its next chapter.
               </p>
             </div>
           </div>
@@ -381,7 +381,7 @@ export default function Miami2026() {
             Be first in line for <span className="miami-text-gradient">Soccerex Miami</span>
           </h2>
           <p className="miami-body text-center text-white/70 mx-auto mb-10" style={{ maxWidth: '640px' }}>
-            Registration, tickets, agenda and speakers open soon. Pre-register to get the announcement before the public release, plus priority access for rights holders.
+            Registration, tickets, agenda and speakers open soon. Pre-register to get the announcement before the public release, plus priority access for rightsholders.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -435,12 +435,12 @@ export default function Miami2026() {
                 label="Speak in Miami"
                 modalTitle="Speak in Miami"
                 eyebrow="Speaker interest"
-                intro="Tell us who you are and what you'd talk about. The programme team will reach out if there's a fit."
+                intro="Tell us who you are and what you'd talk about. The program team will reach out if there's a fit."
                 schema={speakerSchema}
                 extraPayload={{ event_slug: 'soccerex-miami-2026', source: 'miami-speaker-cta' }}
                 submitLabel="Send"
                 successTitle="Thanks — we have your details."
-                successBody="The programme team will reach out if there's a fit."
+                successBody="The program team will reach out if there's a fit."
                 buttonClassName="miami-pill-outline"
               />
             </div>

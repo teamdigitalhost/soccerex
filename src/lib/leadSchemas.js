@@ -57,7 +57,7 @@ export const sponsorshipSchema = [
   },
 ]
 
-/* Speaker interest — single short step. The full programme submission
+/* Speaker interest — single short step. The full program submission
    form on EventAgendaConcept stays for event-specific session pitches. */
 export const speakerSchema = [
   {

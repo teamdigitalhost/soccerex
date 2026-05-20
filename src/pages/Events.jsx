@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Calendar, MapPin, Download, Quote, Globe } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { CONTACT, EUROPE_2026 } from '../lib/routes'
+import { CONTACT, EUROPE_2026, MIAMI_2026 } from '../lib/routes'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema, speakerSchema } from '../lib/leadSchemas'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
@@ -11,28 +11,13 @@ import { useScrollAnimations } from '../lib/useScrollAnimations'
 // ═══ UPCOMING EVENTS (2 featured) ════════════════════════════════════════════
 const UPCOMING = [
   {
-    logo: '/images/events/logos/europe.webp',
-    label: 'SOCCEREX EUROPE',
-    dates: 'May 12-13, 2026',
-    city: 'Amsterdam, Netherlands',
-    venue: 'Johan Cruijff ArenA',
-    image: '/images/events/events/europe-ajax-arena.webp',
-    copy: [
-      'Following the success of Soccerex Europe 2025, which highlighted how AI is reshaping football through insightful sessions and high-profile discussions featuring speakers from TikTok, Ajax, and LALIGA, the football industry\'s leading European event will return to Amsterdam in 2026.',
-      'Amsterdam, one of Europe\'s most influential football cities, will set the stage for Soccerex Europe 2026. Blending rich football heritage with cutting-edge innovation, the city will provide the perfect backdrop for the event at the iconic Johan Cruijff ArenA. Globally recognised for its leadership in sustainability and fan experience, the venue will host an event designed to shape the future of the beautiful game.',
-      'With a legacy that includes hosting Champions League finals and UEFA Euro 2000, the 2026 edition is poised to unite federations, leagues, clubs, brands, media, governing bodies, and football legends from around the world.',
-    ],
-    link: '/europe-2026',
-    internal: true,
-  },
-  {
     logo: '/images/events/logos/miami.webp',
     label: 'SOCCEREX MIAMI',
     dates: 'September 23-25, 2026',
     city: 'Miami, USA',
-    venue: 'Miami Freedom Park',
+    venue: 'Venue to be announced',
     image: '/events/miami/2026/sections/miami-skyline.jpg',
-    copy: 'Soccerex Miami returns in 2026 at the newly opened Miami Freedom Park, the future home of Inter Miami CF. A premier gathering for club executives, investors, and commercial leaders across North and South America.',
+    copy: 'Soccerex Miami returns in 2026, a premier gathering for club executives, investors, and commercial leaders across North and South America.',
     comingSoon: true,
   },
   {
@@ -47,8 +32,18 @@ const UPCOMING = [
   },
 ]
 
-// ═══ RECENT EVENTS (7 past) ═══════════════════════════════════════════════════
+// ═══ RECENT EVENTS (past) ═════════════════════════════════════════════════════
 const RECENT = [
+  {
+    logo: '/images/events/logos/europe.webp',
+    label: 'SOCCEREX EUROPE 2026',
+    dates: 'May 12-13, 2026',
+    city: 'Johan Cruijff ArenA, Amsterdam',
+    image: '/images/events/events/europe-ajax-arena.webp',
+    copy: 'The 30th anniversary edition of Soccerex Europe wrapped a record-breaking gathering at the Johan Cruijff ArenA, bringing federations, leagues, clubs, brands, media, governing bodies, and football legends together to mark three decades of the platform.',
+    link: '/europe-2026',
+    internal: true,
+  },
   {
     logo: '/images/events/logos/miami.webp',
     label: 'SOCCEREX MIAMI 2025',
@@ -351,7 +346,7 @@ export default function Events() {
               >
                 <span className="w-2.5 h-2.5 rounded-full" style={{ background: 'var(--color-red)', boxShadow: '0 0 12px var(--color-red)', animation: 'node-pulse 2s infinite' }} />
                 <span className="font-mono uppercase tracking-[0.15em] text-white" style={{ fontSize: '0.72rem', fontWeight: 600 }}>
-                  Next: Amsterdam, May 11-13 2026
+                  Next: Miami, September 23-25 2026
                 </span>
                 <ArrowRight size={14} color="var(--color-red)" />
               </div>
@@ -585,26 +580,26 @@ export default function Events() {
 
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
-      {/* ═══ CTA (Amsterdam red theme) ═══════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0000 0%, #3a0a0a 50%, #1a0000 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-red)" nodeCount={35} opacity={0.12} />
-        <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(200,48,44,0.1) 0%, transparent 60%)' }} />
+      {/* ═══ CTA (Miami pink theme) ═══════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0010 0%, #3a0a2a 50%, #1a0010 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
+        <NetworkNodes color="#ffffff" accentColor="#E91E63" nodeCount={35} opacity={0.12} />
+        <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(233,30,99,0.1) 0%, transparent 60%)' }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <Calendar size={40} color="var(--color-red)" strokeWidth={2} className="mx-auto mb-6 fade-up" />
-          <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-red)' }}>JOIN US IN AMSTERDAM</p>
+          <Calendar size={40} color="#E91E63" strokeWidth={2} className="mx-auto mb-6 fade-up" />
+          <p className="section-label mb-4 fade-up" style={{ color: '#E91E63' }}>JOIN US IN MIAMI</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
-            Soccerex Europe 2026{' '}
-            <span style={{ color: 'var(--color-red)' }}>Awaits</span>
+            Soccerex Miami 2026{' '}
+            <span style={{ color: '#E91E63' }}>Awaits</span>
           </h2>
-          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-red), transparent)' }} />
+          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, #E91E63, transparent)' }} />
           <p className="font-body text-white/75 leading-relaxed fade-up mb-10 mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.2rem)', maxWidth: '720px' }}>
-            May 11 to 13, 2026. Johan Cruijff ArenA. Federations, leagues, clubs, brands, media, and football legends, together.
+            September 23 to 25, 2026. Where the Americas converge for the post-World Cup business of football.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 fade-up">
-            <Link to={EUROPE_2026} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: '#c8302c', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#a02020' }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#c8302c' }}
+            <Link to={MIAMI_2026} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+              style={{ background: '#E91E63', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', textDecoration: 'none', transition: 'all 0.3s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#c2185b' }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#E91E63' }}
             >
               Event Details <ArrowRight size={16} />
             </Link>
@@ -627,12 +622,12 @@ export default function Events() {
               label="Speak at Soccerex"
               modalTitle="Speak at Soccerex"
               eyebrow="Speaker interest"
-              intro="Tell us who you are and what you'd talk about. The programme team will reach out if there's a fit for an upcoming event."
+              intro="Tell us who you are and what you'd talk about. The program team will reach out if there's a fit for an upcoming event."
               schema={speakerSchema}
               extraPayload={{ source: 'events-page-cta' }}
               submitLabel="Send"
               successTitle="Thanks — we have your details."
-              successBody="The programme team will reach out if there's a fit for an upcoming event."
+              successBody="The program team will reach out if there's a fit for an upcoming event."
               buttonStyle={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', border: '1px solid rgba(255,255,255,0.35)', cursor: 'pointer', transition: 'all 0.3s' }}
               buttonClassName="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
             />

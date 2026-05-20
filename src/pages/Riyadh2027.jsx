@@ -10,7 +10,7 @@ const WHY_ATTEND = [
   { title: "Saudi Arabia's Football Moment", desc: 'Vision 2030, the Saudi Pro League transformation, and the road to the 2034 FIFA World Cup, in the city where the strategy is written.' },
   { title: 'Regional Power Room', desc: 'Federations, clubs, investors and partners from across the GCC, North Africa and West Asia, together in one place.' },
   { title: 'Capital Meets Football', desc: 'The most concentrated pool of football-focused capital in the world is in this region. Soccerex is how you meet it.' },
-  { title: 'Misk City Experience', desc: "Headquartered inside the Kingdom's flagship cultural district, with a social programme built around Riyadh's new wave of hospitality." },
+  { title: 'Misk City Experience', desc: "Headquartered inside the Kingdom's flagship cultural district, with a social program built around Riyadh's new wave of hospitality." },
 ]
 
 const THEMES = [

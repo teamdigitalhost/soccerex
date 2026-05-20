@@ -31,32 +31,18 @@ import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 const SIDE_OPTIONS = [
   {
-    id: 'brand',
+    id: 'company',
     backendValue: 'company',
-    label: 'Brand, sponsor, or buyer',
-    desc: 'You are looking to invest, sponsor, partner, or buy access into the game.',
+    label: 'Company',
+    desc: 'Brand, investor, agency, service provider, or solutions company. You want to do business in football.',
     icon: Building2,
   },
   {
     id: 'rightsholder',
     backendValue: 'rightsholder',
-    label: 'Club, venue, federation, or rights holder',
-    desc: 'You hold the inventory, the audience, or the access counterparties want.',
+    label: 'Rightsholder',
+    desc: 'Club, league, federation, venue, or property. You hold the inventory, audience, or access.',
     icon: Handshake,
-  },
-  {
-    id: 'agency',
-    backendValue: 'company',
-    label: 'Agency or service provider',
-    desc: 'You represent clients or sell services into the football business ecosystem.',
-    icon: Briefcase,
-  },
-  {
-    id: 'both',
-    backendValue: 'both',
-    label: 'I may be both',
-    desc: 'You operate on multiple sides depending on the deal.',
-    icon: Users,
   },
 ]
 
@@ -170,8 +156,8 @@ export default function DealNetwork() {
     setSubmitting(true)
     setSubmitError('')
     try {
-      const sensitivitiesCombined = [
-        form.sensitivities.trim(),
+      const dealDescriptionCombined = [
+        form.deal_description.trim(),
         form.large_file_links.trim() ? `Shared files: ${form.large_file_links.trim()}` : '',
       ].filter(Boolean).join('\n\n')
 
@@ -186,7 +172,7 @@ export default function DealNetwork() {
         decision_maker_attending: !!form.decision_maker_attending,
         deal_types: form.deal_types,
         one_sentence_pitch: form.one_sentence_pitch.trim() || undefined,
-        deal_description: form.deal_description.trim() || undefined,
+        deal_description: dealDescriptionCombined || undefined,
         ideal_counterpart: form.ideal_counterpart.trim() || undefined,
         named_targets: splitCsv(form.named_targets),
         looking_for: form.looking_for,
@@ -203,7 +189,6 @@ export default function DealNetwork() {
         meeting_format_preference: form.meeting_format_preference || undefined,
         specific_people_to_meet: form.specific_people_to_meet.trim() || undefined,
         previous_context: form.previous_context.trim() || undefined,
-        sensitivities: sensitivitiesCombined || undefined,
         marketing_opt_in: !!form.marketing_opt_in,
         source: 'frontend-deal-network',
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
@@ -241,12 +226,12 @@ export default function DealNetwork() {
           </div>
           <p className="section-label text-white mb-5 fade-up" style={{ opacity: 0.85 }}>SOCCEREX DEAL NETWORK</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
-            Concierge introductions{' '}
-            <span style={{ color: 'var(--color-brand-accent)' }}>for serious commercial work.</span>
+            Curated introductions.{' '}
+            <span style={{ color: 'var(--color-brand-accent)' }}>Real commercial outcomes.</span>
           </h1>
           <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/75 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.2rem)', maxWidth: '760px' }}>
-            The Deal Network is a private layer on top of Soccerex profiles. Tell us what you are buying, selling, or looking for, and what would make a meeting worth your time. Our team reviews every brief before any introduction is made.
+            The Deal Network is a hand-curated matchmaking service drawing on the company database we&#x2019;ve built over 30 years of events across the globe. Tell us what you are buying, selling, or looking for, and we pair you with the rightsholders, partners, or companies best positioned to deliver. Every match is reviewed by our team before an introduction is made.
           </p>
 
           <div className="fade-up mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3"
@@ -423,11 +408,6 @@ export default function DealNetwork() {
               <ChipGroup options={REGION_OPTIONS} value={form.primary_geography ? [form.primary_geography] : []} onChange={(arr) => update('primary_geography', arr[arr.length - 1] || '')} single />
             </div>
 
-            <div className="mb-5">
-              <Label>Leagues, competitions, or properties you care about</Label>
-              <ChipGroup options={LEAGUE_OPTIONS} value={form.leagues_competitions} onChange={(v) => update('leagues_competitions', v)} />
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
               <SelectField icon={Target} label="Indicative budget range (USD)" value={form.budget_range} onChange={(v) => update('budget_range', v)} options={BUDGET_OPTIONS} />
               <FormField icon={Calendar} label="Decision timeline" value={form.decision_timeline} onChange={(v) => update('decision_timeline', v)} placeholder="e.g. Q3 2026, before Miami, this season" />
@@ -435,26 +415,8 @@ export default function DealNetwork() {
 
             <Divider />
 
-            {/* Section 5: Event */}
-            <SectionHeader number="05" title="Soccerex event objectives" subtitle="If you have one in mind. If not, leave this blank." />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <SelectField icon={MapPin} label="Which Soccerex event" value={form.event_slug} onChange={(v) => update('event_slug', v)} options={EVENT_OPTIONS} />
-              <SelectField icon={Compass} label="Preferred meeting format" value={form.meeting_format_preference} onChange={(v) => update('meeting_format_preference', v)} options={MEETING_FORMAT_OPTIONS} />
-            </div>
-
-            <div className="mb-4">
-              <FormField textarea rows={3} label="Specific people or roles you want to meet" value={form.specific_people_to_meet} onChange={(v) => update('specific_people_to_meet', v)} placeholder="e.g. Heads of commercial at MLS clubs, federation presidents, family offices." />
-            </div>
-
-            <div className="mb-5">
-              <Toggle label="A decision-maker from our side plans to attend" value={form.decision_maker_attending} onChange={(v) => update('decision_maker_attending', v)} />
-            </div>
-
-            <Divider />
-
-            {/* Section 6: Context */}
-            <SectionHeader number="06" title="Anything else worth knowing" subtitle="Context, sensitivities, or supporting links." />
+            {/* Section 5: Context */}
+            <SectionHeader number="05" title="Anything else worth knowing" subtitle="The more context you share, the sharper the matches we can make." />
 
             <div className="grid grid-cols-1 gap-4 mb-4">
               <FormField textarea rows={3} label="Deeper context (optional)" value={form.deal_description} onChange={(v) => update('deal_description', v)} placeholder="Longer explanation if the one-line pitch doesn't capture it. History, scope, what 'good' looks like." />
@@ -465,7 +427,6 @@ export default function DealNetwork() {
                   Skip uploads. For large decks, brand folders, signage files, or video, paste a shared link, we will review them in context with your brief.
                 </p>
               </div>
-              <FormField textarea rows={2} label="Sensitivities or things to keep private" value={form.sensitivities} onChange={(v) => update('sensitivities', v)} placeholder="Anything we should not share with counterparts without checking first." />
             </div>
 
             <div className="mb-7">

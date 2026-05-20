@@ -5,7 +5,7 @@ import { isTestModeFromUrl } from '../lib/testMode'
 
 const KIND_OPTIONS = [
   { value: 'speaker_interest', label: 'Suggest a speaker', help: 'Yourself or someone you would like to see on this topic.' },
-  { value: 'topic_suggestion', label: 'Suggest a topic',   help: 'A new programme theme worth exploring at this event.' },
+  { value: 'topic_suggestion', label: 'Suggest a topic',   help: 'A new program theme worth exploring at this event.' },
   { value: 'session_proposal', label: 'Propose a session', help: 'A specific session, panel, or fireside you want to lead.' },
 ]
 
@@ -134,7 +134,7 @@ export default function ProgrammingSubmissionForm({ open, onClose, eventSlug, to
               </div>
               <h3 className="font-heading font-bold" style={{ fontSize: '1.4rem', color: '#0D1B2A', marginBottom: 10 }}>Submission received.</h3>
               <p className="font-body" style={{ fontSize: '0.95rem', color: '#3a4a5a', maxWidth: '420px', margin: '0 auto 24px' }}>
-                Thanks{form.name ? `, ${form.name.split(' ')[0]}` : ''}. The Soccerex programme team will review and reach out if there is a fit.
+                Thanks{form.name ? `, ${form.name.split(' ')[0]}` : ''}. The Soccerex program team will review and reach out if there is a fit.
               </p>
               <button type="button" onClick={onClose} className="event-btn-outline-light">Close</button>
             </div>
@@ -144,7 +144,7 @@ export default function ProgrammingSubmissionForm({ open, onClose, eventSlug, to
                 {topic ? `Topic: ${topic.title}` : 'Programming submission'}
               </p>
               <h3 className="font-heading font-bold" style={{ fontSize: '1.4rem', color: '#0D1B2A', marginBottom: 6 }}>
-                Get involved with the programme
+                Get involved with the program
               </h3>
               <p className="font-body" style={{ fontSize: '0.92rem', color: '#3a4a5a', marginBottom: 22 }}>
                 Suggest yourself, a speaker, or a topic. We review every submission.

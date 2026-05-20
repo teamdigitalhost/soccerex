@@ -8,7 +8,7 @@ import ProgrammingSubmissionForm from '../components/ProgrammingSubmissionForm'
 import { HOME, eventAgendaConcept, eventAgenda, eventSpeakers } from '../lib/routes'
 
 const STATUS_LABEL = {
-  in_program: 'In programme',
+  in_program: 'In program',
   approved: 'Approved concept',
   proposed: 'Proposed',
   archived: 'Archived',
@@ -70,17 +70,17 @@ export default function EventAgendaConcept() {
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
 
           <div className="mb-10">
-            <p className="miami-subhead mb-3" style={{ color: 'var(--event-secondary)', fontSize: 11 }}>Programme themes</p>
+            <p className="miami-subhead mb-3" style={{ color: 'var(--event-secondary)', fontSize: 11 }}>Program themes</p>
             <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D1B2A', lineHeight: 1.05, marginBottom: 16 }}>
               The shape of the <span className="miami-text-gradient">conversation</span>
             </h1>
             <p className="miami-body" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 720, lineHeight: 1.6 }}>
-              These are the topics our programme team is shaping for {event?.name || 'this event'}. Some are already in the running order, others are approved concepts looking for the right voices. If a topic looks like yours, suggest a speaker, or pitch your own session.
+              These are the topics our program team is shaping for {event?.name || 'this event'}. Some are already in the running order, others are approved concepts looking for the right voices. If a topic looks like yours, suggest a speaker, or pitch your own session.
             </p>
           </div>
 
           {error && <ErrorState error={error} />}
-          {!error && topics === null && <LoadingState label="Loading programme themes" />}
+          {!error && topics === null && <LoadingState label="Loading program themes" />}
 
           {topics && topics.length === 0 && (
             <EmptyState message="No topics published yet for this event." />
@@ -119,7 +119,7 @@ export default function EventAgendaConcept() {
                 <p className="miami-subhead mb-2" style={{ color: 'var(--event-primary)', fontSize: 11 }}>None of these fit?</p>
                 <h3 className="miami-headline mb-2" style={{ fontSize: '1.4rem', color: '#0D1B2A' }}>Suggest a topic of your own</h3>
                 <p className="miami-body mb-5" style={{ fontSize: '0.95rem', color: '#3a4a5a', maxWidth: 560, margin: '0 auto 20px' }}>
-                  Have a programme theme we have not listed? Pitch it directly to the Soccerex programme team.
+                  Have a program theme we have not listed? Pitch it directly to the Soccerex program team.
                 </p>
                 <button type="button" onClick={() => openSubmissionFor(null)} className="miami-pill-primary" style={{ display: 'inline-flex' }}>
                   <Plus size={15} /> Suggest a topic
@@ -188,11 +188,6 @@ function TopicCard({ topic, onSuggest }) {
       <dl className="grid grid-cols-1 gap-2 mt-1" style={{ fontSize: 12 }}>
         {topic.audience && (
           <Meta icon={Users} label="Audience">{topic.audience}</Meta>
-        )}
-        {topic.suggested_formats?.length > 0 && (
-          <Meta icon={Layers} label="Formats">
-            {topic.suggested_formats.join(' · ')}
-          </Meta>
         )}
         {topic.keywords?.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-1">
@@ -293,7 +288,7 @@ export function EventHeader({ event, slug, active, loading }) {
         </div>
 
         <nav className="flex gap-1 flex-wrap" aria-label="Programming sections">
-          <NavTab to={withTestSearch(eventAgendaConcept(slug))} active={active === 'agenda-concept'}>Programme themes</NavTab>
+          <NavTab to={withTestSearch(eventAgendaConcept(slug))} active={active === 'agenda-concept'}>Program themes</NavTab>
           <NavTab to={withTestSearch(eventAgenda(slug))} active={active === 'agenda'}>Schedule</NavTab>
           <NavTab to={withTestSearch(eventSpeakers(slug))} active={active === 'speakers'}>Speakers</NavTab>
         </nav>

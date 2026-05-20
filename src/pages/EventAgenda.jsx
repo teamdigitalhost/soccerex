@@ -50,7 +50,7 @@ export default function EventAgenda() {
             <p className="miami-body" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 720, lineHeight: 1.6 }}>
               {sessions && sessions.length > 0
                 ? `${sessions.length} session${sessions.length === 1 ? '' : 's'} across ${grouped.length} day${grouped.length === 1 ? '' : 's'}, grouped by stage. All times shown in event time.`
-                : 'Live programme schedule, grouped by day and stage.'}
+                : 'Live program schedule, grouped by day and stage.'}
             </p>
           </div>
 
@@ -296,7 +296,7 @@ function formatTime(iso) {
   if (!iso) return ''
   /* The serialized ISO already includes the event timezone offset. We extract
      the literal HH:MM from the string so the displayed time matches what the
-     event programme actually says, regardless of the user's local timezone. */
+     event program actually says, regardless of the user's local timezone. */
   const m = iso.match(/T(\d{2}):(\d{2})/)
   if (!m) return ''
   let [, h, mm] = m

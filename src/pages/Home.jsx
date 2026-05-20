@@ -89,7 +89,7 @@ function UpcomingEventSection() {
   const eventLinks = [
     { label: 'Pre-register Now',     to: `${MIAMI_2026}#pre-register`,             primary: true,  icon: Mail },
     { label: 'Event Info',           to: MIAMI_2026,                                                 icon: Globe },
-    { label: 'Programme Themes',     to: eventAgendaConcept('soccerex-miami-2026'),                  icon: FileText },
+    { label: 'Program Themes',     to: eventAgendaConcept('soccerex-miami-2026'),                  icon: FileText },
   ]
 
   return (
@@ -126,14 +126,14 @@ function UpcomingEventSection() {
               </p>
             </div>
             <h2 className="font-heading font-bold leading-[1.05] mb-5" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', color: '#0D1B2A' }}>
-              The world came for the World Cup.<br />
-              <span style={{ color: '#E91E63' }}>The industry stays for Soccerex.</span>
+              The world comes for the World Cup.<br />
+              <span style={{ color: '#E91E63' }}>The Industry stays for Soccerex.</span>
             </h2>
             <p className="font-mono uppercase mb-5" style={{ fontSize: 12, letterSpacing: '0.24em', color: '#007C91' }}>
               Where global football meets Miami
             </p>
             <p className="font-body leading-relaxed mb-7" style={{ fontSize: '1.05rem', color: '#1a2a3a', maxWidth: '560px' }}>
-              Soccerex Miami opens the Americas chapter on the doorstep of the 2026 FIFA World Cup. Three days of high-impact content, executive networking, and the partnerships that shape the next decade of football in the region.
+              Soccerex Miami opens the Americas chapter in the wake of the 2026 FIFA World Cup. Three days of high-impact content, executive networking, and the partnerships that shape the next decade of football in the region.
             </p>
             <div className="flex flex-wrap gap-3">
               {eventLinks.map((link) => {
@@ -417,7 +417,7 @@ function EventsSection() {
       city: 'MIAMI',
       name: 'Soccerex Miami',
       dates: '23-25 September 2026',
-      venue: 'Miami Freedom Park',
+      venue: 'Venue to be announced',
       img: '/events/miami/2026/sections/miami-skyline.jpg',
       crest: '/brand/crests/crest-miami-white.svg',
       learnMoreTo: '/miami-2026',
@@ -956,7 +956,7 @@ function SocialProofSection() {
       <div className="relative z-10" style={{ maxWidth: '1360px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div className="mb-14">
           <h2 className="font-heading font-bold text-white leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)' }}>
-            Brand <span style={{ color: 'var(--color-brand-accent)' }}>Ecosystem</span>
+            Soccerex <span style={{ color: 'var(--color-brand-accent)' }}>Ecosystem</span>
           </h2>
           <p className="font-body text-white/55 leading-relaxed fade-up mt-4" style={{ fontSize: '1rem', maxWidth: '680px' }}>
             For 30 years, Soccerex has convened the organizations shaping football. Clubs and federations, broadcasters and brands, investors and innovators.

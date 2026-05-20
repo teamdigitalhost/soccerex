@@ -94,7 +94,7 @@ export default function EventSpeakers() {
             <p className="miami-body" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 720, lineHeight: 1.6 }}>
               {isPast
                 ? 'A look back at the speakers who joined us. Use the search to find a name, company, or country.'
-                : 'Confirmed and invited voices in this year\'s programme. More are added as the schedule firms up.'}
+                : 'Confirmed and invited voices in this year\'s program. More are added as the schedule firms up.'}
             </p>
           </div>
 

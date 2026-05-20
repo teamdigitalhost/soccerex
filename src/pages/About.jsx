@@ -3,7 +3,7 @@ import { ArrowRight, Globe, Users, Mic, Newspaper, Shield, Network as NetworkIco
 import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { CONTACT, EUROPE_2026 } from '../lib/routes'
+import { CONTACT, EUROPE_2026, MIAMI_2026 } from '../lib/routes'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ─── Timeline data ──────────────────────────────────────────────────────────
@@ -224,7 +224,7 @@ export default function About() {
           </h1>
           <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/80 leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: 'clamp(1.05rem, 1.6vw, 1.35rem)', maxWidth: '820px', lineHeight: 1.55 }}>
-            Since 1996, Soccerex has been the neutral ground where the global football industry comes together to connect, deal, and grow the game. Thirty years, three continents, one platform.
+            Since 1996, Soccerex has been the neutral ground where the global football industry comes together to connect, deal, and grow the game. Thirty years, five continents, one platform.
           </p>
           <p className="font-body text-white/55 fade-up font-mono uppercase tracking-widest" style={{ fontSize: '0.85rem', letterSpacing: '0.2em' }}>
             Est. 1996
@@ -260,7 +260,7 @@ export default function About() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {[
               { icon: Shield, title: 'Neutrality & Trust', desc: 'Clubs, leagues, brands, and investors engage openly, without agenda or bias.', img: '/hero/03-TIER1-infantino-fifa-president.jpg' },
-              { icon: NetworkIcon, title: 'Global Connectivity', desc: 'Decision-makers from every part of the global football ecosystem, connected.', img: '/hero/22-NEW-soccerex-brasil-auditorium.jpg' },
+              { icon: NetworkIcon, title: 'Global Connectivity', desc: 'Decision-makers from every part of the global football ecosystem, connected.', img: '/hero/165-NEW6-europe-opening-speech-massive-crowd.jpg' },
               { icon: Brain, title: 'Institutional Memory', desc: 'Relationships and partnerships build over time, not from scratch.', img: '/hero/04-TIER1-bobby-charlton-handprints.jpg' },
               { icon: Target, title: 'Commercial Gravity', desc: 'A concentrated environment where opportunities naturally emerge.', img: '/images/about/networking-group.jpg' },
               { icon: Award, title: 'Credibility', desc: 'A proven track record across global markets over three decades.', img: '/hero/07-TIER1-van-der-sar.jpg' },
@@ -509,7 +509,7 @@ export default function About() {
             To enquire about hosting a Soccerex in your city, or to join our next event, get in touch.
           </p>
           <div className="flex flex-wrap justify-center gap-4 fade-up">
-            <Link to={EUROPE_2026} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
+            <Link to={MIAMI_2026} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
               style={{ background: 'var(--color-brand-accent)', color: '#fff', textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)'; e.currentTarget.style.transform = 'translateY(0)' }}>

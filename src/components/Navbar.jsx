@@ -64,8 +64,8 @@ export default function Navbar() {
         borderBottom: solid ? '1px solid rgba(191,177,112,0.15)' : '1px solid transparent',
       }}>
         <div className="flex items-center justify-between px-6" style={{ maxWidth: '1200px', margin: '0 auto', height: '72px' }}>
-          <Link to={HOME} className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
-            <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '28px', width: 'auto' }} />
+          <Link to={HOME} aria-label="Soccerex home" className="flex items-center gap-2" style={{ textDecoration: 'none', position: 'relative', zIndex: 60, cursor: 'pointer' }}>
+            <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '28px', width: 'auto', display: 'block', pointerEvents: 'none' }} />
           </Link>
 
           <div className="hidden lg:flex items-center gap-6">
