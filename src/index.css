@@ -2,17 +2,39 @@
 @import "./styles/event-themes.css";
 
 @theme {
-  /* Soccerex Brand Colors */
+  /* ════════════════════════════════════════════════════════════════════ */
+  /* BASE THEME PALETTE                                                   */
+  /*                                                                      */
+  /* The Soccerex base theme is currently aligned to Miami pink. To       */
+  /* revert to the original gold/red Soccerex palette, change only the    */
+  /* five values inside the "BASE THEME PALETTE" block below. Keep the    */
+  /* DEFAULTS.soccerex object in src/components/ThemePicker.jsx in sync   */
+  /* (one-to-one mapping with these primary + secondary values).          */
+  /*                                                                      */
+  /* City-page palettes live in src/styles/event-themes.css under         */
+  /* .theme-miami / .theme-europe / .theme-riyadh and are unaffected by   */
+  /* base-theme edits.                                                    */
+  /*                                                                      */
+  /* Original Soccerex gold palette (for revert reference):               */
+  /*   --color-brand-accent:       #bfb170                                */
+  /*   --color-brand-accent-light: #d4c78e                                */
+  /*   --color-red:                #c8302c                                */
+  /*   --color-red-light:          #e8504c                                */
+  /*   --color-warm-anchor-rgb:    191, 177, 112                          */
+  /* ════════════════════════════════════════════════════════════════════ */
+
   --color-navy: #09203e;
   --color-navy-light: #0e2a4f;
   --color-navy-dark: #061729;
-  /* Base brand accent. Temporarily set to Miami pink so the default
-     Soccerex chrome matches the active Miami push. Swap back here when
-     the brand wants a different anchor color. */
-  --color-brand-accent: #E91E63;
+
+  /* ▼ BASE THEME PALETTE (edit these to reskin the chrome) ▼ */
+  --color-brand-accent: #E91E63;       /* primary, currently Miami pink */
   --color-brand-accent-light: #ff5b8a;
-  --color-red: #ffb703;
-  --color-red-light: #ffd166;
+  --color-red: #ff5b8a;                /* secondary accent (kept name for back-compat) */
+  --color-red-light: #ffb1c8;
+  --color-warm-anchor-rgb: 233, 30, 99; /* decorative warm-tint rgba base */
+  /* ▲ BASE THEME PALETTE ▲ */
+
   --color-blue-accent: #1a3fbf;
   --color-midnight: #050d1a;
   --color-charcoal: #0c1a2e;
@@ -98,8 +120,8 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 .bg-charcoal-textured {
   background-color: #0c1a2e;
   background-image:
-    linear-gradient(rgba(191, 177, 112, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(191, 177, 112, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(var(--color-warm-anchor-rgb), 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--color-warm-anchor-rgb), 0.04) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
@@ -205,7 +227,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   left: 0;
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-brand-accent), rgba(191, 177, 112, 0.3));
+  background: linear-gradient(90deg, var(--color-brand-accent), rgba(var(--color-warm-anchor-rgb), 0.3));
 }
 
 /* ─── Hero Slideshow ─────────────────────────────────────────────────────── */
@@ -918,7 +940,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
 .gallery-item:hover .gallery-item-inner {
-  border-color: rgba(191, 177, 112, 0.4);
+  border-color: rgba(var(--color-warm-anchor-rgb), 0.4);
   transform: scale(1.02);
 }
 
@@ -987,17 +1009,17 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   transition: all 0.25s ease;
 }
 .gallery-filter-pill:hover {
-  border-color: rgba(191, 177, 112, 0.4);
+  border-color: rgba(var(--color-warm-anchor-rgb), 0.4);
   color: var(--color-brand-accent);
 }
 .gallery-filter-active {
-  background: rgba(191, 177, 112, 0.12);
+  background: rgba(var(--color-warm-anchor-rgb), 0.12);
   border-color: var(--color-brand-accent);
   color: var(--color-brand-accent);
 }
 .gallery-filter-count {
   font-size: 11px;
-  background: rgba(191, 177, 112, 0.2);
+  background: rgba(var(--color-warm-anchor-rgb), 0.2);
   padding: 1px 7px;
   border-radius: 100px;
 }
@@ -1211,14 +1233,14 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   padding: 14px;
   background: rgba(255, 255, 255, 0.92);
   border-radius: 10px;
-  border: 1px solid rgba(191, 177, 112, 0.1);
+  border: 1px solid rgba(var(--color-warm-anchor-rgb), 0.1);
   transition: transform 0.3s, background 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
 .gn-grid-cell:hover {
   transform: translateY(-4px) scale(1.04);
   background: #ffffff;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-  border-color: rgba(191, 177, 112, 0.5);
+  border-color: rgba(var(--color-warm-anchor-rgb), 0.5);
 }
 .gn-grid-cell img {
   max-width: 100%;
@@ -1255,9 +1277,9 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 }
 
 @keyframes contact-form-glow {
-  0% { box-shadow: 0 20px 60px rgba(9,32,62,0.08), 0 0 0 0 rgba(191,177,112,0); }
-  40% { box-shadow: 0 20px 60px rgba(9,32,62,0.14), 0 0 0 6px rgba(191,177,112,0.28); }
-  100% { box-shadow: 0 20px 60px rgba(9,32,62,0.08), 0 0 0 0 rgba(191,177,112,0); }
+  0% { box-shadow: 0 20px 60px rgba(9,32,62,0.08), 0 0 0 0 rgba(var(--color-warm-anchor-rgb),0); }
+  40% { box-shadow: 0 20px 60px rgba(9,32,62,0.14), 0 0 0 6px rgba(var(--color-warm-anchor-rgb),0.28); }
+  100% { box-shadow: 0 20px 60px rgba(9,32,62,0.08), 0 0 0 0 rgba(var(--color-warm-anchor-rgb),0); }
 }
 
 .contact-form-panel {
@@ -1294,7 +1316,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 
 @keyframes contact-hint-pulse {
   0%, 100% { border-color: rgba(9,32,62,0.12); }
-  50% { border-color: rgba(191,177,112,0.45); }
+  50% { border-color: rgba(var(--color-warm-anchor-rgb),0.45); }
 }
 .gn-grid-cell:hover img {
   filter: grayscale(0);
@@ -1545,8 +1567,8 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 
 /* Pulsing countdown ring (for upcoming events) */
 @keyframes ev-ring-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(191,177,112,0.4); }
-  50% { box-shadow: 0 0 0 12px rgba(191,177,112,0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--color-warm-anchor-rgb),0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(var(--color-warm-anchor-rgb),0); }
 }
 .ev-ring-pulse {
   animation: ev-ring-pulse 2.5s ease-in-out infinite;
@@ -1563,8 +1585,8 @@ html, body { overflow-x: hidden; max-width: 100vw; }
     -45deg,
     transparent,
     transparent 40px,
-    rgba(191,177,112,0.03) 40px,
-    rgba(191,177,112,0.03) 80px
+    rgba(var(--color-warm-anchor-rgb),0.03) 40px,
+    rgba(var(--color-warm-anchor-rgb),0.03) 80px
   );
   pointer-events: none;
 }

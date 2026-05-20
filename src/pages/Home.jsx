@@ -405,9 +405,6 @@ function EventsSection() {
       img: '/events/europe/2026/sections/arena-interior.webp',
       crest: '/brand/crests/crest-europe-white.svg',
       learnMoreTo: '/europe-2026',
-      ctaLabel: 'View Recap',
-      ctaHref: '/europe-2026',
-      ctaExternal: false,
       status: 'past',
       pastLabel: 'Thank you!',
       accent: '#c8302c',
@@ -606,15 +603,15 @@ function EventsSection() {
                     <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.18em', marginTop: '14px' }}>
                       {event.name}
                     </p>
-                    {/* Dual CTA: Learn more + (Buy Tickets | Pre-register) */}
-                    <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', position: 'relative', zIndex: 6 }}>
+                    {/* CTA row: Learn more always present, secondary CTA only when defined */}
+                    <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: event.ctaLabel ? '1fr 1fr' : '1fr', gap: '8px', position: 'relative', zIndex: 6 }}>
                       <Link
                         to={event.learnMoreTo}
                         className="home-event-cta home-event-cta--ghost"
                       >
                         Learn more
                       </Link>
-                      {event.ctaExternal ? (
+                      {event.ctaLabel && (event.ctaExternal ? (
                         <a
                           href={event.ctaHref}
                           target="_blank"
@@ -632,7 +629,7 @@ function EventsSection() {
                         >
                           {event.ctaLabel}
                         </Link>
-                      )}
+                      ))}
                     </div>
                   </div>
                 </div>

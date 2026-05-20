@@ -11,9 +11,11 @@ if (import.meta.hot) {
 }
 
 /* ─── Defaults ────────────────────────────────────────────────────────────── */
-/* Base palette: brand accent (pink) + golden yellow secondary */
+/* Base palette: brand accent (pink) + Miami-aligned soft pink secondary.
+   Keep this object in sync with the BASE THEME PALETTE block at the top
+   of src/index.css. Original Soccerex gold palette commented there. */
 const DEFAULTS = {
-  soccerex: { primary: '#E91E63', secondary: '#ffb703' },
+  soccerex: { primary: '#E91E63', secondary: '#ff5b8a' },
   europe:   { primary: '#c8302c', secondary: '#e8504c' },
   miami:    { primary: '#e84393', secondary: '#fd79a8' },
   riyadh:   { primary: '#d4a853', secondary: '#e8c878' },

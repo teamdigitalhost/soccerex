@@ -316,17 +316,12 @@ export default function HeroSlideshow() {
         // Build a fresh shuffled playlist: heritage every 3rd, modern randomized
         ALL_IMAGES = buildPlaylist(data.heritage || [], data.modern || [])
         setImagesLoaded(true)
-        // Preload first 5 immediately
-        ALL_IMAGES.slice(0, 5).forEach((src) => { new Image().src = src })
-        // Lazy preload the rest in batches
-        let i = 5
-        const preloadBatch = () => {
-          const batch = ALL_IMAGES.slice(i, i + 10)
-          batch.forEach((src) => { new Image().src = src })
-          i += 10
-          if (i < ALL_IMAGES.length) setTimeout(preloadBatch, 500)
-        }
-        setTimeout(preloadBatch, 2000)
+        // Preload only the first 3 immediately. The slideshow advances every
+        // few seconds and the per-cycle effect below preloads the next image
+        // just before it is shown, so eager-loading the whole 200+ image
+        // playlist (~100MB on first paint) was the cause of the "sometimes
+        // fail to load or take a while" report. Just-in-time wins here.
+        ALL_IMAGES.slice(0, 3).forEach((src) => { new Image().src = src })
       })
     const t = setTimeout(() => setTextReady(true), 500)
     return () => clearTimeout(t)
@@ -340,6 +335,10 @@ export default function HeroSlideshow() {
       setTimeout(() => {
         setCurrentImage((prev) => {
           const next = (prev + 1) % ALL_IMAGES.length
+          // Just-in-time preload: warm the cache for the image AFTER next so
+          // the browser has it ready when the slide flips.
+          const lookahead = (next + 1) % ALL_IMAGES.length
+          new Image().src = ALL_IMAGES[lookahead]
           // At loop boundary, trigger gold flash
           if (next === 0) {
             setTransitioning(true)

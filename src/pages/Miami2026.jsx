@@ -209,7 +209,48 @@ export default function Miami2026() {
 
             <div className="flex flex-wrap gap-3 items-center">
               <a href="#pre-register" className="miami-pill-primary"><Mail size={15} /> Pre-register Now</a>
-              <a href="#pre-register" className="miami-pill-outline">Reserve Your Place &rarr;</a>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mt-5" style={{ maxWidth: 560 }}>
+              <InquiryModalButton
+                kind="sponsorship-inquiry"
+                label="Sponsor"
+                modalTitle="Sponsor Soccerex Miami"
+                eyebrow="Sponsorship inquiry"
+                intro="Tell us about your brand and what you want to achieve in Miami. We will send the right sponsorship pack."
+                schema={sponsorshipSchema}
+                extraPayload={{ event_slug: 'soccerex-miami-2026', inquiry_intent: 'sponsor', source: 'miami-hero-sponsor' }}
+                submitLabel="Send inquiry"
+                successTitle="Inquiry received."
+                successBody="A partnerships lead will follow up by email."
+                buttonClassName="miami-cta-box"
+              />
+              <InquiryModalButton
+                kind="sponsorship-inquiry"
+                label="Exhibit"
+                modalTitle="Exhibit at Soccerex Miami"
+                eyebrow="Exhibitor inquiry"
+                intro="Tell us about your stand needs and product mix. We will send the exhibitor pack and floor plan."
+                schema={sponsorshipSchema}
+                extraPayload={{ event_slug: 'soccerex-miami-2026', inquiry_intent: 'exhibit', source: 'miami-hero-exhibit' }}
+                submitLabel="Send inquiry"
+                successTitle="Inquiry received."
+                successBody="An exhibitor lead will follow up by email."
+                buttonClassName="miami-cta-box"
+              />
+              <InquiryModalButton
+                kind="speaker-inquiry"
+                label="Speak"
+                modalTitle="Speak at Soccerex Miami"
+                eyebrow="Speaker interest"
+                intro="Tell us who you are and what you would talk about. The program team will reach out if there is a fit."
+                schema={speakerSchema}
+                extraPayload={{ event_slug: 'soccerex-miami-2026', inquiry_intent: 'speak', source: 'miami-hero-speak' }}
+                submitLabel="Send"
+                successTitle="Thanks, we have your details."
+                successBody="The program team will reach out if there is a fit."
+                buttonClassName="miami-cta-box"
+              />
             </div>
           </div>
 

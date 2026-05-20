@@ -8,6 +8,14 @@ if (import.meta.hot) {
   import.meta.hot.accept(() => { import.meta.hot.invalidate() })
 }
 
+/* Globe palette: currently aligned to the Miami pink base theme. To revert
+   to the original Soccerex gold globe, find/replace inside this file:
+     #E91E63  -> #bfb170    (primary marker / accent)
+     #b3134a  -> #917B4C    (muted accent for year / HQ chip text)
+     #ffd166  -> #d4a853    (Miami home-base marker)
+     233,30,99 -> 191,177,112   (rgba alpha accents)
+     179,19,74 -> 145,123,76    (rgba alpha trails) */
+
 const CITIES = [
   { city: 'London', country: 'UK', lat: 51.5074, lng: -0.1278, years: '1996, 1997, 2005', label: 'Soccerex Launch and European Events' },
   { city: 'Paris', country: 'France', lat: 48.8566, lng: 2.3522, years: '1998', label: 'European Expansion' },
@@ -123,14 +131,14 @@ export default function InteractiveGlobe() {
   }
 
   const pointLabel = useMemo(() => (d) => `
-    <div style="background:rgba(11,33,61,0.95);backdrop-filter:blur(12px);border:1px solid rgba(145,123,76,0.3);border-radius:10px;padding:14px 18px;min-width:180px;font-family:Inter,sans-serif;">
+    <div style="background:rgba(11,33,61,0.95);backdrop-filter:blur(12px);border:1px solid rgba(179,19,74,0.3);border-radius:10px;padding:14px 18px;min-width:180px;font-family:Inter,sans-serif;">
       <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
         <span style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#fff;">${d.city}</span>
         <span style="font-size:12px;color:rgba(255,255,255,0.5);">${d.country}</span>
       </div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#917B4C;margin-bottom:6px;">${d.years}</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#b3134a;margin-bottom:6px;">${d.years}</div>
       <div style="font-size:12px;color:rgba(255,255,255,0.65);line-height:1.4;">${d.label}</div>
-      ${d.homeBase ? '<div style="display:inline-block;margin-top:8px;padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#917B4C;background:rgba(145,123,76,0.15);border:1px solid rgba(145,123,76,0.3);border-radius:100px;">Home Base</div>' : ''}
+      ${d.homeBase ? '<div style="display:inline-block;margin-top:8px;padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#b3134a;background:rgba(179,19,74,0.15);border:1px solid rgba(179,19,74,0.3);border-radius:100px;">Home Base</div>' : ''}
     </div>
   `, [])
 
@@ -161,7 +169,7 @@ export default function InteractiveGlobe() {
             pointsData={CITIES}
             pointLat="lat"
             pointLng="lng"
-            pointColor={(d) => d.homeBase ? '#d4a853' : (d.city === selectedCity ? '#fff' : '#917B4C')}
+            pointColor={(d) => d.homeBase ? '#ffd166' : (d.city === selectedCity ? '#fff' : '#b3134a')}
             pointAltitude={(d) => d.homeBase ? 0.06 : (d.city === selectedCity ? 0.05 : 0.02)}
             pointRadius={(d) => d.homeBase ? 1.2 : (d.city === selectedCity ? 1.0 : 0.7)}
             pointLabel={pointLabel}
@@ -182,7 +190,7 @@ export default function InteractiveGlobe() {
             arcStartLng="startLng"
             arcEndLat="endLat"
             arcEndLng="endLng"
-            arcColor={() => ['rgba(145,123,76,0.5)', 'rgba(145,123,76,0.1)']}
+            arcColor={() => ['rgba(179,19,74,0.5)', 'rgba(179,19,74,0.1)']}
             arcAltitudeAutoScale={0.3}
             arcStroke={0.3}
             arcDashLength={0.5}
@@ -207,7 +215,7 @@ export default function InteractiveGlobe() {
           zIndex: 21,
           background: 'rgba(9,32,62,0.85)',
           backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(191,177,112,0.35)',
+          border: '1px solid rgba(233,30,99,0.35)',
           borderRight: 'none',
           borderRadius: '10px 0 0 10px',
           padding: '14px 10px',
@@ -215,7 +223,7 @@ export default function InteractiveGlobe() {
           display: 'flex',
           alignItems: 'center',
           gap: '6px',
-          color: '#bfb170',
+          color: '#E91E63',
           fontFamily: '"IBM Plex Mono", monospace',
           fontSize: '0.58rem',
           textTransform: 'uppercase',
@@ -224,8 +232,8 @@ export default function InteractiveGlobe() {
           transition: 'transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, border-color 0.2s',
           writingMode: 'vertical-rl',
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.7)' }}
-        onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.35)' }}
+        onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(233,30,99,0.7)' }}
+        onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(233,30,99,0.35)' }}
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotate(90deg)' }}>
           <polyline points="15 18 9 12 15 6" />
@@ -257,17 +265,17 @@ export default function InteractiveGlobe() {
             height: '28px',
             borderRadius: '50%',
             background: 'rgba(9,32,62,0.92)',
-            border: '1px solid rgba(191,177,112,0.4)',
+            border: '1px solid rgba(233,30,99,0.4)',
             backdropFilter: 'blur(8px)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#bfb170',
+            color: '#E91E63',
             transition: 'transform 0.15s ease, border-color 0.15s',
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.8)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.borderColor = 'rgba(191,177,112,0.4)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.borderColor = 'rgba(233,30,99,0.8)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.borderColor = 'rgba(233,30,99,0.4)' }}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6" />
@@ -277,7 +285,7 @@ export default function InteractiveGlobe() {
         {sel && (
           <div style={{
             background: 'rgba(9,32,62,0.65)',
-            border: '1px solid rgba(191,177,112,0.3)',
+            border: '1px solid rgba(233,30,99,0.3)',
             borderRadius: '14px',
             padding: '16px 18px',
             marginBottom: '8px',
@@ -286,9 +294,9 @@ export default function InteractiveGlobe() {
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
               <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.05rem', fontWeight: 700, color: '#fff' }}>{sel.city}</span>
               <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)' }}>{sel.country}</span>
-              {sel.homeBase && <span style={{ fontSize: '0.5rem', fontFamily: '"IBM Plex Mono", monospace', color: '#bfb170', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(191,177,112,0.15)', padding: '2px 8px', borderRadius: '100px', border: '1px solid rgba(191,177,112,0.25)' }}>HQ</span>}
+              {sel.homeBase && <span style={{ fontSize: '0.5rem', fontFamily: '"IBM Plex Mono", monospace', color: '#E91E63', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(233,30,99,0.15)', padding: '2px 8px', borderRadius: '100px', border: '1px solid rgba(233,30,99,0.25)' }}>HQ</span>}
             </div>
-            <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.62rem', color: '#bfb170', letterSpacing: '0.08em', marginBottom: '4px' }}>{sel.years}</p>
+            <p style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.62rem', color: '#E91E63', letterSpacing: '0.08em', marginBottom: '4px' }}>{sel.years}</p>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 }}>{sel.label}</p>
           </div>
         )}
@@ -299,7 +307,7 @@ export default function InteractiveGlobe() {
           style={{
             width: '100%',
             background: 'rgba(9,32,62,0.65)',
-            border: '1px solid rgba(191,177,112,0.2)',
+            border: '1px solid rgba(233,30,99,0.2)',
             borderRadius: '14px',
             padding: '12px 18px',
             marginBottom: listOpen ? (sel ? '8px' : '10px') : '0',
@@ -311,14 +319,14 @@ export default function InteractiveGlobe() {
             gap: '8px',
             transition: 'border-color 0.2s',
           }}
-          onMouseEnter={(e) => { if (isMobile) e.currentTarget.style.borderColor = 'rgba(191,177,112,0.4)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(191,177,112,0.2)' }}
+          onMouseEnter={(e) => { if (isMobile) e.currentTarget.style.borderColor = 'rgba(233,30,99,0.4)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(233,30,99,0.2)' }}
         >
-          <span style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#bfb170', fontWeight: 600 }}>
+          <span style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.62rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#E91E63', fontWeight: 600 }}>
             {CITIES.length} Event Cities
           </span>
           {isMobile && (
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#bfb170" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E91E63" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
               style={{ transition: 'transform 0.25s', transform: listOpen ? 'rotate(180deg)' : 'rotate(0)' }}>
               <polyline points="6 9 12 15 18 9" />
             </svg>
@@ -338,7 +346,7 @@ export default function InteractiveGlobe() {
             maxHeight: '360px',
             borderRadius: '14px',
             background: 'rgba(9,32,62,0.65)',
-            border: '1px solid rgba(191,177,112,0.15)',
+            border: '1px solid rgba(233,30,99,0.15)',
             padding: '6px',
             marginTop: sel ? '0' : '8px',
           }}>
@@ -353,12 +361,12 @@ export default function InteractiveGlobe() {
                     width: '100%', padding: '9px 12px', borderRadius: '6px',
                     border: 'none', cursor: 'pointer', textAlign: 'left',
                     transition: 'all 0.15s',
-                    background: isActive ? 'rgba(191,177,112,0.15)' : 'transparent',
-                    borderLeft: isActive ? '2px solid #bfb170' : '2px solid transparent',
+                    background: isActive ? 'rgba(233,30,99,0.15)' : 'transparent',
+                    borderLeft: isActive ? '2px solid #E91E63' : '2px solid transparent',
                     marginBottom: '1px',
                   }}
                   onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = isActive ? 'rgba(191,177,112,0.15)' : 'transparent' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = isActive ? 'rgba(233,30,99,0.15)' : 'transparent' }}
                 >
                   <div>
                     <span style={{
@@ -369,7 +377,7 @@ export default function InteractiveGlobe() {
                     </span>
                     <span style={{
                       fontFamily: '"IBM Plex Mono", monospace', fontSize: '0.55rem',
-                      color: isActive ? '#bfb170' : 'rgba(255,255,255,0.25)',
+                      color: isActive ? '#E91E63' : 'rgba(255,255,255,0.25)',
                       marginLeft: '8px',
                     }}>
                       {c.years}
@@ -377,8 +385,8 @@ export default function InteractiveGlobe() {
                   </div>
                   <span style={{
                     width: '4px', height: '4px', borderRadius: '50%', flexShrink: 0,
-                    background: isActive ? '#bfb170' : 'rgba(255,255,255,0.1)',
-                    boxShadow: isActive ? '0 0 6px rgba(191,177,112,0.5)' : 'none',
+                    background: isActive ? '#E91E63' : 'rgba(255,255,255,0.1)',
+                    boxShadow: isActive ? '0 0 6px rgba(233,30,99,0.5)' : 'none',
                   }} />
                 </button>
               )

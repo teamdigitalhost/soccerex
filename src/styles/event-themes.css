@@ -695,6 +695,32 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   background: var(--event-primary-bg, rgba(233, 30, 99, 0.08));
 }
 
+/* Miami hero secondary CTA boxes: Sponsor / Exhibit / Speak trio.
+   Compact squared tiles that sit under the primary pre-register pill. */
+.miami-cta-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 8px;
+  background: #FFFFFF;
+  color: var(--event-primary, #E91E63);
+  border: 2px solid var(--event-primary, #E91E63);
+  border-radius: 0;
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+.miami-cta-box:hover {
+  background: var(--event-primary, #E91E63);
+  color: #FFFFFF;
+}
+
 /* Outline button on light backgrounds */
 .event-btn-outline-light {
   display: inline-flex;
