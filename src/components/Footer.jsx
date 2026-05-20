@@ -65,11 +65,12 @@ const SOCIALS = [
   // is left in place so we can re-add it cheaply if Soccerex changes mind.
 ]
 
+// Get in Touch sidebar pared back per GN revisions doc to a single channel.
+// EXHIBIT / SPEAK / PRESS entries removed — exhibitor + press inquiries
+// still route correctly through the main Contact form's dropdown. Keep the
+// addresses live on the backend so old links don't bounce.
 const CONTACTS = [
   { label: 'PARTNERSHIP OPPORTUNITIES', email: 'partner@soccerex.com' },
-  { label: 'EXHIBIT', email: 'exhibit@soccerex.com' },
-  { label: 'SPEAK', email: 'talks@soccerex.com' },
-  { label: 'PRESS', email: 'press@soccerex.com' },
 ]
 
 export default function Footer() {

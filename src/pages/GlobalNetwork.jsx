@@ -269,11 +269,15 @@ const PILLARS = [
 ]
 
 // Stats bar numbers
+// Standardized to the GN revisions doc stats line:
+// "30 Years · 57 Events · 75K+ Delegates · 5K+ Brands". The fifth tagline
+// segment ("One Global Football Business Platform") renders inline under
+// the hero, not as a stat tile.
 const NETWORK_STATS = [
-  { num: '228', label: 'Global Partners' },
+  { num: '30', label: 'Years' },
   { num: '57', label: 'Events' },
-  { num: '75k+', label: 'Delegates' },
-  { num: '5k+', label: 'Brands' },
+  { num: '75K+', label: 'Delegates' },
+  { num: '5K+', label: 'Brands' },
 ]
 
 // ─── Animated counter ──────────────────────────────────────────────────────
@@ -356,18 +360,17 @@ export default function GlobalNetwork() {
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
               style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
-          <p className="section-label text-brand-accent mb-6 fade-up">COMMUNITY</p>
+          <p className="section-label text-brand-accent mb-6 fade-up">GLOBAL FOOTBALL BUSINESS PLATFORM</p>
           <h1 className="font-heading font-bold text-white leading-[1.02] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 6rem)' }}>
-            The Global Leader in the{' '}
-            <span style={{ color: 'var(--color-brand-accent)' }}>Business of Football</span>{' '}
-            <span style={{ color: 'var(--color-brand-accent)' }}>Since 1996</span>
+            The Global Platform for the{' '}
+            <span style={{ color: 'var(--color-brand-accent)' }}>Business of Football</span>
           </h1>
           <div className="fade-up mx-auto mb-8" style={{ width: '120px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
-          <p className="font-body text-white/85 leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: 'clamp(1.15rem, 1.8vw, 1.4rem)', maxWidth: '840px', lineHeight: 1.55 }}>
-            Soccerex events provide the industry&apos;s leading professionals with a variety of formal and informal networking platforms, building and strengthening the relationships that shape the global football industry.
+          <p className="font-body text-white/85 leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: 'clamp(1.15rem, 1.8vw, 1.4rem)', maxWidth: '880px', lineHeight: 1.55 }}>
+            For 30 years, Soccerex has brought the football industry together across the world. Today, that legacy has evolved into a year-round platform connecting clubs, leagues, federations, investors, brands, rightsholders, technology leaders, and financial partners through events, insight, dealmaking, innovation, and impact.
           </p>
           <p className="font-body text-white/60 fade-up mx-auto font-mono uppercase tracking-widest" style={{ fontSize: '0.82rem', letterSpacing: '0.22em' }}>
-            228 Partners &middot; 75k+ Delegates &middot; 57 Events &middot; 5k+ Brands
+            30 Years &middot; 57 Events &middot; 75K+ Delegates &middot; 5K+ Brands &middot; One Global Football Business Platform
           </p>
         </div>
       </section>
@@ -474,6 +477,9 @@ export default function GlobalNetwork() {
             </div>
           ))}
         </div>
+        <p className="relative z-10 font-mono uppercase text-center mt-10 fade-up" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.8rem', letterSpacing: '0.18em' }}>
+          One Global Football Business Platform
+        </p>
       </section>
 
       {/* Wave divider: stats → marquee */}

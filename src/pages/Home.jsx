@@ -219,16 +219,15 @@ function UpcomingEventSection() {
 }
 
 // ─── BY THE NUMBERS (WFS-style stat tiles with background imagery) ──────────
+// Standardized to the GN revisions doc stats line:
+// "30 Years · 57 Events · 75K+ Delegates · 5K+ Brands · One Global Football
+// Business Platform". The fifth tagline segment renders below the grid.
 function ByTheNumbersSection() {
   const stats = [
-    { num: '75k+', label: 'Attendees',        bg: '/hero/22-NEW-soccerex-brasil-auditorium.jpg' },
-    { num: '57',   label: 'Events',           bg: '/hero/15-TIER2-asian-forum-panel.jpg' },
-    { num: '21',   label: 'Cities',           bg: '/hero/279-NEW9-cruyff-arena-interior-daylight.jpg' },
-    { num: '5k+',  label: 'Brands',           bg: '/hero/09-TIER1-jenny-chiu-diverse-panel.jpg' },
-    { num: '30',   label: 'Years',            bg: '/hero/04-TIER1-bobby-charlton-handprints.jpg' },
-    { num: '2k+',  label: 'Avg Delegates',    bg: '/hero/16-TIER2-football-for-hope-youth.jpg' },
-    { num: '100+', label: 'Countries',        bg: '/hero/11-TIER1-alexi-lalas.jpg' },
-    { num: '100+', label: 'Speakers Annually', bg: '/hero/01-TIER1-ronaldo.jpg' },
+    { num: '30',   label: 'Years',     bg: '/hero/04-TIER1-bobby-charlton-handprints.jpg' },
+    { num: '57',   label: 'Events',    bg: '/hero/15-TIER2-asian-forum-panel.jpg' },
+    { num: '75K+', label: 'Delegates', bg: '/hero/22-NEW-soccerex-brasil-auditorium.jpg' },
+    { num: '5K+',  label: 'Brands',    bg: '/hero/09-TIER1-jenny-chiu-diverse-panel.jpg' },
   ]
 
   return (
@@ -297,6 +296,10 @@ function ByTheNumbersSection() {
             </div>
           ))}
         </div>
+        {/* Standard platform tagline, GN revisions doc. */}
+        <p className="font-mono uppercase fade-up mt-10 text-center" style={{ fontSize: 'clamp(0.78rem, 1vw, 0.88rem)', letterSpacing: '0.18em', color: '#0D1B2A' }}>
+          One Global Football Business Platform
+        </p>
       </div>
     </section>
   )

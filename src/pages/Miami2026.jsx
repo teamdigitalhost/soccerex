@@ -21,6 +21,9 @@ const ECOSYSTEM_BRAND = [
   { label: 'Stadiums', icon: 'stadiums' },
   { label: 'Agencies', icon: 'agencies' },
   { label: 'Academies', icon: 'academies' },
+  // Impact chip added per GN revisions doc — covers non-profits, foundations,
+  // and impact-driven orgs working at the intersection of football + community.
+  { label: 'Impact', icon: 'impact' },
 ]
 
 const PILLARS_BRAND = [

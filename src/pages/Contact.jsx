@@ -288,60 +288,35 @@ export default function Contact() {
         }} />
         <div className="relative z-10" style={{ maxWidth: '980px', margin: '0 auto' }}>
 
-          {/* Step 1: Inquiry type picker */}
-          <div className="mb-10">
-            <p className="font-mono uppercase tracking-[0.15em] mb-5 fade-up" style={{ fontSize: '0.72rem', color: '#09203e', fontWeight: 600 }}>
-              Step 1 : What brings you here?
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {INQUIRY_TYPES.map((t) => {
-                const Icon = t.icon
-                const active = t.id === selectedType
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={() => { setSelectedType(t.id); setSubmitted(false) }}
-                    className="fade-up"
-                    style={{
-                      background: active ? '#09203e' : '#fff',
-                      color: active ? '#fff' : '#09203e',
-                      border: `1px solid ${active ? '#09203e' : 'rgba(9,32,62,0.12)'}`,
-                      borderRadius: '12px',
-                      padding: '20px 16px',
-                      cursor: 'pointer',
-                      transition: 'all 0.25s',
-                      textAlign: 'left',
-                      boxShadow: active ? '0 14px 36px rgba(9,32,62,0.25)' : '0 4px 14px rgba(9,32,62,0.06)',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!active) {
-                        e.currentTarget.style.borderColor = 'var(--color-brand-accent)'
-                        e.currentTarget.style.transform = 'translateY(-3px)'
-                        e.currentTarget.style.boxShadow = '0 12px 28px rgba(9,32,62,0.12)'
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!active) {
-                        e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'
-                        e.currentTarget.style.transform = 'translateY(0)'
-                        e.currentTarget.style.boxShadow = '0 4px 14px rgba(9,32,62,0.06)'
-                      }
-                    }}
-                  >
-                    <div style={{
-                      width: '38px', height: '38px', borderRadius: '9px',
-                      background: active ? 'var(--color-brand-accent)' : 'rgba(191,177,112,0.12)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      marginBottom: '12px',
-                    }}>
-                      <Icon size={18} color={active ? '#09203e' : 'var(--color-brand-accent)'} strokeWidth={2.2} />
-                    </div>
-                    <p className="font-heading font-bold" style={{ fontSize: '1rem' }}>{t.label}</p>
-                  </button>
-                )
-              })}
-            </div>
+          {/* Step 1: Inquiry type picker — simplified to a single dropdown
+              per the GN revisions doc (was an 8-tile grid). The dropdown
+              writes to the same `selectedType` state so the rest of the
+              form is unchanged. */}
+          <div className="mb-10 fade-up" style={{ maxWidth: '520px' }}>
+            <label className="font-mono uppercase tracking-[0.15em] mb-3 block" htmlFor="inquiry-type-select" style={{ fontSize: '0.72rem', color: '#09203e', fontWeight: 600 }}>
+              What brings you here?
+            </label>
+            <select
+              id="inquiry-type-select"
+              value={selectedType || ''}
+              onChange={(e) => { setSelectedType(e.target.value || null); setSubmitted(false) }}
+              style={{
+                width: '100%', padding: '16px 18px',
+                fontSize: '1rem', fontFamily: 'Inter, sans-serif', fontWeight: 600,
+                background: '#fff', color: '#09203e',
+                border: '1px solid rgba(9,32,62,0.12)',
+                borderRadius: '10px', outline: 'none',
+                cursor: 'pointer', transition: 'border-color 0.2s, box-shadow 0.2s',
+                boxShadow: '0 4px 14px rgba(9,32,62,0.06)',
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.boxShadow = '0 8px 22px rgba(9,32,62,0.10)' }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(9,32,62,0.06)' }}
+            >
+              <option value="">Select inquiry type…</option>
+              {INQUIRY_TYPES.map((t) => (
+                <option key={t.id} value={t.id}>{t.label}</option>
+              ))}
+            </select>
           </div>
 
           {/* Step 2: Form (appears after selection with animation) */}
@@ -501,7 +476,7 @@ export default function Contact() {
               background: 'rgba(255,255,255,0.5)',
             }}>
               <p className="font-mono uppercase tracking-[0.15em]" style={{ fontSize: '0.72rem', color: 'var(--color-brand-accent)', fontWeight: 600, marginBottom: '10px' }}>
-                ← Pick a category above
+                ↑ Choose an inquiry type
               </p>
               <p className="font-body" style={{ fontSize: '0.95rem', color: '#666' }}>
                 Your form will appear here once you tell us what you're reaching out about.

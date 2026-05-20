@@ -325,10 +325,14 @@ export default function About() {
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8 w-full" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {[
-            { num: '75k+', display: '75k+', label: 'Attendees', sub: 'Industry professionals across six continents' },
+            // Standardized to the GN revisions doc stats line:
+            // "30 Years · 57 Events · 75K+ Delegates · 5K+ Brands". The
+            // "One Global Football Business Platform" tagline renders
+            // separately below the grid.
+            { num: '30', display: '30', label: 'Years', sub: 'Three decades as the football business platform' },
             { num: '57', display: '57', label: 'Events', sub: 'In major football markets worldwide' },
-            { num: '21', display: '21', label: 'Cities', sub: 'Global footprint from Miami to Macau' },
-            { num: '5k+', display: '5k+', label: 'Brands', sub: 'Sport, media, and technology worldwide' },
+            { num: '75k+', display: '75K+', label: 'Delegates', sub: 'Industry professionals from across the global game' },
+            { num: '5k+', display: '5K+', label: 'Brands', sub: 'Sport, media, and technology worldwide' },
           ].map((s) => (
             <div key={s.label} className="text-center scale-up">
               <p className="font-heading font-bold text-brand-accent" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1 }}>
@@ -339,6 +343,9 @@ export default function About() {
             </div>
           ))}
         </div>
+        <p className="relative z-10 font-mono uppercase text-center mt-10 fade-up" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.8rem', letterSpacing: '0.18em' }}>
+          One Global Football Business Platform
+        </p>
       </section>
 
       {/* Wave divider: stats → audience reach */}
