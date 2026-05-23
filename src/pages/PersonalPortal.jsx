@@ -352,14 +352,24 @@ function VipExperienceCard({ experience: e, slug, editToken, isTest, onAfter }) 
           </>
         )}
         {status === 'waitlisted' && (
-          <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.18em', color: '#b45309', background: 'rgba(245,158,11,0.12)', padding: '4px 10px' }}>
-            <Clock size={11} /> On waitlist
-          </span>
+          <>
+            <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.18em', color: '#b45309', background: 'rgba(245,158,11,0.12)', padding: '4px 10px' }}>
+              <Clock size={11} /> On waitlist
+            </span>
+            <button disabled={busy} onClick={() => submit('declined')} className="event-btn-outline-light" style={{ padding: '8px 14px', fontSize: 11 }}>
+              Leave waitlist
+            </button>
+          </>
         )}
-        {(status === 'declined' || !confirmed) && status !== 'pending' && status !== 'waitlisted' && status !== 'confirmed' && (
-          <button disabled={busy} onClick={() => submit('confirmed')} className="event-btn-primary" style={{ padding: '8px 14px', fontSize: 11 }}>
-            Change to attending
-          </button>
+        {status === 'declined' && (
+          <>
+            <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.18em', color: '#607186', background: 'rgba(13,27,42,0.06)', padding: '4px 10px' }}>
+              Declined
+            </span>
+            <button disabled={busy} onClick={() => submit('confirmed')} className="event-btn-primary" style={{ padding: '8px 14px', fontSize: 11 }}>
+              {capacity === 'full' || capacity === 'waitlist' ? 'Join waitlist' : 'Change to attending'}
+            </button>
+          </>
         )}
         <button onClick={() => setExpanded((x) => !x)} className="inline-text-btn" style={{ fontSize: 11 }}>
           {expanded ? 'Hide note' : 'Add note'}
