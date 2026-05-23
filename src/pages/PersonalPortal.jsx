@@ -121,6 +121,23 @@ export default function PersonalPortal() {
   const hasVip = !!data.vip
   const noRoles = !loading && !hasSpeaker && !hasRights && !hasDelegate && !hasVip
 
+  /* Event-day mode: detect whether any role has a session/experience today.
+     If so, default the toggle ON. User can flip it off. */
+  const hasItemToday = (() => {
+    const today = new Date(); today.setHours(0,0,0,0)
+    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1)
+    const isTodayIso = (v) => {
+      if (! v) return false
+      const d = new Date(v); return d >= today && d < tomorrow
+    }
+    if (data.speaker?.sessions?.some((s) => isTodayIso(s.starts_at || s.start_time))) return true
+    if (data.delegate?.schedule?.some((s) => isTodayIso(s.starts_at || s.start_time))) return true
+    if (data.vip?.experiences?.some((e) => isTodayIso(e.starts_at))) return true
+    return false
+  })()
+  const [eventDayMode, setEventDayMode] = useState(hasItemToday)
+  useEffect(() => { setEventDayMode(hasItemToday) }, [hasItemToday])
+
   return (
     <div className="event-page theme-soccerex" style={{ background: '#FAFBFC', minHeight: '100vh', paddingTop: 'var(--app-top-offset)' }}>
       <PortalHeader profile={profile} session={session} onSignOut={signOut} slug={slug} />
@@ -129,6 +146,10 @@ export default function PersonalPortal() {
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           {error && <ErrorBanner error={error} />}
           {loading && !error && <Loading label="Loading your portal" />}
+
+          {hasItemToday && (
+            <EventDayToggle on={eventDayMode} onChange={setEventDayMode} />
+          )}
 
           {/* VIP overlay — pinned above the rest. */}
           {hasVip && (
@@ -144,7 +165,7 @@ export default function PersonalPortal() {
           {noRoles && !error && <NoRoles />}
 
           {hasSpeaker && (
-            <SpeakerSection data={data.speaker} slug={slug} />
+            <SpeakerSection data={data.speaker} slug={slug} eventDayMode={eventDayMode} />
           )}
 
           {hasRights && (
@@ -157,6 +178,7 @@ export default function PersonalPortal() {
               slug={slug}
               editToken={editToken}
               isTest={isTest}
+              eventDayMode={eventDayMode}
               onRefresh={() => reloadSection('delegate', () => getDelegatePortal(slug, editToken, { test: isTest }))}
             />
           )}
@@ -389,10 +411,13 @@ function CapacityChip({ state }) {
 
 /* ─── Speaker section ──────────────────────────────────────────────────── */
 
-function SpeakerSection({ data, slug }) {
+function SpeakerSection({ data, slug, eventDayMode = false }) {
   const readiness = data?.readiness || data?.profile_readiness
-  const sessions = Array.isArray(data?.sessions) ? data.sessions : []
-  const nextActions = Array.isArray(data?.next_actions) ? data.next_actions : []
+  const allSessions = Array.isArray(data?.sessions) ? data.sessions : []
+  const sessions = eventDayMode
+    ? allSessions.filter((s) => isSameDay(s.starts_at || s.start_time))
+    : allSessions
+  const nextActions = eventDayMode ? [] : (Array.isArray(data?.next_actions) ? data.next_actions : [])
 
   return (
     <section className="portal-section mb-6">
@@ -416,6 +441,59 @@ function SpeakerSection({ data, slug }) {
       )}
     </section>
   )
+}
+
+/* Inline event-day toggle. Pinned at the top when at least one item is today. */
+function EventDayToggle({ on, onChange }) {
+  return (
+    <div
+      onClick={() => onChange(! on)}
+      style={{
+        cursor: 'pointer',
+        background: on ? 'linear-gradient(135deg, #0D1B2A 0%, #1f3f6d 100%)' : '#FFFFFF',
+        color: on ? '#FFFFFF' : '#0D1B2A',
+        border: '1px solid ' + (on ? '#0D1B2A' : 'rgba(13,27,42,0.18)'),
+        padding: '12px 16px',
+        marginBottom: 16,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+      }}
+    >
+      <div style={{
+        width: 36, height: 20, borderRadius: 20,
+        background: on ? 'rgba(255,255,255,0.25)' : 'rgba(13,27,42,0.12)',
+        position: 'relative', flexShrink: 0,
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 2, left: on ? 18 : 2,
+          width: 16, height: 16, borderRadius: 16,
+          background: on ? '#FFFFFF' : '#FFFFFF',
+          transition: 'left 120ms ease',
+          boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+        }}/>
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p className="font-heading font-bold" style={{ fontSize: 13, lineHeight: 1.2 }}>
+          {on ? 'Event-day mode' : 'Event-day mode (off)'}
+        </p>
+        <p style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
+          {on
+            ? 'Showing only today\'s items. Tap to see your full portal.'
+            : 'You have something happening today. Tap to focus on just today\'s items.'}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function isSameDay(v) {
+  if (! v) return false
+  const d = new Date(v)
+  const today = new Date(); today.setHours(0,0,0,0)
+  const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1)
+  return d >= today && d < tomorrow
 }
 
 function SpeakerSessionCard({ session: s }) {
@@ -644,13 +722,16 @@ function OrderRow({ order, compNote }) {
 
 /* ─── Delegate section ─────────────────────────────────────────────────── */
 
-function DelegateSection({ data, slug, editToken, isTest, onRefresh }) {
+function DelegateSection({ data, slug, editToken, isTest, onRefresh, eventDayMode = false }) {
   const tickets = Array.isArray(data?.tickets) ? data.tickets : []
   const orders = Array.isArray(data?.orders) ? data.orders : []
   const readiness = data?.readiness || data?.profile_readiness
-  const schedule = Array.isArray(data?.schedule?.items) ? data.schedule.items : (Array.isArray(data?.schedule) ? data.schedule : [])
+  const rawSchedule = Array.isArray(data?.schedule?.items) ? data.schedule.items : (Array.isArray(data?.schedule) ? data.schedule : [])
+  const schedule = eventDayMode
+    ? rawSchedule.filter((s) => isSameDay(s.starts_at || s.start_time))
+    : rawSchedule
   const summary = data?.schedule?.summary || data?.summary || {}
-  const next = Array.isArray(data?.next_actions) ? data.next_actions : []
+  const next = eventDayMode ? [] : (Array.isArray(data?.next_actions) ? data.next_actions : [])
 
   return (
     <section className="portal-section mb-6">
