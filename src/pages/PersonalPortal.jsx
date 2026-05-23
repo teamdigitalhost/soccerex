@@ -443,11 +443,24 @@ function SpeakerSection({ data, slug, eventDayMode = false }) {
   )
 }
 
-/* Inline event-day toggle. Pinned at the top when at least one item is today. */
+/* Inline event-day toggle. Pinned at the top when at least one item is
+   today. Switch-role for screen-reader + keyboard access. */
 function EventDayToggle({ on, onChange }) {
+  const toggle = () => onChange(! on)
+  const handleKey = (e) => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault()
+      toggle()
+    }
+  }
   return (
     <div
-      onClick={() => onChange(! on)}
+      role="switch"
+      aria-checked={on}
+      aria-label={on ? 'Today only mode is on. Press to show full portal.' : 'Press to focus on today only.'}
+      tabIndex={0}
+      onClick={toggle}
+      onKeyDown={handleKey}
       style={{
         cursor: 'pointer',
         background: on ? 'linear-gradient(135deg, #0D1B2A 0%, #1f3f6d 100%)' : '#FFFFFF',
@@ -458,9 +471,12 @@ function EventDayToggle({ on, onChange }) {
         display: 'flex',
         alignItems: 'center',
         gap: 12,
+        outline: 'none',
       }}
+      onFocus={(e) => { e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13,27,42,0.18)' }}
+      onBlur={(e) => { e.currentTarget.style.boxShadow = 'none' }}
     >
-      <div style={{
+      <div aria-hidden="true" style={{
         width: 36, height: 20, borderRadius: 20,
         background: on ? 'rgba(255,255,255,0.25)' : 'rgba(13,27,42,0.12)',
         position: 'relative', flexShrink: 0,
@@ -469,19 +485,19 @@ function EventDayToggle({ on, onChange }) {
           position: 'absolute',
           top: 2, left: on ? 18 : 2,
           width: 16, height: 16, borderRadius: 16,
-          background: on ? '#FFFFFF' : '#FFFFFF',
+          background: '#FFFFFF',
           transition: 'left 120ms ease',
           boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
         }}/>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <p className="font-heading font-bold" style={{ fontSize: 13, lineHeight: 1.2 }}>
-          {on ? 'Event-day mode' : 'Event-day mode (off)'}
+          {on ? 'Today only' : 'Full portal'}
         </p>
         <p style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
           {on
-            ? 'Showing only today\'s items. Tap to see your full portal.'
-            : 'You have something happening today. Tap to focus on just today\'s items.'}
+            ? "Focused on today's items. Tap to see everything."
+            : "Something's happening today. Tap to focus on it."}
         </p>
       </div>
     </div>
