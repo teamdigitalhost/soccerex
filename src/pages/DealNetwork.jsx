@@ -281,8 +281,46 @@ export default function DealNetwork() {
         </div>
       </section>
 
-      {/* ═══ INTAKE FORM ══════════════════════════════════════════════════ */}
-      <section id="intake" style={{ background: 'linear-gradient(180deg, #efece6 0%, #e7e4dd 100%)', padding: 'clamp(40px,5vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,140px)' }}>
+      {/* ═══ CONTACT (intake form temporarily disabled) ══════════════════ */}
+      <section id="intake" style={{ background: 'linear-gradient(180deg, #efece6 0%, #e7e4dd 100%)', padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px) clamp(80px,10vw,140px)' }}>
+        <div style={{ maxWidth: '720px', margin: '0 auto', textAlign: 'center' }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-4 fade-up" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+            Get in touch
+          </p>
+          <h2 className="font-heading font-bold mb-5 fade-up" style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: '#09203e', lineHeight: 1.2 }}>
+            For more information, please contact us.
+          </h2>
+          <p className="font-body mb-8 fade-up" style={{ fontSize: '1.05rem', color: '#586778', lineHeight: 1.65, maxWidth: '560px', margin: '0 auto 32px' }}>
+            Our concierge team handles every Deal Network introduction by hand. Email us with a short note about what you are looking for and a member of the team will be in touch.
+          </p>
+          <a
+            href="mailto:enquiries@soccerex.com"
+            className="fade-up inline-flex items-center gap-2"
+            style={{
+              background: '#09203e',
+              color: '#fff',
+              padding: '14px 28px',
+              borderRadius: '999px',
+              fontFamily: 'inherit',
+              fontWeight: 600,
+              fontSize: '1rem',
+              textDecoration: 'none',
+              boxShadow: '0 12px 32px rgba(9,32,62,0.18)',
+            }}
+          >
+            <Mail size={18} strokeWidth={2} />
+            enquiries@soccerex.com
+          </a>
+          <p className="font-body mt-6 fade-up" style={{ fontSize: '0.85rem', color: '#7a8b9d' }}>
+            Already in the network?{' '}
+            <Link to={PROFILE_ACCESS} style={{ color: '#09203e', fontWeight: 600, textDecoration: 'underline', textDecorationColor: 'rgba(191,177,112,0.6)' }}>
+              Sign in to your Deal Network portal
+            </Link>
+          </p>
+        </div>
+      </section>
+      {/* ═══ ORIGINAL INTAKE FORM (kept for reference, not rendered) ═════ */}
+      {false && <section id="intake-disabled" style={{ background: 'linear-gradient(180deg, #efece6 0%, #e7e4dd 100%)', padding: 'clamp(40px,5vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,140px)' }}>
         <div style={{ maxWidth: '980px', margin: '0 auto' }}>
           <div className="text-center mb-12 fade-up">
             <p className="font-mono uppercase tracking-[0.18em] mb-3" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
@@ -475,7 +513,7 @@ export default function DealNetwork() {
             </p>
           </div>
         </div>
-      </section>
+      </section>}
     </div>
   )
 }

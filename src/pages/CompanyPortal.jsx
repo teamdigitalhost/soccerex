@@ -5,7 +5,7 @@ import {
   Calendar, CheckCircle2, Circle, FileText, Ticket, Wallet, X, Plus,
   Building2, ExternalLink, UserPlus, Image, HelpCircle, MessageSquare, Send,
 } from 'lucide-react'
-import { getCompanyPortal, assignCompanyPass, postDeliverableUpdate, ApiError } from '../lib/soccerexApi'
+import { getCompanyPortal, assignCompanyPass, managePortalPass, postDeliverableUpdate, ApiError } from '../lib/soccerexApi'
 import { readProfileAccessSession, clearProfileAccessSession } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
@@ -589,7 +589,7 @@ function PassAllocation({ data, events, slug, editToken, isTest, onRefresh }) {
           <div className="mt-5">
             <p className="miami-subhead mb-2" style={{ fontSize: 10, color: '#607186', letterSpacing: '0.22em' }}>Assigned passes</p>
             <table className="portal-table">
-              <thead><tr><th>Attendee</th><th>Type</th><th>Email</th><th>Status</th></tr></thead>
+              <thead><tr><th>Attendee</th><th>Type</th><th>Email</th><th>Status</th><th></th></tr></thead>
               <tbody>
                 {data.assignments.map((a, i) => (
                   <tr key={a.id || i}>
@@ -600,6 +600,17 @@ function PassAllocation({ data, events, slug, editToken, isTest, onRefresh }) {
                     <td><Cell text={a.pass_type || a.type} /></td>
                     <td><Cell text={a.attendee_email} /></td>
                     <td><StatusPill status={a.status} /></td>
+                    <td style={{ textAlign: 'right' }}>
+                      {a.id && (a.status !== 'cancelled' && a.status !== 'refunded') && (
+                        <PassActionMenu
+                          ticket={a}
+                          slug={slug}
+                          editToken={editToken}
+                          isTest={isTest}
+                          onDone={onRefresh}
+                        />
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -804,6 +815,95 @@ function CommercialOverview({ agreements, invoices, paymentSchedule }) {
         </>
       )}
     </Card>
+  )
+}
+
+/* ─── Pass action menu ────────────────────────────────────────────────── */
+
+/* Per-row resend / cancel / reassign menu on the assigned passes table.
+   Each action shows an inline confirmation panel; reassign reveals two
+   fields. We keep the menu inline (no modal) so admins can manage many
+   passes in a row without breaking flow. */
+function PassActionMenu({ ticket, slug, editToken, isTest, onDone }) {
+  const [open, setOpen] = useState(null) /* null | 'resend' | 'cancel' | 'reassign' */
+  const [busy, setBusy] = useState(false)
+  const [name, setName] = useState(ticket.attendee_name || '')
+  const [email, setEmail] = useState('')
+  const [reason, setReason] = useState('')
+  const [err, setErr] = useState('')
+
+  const run = async (action, body = {}) => {
+    setBusy(true); setErr('')
+    try {
+      await managePortalPass(slug, editToken, ticket.id, { action, ...body }, { test: isTest })
+      setOpen(null); onDone && onDone()
+    } catch (e) {
+      setErr(e instanceof ApiError ? (e.payload?.message || e.message) : String(e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (open === null) {
+    return (
+      <div className="inline-flex items-center gap-1">
+        <button type="button" onClick={() => setOpen('resend')} className="portal-action-btn">Resend</button>
+        <button type="button" onClick={() => setOpen('reassign')} className="portal-action-btn">Reassign</button>
+        <button type="button" onClick={() => setOpen('cancel')} className="portal-action-btn portal-action-btn-danger">Cancel</button>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{
+      background: '#FAFBFC', border: '1px solid rgba(13,27,42,0.10)', padding: 10,
+      display: 'flex', flexDirection: 'column', gap: 6, minWidth: 240, textAlign: 'left',
+    }}>
+      {open === 'resend' && (
+        <>
+          <p className="miami-body" style={{ fontSize: 12, color: '#0D1B2A' }}>
+            Queue a resend of the assignment email to <strong>{ticket.attendee_email || 'this attendee'}</strong>?
+          </p>
+          <div className="flex gap-2">
+            <button type="button" onClick={() => run('resend')} disabled={busy} className="portal-action-btn portal-action-btn-primary">{busy ? 'Sending…' : 'Confirm resend'}</button>
+            <button type="button" onClick={() => setOpen(null)} disabled={busy} className="portal-action-btn">Cancel</button>
+          </div>
+        </>
+      )}
+      {open === 'cancel' && (
+        <>
+          <p className="miami-body" style={{ fontSize: 12, color: '#0D1B2A' }}>
+            Cancel this pass? You can re-allocate the freed slot to someone else.
+          </p>
+          <input
+            type="text" value={reason} onChange={(e) => setReason(e.target.value)}
+            placeholder="Reason (optional)"
+            className="portal-input"
+          />
+          <div className="flex gap-2">
+            <button type="button" onClick={() => run('cancel', { reason })} disabled={busy} className="portal-action-btn portal-action-btn-danger">{busy ? 'Cancelling…' : 'Confirm cancel'}</button>
+            <button type="button" onClick={() => setOpen(null)} disabled={busy} className="portal-action-btn">Back</button>
+          </div>
+        </>
+      )}
+      {open === 'reassign' && (
+        <>
+          <input
+            type="text" value={name} onChange={(e) => setName(e.target.value)}
+            placeholder="New attendee name" className="portal-input"
+          />
+          <input
+            type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+            placeholder="New attendee email" className="portal-input"
+          />
+          <div className="flex gap-2">
+            <button type="button" onClick={() => run('reassign', { new_attendee_name: name, new_attendee_email: email })} disabled={busy || !name.trim() || !email.trim()} className="portal-action-btn portal-action-btn-primary">{busy ? 'Saving…' : 'Reassign'}</button>
+            <button type="button" onClick={() => setOpen(null)} disabled={busy} className="portal-action-btn">Cancel</button>
+          </div>
+        </>
+      )}
+      {err && <p style={{ fontSize: 11, color: '#b91c1c' }}>{err}</p>}
+    </div>
   )
 }
 

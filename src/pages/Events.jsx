@@ -21,8 +21,8 @@ const UPCOMING = [
     comingSoon: true,
   },
   {
-    logo: '/images/events/logos/miami.webp',
-    label: 'SOCCEREX MIDDLE EAST',
+    logo: '/events/middle-east/riyadh-logo-horizontal-placeholder.jpg',
+    label: 'SOCCEREX RIYADH',
     dates: 'January 2027',
     city: 'Riyadh, Saudi Arabia',
     venue: 'Misk City',

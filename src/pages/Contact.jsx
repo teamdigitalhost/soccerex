@@ -29,14 +29,11 @@ const INQUIRY_TYPES = [
     desc: 'Strategic partnerships and commercial opportunities.',
     fields: ['organisation', 'role', 'country', 'partnershipType', 'event', 'attendeeCount'],
   },
-  {
-    id: 'speaker',
-    label: 'Speaker',
-    icon: Mic,
-    email: 'talks@soccerex.com',
-    desc: 'Propose yourself or someone you represent as a Soccerex speaker.',
-    fields: ['organisation', 'role', 'topic', 'topicArea', 'speakerBio', 'proposal', 'linkedin', 'event'],
-  },
+  // Speaker option removed from the public Contact dropdown — speaker
+  // proposals come in through the per-event "speak" CTAs (and the program
+  // submission flow on the agenda-concept pages), not from the cold-contact
+  // form. Keeping the backend 'speaker' kind alive in kindForInquiryType
+  // for any deep links / legacy URLs.
   {
     id: 'exhibit',
     label: 'Exhibitor',
@@ -69,14 +66,10 @@ const INQUIRY_TYPES = [
     desc: 'Join the Soccerex crew and help deliver our flagship events.',
     fields: ['role', 'country', 'availability', 'languages', 'event'],
   },
-  {
-    id: 'host',
-    label: 'Event Host',
-    icon: MapPin,
-    email: 'partner@soccerex.com',
-    desc: 'Bring a Soccerex event to your city, region, or venue.',
-    fields: ['organisation', 'role', 'country', 'venueCity', 'venueName', 'event'],
-  },
+  // Event Host option removed from the public Contact dropdown — host-city
+  // conversations come through partner@soccerex.com directly, not through
+  // the general contact form. Backend 'host' kind kept alive in
+  // kindForInquiryType for any deep links / legacy URLs.
   {
     id: 'general',
     label: 'General',
@@ -490,8 +483,10 @@ export default function Contact() {
             <p className="font-mono uppercase tracking-[0.15em] mb-4" style={{ fontSize: '0.7rem', color: '#666', fontWeight: 600 }}>Prefer direct email?</p>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
               {[
+                // Speakers email removed in lockstep with the dropdown — we
+                // don't want a Speaker direct-email link when the form path
+                // doesn't surface that option either.
                 { label: 'Partnerships', email: 'partner@soccerex.com' },
-                { label: 'Speakers', email: 'talks@soccerex.com' },
                 { label: 'Press', email: 'press@soccerex.com' },
                 { label: 'Exhibit', email: 'exhibit@soccerex.com' },
                 { label: 'General', email: 'enquiries@soccerex.com' },

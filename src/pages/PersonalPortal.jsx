@@ -414,6 +414,24 @@ function SpeakerSessionCard({ session: s }) {
   const coSpeakers = Array.isArray(s.co_speakers) ? s.co_speakers : []
   const logistics = s.logistics || s.attributes || {}
 
+  const onAddToCalendar = () => {
+    if (!s.starts_at && !s.start_time) return
+    const start = s.starts_at || s.start_time
+    const end = s.ends_at || s.end_time || start
+    const ics = buildIcs({
+      uid: `soccerex-speaker-session-${s.id || s.slug}@soccerex.com`,
+      title: s.title || s.topic || 'Soccerex session',
+      start, end,
+      location: s.stage || s.venue || s.location || '',
+      description: [
+        s.role ? `Role: ${s.role}` : null,
+        s.event_name || s.event?.name || null,
+        s.notes || null,
+      ].filter(Boolean).join('\n\n'),
+    })
+    downloadIcs(ics, `${(s.title || 'session').toLowerCase().replace(/\s+/g, '-').slice(0, 60)}.ics`)
+  }
+
   return (
     <div style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.10)', padding: 18 }}>
       <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
@@ -437,14 +455,30 @@ function SpeakerSessionCard({ session: s }) {
             )}
           </div>
         </div>
-        <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{
-          fontSize: 10, letterSpacing: '0.18em',
-          background: /(confirmed|accepted)/i.test(status) ? 'rgba(16,185,129,0.10)' : 'rgba(245,158,11,0.12)',
-          color: /(confirmed|accepted)/i.test(status) ? '#10b981' : '#b45309',
-          padding: '4px 10px',
-        }}>
-          <Icon size={11} /> {String(status).replace(/_/g, ' ')}
-        </span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{
+            fontSize: 10, letterSpacing: '0.18em',
+            background: /(confirmed|accepted)/i.test(status) ? 'rgba(16,185,129,0.10)' : 'rgba(245,158,11,0.12)',
+            color: /(confirmed|accepted)/i.test(status) ? '#10b981' : '#b45309',
+            padding: '4px 10px',
+          }}>
+            <Icon size={11} /> {String(status).replace(/_/g, ' ')}
+          </span>
+          {(s.starts_at || s.start_time) && (
+            <button
+              type="button"
+              onClick={onAddToCalendar}
+              className="inline-flex items-center gap-1.5 font-mono uppercase hover:opacity-80 transition-opacity"
+              style={{
+                fontSize: 10, letterSpacing: '0.18em',
+                background: 'rgba(13,27,42,0.06)', color: '#0D1B2A',
+                padding: '4px 10px', cursor: 'pointer',
+              }}
+            >
+              <Calendar size={11} /> Add to calendar
+            </button>
+          )}
+        </div>
       </div>
 
       {s.role && <p className="font-body" style={{ fontSize: 12, color: '#607186', marginTop: 4 }}>Role: <span style={{ color: '#0D1B2A' }}>{s.role}</span></p>}

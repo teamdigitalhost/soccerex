@@ -936,3 +936,42 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   border-radius: 14px;
   padding: 28px;
 }
+
+/* Pass action menu styling (CompanyPortal) ─────────────────────────────── */
+.portal-action-btn {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  background: #ffffff;
+  border: 1px solid rgba(13,27,42,0.18);
+  color: #0D1B2A;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+.portal-action-btn:hover:not(:disabled) {
+  background: #f4f6fa;
+  border-color: rgba(13,27,42,0.35);
+}
+.portal-action-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.portal-action-btn-primary {
+  background: #0D1B2A; color: #ffffff; border-color: #0D1B2A;
+}
+.portal-action-btn-primary:hover:not(:disabled) { background: #1a2a3d; }
+.portal-action-btn-danger {
+  background: #ffffff; color: #b91c1c; border-color: rgba(185,28,28,0.4);
+}
+.portal-action-btn-danger:hover:not(:disabled) {
+  background: #fef2f2; border-color: #b91c1c;
+}
+.portal-input {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 8px;
+  background: #ffffff;
+  border: 1px solid rgba(13,27,42,0.18);
+  color: #0D1B2A;
+  width: 100%;
+}
+.portal-input:focus { outline: 2px solid #0D1B2A; outline-offset: -1px; }

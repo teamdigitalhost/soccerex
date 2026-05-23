@@ -309,6 +309,20 @@ export async function assignCompanyPass(slug, editToken, body, opts = {}) {
 }
 
 /**
+ * Manage an existing sponsor-allocated pass.
+ *
+ * action: 'resend' | 'cancel' | 'reassign'
+ * For 'reassign', pass `new_attendee_name` and `new_attendee_email`.
+ * Optional `reason` for cancel.
+ */
+export async function managePortalPass(slug, editToken, ticketId, body, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/portal/passes/${encodeURIComponent(ticketId)}/manage`,
+    { method: 'POST', body, token: editToken, test: opts.test },
+  ))
+}
+
+/**
  * Post a deliverable update from the company portal.
  *
  * source: 'deal' | 'agreement'
