@@ -323,6 +323,29 @@ export async function managePortalPass(slug, editToken, ticketId, body, opts = {
 }
 
 /**
+ * Invite a teammate to co-manage this company profile. Returns refreshed
+ * team list.
+ *
+ * body: { email, role?: 'owner' | 'editor' | 'viewer' }
+ */
+export async function inviteCompanyTeammate(slug, editToken, body, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/portal/team`,
+    { method: 'POST', body, token: editToken, test: opts.test },
+  ))
+}
+
+/**
+ * Revoke a pending invitation or remove an accepted teammate by membership id.
+ */
+export async function revokeCompanyTeammate(slug, editToken, membershipId, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/portal/team/${encodeURIComponent(membershipId)}`,
+    { method: 'DELETE', token: editToken, test: opts.test },
+  ))
+}
+
+/**
  * Post a deliverable update from the company portal.
  *
  * source: 'deal' | 'agreement'

@@ -5,7 +5,7 @@ import {
   Calendar, CheckCircle2, Circle, FileText, Ticket, Wallet, X, Plus,
   Building2, ExternalLink, UserPlus, Image, HelpCircle, MessageSquare, Send,
 } from 'lucide-react'
-import { getCompanyPortal, assignCompanyPass, managePortalPass, postDeliverableUpdate, ApiError } from '../lib/soccerexApi'
+import { getCompanyPortal, assignCompanyPass, managePortalPass, inviteCompanyTeammate, revokeCompanyTeammate, postDeliverableUpdate, ApiError } from '../lib/soccerexApi'
 import { readProfileAccessSession, clearProfileAccessSession } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
@@ -104,6 +104,13 @@ export default function CompanyPortal() {
                 agreements={portal.agreements}
                 invoices={portal.invoices}
                 paymentSchedule={portal.payment_schedule}
+              />
+              <TeamSection
+                team={portal.team}
+                slug={slug}
+                editToken={editToken}
+                isTest={isTest}
+                onRefresh={refresh}
               />
               <OrdersAndTickets orders={portal.orders} tickets={portal.tickets} />
             </div>
@@ -904,6 +911,109 @@ function PassActionMenu({ ticket, slug, editToken, isTest, onDone }) {
       )}
       {err && <p style={{ fontSize: 11, color: '#b91c1c' }}>{err}</p>}
     </div>
+  )
+}
+
+/* ─── Team section ────────────────────────────────────────────────────── */
+
+/* Invite teammates to co-manage this company profile. Shows pending
+   invites and accepted teammates; inline invite form; revoke per row. */
+function TeamSection({ team, slug, editToken, isTest, onRefresh }) {
+  const [rows, setRows] = useState(Array.isArray(team) ? team : [])
+  const [inviteEmail, setInviteEmail] = useState('')
+  const [inviteRole, setInviteRole] = useState('editor')
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+
+  useEffect(() => {
+    if (Array.isArray(team)) setRows(team)
+  }, [team])
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (! inviteEmail.trim() || busy) return
+    setBusy(true); setErr('')
+    try {
+      const res = await inviteCompanyTeammate(slug, editToken, { email: inviteEmail.trim(), role: inviteRole }, { test: isTest })
+      setRows(res?.team || rows)
+      setInviteEmail('')
+      onRefresh && onRefresh()
+    } catch (e2) {
+      setErr(e2 instanceof ApiError ? (e2.payload?.message || e2.message) : String(e2))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const revoke = async (id) => {
+    if (busy) return
+    setBusy(true); setErr('')
+    try {
+      const res = await revokeCompanyTeammate(slug, editToken, id, { test: isTest })
+      setRows(res?.team || rows.filter((r) => r.id !== id))
+    } catch (e2) {
+      setErr(e2 instanceof ApiError ? (e2.payload?.message || e2.message) : String(e2))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Card kicker="Team" title="People who can edit this profile">
+      <form onSubmit={submit} className="flex flex-wrap items-end gap-2 mb-4">
+        <div className="flex-1 min-w-[200px]">
+          <label className="miami-subhead block mb-1" style={{ fontSize: 10, color: '#607186', letterSpacing: '0.22em' }}>Email</label>
+          <input type="email" value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)}
+            placeholder="teammate@company.com" className="portal-input" disabled={busy} required />
+        </div>
+        <div>
+          <label className="miami-subhead block mb-1" style={{ fontSize: 10, color: '#607186', letterSpacing: '0.22em' }}>Role</label>
+          <select value={inviteRole} onChange={(e) => setInviteRole(e.target.value)} disabled={busy} className="portal-input">
+            <option value="editor">Editor</option>
+            <option value="owner">Owner</option>
+            <option value="viewer">Viewer</option>
+          </select>
+        </div>
+        <button type="submit" disabled={busy || ! inviteEmail.trim()} className="portal-action-btn portal-action-btn-primary" style={{ padding: '8px 16px' }}>
+          {busy ? 'Sending…' : 'Send invitation'}
+        </button>
+      </form>
+
+      {err && <p style={{ fontSize: 12, color: '#b91c1c', marginBottom: 8 }}>{err}</p>}
+
+      {rows.length === 0 ? (
+        <p className="miami-body" style={{ fontSize: 12, color: '#607186' }}>No teammates yet. Invite the people who should manage this profile.</p>
+      ) : (
+        <table className="portal-table">
+          <thead><tr><th>Email</th><th>Role</th><th>Status</th><th>Invited</th><th></th></tr></thead>
+          <tbody>
+            {rows.map((m) => (
+              <tr key={m.id}>
+                <td><Cell text={m.invited_email} /></td>
+                <td><Cell text={m.role} /></td>
+                <td>
+                  {m.is_pending ? (
+                    <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{ fontSize: 9, letterSpacing: '0.18em', background: 'rgba(245,158,11,0.12)', color: '#b45309', padding: '3px 8px' }}>
+                      Pending
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{ fontSize: 9, letterSpacing: '0.18em', background: 'rgba(16,185,129,0.10)', color: '#10b981', padding: '3px 8px' }}>
+                      Active
+                    </span>
+                  )}
+                </td>
+                <td><Cell text={m.invited_at ? new Date(m.invited_at).toLocaleDateString() : '—'} /></td>
+                <td style={{ textAlign: 'right' }}>
+                  <button type="button" onClick={() => revoke(m.id)} disabled={busy} className="portal-action-btn portal-action-btn-danger">
+                    {m.is_pending ? 'Revoke' : 'Remove'}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </Card>
   )
 }
 
