@@ -315,6 +315,42 @@ export async function assignCompanyPass(slug, editToken, body, opts = {}) {
  * For 'reassign', pass `new_attendee_name` and `new_attendee_email`.
  * Optional `reason` for cancel.
  */
+/**
+ * Stream the sponsor briefing pack PDF and trigger a browser download.
+ * Optional opts.eventSlug to narrow to one event.
+ */
+export async function downloadBriefingPack(slug, editToken, opts = {}) {
+  const params = new URLSearchParams()
+  if (opts.eventSlug) params.set('event', opts.eventSlug)
+  const qs = params.toString() ? `?${params.toString()}` : ''
+  const url = withTestParam(
+    `${API_BASE_URL}/profile-access/profiles/${encodeURIComponent(slug)}/portal/briefing-pack.pdf${qs}`,
+    { test: opts.test },
+  )
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${editToken}` },
+  })
+  if (! res.ok) {
+    const text = await res.text().catch(() => '')
+    throw new ApiError(res.status, text || `Download failed (${res.status})`)
+  }
+  const blob = await res.blob()
+  const filename = (() => {
+    const disp = res.headers.get('content-disposition') || ''
+    const m = disp.match(/filename="?([^";]+)"?/i)
+    return m ? m[1] : `briefing-${slug}.pdf`
+  })()
+  const objectUrl = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = objectUrl
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 1000)
+}
+
 export async function managePortalPass(slug, editToken, ticketId, body, opts = {}) {
   return unwrap(await authedRequest(
     `/profile-access/profiles/${encodeURIComponent(slug)}/portal/passes/${encodeURIComponent(ticketId)}/manage`,

@@ -5,7 +5,7 @@ import {
   Calendar, CheckCircle2, Circle, FileText, Ticket, Wallet, X, Plus,
   Building2, ExternalLink, UserPlus, Image, HelpCircle, MessageSquare, Send,
 } from 'lucide-react'
-import { getCompanyPortal, assignCompanyPass, managePortalPass, inviteCompanyTeammate, revokeCompanyTeammate, postDeliverableUpdate, ApiError } from '../lib/soccerexApi'
+import { getCompanyPortal, assignCompanyPass, managePortalPass, inviteCompanyTeammate, revokeCompanyTeammate, downloadBriefingPack, postDeliverableUpdate, ApiError } from '../lib/soccerexApi'
 import { readProfileAccessSession, clearProfileAccessSession } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
@@ -83,6 +83,7 @@ export default function CompanyPortal() {
           {portal && (
             <div className="flex flex-col gap-6">
               <ProfileSummary profile={profile} slug={slug} />
+              <BriefingPackBar slug={slug} editToken={editToken} isTest={isTest} events={portal.events || (portal.event ? [portal.event] : [])} />
               <NextActions actions={portal.next_actions} />
               <DealNetworkPortalSection
                 slug={slug}
@@ -822,6 +823,71 @@ function CommercialOverview({ agreements, invoices, paymentSchedule }) {
         </>
       )}
     </Card>
+  )
+}
+
+/* ─── Briefing pack bar ───────────────────────────────────────────────── */
+
+/* Sponsor-facing "Download briefing pack" affordance. Discreet bar
+   between ProfileSummary and NextActions. If there's exactly one event
+   we offer it scoped; multiple events get a select. */
+function BriefingPackBar({ slug, editToken, isTest, events }) {
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const eventList = Array.isArray(events) ? events : []
+  const [eventSlug, setEventSlug] = useState(eventList[0]?.slug || '')
+
+  const download = async () => {
+    setBusy(true); setErr('')
+    try {
+      await downloadBriefingPack(slug, editToken, { test: isTest, eventSlug: eventSlug || undefined })
+    } catch (e) {
+      setErr(e instanceof ApiError ? (e.payload?.message || e.message) : String(e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid rgba(13,27,42,0.10)',
+      padding: '14px 18px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 14,
+      flexWrap: 'wrap',
+    }}>
+      <FileText size={18} style={{ color: '#0D1B2A', flexShrink: 0 }} />
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <p className="font-heading font-bold" style={{ fontSize: 13, color: '#0D1B2A', marginBottom: 2 }}>Briefing pack</p>
+        <p style={{ fontSize: 12, color: '#607186' }}>Single-document PDF: agreements, deliverables, passes, event details.</p>
+      </div>
+      {eventList.length > 1 && (
+        <select
+          value={eventSlug}
+          onChange={(e) => setEventSlug(e.target.value)}
+          disabled={busy}
+          className="portal-input"
+          style={{ minWidth: 200, fontSize: 12 }}
+        >
+          <option value="">All events</option>
+          {eventList.map((e) => (
+            <option key={e.id || e.slug} value={e.slug}>{e.name}</option>
+          ))}
+        </select>
+      )}
+      <button
+        type="button"
+        onClick={download}
+        disabled={busy}
+        className="portal-action-btn portal-action-btn-primary"
+        style={{ padding: '8px 14px' }}
+      >
+        {busy ? 'Generating…' : 'Download PDF'}
+      </button>
+      {err && <p style={{ width: '100%', fontSize: 11, color: '#b91c1c', marginTop: 4 }}>{err}</p>}
+    </div>
   )
 }
 
