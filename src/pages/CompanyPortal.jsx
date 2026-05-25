@@ -10,6 +10,7 @@ import { readProfileAccessSession, clearProfileAccessSession } from '../lib/prof
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
 import DealNetworkPortalSection from '../components/DealNetworkPortalSection'
+import EventDayToggle from '../components/EventDayToggle'
 
 /* The portal payload is rendered as-is. The backend strips internal-only
    fields (deal margin, staff notes) before serialising; this view never
@@ -71,6 +72,13 @@ export default function CompanyPortal() {
   if (!editToken) return null
   const profile = portal?.profile || portal?.company || null
 
+  /* Event-day mode: pinned focus toggle. Defaults on when any deliverable
+     is due in the next 7 days OR a session is scheduled for today/this
+     week. Filters lists down to "what needs attention now". */
+  const urgentItemCount = portal ? countUrgentItems(portal) : 0
+  const [eventDayMode, setEventDayMode] = useState(urgentItemCount > 0)
+  useEffect(() => { setEventDayMode(urgentItemCount > 0) }, [urgentItemCount])
+
   return (
     <div className="event-page theme-soccerex" style={{ background: '#FAFBFC', minHeight: '100vh', paddingTop: 'var(--app-top-offset)' }}>
       <PortalHeader profile={profile} session={session} onSignOut={signOut} />
@@ -82,6 +90,9 @@ export default function CompanyPortal() {
 
           {portal && (
             <div className="flex flex-col gap-6">
+              {urgentItemCount > 0 && (
+                <EventDayToggle on={eventDayMode} onChange={setEventDayMode} label={`${urgentItemCount} item${urgentItemCount === 1 ? '' : 's'} need attention this week`} />
+              )}
               <ProfileSummary profile={profile} slug={slug} />
               <BriefingPackBar slug={slug} editToken={editToken} isTest={isTest} events={portal.events || (portal.event ? [portal.event] : [])} />
               <NextActions actions={portal.next_actions} />
@@ -1285,3 +1296,39 @@ function fmtMoney(row) {
 }
 function numericOr(v, fallback) { const n = Number(v); return Number.isFinite(n) ? n : fallback }
 function prettyUrl(url) { try { return new URL(url).host.replace(/^www\./, '') } catch { return url } }
+
+/* Count "needs attention now" items: deliverables due within 7 days that
+   are not yet complete, plus unassigned passes when the event is within
+   30 days. Drives whether the event-day toggle is shown + defaulted on. */
+function countUrgentItems(portal) {
+  let count = 0
+  const now = new Date()
+  const weekAhead = new Date(now); weekAhead.setDate(weekAhead.getDate() + 7)
+  const monthAhead = new Date(now); monthAhead.setDate(monthAhead.getDate() + 30)
+
+  const deliverables = Array.isArray(portal?.deliverables?.items)
+    ? portal.deliverables.items
+    : (Array.isArray(portal?.deliverables) ? portal.deliverables : [])
+  for (const d of deliverables) {
+    const due = d?.due_at || d?.due_date || d?.deadline
+    if (! due) continue
+    const dt = new Date(due)
+    if (Number.isNaN(dt.getTime())) continue
+    const status = String(d?.status || '').toLowerCase()
+    if (['done', 'completed', 'delivered', 'approved'].includes(status)) continue
+    if (dt >= now && dt <= weekAhead) count++
+  }
+
+  const passes = portal?.passes || portal?.pass_allocation
+  const remaining = numericOr(passes?.remaining ?? passes?.delegate?.remaining, 0)
+  const events = portal?.events || (portal?.event ? [portal.event] : [])
+  const hasEventSoon = events.some((e) => {
+    const start = e?.starts_on || e?.start_date
+    if (! start) return false
+    const sd = new Date(start)
+    return ! Number.isNaN(sd.getTime()) && sd >= now && sd <= monthAhead
+  })
+  if (remaining > 0 && hasEventSoon) count++
+
+  return count
+}
