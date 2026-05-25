@@ -164,6 +164,40 @@ export async function declineInvitation(token, opts = {}) {
   }))
 }
 
+/* ───── Deal Network unlisted apply flow ────────────────────────────────── */
+
+export async function dealNetworkApplyStart(email, opts = {}) {
+  return unwrap(await request('/deal-network/apply/start', {
+    method: 'POST',
+    body: { email },
+    test: opts.test,
+  }))
+}
+
+export async function dealNetworkApplyPreview(token, opts = {}) {
+  return unwrap(await request('/deal-network/apply/preview', {
+    method: 'POST',
+    body: { token },
+    test: opts.test,
+  }))
+}
+
+export async function dealNetworkSearchCompanies(token, q, opts = {}) {
+  return unwrap(await request('/deal-network/apply/search-companies', {
+    method: 'POST',
+    body: { token, q },
+    test: opts.test,
+  }))
+}
+
+export async function dealNetworkApplyClaim(payload, opts = {}) {
+  return unwrap(await request('/deal-network/apply/claim', {
+    method: 'POST',
+    body: payload,
+    test: opts.test,
+  }))
+}
+
 /** platform: 'linkedin' | 'instagram' | 'x' */
 export async function getSocialPostsByPillar(slug, platform, opts = {}) {
   const qs = new URLSearchParams({ pillar: slug })

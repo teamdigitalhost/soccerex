@@ -59,6 +59,7 @@ const CompanyPortal = lazy(() => import('./pages/CompanyPortal'))
 const PersonalPortal = lazy(() => import('./pages/PersonalPortal'))
 const DealNetworkPage = lazy(() => import('./pages/DealNetwork'))
 const InviteAccept = lazy(() => import('./pages/InviteAccept'))
+const DealNetworkApply = lazy(() => import('./pages/DealNetworkApply'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
 // Unreleased verticals (HerSoccerex, The Pitch) kept on disk but
 // no longer routed until announced. Restore routes in App.jsx when launching.
@@ -98,6 +99,8 @@ function App() {
           <Route path={ROUTE_PATTERNS.eventSpeaker} element={<EventSpeakerProfile />} />
           {/* Invitation accept (admin issues invite_token, link lands here) */}
           <Route path={INVITE_PATTERN} element={<InviteAccept />} />
+          {/* Deal Network unlisted apply flow (email-first + profile match) */}
+          <Route path="/deal-network/apply" element={<DealNetworkApply />} />
           {/* Profile self-service editor (passwordless via emailed link) */}
           <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />
