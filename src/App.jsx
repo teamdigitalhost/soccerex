@@ -8,6 +8,7 @@ import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, APP_PAGE,
   MIAMI_2026, EUROPE_2026, RIYADH_2027,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK,
+  INVITE_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
   ROUTE_PATTERNS,
 } from './lib/routes'
@@ -57,6 +58,7 @@ const ProfileEditor = lazy(() => import('./pages/ProfileEditor'))
 const CompanyPortal = lazy(() => import('./pages/CompanyPortal'))
 const PersonalPortal = lazy(() => import('./pages/PersonalPortal'))
 const DealNetworkPage = lazy(() => import('./pages/DealNetwork'))
+const InviteAccept = lazy(() => import('./pages/InviteAccept'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
 // Unreleased verticals (HerSoccerex, The Pitch) kept on disk but
 // no longer routed until announced. Restore routes in App.jsx when launching.
@@ -94,6 +96,8 @@ function App() {
           <Route path={ROUTE_PATTERNS.eventSchedule} element={<EventAgenda />} />
           <Route path={ROUTE_PATTERNS.eventSpeakers} element={<EventSpeakers />} />
           <Route path={ROUTE_PATTERNS.eventSpeaker} element={<EventSpeakerProfile />} />
+          {/* Invitation accept (admin issues invite_token, link lands here) */}
+          <Route path={INVITE_PATTERN} element={<InviteAccept />} />
           {/* Profile self-service editor (passwordless via emailed link) */}
           <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />

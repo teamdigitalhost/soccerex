@@ -138,6 +138,32 @@ export async function getArticle(slug, opts = {}) {
   return unwrap(await request(`/articles/${encodeURIComponent(slug)}`, opts))
 }
 
+/* ───── Invitation accept flow ──────────────────────────────────────────────
+ * Backend issues an invite_token via email. The recipient lands on
+ * /invite/:token on the React frontend, which previews via GET and accepts
+ * via POST. The accept response returns a backend magic-link URL that the
+ * browser is redirected to in order to actually establish the session.
+ */
+export async function previewInvitation(token, opts = {}) {
+  return unwrap(await request(`/invitations/${encodeURIComponent(token)}`, opts))
+}
+
+export async function acceptInvitation(token, opts = {}) {
+  return unwrap(await request(`/invitations/${encodeURIComponent(token)}/accept`, {
+    method: 'POST',
+    body: {},
+    test: opts.test,
+  }))
+}
+
+export async function declineInvitation(token, opts = {}) {
+  return unwrap(await request(`/invitations/${encodeURIComponent(token)}/decline`, {
+    method: 'POST',
+    body: {},
+    test: opts.test,
+  }))
+}
+
 /** platform: 'linkedin' | 'instagram' | 'x' */
 export async function getSocialPostsByPillar(slug, platform, opts = {}) {
   const qs = new URLSearchParams({ pillar: slug })

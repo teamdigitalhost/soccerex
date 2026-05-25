@@ -1,792 +1,708 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Handshake, Building2, Users, Briefcase, ArrowRight, Check, Mail, Phone,
-  Globe, MapPin, Target, Compass, Calendar, Sparkles, Lock, Loader2,
-  ChevronRight, Link as LinkIcon, Shield,
+  Handshake, Building2, Users, Briefcase, ArrowRight, Sparkles, Shield,
+  Trophy, TrendingUp, Network, Calendar, Crosshair, ClipboardList,
+  CheckCircle2, MessagesSquare, Coins, Globe,
 } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { submitDealNetworkIntake } from '../lib/soccerexApi'
-import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
-import { CONTACT, MIAMI_2026, PROFILE_ACCESS } from '../lib/routes'
-import { NEED_OFFER_OPTIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
+import { CONTACT, PROFILE_ACCESS } from '../lib/routes'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
-/* ═══ Deal Network — public concierge intake ════════════════════════════════
- * Soccerex curates introductions. This page is the front door for brands,
- * properties, agencies, and rights holders who want to be considered. It is
- * deliberately not a marketplace: nothing here implies instant matching.
+/* ═══ Deal Network: public marketing page ═══════════════════════════════
+ * No intake form on the public page. Two CTAs route to the application /
+ * contact flows. The page leans on a custom ecosystem infographic that
+ * mirrors the printed one-pager: ecosystem inputs on the left, the Deal
+ * Network hub in the middle, outcomes on the right, and the five-step
+ * concierge process across the bottom.
  *
- * The form is single-page with progressive sections — the audience is
- * time-pressed senior commercial leaders who would rather scroll than click
- * "Next". Only four fields are required; the rest are framed as helpful.
- *
- * Side options in the UI (4) collapse to the 3 backend values:
- *   brand / sponsor / buyer  -> 'company'
- *   agency / service provider -> 'company'
- *   rights holder / club / venue / federation -> 'rightsholder'
- *   both -> 'both'
+ * Brand palette used here:
+ *   navy   #09203e (primary)
+ *   gold   var(--color-brand-accent)
+ *   purple #6b3aa8 (echoes the printed infographic's secondary accent)
+ *   cream  #f4f3f0 (light section background)
  */
 
-const SIDE_OPTIONS = [
+const NAVY = '#09203e'
+const NAVY_DEEP = '#050d1a'
+const PURPLE = '#6b3aa8'
+const PURPLE_SOFT = 'rgba(107,58,168,0.10)'
+
+const ECOSYSTEM = [
   {
-    id: 'company',
-    backendValue: 'company',
-    label: 'Company',
-    desc: 'Brand, investor, agency, service provider, or solutions company. You want to do business in football.',
+    icon: Trophy,
+    label: 'Rightsholders',
+    items: [
+      'Federations', 'Leagues', 'Clubs & academies', 'Competitions',
+      'Governing bodies', 'Member associations', "Women's football properties",
+    ],
+  },
+  {
     icon: Building2,
+    label: 'Commercial Partners',
+    items: [
+      'Brands & sponsors', 'Agencies & operators', 'Technology providers',
+      'Media & broadcasters', 'Service providers & vendors', 'Startups & innovators',
+    ],
   },
   {
-    id: 'rightsholder',
-    backendValue: 'rightsholder',
-    label: 'Rightsholder',
-    desc: 'Club, league, federation, venue, or property. You hold the inventory, audience, or access.',
-    icon: Handshake,
+    icon: Coins,
+    label: 'Capital & Innovation Partners',
+    items: [
+      'Private equity groups', 'Family offices', 'Funds',
+      'Strategic investors', 'Financial institutions', 'Foundations & impact partners',
+    ],
   },
 ]
 
-const DEAL_TYPE_OPTIONS = [
-  'Sponsorship', 'Media rights', 'Content partnership', 'Technology / platform',
-  'Hospitality / experiences', 'Investment / M&A', 'Stadium / venue',
-  'Data / analytics', 'Merchandising / licensing', 'Talent / agency', 'Other',
+const OUTCOMES = [
+  { icon: Users, label: 'Sponsor pipeline', desc: 'Connect with brands, sponsors, and commercial partners aligned to your objectives.' },
+  { icon: TrendingUp, label: 'Capital connectivity', desc: 'Access investors, PE groups, family offices, funds, and financial institutions.' },
+  { icon: Shield, label: 'Federation & rightsholder pathways', desc: 'Direct routes to federations, leagues, clubs, competitions, and member associations.' },
+  { icon: Handshake, label: 'Curated dealmaking', desc: 'Pre-arranged senior meetings with confirmed relevance and high likelihood of follow-up.' },
+  { icon: Network, label: 'Strategic introductions', desc: 'Targeted introductions across the football, commercial, capital, and innovation ecosystems.' },
+  { icon: Calendar, label: 'Year-round relationship support', desc: 'Ongoing introductions, insights, opportunity flow, and relationship development between events.' },
 ]
 
-const EVENT_OPTIONS = [
-  { value: '', label: 'Not tied to a specific event yet' },
-  { value: 'soccerex-miami-2026',  label: 'Soccerex Miami 2026' },
-  { value: 'soccerex-europe-2026', label: 'Soccerex Europe 2026 (Amsterdam)' },
-  { value: 'soccerex-mena-2027',   label: 'Soccerex MENA 2027' },
-  { value: 'multiple',             label: 'Multiple Soccerex events' },
+const PROCESS = [
+  { n: '01', icon: ClipboardList, label: 'Intake & Align', desc: 'We capture priorities, objectives, and target counterparties from both sides.' },
+  { n: '02', icon: Crosshair, label: 'Curate & Match', desc: 'We identify the most relevant, high-intent matches based on fit and objectives.' },
+  { n: '03', icon: Calendar, label: 'Pre-Schedule', desc: 'We build a personalised meeting agenda before you arrive.' },
+  { n: '04', icon: MessagesSquare, label: 'Facilitate', desc: 'We facilitate 1:1 meetings, roundtables, and deal lunches throughout the event.' },
+  { n: '05', icon: CheckCircle2, label: 'Track & Continue', desc: 'We track outcomes and continue creating opportunities year-round.' },
 ]
 
-const BUDGET_OPTIONS = [
-  '', 'Under $25k', '$25k – $50k', '$50k – $100k', '$100k – $250k',
-  '$250k – $500k', '$500k – $1M', '$1M+', 'Prefer not to say',
+const RIGHTSHOLDER_TYPES = [
+  'Federations', 'Leagues', 'Clubs', 'Competitions', 'Academies',
+  'Governing bodies', 'Member associations',
+  "Women's football properties", 'Football development organizations',
 ]
 
-const MEETING_FORMAT_OPTIONS = [
-  { value: '', label: 'No preference' },
-  { value: 'curated_intro', label: 'Curated introduction (concierge sets the meeting)' },
-  { value: 'group_session', label: 'Group / roundtable session' },
-  { value: 'on_site_meeting', label: 'On-site at a Soccerex event' },
-  { value: 'virtual_intro', label: 'Virtual introduction first' },
-  { value: 'open', label: 'Open to whatever fits' },
+const PARTNER_TYPES = [
+  'Brands and sponsors', 'Agencies and operators', 'Technology providers',
+  'Startups and innovators', 'Private equity groups', 'Family offices',
+  'Funds', 'Strategic investors', 'Financial institutions',
+  'Foundations and nonprofits', 'Impact-focused brands',
+  'Media and content platforms', 'Service providers and vendors',
 ]
 
-const REGION_OPTIONS = [
-  'Global', 'Americas', 'Europe', 'MENA / GCC', 'Africa', 'Asia', 'Oceania',
+const OUTCOME_LIST = [
+  'Sponsor pipeline', 'Capital connectivity',
+  'Federation and rightsholder pathways', 'Curated dealmaking',
+  'Strategic introductions', 'Investment opportunities',
+  'Technology and innovation adoption', 'Foundation and impact pathways',
+  'Year-round relationship development',
 ]
 
-const LEAGUE_OPTIONS = [
-  'MLS', 'Liga MX', 'Premier League', 'La Liga', 'Serie A', 'Bundesliga',
-  'Ligue 1', 'Eredivisie', 'CONCACAF', 'CONMEBOL', 'UEFA', 'AFC', 'FIFA',
-  'Saudi Pro League', 'NWSL', 'Liga F',
+const CORE_OFFERINGS = [
+  {
+    icon: Handshake,
+    label: 'Curated 1:1 Meetings',
+    desc: 'Pre-arranged meetings with relevant counterparties matched by objective, category, and strategic fit.',
+  },
+  {
+    icon: Users,
+    label: 'Roundtables & Deal Lunches',
+    desc: 'Closed-door conversations with aligned decision-makers, investors, operators, brands, and rightsholders.',
+  },
+  {
+    icon: Calendar,
+    label: 'Year-Round Engagement',
+    desc: 'Ongoing introductions, relationship development, and opportunity support between Soccerex editions.',
+  },
 ]
 
-const EMPTY_FORM = {
-  side: '',
-  company_name: '', website: '',
-  primary_contact_name: '', primary_contact_title: '',
-  primary_contact_email: '', primary_contact_phone: '',
-  decision_maker_attending: false,
-  deal_types: [],
-  one_sentence_pitch: '',
-  ideal_counterpart: '',
-  named_targets: '',
-  looking_for: [],
-  can_offer: [],
-  pain_points: [],
-  pain_point_detail: '',
-  primary_geography: '',
-  leagues_competitions: [],
-  excluded_regions: [],
-  deal_description: '',
-  budget_range: '',
-  decision_timeline: '',
-  event_slug: '',
-  meeting_format_preference: '',
-  specific_people_to_meet: '',
-  large_file_links: '',
-  previous_context: '',
-  sensitivities: '',
-  marketing_opt_in: true,
-}
-
-function arrayToggle(arr, value) {
-  return arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value]
-}
-
-function splitCsv(value) {
-  return String(value || '')
-    .split(/[\n,]+/g)
-    .map((s) => s.trim())
-    .filter(Boolean)
-}
+const APPLY_MAILTO = 'mailto:enquiries@soccerex.com?subject=Deal%20Network%20application'
 
 export default function DealNetwork() {
-  const [form, setForm] = useState(EMPTY_FORM)
-  const [submitting, setSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState('')
-  const [submitResult, setSubmitResult] = useState(null)
-  const isTest = isTestModeFromUrl()
-
   useScrollAnimations()
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.title = 'Soccerex Deal Network — Concierge Introductions'
+      document.title = 'Soccerex Deal Network'
     }
   }, [])
 
-  const update = (k, v) => setForm((f) => ({ ...f, [k]: v }))
-  const selectedSide = SIDE_OPTIONS.find((s) => s.id === form.side) || null
-
-  const canSubmit = useMemo(() => Boolean(
-    form.side &&
-    form.company_name.trim() &&
-    form.primary_contact_name.trim() &&
-    form.primary_contact_email.trim() &&
-    !submitting,
-  ), [form, submitting])
-
-  async function handleSubmit(e) {
-    e?.preventDefault?.()
-    if (!canSubmit) return
-    setSubmitting(true)
-    setSubmitError('')
-    try {
-      const dealDescriptionCombined = [
-        form.deal_description.trim(),
-        form.large_file_links.trim() ? `Shared files: ${form.large_file_links.trim()}` : '',
-      ].filter(Boolean).join('\n\n')
-
-      const payload = {
-        side: selectedSide?.backendValue || 'company',
-        company_name: form.company_name.trim(),
-        website: form.website.trim() || undefined,
-        primary_contact_name: form.primary_contact_name.trim(),
-        primary_contact_title: form.primary_contact_title.trim() || undefined,
-        primary_contact_email: form.primary_contact_email.trim(),
-        primary_contact_phone: form.primary_contact_phone.trim() || undefined,
-        decision_maker_attending: !!form.decision_maker_attending,
-        deal_types: form.deal_types,
-        one_sentence_pitch: form.one_sentence_pitch.trim() || undefined,
-        deal_description: dealDescriptionCombined || undefined,
-        ideal_counterpart: form.ideal_counterpart.trim() || undefined,
-        named_targets: splitCsv(form.named_targets),
-        looking_for: form.looking_for,
-        can_offer: form.can_offer,
-        pain_points: form.pain_points,
-        pain_point_detail: form.pain_point_detail.trim() || undefined,
-        primary_geography: form.primary_geography || undefined,
-        leagues_competitions: form.leagues_competitions,
-        excluded_regions: form.excluded_regions,
-        budget_range: form.budget_range || undefined,
-        decision_timeline: form.decision_timeline.trim() || undefined,
-        event_slug: form.event_slug || undefined,
-        event_objectives: form.specific_people_to_meet.trim() || undefined,
-        meeting_format_preference: form.meeting_format_preference || undefined,
-        specific_people_to_meet: form.specific_people_to_meet.trim() || undefined,
-        previous_context: form.previous_context.trim() || undefined,
-        marketing_opt_in: !!form.marketing_opt_in,
-        source: 'frontend-deal-network',
-        source_url: typeof window !== 'undefined' ? window.location.href : undefined,
-      }
-      const result = await submitDealNetworkIntake(payload, { test: isTest })
-      setSubmitResult({
-        ...(result || {}),
-        _uiIncomplete: form.looking_for.length === 0 || form.pain_points.length === 0,
-      })
-      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
-    } catch (err) {
-      setSubmitError(err?.message || 'We could not submit your brief. Please email partner@soccerex.com directly.')
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  if (submitResult) {
-    return <ConfirmationView result={submitResult} side={selectedSide} />
-  }
-
   return (
-    <div style={{ background: '#050d1a' }}>
-      {/* ═══ HERO ═════════════════════════════════════════════════════════ */}
+    <div style={{ background: NAVY_DEEP }}>
+
+      {/* ═══ HERO ════════════════════════════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
+          background: `radial-gradient(ellipse at top, #0d2b52 0%, ${NAVY_DEEP} 70%)`,
         }} />
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={42} opacity={0.18} />
-        <div className="absolute pointer-events-none" style={{ top: '12%', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.12) 0%, transparent 60%)' }} />
-        <div className="relative z-10 text-center" style={{ maxWidth: '1000px', padding: 'clamp(70px,8vw,130px) clamp(24px,5vw,80px) clamp(60px,7vw,100px)' }}>
+        <div className="absolute pointer-events-none" style={{
+          top: '12%', left: '50%', transform: 'translateX(-50%)',
+          width: '900px', height: '900px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(191,177,112,0.12) 0%, transparent 60%)',
+        }} />
+
+        <div className="relative z-10 text-center" style={{
+          maxWidth: '1000px',
+          padding: 'clamp(70px,8vw,130px) clamp(24px,5vw,80px) clamp(60px,7vw,100px)',
+        }}>
           <div className="inner-hero-crest flex justify-center fade-up">
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
-              style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
+              style={{ filter: 'drop-shadow(0 8px 40px rgba(233,30,99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
           <p className="section-label text-white mb-5 fade-up" style={{ opacity: 0.85 }}>SOCCEREX DEAL NETWORK</p>
-          <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
-            Curated introductions.{' '}
-            <span style={{ color: 'var(--color-brand-accent)' }}>Real commercial outcomes.</span>
+          <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow"
+              style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
+            From Access to{' '}
+            <span style={{ color: 'var(--color-brand-accent)' }}>Commercial Outcomes</span>
           </h1>
-          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
-          <p className="font-body text-white/75 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.2rem)', maxWidth: '760px' }}>
-            The Deal Network is a hand-curated matchmaking service drawing on the company database we&#x2019;ve built over 30 years of events across the globe. Tell us what you are buying, selling, or looking for, and we pair you with the rightsholders, partners, or companies best positioned to deliver. Every match is reviewed by our team before an introduction is made.
+          <div className="fade-up mx-auto mb-6" style={{
+            width: '100px', height: '3px',
+            background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)',
+          }} />
+          <p className="font-body text-white/80 leading-relaxed fade-up mx-auto"
+             style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.2rem)', maxWidth: '780px' }}>
+            The Soccerex Deal Network is the commercial engine of the Soccerex platform. Built on 30 years of trusted relationships across global football, the Deal Network connects rightsholders, brands, agencies, technology providers, startups, private equity groups, family offices, funds, strategic investors, foundations, and football decision-makers through curated, outcome-driven business engagement.
+          </p>
+
+          <div className="fade-up mt-7 mx-auto font-body text-white/65"
+               style={{ fontSize: '1rem', maxWidth: '640px', lineHeight: 1.7 }}>
+            <p style={{ marginBottom: 8 }}>This is not open networking.</p>
+            <p>This is the Soccerex ecosystem activated with purpose.</p>
+          </div>
+
+          <p className="font-heading font-semibold fade-up mt-8 mx-auto"
+             style={{ color: 'var(--color-brand-accent)', fontSize: 'clamp(1rem, 1.6vw, 1.25rem)', letterSpacing: '0.02em' }}>
+            Right people. Right conversations. Right outcomes.
           </p>
 
           <div className="fade-up mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3"
                style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter, sans-serif' }}>
-            <span className="inline-flex items-center gap-2"><Lock size={14} style={{ color: 'var(--color-brand-accent)' }} /> Private until Soccerex approves a fit</span>
             <span className="inline-flex items-center gap-2"><Sparkles size={14} style={{ color: 'var(--color-brand-accent)' }} /> Curated, not algorithmic</span>
-            <span className="inline-flex items-center gap-2"><Shield size={14} style={{ color: 'var(--color-brand-accent)' }} /> No public marketplace</span>
+            <span className="inline-flex items-center gap-2"><Shield size={14} style={{ color: 'var(--color-brand-accent)' }} /> Senior, qualified counterparties</span>
+            <span className="inline-flex items-center gap-2"><Globe size={14} style={{ color: 'var(--color-brand-accent)' }} /> Year-round, not just at events</span>
           </div>
 
-          <div className="fade-up mt-10">
-            <a href="#intake" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'var(--color-brand-accent)', color: '#ffffff', padding: '15px 32px', fontSize: '0.78rem', textDecoration: 'none' }}>
-              Submit a brief <ArrowRight size={15} />
+          <div className="fade-up mt-10 flex flex-wrap items-center justify-center gap-3">
+            <a href={APPLY_MAILTO} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+              style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 32px', fontSize: '0.78rem', textDecoration: 'none' }}>
+              Join the Deal Network <ArrowRight size={15} />
             </a>
+            <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+              style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.25)', padding: '14px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
+              Speak with Soccerex <ArrowRight size={15} />
+            </Link>
           </div>
         </div>
       </section>
 
       <PixelDivider color="#f4f3f0" layers={4} height={90} speed={0.5} />
 
-      {/* ═══ HOW IT WORKS ═════════════════════════════════════════════════ */}
-      <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #efece6 100%)', padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px) clamp(40px,4vw,60px)' }}>
-        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
-          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
-            How the Deal Network works
+      {/* ═══ THE ECOSYSTEM IS THE ADVANTAGE ══════════════════════════════ */}
+      <section style={{
+        background: 'linear-gradient(180deg, #f4f3f0 0%, #efece6 100%)',
+        padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(40px,5vw,80px)',
+      }}>
+        <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div className="text-center mb-12">
+            <p className="font-mono uppercase tracking-[0.18em] mb-3 fade-up"
+               style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+              The Ecosystem is the Advantage
+            </p>
+            <h2 className="font-heading font-bold mb-5 fade-up"
+                style={{ fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', color: NAVY, lineHeight: 1.15 }}>
+              30 years of relationships, activated with structure.
+            </h2>
+            <p className="font-body mx-auto fade-up"
+               style={{ fontSize: '1.02rem', color: '#586778', lineHeight: 1.65, maxWidth: '780px' }}>
+              For 30 years, Soccerex has convened the people and organizations that shape global football. The Deal Network turns that ecosystem into a structured commercial platform, connecting the right stakeholders before, during, and after Soccerex events. It is designed to move beyond chance conversations and create qualified meetings, strategic introductions, capital connectivity, and measurable business outcomes.
+            </p>
+          </div>
+
+          <EcosystemInfographic />
+
+          <p className="font-heading font-semibold text-center fade-up mt-12 mx-auto"
+             style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.35rem)', color: NAVY, maxWidth: '760px', lineHeight: 1.4 }}>
+            The Soccerex Deal Network turns ecosystem strength into commercial momentum.
           </p>
-          <h2 className="font-heading font-bold text-center mb-12 fade-up" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.25rem)', color: '#09203e' }}>
-            Four steps. No public listings.
+        </div>
+      </section>
+
+      {/* ═══ WHAT THE DEAL NETWORK DOES ═══════════════════════════════════ */}
+      <section style={{
+        background: '#fff',
+        padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)',
+      }}>
+        <div style={{ maxWidth: '980px', margin: '0 auto' }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up"
+             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+            What the Deal Network Does
+          </p>
+          <h2 className="font-heading font-bold text-center mb-10 fade-up"
+              style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: NAVY, lineHeight: 1.2 }}>
+            Access the right counterparties across the football business ecosystem.
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <ConnectsCard
+              icon={Trophy}
+              from="Rightsholders"
+              to="brands, sponsors, agencies, technology providers, investors, foundations, and strategic partners."
+            />
+            <ConnectsCard
+              icon={Building2}
+              from="Companies and investors"
+              to="federations, leagues, clubs, competitions, member associations, women's football properties, and football development opportunities."
+            />
+          </div>
+
+          <div className="text-center fade-up">
+            <p className="font-body" style={{ fontSize: '1rem', color: '#586778', marginBottom: 10 }}>
+              The objective is simple:
+            </p>
+            <p className="font-heading font-bold"
+               style={{ fontSize: 'clamp(1.4rem, 2.6vw, 2rem)', color: NAVY }}>
+              Less noise. <span style={{ color: 'var(--color-brand-accent)' }}>More relevance.</span> Better outcomes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ HOW IT WORKS ═════════════════════════════════════════════════ */}
+      <section style={{
+        background: 'linear-gradient(180deg, #f4f3f0 0%, #efece6 100%)',
+        padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)',
+      }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up"
+             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+            How It Works
+          </p>
+          <h2 className="font-heading font-bold text-center mb-12 fade-up"
+              style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: NAVY, lineHeight: 1.2 }}>
+            Four moves, before, during, and after the event.
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { n: '01', t: 'Submit a brief', d: 'Tell us who you are, what you want, what you can offer, and what kind of introductions would actually move the needle.' },
-              { n: '02', t: 'Soccerex reviews', d: 'Our concierge team curates briefs by hand. We weigh fit, seniority, geography, timing, and signal, not just keywords.' },
-              { n: '03', t: 'We suggest introductions', d: 'When we see a strong fit, we propose a curated introduction with a clear rationale, and a meeting format that works for both sides.' },
-              { n: '04', t: 'Accept, decline, or shape it', d: 'You control your calendar. Accept, decline, or send a note back. Concierge handles scheduling and the room.' },
-            ].map((step) => (
-              <div key={step.n} className="fade-up" style={{
-                background: '#fff', borderRadius: '14px', padding: '28px 24px',
-                border: '1px solid rgba(9,32,62,0.08)', boxShadow: '0 6px 24px rgba(9,32,62,0.06)',
+              { n: '01', icon: ClipboardList, t: 'Intake',        d: 'Soccerex captures participant goals, priorities, target counterparties, and desired outcomes.' },
+              { n: '02', icon: Crosshair,     t: 'Curate',        d: 'We identify relevant matches across the Soccerex ecosystem based on fit, intent, and strategic value.' },
+              { n: '03', icon: Handshake,     t: 'Connect',       d: 'We pre-arrange meetings, roundtables, lunches, and executive conversations designed around real business objectives.' },
+              { n: '04', icon: CheckCircle2,  t: 'Follow Through',d: 'We track outcomes, support next steps, and continue surfacing opportunities year-round.' },
+            ].map((step) => {
+              const Icon = step.icon
+              return (
+                <div key={step.n} className="fade-up" style={{
+                  background: '#fff', borderRadius: '14px', padding: '28px 24px',
+                  border: '1px solid rgba(9,32,62,0.08)', boxShadow: '0 6px 24px rgba(9,32,62,0.06)',
+                  position: 'relative',
+                }}>
+                  <div className="flex items-center justify-between mb-4">
+                    <div style={{
+                      width: 42, height: 42, borderRadius: 10,
+                      background: PURPLE_SOFT, display: 'grid', placeItems: 'center',
+                    }}>
+                      <Icon size={20} color={PURPLE} strokeWidth={2.2} />
+                    </div>
+                    <span className="font-mono" style={{
+                      fontSize: '0.7rem', color: 'var(--color-brand-accent)',
+                      letterSpacing: '0.18em', fontWeight: 700,
+                    }}>{step.n}</span>
+                  </div>
+                  <h3 className="font-heading font-bold" style={{ fontSize: '1.1rem', color: NAVY, marginBottom: 8 }}>{step.t}</h3>
+                  <p className="font-body" style={{ fontSize: '0.9rem', color: '#586778', lineHeight: 1.55 }}>{step.d}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ WHO IT IS FOR ════════════════════════════════════════════════ */}
+      <section style={{ background: '#fff', padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up"
+             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+            Who It Is For
+          </p>
+          <h2 className="font-heading font-bold text-center mb-12 fade-up"
+              style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: NAVY, lineHeight: 1.2 }}>
+            Built for both sides of the table.
+          </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <AudienceCard icon={Trophy} title="Rightsholders" items={RIGHTSHOLDER_TYPES} tint={NAVY} />
+            <AudienceCard icon={Briefcase} title="Commercial, Capital & Innovation Partners" items={PARTNER_TYPES} tint={PURPLE} />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ WHAT IT CREATES ══════════════════════════════════════════════ */}
+      <section style={{
+        background: 'linear-gradient(180deg, #f4f3f0 0%, #efece6 100%)',
+        padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)',
+      }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up"
+             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+            What It Creates
+          </p>
+          <h2 className="font-heading font-bold text-center mb-12 fade-up"
+              style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: NAVY, lineHeight: 1.2 }}>
+            Concrete outputs, not vague potential.
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {OUTCOME_LIST.map((o) => (
+              <div key={o} className="fade-up" style={{
+                background: '#fff', borderRadius: 10, padding: '14px 18px',
+                border: '1px solid rgba(9,32,62,0.08)',
+                display: 'flex', alignItems: 'center', gap: 12,
               }}>
-                <p className="font-mono" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', letterSpacing: '0.18em', fontWeight: 700, marginBottom: 14 }}>{step.n}</p>
-                <h3 className="font-heading font-bold" style={{ fontSize: '1.05rem', color: '#09203e', marginBottom: 8 }}>{step.t}</h3>
-                <p className="font-body" style={{ fontSize: '0.88rem', color: '#586778', lineHeight: 1.55 }}>{step.d}</p>
+                <span style={{
+                  width: 8, height: 8, borderRadius: '50%',
+                  background: 'var(--color-brand-accent)', flexShrink: 0,
+                }} />
+                <span className="font-body" style={{ fontSize: '0.92rem', color: NAVY, fontWeight: 500 }}>{o}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ CONTACT (intake form temporarily disabled) ══════════════════ */}
-      <section id="intake" style={{ background: 'linear-gradient(180deg, #efece6 0%, #e7e4dd 100%)', padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px) clamp(80px,10vw,140px)' }}>
-        <div style={{ maxWidth: '720px', margin: '0 auto', textAlign: 'center' }}>
-          <p className="font-mono uppercase tracking-[0.18em] mb-4 fade-up" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
-            Get in touch
+      {/* ═══ WHY IT MATTERS ═══════════════════════════════════════════════ */}
+      <section style={{ background: NAVY, padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-3 fade-up"
+             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+            Why It Matters
           </p>
-          <h2 className="font-heading font-bold mb-5 fade-up" style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: '#09203e', lineHeight: 1.2 }}>
-            For more information, please contact us.
+          <h2 className="font-heading font-bold text-white fade-up mb-8"
+              style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', lineHeight: 1.2 }}>
+            Most events sell access.<br />
+            <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex activates the ecosystem behind it.</span>
           </h2>
-          <p className="font-body mb-8 fade-up" style={{ fontSize: '1.05rem', color: '#586778', lineHeight: 1.65, maxWidth: '560px', margin: '0 auto 32px' }}>
-            Our concierge team handles every Deal Network introduction by hand. Email us with a short note about what you are looking for and a member of the team will be in touch.
+          <p className="font-body text-white/80 fade-up mx-auto"
+             style={{ fontSize: '1.05rem', lineHeight: 1.7, maxWidth: '720px', marginBottom: 18 }}>
+            The Deal Network is built to help participants enter the right rooms, meet the right people, and create opportunities that continue beyond the event itself.
           </p>
-          <a
-            href="mailto:enquiries@soccerex.com"
-            className="fade-up inline-flex items-center gap-2"
-            style={{
-              background: '#09203e',
-              color: '#fff',
-              padding: '14px 28px',
-              borderRadius: '999px',
-              fontFamily: 'inherit',
-              fontWeight: 600,
-              fontSize: '1rem',
-              textDecoration: 'none',
-              boxShadow: '0 12px 32px rgba(9,32,62,0.18)',
-            }}
-          >
-            <Mail size={18} strokeWidth={2} />
-            enquiries@soccerex.com
-          </a>
-          <p className="font-body mt-6 fade-up" style={{ fontSize: '0.85rem', color: '#7a8b9d' }}>
+          <p className="font-body text-white/65 fade-up mx-auto"
+             style={{ fontSize: '0.98rem', lineHeight: 1.65, maxWidth: '720px' }}>
+            It is where Soccerex moves from convening the football industry to helping the football industry do business.
+          </p>
+        </div>
+      </section>
+
+      {/* ═══ CORE OFFERINGS ═══════════════════════════════════════════════ */}
+      <section style={{
+        background: 'linear-gradient(180deg, #f4f3f0 0%, #efece6 100%)',
+        padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)',
+      }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up"
+             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+            Core Offerings
+          </p>
+          <h2 className="font-heading font-bold text-center mb-12 fade-up"
+              style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: NAVY, lineHeight: 1.2 }}>
+            Three formats, one outcome standard.
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {CORE_OFFERINGS.map((off) => {
+              const Icon = off.icon
+              return (
+                <div key={off.label} className="fade-up" style={{
+                  background: '#fff', borderRadius: 14, padding: '32px 28px',
+                  border: '1px solid rgba(9,32,62,0.08)', boxShadow: '0 8px 28px rgba(9,32,62,0.06)',
+                }}>
+                  <div style={{
+                    width: 48, height: 48, borderRadius: 12,
+                    background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)',
+                    display: 'grid', placeItems: 'center', marginBottom: 18,
+                  }}>
+                    <Icon size={22} color={NAVY} strokeWidth={2.2} />
+                  </div>
+                  <h3 className="font-heading font-bold" style={{ fontSize: '1.15rem', color: NAVY, marginBottom: 10 }}>{off.label}</h3>
+                  <p className="font-body" style={{ fontSize: '0.92rem', color: '#586778', lineHeight: 1.6 }}>{off.desc}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ JOIN / APPLY ═════════════════════════════════════════════════ */}
+      <section style={{ background: NAVY_DEEP, padding: 'clamp(70px,8vw,120px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: '880px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-3 fade-up"
+             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+            Join the Deal Network
+          </p>
+          <h2 className="font-heading font-bold text-white fade-up mb-6"
+              style={{ fontSize: 'clamp(1.9rem, 3.6vw, 2.8rem)', lineHeight: 1.15 }}>
+            Available through select participation packages and curated membership pathways.
+          </h2>
+          <p className="font-body text-white/75 fade-up mx-auto"
+             style={{ fontSize: '1.05rem', lineHeight: 1.7, maxWidth: '720px', marginBottom: 32 }}>
+            Participants complete a priority intake process so Soccerex can understand their objectives, identify relevant counterparties, and structure the right opportunities.
+          </p>
+
+          <div className="fade-up flex flex-wrap items-center justify-center gap-3">
+            <a href={APPLY_MAILTO} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+              style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '17px 38px', fontSize: '0.8rem', textDecoration: 'none' }}>
+              Apply to Join the Deal Network <ArrowRight size={16} />
+            </a>
+            <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+              style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.25)', padding: '16px 34px', fontSize: '0.8rem', textDecoration: 'none' }}>
+              Speak with Soccerex <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          <p className="font-body fade-up mt-8" style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)' }}>
             Already in the network?{' '}
-            <Link to={PROFILE_ACCESS} style={{ color: '#09203e', fontWeight: 600, textDecoration: 'underline', textDecorationColor: 'rgba(191,177,112,0.6)' }}>
+            <Link to={PROFILE_ACCESS} style={{
+              color: 'var(--color-brand-accent)', fontWeight: 600,
+              textDecoration: 'underline', textDecorationColor: 'rgba(191,177,112,0.5)',
+            }}>
               Sign in to your Deal Network portal
             </Link>
           </p>
         </div>
       </section>
-      {/* ═══ ORIGINAL INTAKE FORM (kept for reference, not rendered) ═════ */}
-      {false && <section id="intake-disabled" style={{ background: 'linear-gradient(180deg, #efece6 0%, #e7e4dd 100%)', padding: 'clamp(40px,5vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,140px)' }}>
-        <div style={{ maxWidth: '980px', margin: '0 auto' }}>
-          <div className="text-center mb-12 fade-up">
-            <p className="font-mono uppercase tracking-[0.18em] mb-3" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
-              Your brief
-            </p>
-            <h2 className="font-heading font-bold mb-3" style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: '#09203e' }}>
-              Tell us what would make this useful.
-            </h2>
-            <p className="font-body" style={{ fontSize: '0.95rem', color: '#586778', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}>
-              Only four fields are required. The rest help our concierge team build a sharper picture. Brief and honest beats long and polished.
-            </p>
-          </div>
 
-          <form onSubmit={handleSubmit} style={{
-            background: '#fff', borderRadius: '18px',
-            padding: 'clamp(28px,4vw,52px)',
-            border: '1px solid rgba(9,32,62,0.08)',
-            boxShadow: '0 24px 70px rgba(9,32,62,0.10)',
-          }}>
-            {/* Section 1: Identity */}
-            <SectionHeader number="01" title="Tell us who you are" subtitle="So we know which side of the table you sit on." />
-
-            <div className="mb-8">
-              <Label required>Which best describes you?</Label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                {SIDE_OPTIONS.map((opt) => {
-                  const Icon = opt.icon
-                  const active = form.side === opt.id
-                  return (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => update('side', opt.id)}
-                      style={{
-                        background: active ? '#09203e' : '#f8f7f4',
-                        color: active ? '#fff' : '#09203e',
-                        border: `1px solid ${active ? '#09203e' : 'rgba(9,32,62,0.10)'}`,
-                        borderRadius: '12px',
-                        padding: '18px 18px',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        transition: 'all 0.22s',
-                        boxShadow: active ? '0 14px 32px rgba(9,32,62,0.22)' : 'none',
-                      }}
-                      onMouseEnter={(e) => { if (!active) e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
-                      onMouseLeave={(e) => { if (!active) e.currentTarget.style.borderColor = 'rgba(9,32,62,0.10)' }}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div style={{
-                          width: 38, height: 38, borderRadius: 9,
-                          background: active ? 'var(--color-brand-accent)' : 'rgba(191,177,112,0.14)',
-                          display: 'grid', placeItems: 'center', flexShrink: 0,
-                        }}>
-                          <Icon size={18} color={active ? '#09203e' : 'var(--color-brand-accent)'} strokeWidth={2.2} />
-                        </div>
-                        <div>
-                          <p className="font-heading font-bold" style={{ fontSize: '1rem', marginBottom: 3 }}>{opt.label}</p>
-                          <p className="font-body" style={{ fontSize: '0.82rem', opacity: 0.78, lineHeight: 1.5 }}>{opt.desc}</p>
-                        </div>
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-              <FormField icon={Building2} label="Company / organisation" required value={form.company_name} onChange={(v) => update('company_name', v)} placeholder="Your company name" />
-              <FormField icon={Globe} label="Website" type="url" value={form.website} onChange={(v) => update('website', v)} placeholder="https://" />
-              <FormField icon={Users} label="Your name" required value={form.primary_contact_name} onChange={(v) => update('primary_contact_name', v)} placeholder="Your name" />
-              <FormField icon={Briefcase} label="Title / role" value={form.primary_contact_title} onChange={(v) => update('primary_contact_title', v)} placeholder="Head of Commercial, Founder, etc." />
-              <FormField icon={Mail} label="Email" type="email" required value={form.primary_contact_email} onChange={(v) => update('primary_contact_email', v)} placeholder="you@company.com" />
-              <FormField icon={Phone} label="Phone or WhatsApp" type="tel" value={form.primary_contact_phone} onChange={(v) => update('primary_contact_phone', v)} placeholder="+1 305 555 0199" />
-            </div>
-
-            <Divider />
-
-            {/* Section 2: Objectives */}
-            <SectionHeader number="02" title="What are you looking for?" subtitle="A one-line pitch goes further than a paragraph. We will read both." />
-
-            <div className="mb-5">
-              <Label>Deal types you are open to</Label>
-              <ChipGroup options={DEAL_TYPE_OPTIONS} value={form.deal_types} onChange={(v) => update('deal_types', v)} />
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 mb-4">
-              <FormField textarea rows={2} label="One-sentence pitch" value={form.one_sentence_pitch} onChange={(v) => update('one_sentence_pitch', v)} placeholder="e.g. We want to meet MLS clubs ready to launch fan data activations in 2026." />
-              <FormField textarea rows={3} label="Who would be an ideal counterpart?" value={form.ideal_counterpart} onChange={(v) => update('ideal_counterpart', v)} placeholder="The kind of company, role, or context that would make this worth your time." />
-              <FormField textarea rows={2} label="Named targets (optional)" value={form.named_targets} onChange={(v) => update('named_targets', v)} placeholder="Companies, clubs, or people you'd love to meet. One per line or comma-separated." />
-            </div>
-
-            <Divider />
-
-            {/* Section: Commercial signals (optional now, completes your brief) */}
-            <SectionHeader number="03" title="What you need, what you bring, what hurts" subtitle="Optional now, but your brief is only matched once you have declared at least one need and one pain point. You can complete this later from your portal." />
-
-            <div className="mb-5">
-              <Label>What you are looking for</Label>
-              <KeyChipGroup options={NEED_OFFER_OPTIONS} value={form.looking_for} onChange={(v) => update('looking_for', v)} />
-            </div>
-
-            <div className="mb-5">
-              <Label>What you can offer</Label>
-              <KeyChipGroup options={NEED_OFFER_OPTIONS} value={form.can_offer} onChange={(v) => update('can_offer', v)} />
-            </div>
-
-            <div className="mb-5">
-              <Label>Pain points you are trying to solve</Label>
-              <KeyChipGroup options={PAIN_OPTIONS} value={form.pain_points} onChange={(v) => update('pain_points', v)} />
-            </div>
-
-            <div className="mb-2">
-              <FormField textarea rows={2} label="Pain point detail (optional)" value={form.pain_point_detail} onChange={(v) => update('pain_point_detail', v)} placeholder="In your words: what is the actual problem, and what would solving it unlock?" />
-            </div>
-
-            <Divider />
-
-            {/* Section 4: Geography & shape */}
-            <SectionHeader number="04" title="Geography, budget, and timing" subtitle="Helps us avoid wasting your time on the wrong room." />
-
-            <div className="mb-5">
-              <Label>Primary geography</Label>
-              <ChipGroup options={REGION_OPTIONS} value={form.primary_geography ? [form.primary_geography] : []} onChange={(arr) => update('primary_geography', arr[arr.length - 1] || '')} single />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-              <SelectField icon={Target} label="Indicative budget range (USD)" value={form.budget_range} onChange={(v) => update('budget_range', v)} options={BUDGET_OPTIONS} />
-              <FormField icon={Calendar} label="Decision timeline" value={form.decision_timeline} onChange={(v) => update('decision_timeline', v)} placeholder="e.g. Q3 2026, before Miami, this season" />
-            </div>
-
-            <Divider />
-
-            {/* Section 5: Context */}
-            <SectionHeader number="05" title="Anything else worth knowing" subtitle="The more context you share, the sharper the matches we can make." />
-
-            <div className="grid grid-cols-1 gap-4 mb-4">
-              <FormField textarea rows={3} label="Deeper context (optional)" value={form.deal_description} onChange={(v) => update('deal_description', v)} placeholder="Longer explanation if the one-line pitch doesn't capture it. History, scope, what 'good' looks like." />
-              <FormField textarea rows={2} label="Previous Soccerex context (optional)" value={form.previous_context} onChange={(v) => update('previous_context', v)} placeholder="Past meetings, deals, or conversations with our team or the network." />
-              <div>
-                <FormField textarea rows={2} icon={LinkIcon} label="Supporting files (paste links)" value={form.large_file_links} onChange={(v) => update('large_file_links', v)} placeholder="Dropbox, Google Drive, WeTransfer, Box, Notion, etc." />
-                <p className="font-body mt-2" style={{ fontSize: '0.78rem', color: '#7a8896', lineHeight: 1.55 }}>
-                  Skip uploads. For large decks, brand folders, signage files, or video, paste a shared link, we will review them in context with your brief.
-                </p>
-              </div>
-            </div>
-
-            <div className="mb-7">
-              <Toggle label="Keep me on the Soccerex commercial briefing list" value={form.marketing_opt_in} onChange={(v) => update('marketing_opt_in', v)} />
-            </div>
-
-            <Divider />
-
-            {/* Submit */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-3">
-              <p className="font-body" style={{ fontSize: '0.78rem', color: '#7a8896', maxWidth: '460px', lineHeight: 1.55 }}>
-                We review every brief by hand before sharing anything with potential counterparts.
-                You will hear back from a Soccerex team member directly, not an automated match.
-              </p>
-              <button type="submit" disabled={!canSubmit} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
-                style={{
-                  background: canSubmit ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)',
-                  color: '#09203e',
-                  padding: '17px 38px',
-                  fontSize: '0.82rem',
-                  border: 'none',
-                  cursor: canSubmit ? 'pointer' : 'not-allowed',
-                  transition: 'all 0.25s',
-                  opacity: submitting ? 0.7 : 1,
-                }}
-                onMouseEnter={(e) => { if (canSubmit) e.currentTarget.style.background = '#d4c78e' }}
-                onMouseLeave={(e) => { if (canSubmit) e.currentTarget.style.background = 'var(--color-brand-accent)' }}
-              >
-                {submitting
-                  ? <><Loader2 size={16} className="prog-spin" /> Sending</>
-                  : <>Submit brief <ArrowRight size={16} /></>}
-              </button>
-            </div>
-            {submitError && (
-              <p className="font-body mt-4" style={{ fontSize: '0.85rem', color: '#b91c1c' }}>{submitError}</p>
-            )}
-          </form>
-
-          {/* Existing member nudge */}
-          <div className="mt-10 text-center fade-up">
-            <p className="font-body" style={{ fontSize: '0.88rem', color: '#586778' }}>
-              Already in the network?{' '}
-              <Link to={withTestSearch(PROFILE_ACCESS)} style={{ color: '#09203e', fontWeight: 600, textDecoration: 'underline', textDecorationColor: 'rgba(191,177,112,0.6)' }}>
-                Sign in to your Deal Network portal
-              </Link>
-            </p>
-          </div>
-        </div>
-      </section>}
-    </div>
-  )
-}
-
-/* ═══ Confirmation view ════════════════════════════════════════════════════ */
-
-function ConfirmationView({ result, side }) {
-  const data = result?.data || result || {}
-  return (
-    <div style={{ background: '#050d1a', minHeight: '100vh' }}>
-      <section className="inner-hero relative overflow-hidden flex items-center justify-center">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
-        }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={28} opacity={0.13} />
-        <div className="relative z-10 text-center" style={{ maxWidth: '760px', padding: 'clamp(80px,10vw,160px) clamp(24px,5vw,80px)' }}>
-          <div style={{
-            width: 78, height: 78, borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)',
-            display: 'grid', placeItems: 'center', margin: '0 auto 32px',
-            boxShadow: '0 20px 60px rgba(191,177,112,0.45)',
-          }}>
-            <Check size={36} color="#09203e" strokeWidth={2.5} />
-          </div>
-          <p className="section-label text-brand-accent mb-4">Brief received</p>
-          <h1 className="font-heading font-bold text-white leading-tight mb-6" style={{ fontSize: 'clamp(1.9rem, 4vw, 3.1rem)' }}>
-            Thank you. The Soccerex team takes it from here.
-          </h1>
-          <p className="font-body text-white/75 leading-relaxed mb-3 mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.12rem)', maxWidth: '600px' }}>
-            We received your Deal Network brief and will review it before sharing anything with potential counterparts. If there is a fit, our concierge team will reach out with a suggested introduction or next step.
+      {/* ═══ CLOSING STATEMENT ════════════════════════════════════════════ */}
+      <section style={{ background: '#fff', padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: '880px', margin: '0 auto', textAlign: 'center' }}>
+          <p className="font-body fade-up" style={{ fontSize: '1.05rem', color: '#586778', lineHeight: 1.7, marginBottom: 12 }}>
+            The football industry already gathers at Soccerex.
           </p>
-          <p className="font-body text-white/55 leading-relaxed mx-auto" style={{ fontSize: '0.92rem', maxWidth: '560px' }}>
-            Expect to hear from a real person, usually within two business days. Nothing about your brief is public; we only share what is needed to make a single introduction make sense.
+          <p className="font-heading font-bold fade-up mx-auto"
+             style={{ fontSize: 'clamp(1.4rem, 2.6vw, 2rem)', color: NAVY, lineHeight: 1.3, maxWidth: '780px', marginBottom: 32 }}>
+            The Deal Network ensures that when they arrive, they leave with something to show for it.
           </p>
-
-          {result?._uiIncomplete && (
-            <div className="mt-8 mx-auto" style={{ maxWidth: '560px', background: 'rgba(233,30,99,0.12)', border: '1px solid rgba(233,30,99,0.35)', borderRadius: 12, padding: '18px 22px' }}>
-              <p className="font-body" style={{ fontSize: '0.92rem', color: '#fff', lineHeight: 1.55 }}>
-                Your brief is in, but it is not yet match-ready. Add at least one thing you are looking for and one pain point from your{' '}
-                <Link to={withTestSearch(PROFILE_ACCESS)} style={{ color: 'var(--color-brand-accent)', fontWeight: 600, textDecoration: 'underline' }}>
-                  Deal Network portal
-                </Link>{' '}
-                so we can start matching.
-              </p>
-            </div>
-          )}
-
-          {data.id && (
-            <p className="font-mono uppercase tracking-[0.18em] mt-8" style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.42)' }}>
-              Reference · {data.id}
-              {data.status && <> · {String(data.status).replace(/_/g, ' ')}</>}
-            </p>
-          )}
-
-          <div className="mt-12 flex flex-wrap justify-center gap-3">
-            <Link to={withTestSearch(MIAMI_2026)} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '15px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
-              Explore Miami 2026 <ChevronRight size={15} />
-            </Link>
-            <Link to={withTestSearch(CONTACT)} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', padding: '14px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
-              Talk to the team <ArrowRight size={15} />
-            </Link>
+          <div className="fade-up font-heading font-semibold mx-auto" style={{
+            fontSize: 'clamp(1.05rem, 1.8vw, 1.35rem)', color: NAVY, lineHeight: 1.6,
+          }}>
+            <p style={{ marginBottom: 6 }}>From conversations to opportunities.</p>
+            <p style={{ marginBottom: 6 }}>From access to outcomes.</p>
+            <p style={{ color: 'var(--color-brand-accent)' }}>From events to a year-round commercial platform.</p>
           </div>
-
-          {side && (
-            <p className="font-body text-white/45 mt-10" style={{ fontSize: '0.82rem' }}>
-              Submitted as <span style={{ color: 'rgba(255,255,255,0.7)' }}>{side.label}</span>.
-            </p>
-          )}
         </div>
       </section>
     </div>
   )
 }
 
-/* ═══ Form primitives ══════════════════════════════════════════════════════ */
-
-function SectionHeader({ number, title, subtitle }) {
+/* ═══ Ecosystem Infographic ═══════════════════════════════════════════════
+ * Mirrors the printed one-pager: ecosystem inputs (left) → Deal Network hub
+ * (center) → outcomes (right), with the 5-step concierge process across the
+ * bottom. Pure HTML/CSS so it scales perfectly. Stacks on mobile.
+ */
+function EcosystemInfographic() {
   return (
-    <div className="mb-6">
-      <div className="flex items-baseline gap-3 mb-1">
-        <span className="font-mono" style={{ fontSize: '0.72rem', color: 'var(--color-brand-accent)', letterSpacing: '0.2em', fontWeight: 700 }}>{number}</span>
-        <h3 className="font-heading font-bold" style={{ fontSize: '1.2rem', color: '#09203e' }}>{title}</h3>
+    <div className="fade-up" style={{
+      background: '#fff', borderRadius: 18, padding: 'clamp(24px,3vw,40px)',
+      border: '1px solid rgba(9,32,62,0.08)', boxShadow: '0 16px 48px rgba(9,32,62,0.08)',
+    }}>
+      <div className="text-center mb-6">
+        <p className="font-mono uppercase tracking-[0.18em]"
+           style={{ fontSize: '0.65rem', color: PURPLE, fontWeight: 700 }}>
+          How the Deal Network activates the Soccerex ecosystem
+        </p>
       </div>
-      {subtitle && <p className="font-body" style={{ fontSize: '0.86rem', color: '#7a8896', lineHeight: 1.5, marginLeft: 30 }}>{subtitle}</p>}
-    </div>
-  )
-}
 
-function Divider() {
-  return <div style={{ height: 1, background: 'rgba(9,32,62,0.08)', margin: '26px 0 28px' }} />
-}
-
-function Label({ children, required }) {
-  return (
-    <label className="font-mono uppercase tracking-[0.1em] block mb-2" style={{ fontSize: '0.68rem', color: '#09203e', fontWeight: 600 }}>
-      {children}{required && <span style={{ color: 'var(--color-brand-accent)', marginLeft: 4 }}>*</span>}
-    </label>
-  )
-}
-
-function FormField({ icon: Icon, label, placeholder, type = 'text', required, textarea, rows = 3, value, onChange }) {
-  return (
-    <div>
-      <Label required={required}>{label}</Label>
-      <div style={{ position: 'relative' }}>
-        {Icon && !textarea && (
-          <Icon size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-brand-accent)', pointerEvents: 'none' }} />
-        )}
-        {textarea ? (
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-            rows={rows}
-            required={required}
-            style={textareaStyle}
-            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
-          />
-        ) : (
-          <input
-            type={type}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-            required={required}
-            style={Icon ? inputStyleIcon : inputStyle}
-            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
-          />
-        )}
-      </div>
-    </div>
-  )
-}
-
-function SelectField({ icon: Icon, label, value, onChange, options }) {
-  return (
-    <div>
-      <Label>{label}</Label>
-      <div style={{ position: 'relative' }}>
-        {Icon && (
-          <Icon size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-brand-accent)', pointerEvents: 'none', zIndex: 1 }} />
-        )}
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          style={Icon ? selectStyleIcon : selectStyle}
-          onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
-          onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
-        >
-          {options.map((opt) => {
-            const isObj = typeof opt === 'object' && opt !== null
-            const v = isObj ? opt.value : opt
-            const l = isObj ? opt.label : (opt === '' ? 'Select…' : opt)
-            return <option key={v} value={v}>{l}</option>
+      {/* Three-column ecosystem map */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
+        {/* LEFT: Ecosystem inputs */}
+        <div className="flex flex-col gap-3">
+          <p className="font-mono uppercase tracking-[0.16em] mb-1"
+             style={{ fontSize: '0.62rem', color: 'var(--color-brand-accent)', fontWeight: 700, textAlign: 'center' }}>
+            The Soccerex Ecosystem
+          </p>
+          {ECOSYSTEM.map((group) => {
+            const Icon = group.icon
+            return (
+              <div key={group.label} style={{
+                background: '#fafaf7', borderRadius: 12, padding: '16px 16px',
+                border: '1px solid rgba(9,32,62,0.06)',
+              }}>
+                <div className="flex items-center gap-2.5 mb-2">
+                  <span style={{
+                    width: 32, height: 32, borderRadius: 8,
+                    background: 'rgba(191,177,112,0.16)', display: 'grid', placeItems: 'center', flexShrink: 0,
+                  }}>
+                    <Icon size={16} color="var(--color-brand-accent)" strokeWidth={2.2} />
+                  </span>
+                  <h4 className="font-heading font-bold" style={{ fontSize: '0.92rem', color: NAVY }}>{group.label}</h4>
+                </div>
+                <ul className="font-body" style={{ fontSize: '0.78rem', color: '#586778', lineHeight: 1.55, listStyle: 'none', padding: 0, margin: 0 }}>
+                  {group.items.map((item) => (
+                    <li key={item} style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                      <span style={{ color: 'var(--color-brand-accent)', fontSize: '0.6rem', lineHeight: 1 }}>●</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
           })}
-        </select>
+        </div>
+
+        {/* CENTER: Hub */}
+        <div className="flex flex-col items-center justify-center" style={{ padding: 'clamp(16px, 3vw, 40px) 0' }}>
+          <div style={{
+            position: 'relative', aspectRatio: '1 / 1', width: '100%', maxWidth: 320,
+          }}>
+            {/* Outer dotted ring */}
+            <div style={{
+              position: 'absolute', inset: 0, borderRadius: '50%',
+              border: `2px dashed ${PURPLE}`, opacity: 0.35,
+            }} />
+            {/* Inner solid ring with gradient */}
+            <div style={{
+              position: 'absolute', inset: 14, borderRadius: '50%',
+              background: `conic-gradient(from 0deg, var(--color-brand-accent) 0%, ${PURPLE} 50%, var(--color-brand-accent) 100%)`,
+              padding: 3,
+            }}>
+              <div style={{
+                width: '100%', height: '100%', borderRadius: '50%',
+                background: '#fff', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center', textAlign: 'center',
+                padding: '0 20px',
+              }}>
+                <p className="font-heading font-bold" style={{ fontSize: 'clamp(1.05rem, 2vw, 1.4rem)', color: NAVY, lineHeight: 1.15 }}>
+                  SOCCEREX<br />DEAL<br />NETWORK
+                </p>
+                <div style={{ width: 50, height: 2, background: 'var(--color-brand-accent)', margin: '10px auto 8px' }} />
+                <p className="font-mono uppercase tracking-[0.14em]" style={{ fontSize: '0.55rem', color: '#7a8896', fontWeight: 600 }}>
+                  Curated<br />Pre-scheduled<br />Outcome-driven
+                </p>
+              </div>
+            </div>
+          </div>
+          <p className="font-body text-center mt-4" style={{ fontSize: '0.78rem', color: '#7a8896', maxWidth: 220, lineHeight: 1.5 }}>
+            Every introduction begins and ends here.
+          </p>
+        </div>
+
+        {/* RIGHT: Outcomes */}
+        <div className="flex flex-col gap-3">
+          <p className="font-mono uppercase tracking-[0.16em] mb-1"
+             style={{ fontSize: '0.62rem', color: PURPLE, fontWeight: 700, textAlign: 'center' }}>
+            Outcomes that Drive Value
+          </p>
+          {OUTCOMES.map((o) => {
+            const Icon = o.icon
+            return (
+              <div key={o.label} style={{
+                background: '#fafaf7', borderRadius: 10, padding: '12px 14px',
+                border: '1px solid rgba(9,32,62,0.06)',
+                display: 'flex', alignItems: 'flex-start', gap: 12,
+              }}>
+                <span style={{
+                  width: 30, height: 30, borderRadius: 8,
+                  background: PURPLE_SOFT, display: 'grid', placeItems: 'center', flexShrink: 0,
+                }}>
+                  <Icon size={15} color={PURPLE} strokeWidth={2.2} />
+                </span>
+                <div>
+                  <h4 className="font-heading font-bold" style={{ fontSize: '0.85rem', color: NAVY, marginBottom: 2, lineHeight: 1.25 }}>{o.label}</h4>
+                  <p className="font-body" style={{ fontSize: '0.74rem', color: '#586778', lineHeight: 1.45 }}>{o.desc}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* BOTTOM: 5-step process strip */}
+      <div className="mt-8 pt-7" style={{ borderTop: '1px dashed rgba(9,32,62,0.15)' }}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {PROCESS.map((step, idx) => {
+            const Icon = step.icon
+            return (
+              <div key={step.n} style={{ position: 'relative' }}>
+                {idx < PROCESS.length - 1 && (
+                  <div className="hidden lg:block" style={{
+                    position: 'absolute', top: 20, right: '-10px', width: 20, height: 2,
+                    background: `linear-gradient(90deg, ${PURPLE}, transparent)`, opacity: 0.4,
+                  }} />
+                )}
+                <div className="flex items-start gap-2.5">
+                  <span style={{
+                    width: 38, height: 38, borderRadius: '50%',
+                    background: PURPLE_SOFT, display: 'grid', placeItems: 'center',
+                    flexShrink: 0, border: `1.5px solid ${PURPLE}`,
+                  }}>
+                    <Icon size={16} color={PURPLE} strokeWidth={2.2} />
+                  </span>
+                  <div style={{ minWidth: 0 }}>
+                    <p className="font-mono" style={{
+                      fontSize: '0.6rem', color: 'var(--color-brand-accent)',
+                      letterSpacing: '0.16em', fontWeight: 700, marginBottom: 2,
+                    }}>{step.n}</p>
+                    <h5 className="font-heading font-bold" style={{ fontSize: '0.82rem', color: NAVY, marginBottom: 3, lineHeight: 1.2 }}>{step.label}</h5>
+                    <p className="font-body" style={{ fontSize: '0.68rem', color: '#7a8896', lineHeight: 1.4 }}>{step.desc}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
 }
 
-function ChipGroup({ options, value, onChange, single = false }) {
+/* ═══ "What the Deal Network Does" card ═══════════════════════════════════ */
+function ConnectsCard({ icon: Icon, from, to }) {
   return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((opt) => {
-        const active = value.includes(opt)
-        return (
-          <button
-            key={opt}
-            type="button"
-            onClick={() => {
-              if (single) onChange(active ? [] : [opt])
-              else onChange(arrayToggle(value, opt))
-            }}
-            style={{
-              background: active ? '#09203e' : '#f8f7f4',
-              color: active ? '#fff' : '#09203e',
-              border: `1px solid ${active ? '#09203e' : 'rgba(9,32,62,0.12)'}`,
-              borderRadius: 999,
-              padding: '8px 14px',
-              fontSize: '0.82rem',
-              fontFamily: 'Inter, sans-serif',
-              cursor: 'pointer',
-              transition: 'all 0.18s',
-            }}
-            onMouseEnter={(e) => { if (!active) e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
-            onMouseLeave={(e) => { if (!active) e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
-          >
-            {opt}
-          </button>
-        )
-      })}
-    </div>
-  )
-}
-
-function KeyChipGroup({ options, value, onChange }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((opt) => {
-        const active = value.includes(opt.key)
-        return (
-          <button
-            key={opt.key}
-            type="button"
-            onClick={() => onChange(arrayToggle(value, opt.key))}
-            style={{
-              background: active ? '#09203e' : '#f8f7f4',
-              color: active ? '#fff' : '#09203e',
-              border: `1px solid ${active ? '#09203e' : 'rgba(9,32,62,0.12)'}`,
-              borderRadius: 999,
-              padding: '8px 14px',
-              fontSize: '0.82rem',
-              fontFamily: 'Inter, sans-serif',
-              cursor: 'pointer',
-              transition: 'all 0.18s',
-            }}
-            onMouseEnter={(e) => { if (!active) e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
-            onMouseLeave={(e) => { if (!active) e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
-          >
-            {opt.label}
-          </button>
-        )
-      })}
-    </div>
-  )
-}
-
-function Toggle({ label, value, onChange }) {
-  return (
-    <label className="inline-flex items-center gap-3 cursor-pointer" style={{ userSelect: 'none' }}>
-      <span
-        onClick={() => onChange(!value)}
-        style={{
-          width: 42, height: 24, borderRadius: 999, position: 'relative',
-          background: value ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)',
-          transition: 'background 0.2s',
-          flexShrink: 0,
-        }}
-      >
+    <div className="fade-up" style={{
+      background: '#fafaf7', borderRadius: 14, padding: '24px 24px',
+      border: '1px solid rgba(9,32,62,0.08)',
+    }}>
+      <div className="flex items-center gap-3 mb-3">
         <span style={{
-          position: 'absolute', top: 3, left: value ? 21 : 3,
-          width: 18, height: 18, borderRadius: '50%',
-          background: '#fff', transition: 'left 0.18s',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.18)',
-        }} />
-      </span>
-      <span className="font-body" style={{ fontSize: '0.9rem', color: '#09203e' }}>{label}</span>
-    </label>
+          width: 40, height: 40, borderRadius: 10,
+          background: 'rgba(191,177,112,0.18)', display: 'grid', placeItems: 'center',
+        }}>
+          <Icon size={20} color="var(--color-brand-accent)" strokeWidth={2.2} />
+        </span>
+        <h3 className="font-heading font-bold" style={{ fontSize: '1.05rem', color: NAVY }}>{from}</h3>
+      </div>
+      <p className="font-body" style={{ fontSize: '0.92rem', color: '#586778', lineHeight: 1.6 }}>
+        connect with <span style={{ color: NAVY, fontWeight: 500 }}>{to}</span>
+      </p>
+    </div>
   )
 }
 
-const inputStyle = {
-  width: '100%', padding: '13px 14px',
-  fontSize: '0.92rem', fontFamily: 'Inter, sans-serif',
-  background: '#f8f7f4',
-  border: '1px solid rgba(9,32,62,0.12)',
-  borderRadius: 8, color: '#09203e',
-  outline: 'none', transition: 'border-color 0.2s, background 0.2s',
+/* ═══ "Who It Is For" card ═══════════════════════════════════════════════ */
+function AudienceCard({ icon: Icon, title, items, tint }) {
+  return (
+    <div className="fade-up" style={{
+      background: '#fafaf7', borderRadius: 16, padding: 'clamp(24px,3vw,36px)',
+      border: '1px solid rgba(9,32,62,0.08)', boxShadow: '0 6px 22px rgba(9,32,62,0.05)',
+    }}>
+      <div className="flex items-center gap-3 mb-5">
+        <span style={{
+          width: 46, height: 46, borderRadius: 11,
+          background: tint === NAVY ? 'rgba(9,32,62,0.08)' : PURPLE_SOFT,
+          display: 'grid', placeItems: 'center',
+        }}>
+          <Icon size={22} color={tint} strokeWidth={2.2} />
+        </span>
+        <h3 className="font-heading font-bold" style={{ fontSize: '1.2rem', color: NAVY, lineHeight: 1.25 }}>{title}</h3>
+      </div>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {items.map((item) => (
+          <li key={item} className="font-body" style={{
+            fontSize: '0.88rem', color: '#586778',
+            display: 'flex', alignItems: 'baseline', gap: 8,
+          }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--color-brand-accent)', flexShrink: 0, transform: 'translateY(-2px)' }} />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }
-const inputStyleIcon = { ...inputStyle, padding: '13px 14px 13px 38px' }
-const textareaStyle = { ...inputStyle, resize: 'vertical', minHeight: 88 }
-const selectStyle = {
-  ...inputStyle,
-  appearance: 'none',
-  WebkitAppearance: 'none',
-  backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 width%3D%2210%22 height%3D%226%22 viewBox%3D%220 0 10 6%22%3E%3Cpath fill%3D%22%2309203e%22 d%3D%22M5 6 0 0h10z%22%2F%3E%3C%2Fsvg%3E")',
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'right 16px center',
-  paddingRight: 36,
-}
-const selectStyleIcon = { ...selectStyle, padding: '13px 36px 13px 38px' }

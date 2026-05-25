@@ -26,6 +26,8 @@ export const GLOBAL_NETWORK  = '/global-network'
 export const GALLERY         = '/gallery'
 export const APP_PAGE        = '/app'
 export const DEAL_NETWORK    = '/deal-network'
+export const INVITE_PATTERN  = '/invite/:token'
+export const buildInviteUrl  = (token) => `/invite/${encodeURIComponent(token)}`
 
 /* ─── Event landing pages ──────────────────────────────────────────────── */
 export const MIAMI_2026      = '/miami-2026'
