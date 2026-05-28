@@ -192,8 +192,8 @@ export default function Miami2026() {
             {/* Tagline removed per GN revisions doc. Hero now goes straight
                 from the brand lockup into the headline. */}
             <h1 className="miami-headline mt-7 mb-8" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', color: '#0D1B2A', lineHeight: 1.15, letterSpacing: '0.01em', maxWidth: '640px' }}>
-              The world comes for the World Cup.<br />
-              <span style={{ color: '#E91E63' }}>The Industry stays for Soccerex.</span>
+              The World Comes for the World Cup.<br />
+              <span style={{ color: '#E91E63' }}>The Industry Builds at Soccerex.</span>
             </h1>
 
             <div className="flex items-center gap-6 lg:gap-8 mb-8 flex-wrap">

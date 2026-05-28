@@ -7,11 +7,11 @@ import {
 } from '../lib/routes'
 
 const navLinks = [
-  { label: 'About',        to: ABOUT },
-  { label: 'Events',       to: EVENTS },
-  { label: 'Reach',        to: GLOBAL_NETWORK },
-  { label: 'Deal Network', to: DEAL_NETWORK },
-  { label: 'Insights',     to: INSIGHTS },
+  { label: 'About',                  to: ABOUT },
+  { label: 'Events',                 to: EVENTS },
+  { label: 'Soccerex Global Platform', to: GLOBAL_NETWORK },
+  { label: 'Deal Network',           to: DEAL_NETWORK },
+  { label: 'Insights',               to: INSIGHTS },
 ]
 
 /* CTA accent color is route-aware so each event page's "Get in Touch" button
@@ -79,15 +79,8 @@ export default function Navbar() {
           </div>
 
           <div className="hidden lg:flex items-center gap-5">
-            {/* Low-emphasis self-service entry — speakers, delegates,
-                rights-holders and company portals all go through here. */}
-            <Link to={PROFILE_ACCESS}
-              className="font-body font-medium text-xs uppercase tracking-[0.12em] transition-colors duration-200 whitespace-nowrap"
-              style={{ color: 'rgba(255,255,255,0.55)', textDecoration: 'none' }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#fff' }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)' }}>
-              Sign in
-            </Link>
+            {/* Sign in removed for now per v4 revisions doc (the
+                /profile-access route still exists for magic-link returns). */}
             <Link to={CONTACT}
               className="inline-flex items-center gap-2 font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
               style={{ background: cta.bg, border: `1px solid ${cta.bg}`, color: cta.text, textDecoration: 'none' }}

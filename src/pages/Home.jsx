@@ -130,14 +130,14 @@ function UpcomingEventSection() {
               </p>
             </div>
             <h2 className="font-heading font-bold leading-[1.05] mb-5" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', color: '#0D1B2A' }}>
-              The world comes for the World Cup.<br />
-              <span style={{ color: '#E91E63' }}>The Industry stays for Soccerex.</span>
+              The World Comes for the World Cup.<br />
+              <span style={{ color: '#E91E63' }}>The Industry Builds at Soccerex.</span>
             </h2>
-            <p className="font-mono uppercase mb-5" style={{ fontSize: 12, letterSpacing: '0.24em', color: '#007C91' }}>
-              Where global football meets Miami
+            <p className="font-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a', maxWidth: '560px' }}>
+              Miami 2026 places Soccerex at the center of football&#x2019;s biggest global moment, bringing leaders, capital, brands, innovators, and rightsholders together to shape what comes next.
             </p>
             <p className="font-body leading-relaxed mb-7" style={{ fontSize: '1.05rem', color: '#1a2a3a', maxWidth: '560px' }}>
-              Soccerex Miami opens the Americas chapter in the wake of the 2026 FIFA World Cup. Three days of high-impact content, executive networking, and the partnerships that shape the next decade of football in the region.
+              Across investment, sponsorship, technology, women&#x2019;s football, media, development, and impact, Soccerex Miami turns global attention into commercial opportunity.
             </p>
             <div className="flex flex-wrap gap-3">
               {eventLinks.map((link) => {
@@ -219,9 +219,8 @@ function UpcomingEventSection() {
 }
 
 // ─── BY THE NUMBERS (WFS-style stat tiles with background imagery) ──────────
-// Standardized to the GN revisions doc stats line:
-// "30 Years · 57 Events · 75K+ Delegates · 5K+ Brands · One Global Football
-// Business Platform". The fifth tagline segment renders below the grid.
+// Heading uses the canonical stats line "57 Events. 21 Cities. 30 Years.";
+// the platform framing carries in the paragraph below it.
 function ByTheNumbersSection() {
   const stats = [
     { num: '30',   label: 'Years',     bg: '/hero/04-TIER1-bobby-charlton-handprints.jpg' },
@@ -237,8 +236,11 @@ function ByTheNumbersSection() {
         <div className="mb-14">
           <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-brand-accent)', fontWeight: 600 }}>SOCCEREX BY THE NUMBERS</p>
           <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', color: '#0D1B2A' }}>
-            30 Years <span style={{ color: 'var(--color-brand-accent)' }}>of Global Impact</span>
+            57 Events. 21 Cities. <span style={{ color: 'var(--color-brand-accent)' }}>30 Years.</span>
           </h2>
+          <p className="font-body fade-up mt-4" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: '720px' }}>
+            Since 1996, Soccerex has brought football&#x2019;s leaders together across the world&#x2019;s most important markets. That history now powers a year-round platform built to turn access into partnerships, investment, innovation, impact, and commercial opportunity.
+          </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((s, i) => (
@@ -453,12 +455,12 @@ function EventsSection() {
     <section id="events" className="relative overflow-hidden" style={{ background: '#FFFFFF' }}>
       <div className="relative z-10" style={{ maxWidth: '1400px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div className="mb-14">
-          <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-brand-accent)', fontWeight: 600 }}>WHERE WE GATHER</p>
+          <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-brand-accent)', fontWeight: 600 }}>THE SOCCEREX GLOBAL CALENDAR</p>
           <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', color: '#0D1B2A' }}>
-            The Soccerex <span style={{ color: 'var(--color-brand-accent)' }}>Calendar</span>
+            Three Anchor Events. <span style={{ color: 'var(--color-brand-accent)' }}>One Year-Round Platform.</span>
           </h2>
-          <p className="font-body fade-up mt-4" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: '680px' }}>
-            Three flagship gatherings on three continents. Miami opens the Americas chapter in September, Riyadh lands in the Middle East in early 2027, and Amsterdam wrapped a record European edition in May.
+          <p className="font-body fade-up mt-4" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: '720px' }}>
+            Miami anchors the Americas. Riyadh connects the Middle East. Amsterdam serves as a European gateway. Each Soccerex edition brings the football business ecosystem into a strategic market and feeds a wider platform built around dealmaking, investment, partnerships, innovation, women&#x2019;s football, impact, and commercial opportunity.
           </p>
         </div>
 
@@ -960,10 +962,10 @@ function SocialProofSection() {
       <div className="relative z-10" style={{ maxWidth: '1360px', margin: '0 auto', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
         <div className="mb-14">
           <h2 className="font-heading font-bold text-white leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)' }}>
-            Soccerex <span style={{ color: 'var(--color-brand-accent)' }}>Ecosystem</span>
+            The Soccerex <span style={{ color: 'var(--color-brand-accent)' }}>Ecosystem</span>
           </h2>
-          <p className="font-body text-white/55 leading-relaxed fade-up mt-4" style={{ fontSize: '1rem', maxWidth: '680px' }}>
-            For 30 years, Soccerex has convened the organizations shaping football. Clubs and federations, broadcasters and brands, investors and innovators.
+          <p className="font-body text-white/55 leading-relaxed fade-up mt-4" style={{ fontSize: '1rem', maxWidth: '720px' }}>
+            Built over 30 years, the Soccerex ecosystem connects the people, capital, companies, and institutions shaping football&#x2019;s future, creating the foundation for events, dealmaking, investment, innovation, women&#x2019;s football, and impact.
           </p>
         </div>
 
