@@ -65,44 +65,61 @@ rightsholders), the grid should fall back to showing BOTH columns for every
 capability rather than hiding anything — better to over-show than block a valid
 entry. This fallback only triggers when the side cannot be determined.
 
-**Capability taxonomy** (✓ = that checkbox renders for that type):
+**Capability taxonomy — uses the EXISTING backend keys.** The backend already
+defines a fixed vocabulary in `app/Support/DealNetwork/SignalTaxonomy.php`
+(`NEED_OFFER`, 14 keys) and validates `looking_for[]` / `can_offer[]` against
+`SignalTaxonomy::needOfferKeys()` via `Rule::in(...)` in `DealNetworkController`.
+Signals are then written relationally into `IntakeSignal` rows by
+`IntakeSignalWriter::sync`. Therefore the grid MUST emit these exact keys —
+free-text labels would 422. We reuse the 14 keys as the grid rows and add a
+**frontend-only** per-type validity map. No backend taxonomy change, no
+migration.
 
-| Capability | Property: Looking / Provide | Brand: Looking / Provide |
-|---|---|---|
-| Brand exposure & visibility | – / ✓ | ✓ / – |
-| Sponsorship inventory | – / ✓ | ✓ / – |
-| Audience & fan access | – / ✓ | ✓ / – |
-| Hospitality & experiences | – / ✓ | ✓ / – |
-| Merchandising & licensing | – / ✓ | ✓ / – |
-| Capital & investment | ✓ / – | – / ✓ |
-| Technology & platforms | ✓ / – | – / ✓ |
-| Distribution & commercial reach | ✓ / – | – / ✓ |
-| Advisory & services | ✓ / – | – / ✓ |
-| Media & broadcast rights | ✓ / ✓ | ✓ / ✓ |
-| Content & IP | ✓ / ✓ | ✓ / ✓ |
-| Data & analytics | ✓ / ✓ | ✓ / ✓ |
-| Talent & representation | ✓ / ✓ | ✓ / ✓ |
-| Stadium, venue & infrastructure | ✓ / ✓ | ✓ / ✓ |
-| Market entry & geographic reach | ✓ / ✓ | ✓ / ✓ |
+The 14 keys (key → label) and their per-type column validity
+(✓ = that checkbox renders for that side):
 
-Top block encodes the typical, non-reversible asymmetry; bottom block is
-genuinely two-directional. The taxonomy lives in one config object in the
-frontend (single source of truth), structured so a capability declares which
-columns are valid per side, e.g.:
+| key | label | Property: Look / Provide | Brand: Look / Provide |
+|---|---|---|---|
+| sponsorship_inventory | Sponsorship inventory | – / ✓ | ✓ / – |
+| fan_audience_access | Fan / audience access | – / ✓ | ✓ / – |
+| hospitality_experiences | Hospitality & experiences | – / ✓ | ✓ / – |
+| merchandising_licensing | Merchandising & licensing | – / ✓ | ✓ / – |
+| investment_capital | Investment / capital | ✓ / – | – / ✓ |
+| technology_platform | Technology & platform | ✓ / – | – / ✓ |
+| media_broadcast_rights | Media & broadcast rights | ✓ / ✓ | ✓ / ✓ |
+| content_ip | Content & IP | ✓ / ✓ | ✓ / ✓ |
+| data_analytics | Data & analytics | ✓ / ✓ | ✓ / ✓ |
+| talent_representation | Talent & representation | ✓ / ✓ | ✓ / ✓ |
+| stadium_venue_infrastructure | Stadium / venue / infrastructure | ✓ / ✓ | ✓ / ✓ |
+| distribution_commercial_reach | Distribution & commercial reach | ✓ / ✓ | ✓ / ✓ |
+| ma_equity | M&A / equity | ✓ / ✓ | ✓ / ✓ |
+| advisory_services | Advisory & services | ✓ / – | ✓ / ✓ |
+
+Top block = typical non-reversible asymmetry; lower block = two-directional.
+The validity map is one frontend config object keyed by SignalTaxonomy key:
 
 ```js
-{ key: 'brand_exposure', label: 'Brand exposure & visibility',
+{ key: 'sponsorship_inventory',
   property: { looking: false, provide: true },
   brand:    { looking: true,  provide: false } }
 ```
 
-A capability is hidden entirely if neither column is valid for the side.
+Labels are pulled from `SignalTaxonomy::needOfferMap()` so the frontend and
+backend never drift. A capability is hidden for a side only if neither column
+is valid for it.
 
-**Mapping to the existing payload:** the grid produces two arrays —
-`looking_for` (capabilities ticked "Looking for") and `can_offer` (ticked
-"Can provide"). These already exist on the `submitDealNetworkIntake` payload,
-so no backend schema change is needed for the grid. The capability `label`
-strings are what gets stored (human-readable in the admin lead view).
+**The "pain points" dimension stays.** `SignalTaxonomy` also has a separate
+12-key `PAIN` vocabulary, and the intake payload already carries `pain_points[]`
++ `pain_point_detail`. The user's "wants/needs/pain-points" language maps to two
+distinct signals: the need/offer grid (primary matching) and the pain list
+(secondary context). Keep a short optional pain-point question after the grid;
+do NOT silently drop it (the previous redesign omitted it — that was a
+regression).
+
+**Mapping to the existing payload:** the grid produces `looking_for[]` (keys
+ticked "Looking for") and `can_offer[]` (keys ticked "Can provide"). Both fields
+already exist and are validated; the backend `IntakeSignalWriter` syncs them
+into `IntakeSignal` rows. No schema change.
 
 ### 2. Lifecycle notifications (backend, via SES)
 
@@ -110,29 +127,35 @@ Four new mailables, delivered through the existing SES failover mailer
 (`config/leads.php` recipients pattern not reused here — these go to the
 applicant). Reply-to = `enquiries@soccerex.com`.
 
-1. **Application received** — automatic, fired on successful intake submit.
-   Confirms profile + company were created/linked; sets the ~2-business-day
-   expectation; explains what happens next.
-2. **Profile/company claim confirmation** — automatic, fired during `claim`
+1. **Application received** — automatic. Fired **server-side inside the intake
+   submit** (in `DealNetworkController::submitIntake` after the row is created),
+   not from the frontend, so it cannot be missed. Confirms profile + company
+   created/linked; sets ~2-business-day expectation.
+2. **Profile/company claim confirmation** — automatic, fired inside `claim`
    ONLY when a brand-new company Profile was created (not when an existing one
-   was matched). Tells them a company record now exists for them.
-3. **Membership under review / approved** — fired by an admin action in
-   Filament when the membership/application status moves to approved.
-4. **Introductions proposed** — **strictly admin-fired for now** (not
-   automatic). Fired by a concierge/admin action when a curated match is
-   proposed; links to the existing Deal Network portal.
+   was matched).
+3. **Membership approved** — admin-fired. NOTE: there is no `STATUS_APPROVED`;
+   membership statuses are `prospect / active / paused / completed / declined`
+   (`Membership.php`). "Approved" = transition to `STATUS_ACTIVE`. This requires
+   **building a Filament action** on `DealNetworkMembershipResource` (today it
+   has only Edit/Delete) that sets status=active and sends the email.
+4. **Introductions proposed** — **strictly admin-fired** (no automatic matching
+   in this change). Requires **building a Filament action** on
+   `DealNetworkMatchResource` (today only Edit/Delete) that sends the email and
+   links to the existing portal.
 
-Stages 1–2 are automatic (frontend-driven submit). Stages 3–4 are triggered by
-the Soccerex team from the backend admin. No automatic matching logic ships in
-this change.
+Stages 1–2 are automatic. Stages 3–4 each require a NEW Filament admin action to
+be built (they do not exist today). All four mailables are new — `app/Mail`
+currently has only `MagicLinkMail`, `LeadReceived` (admin), and
+`RightsHolderApplicationDecisionMail`; none are deal-network applicant
+lifecycle emails.
 
 ### 3. Marketing page → apply funnel (frontend, folds into v4-D copy work)
 
-- The public `/deal-network` page becomes the marketing/explainer page with the
-  v4 copy ("SOCCEREX DEAL NETWORK / Curated Access. Commercial Outcomes."), and
-  its CTAs ("REQUEST DEAL NETWORK ACCESS") link to `/deal-network/apply`.
-- The old single-shot intake form on `/deal-network` (the A1–A5 work) is
-  **retired** in favor of the apply flow. One funnel.
+- `/deal-network` (`DealNetwork.jsx`) is **already a marketing/explainer page
+  with no form** — there is nothing to "retire." This task is purely: apply the
+  v4 copy and point its CTAs ("REQUEST DEAL NETWORK ACCESS") at
+  `/deal-network/apply`. One funnel.
 
 ## Data flow
 
@@ -160,9 +183,26 @@ email
 
 ## Risks / notes
 
-- The capability `label` strings become matching keys in the admin view; keep
-  them stable once shipped (changing a label re-buckets historical data).
-- "Approved" and "Introductions proposed" require admin trigger points in
-  Filament; the implementation plan must locate or add those actions.
-- Retiring the old `/deal-network` intake means any existing deep links to it
-  should redirect to `/deal-network/apply`.
+- **Free-email type bias (must address).** `claim` creates a brand-new company
+  as `TYPE_BRAND` by default, and `emailDomain()` skips free-email domains
+  (gmail/yahoo/etc) for dedup. Result: a freemail applicant who creates a new
+  company always lands on the **Brand** side, so the grid shows the brand
+  asymmetry even for a rightsholder. The "show both columns" fallback does NOT
+  rescue this because the side IS determinable (just defaulted). Fix: when the
+  side was defaulted / low-confidence, show an explicit one-tap "Which best
+  describes you? Property (rightsholder) / Brand (company)" confirmation before
+  the grid, and let it set the side. (This mirrors the old A1–A5 2-option
+  selector.) The chosen side should also persist to `Membership.side`.
+- **Membership.side is set once at claim from company type**, not from the grid.
+  A property that legitimately ticks some brand-side capabilities won't flip its
+  membership side — that's acceptable (side = primary identity; grid = granular
+  signals), but the implementation plan should make the precedence explicit:
+  the side-confirmation above wins over the type-derived default.
+- **Matchmaking token expiry.** The `deal-network-matchmaking` token is 60 min.
+  The grid + pitch can take a while. Plan must handle expiry gracefully (clear
+  "your link expired, re-enter your email" path) and define what happens on
+  re-submission / editing an already-submitted application (idempotency).
+- Capability **keys** (not labels) are the stored matching values; labels come
+  from `SignalTaxonomy::needOfferMap()`. Keys must stay stable once shipped.
+- No deep-link redirect needed for the old intake — `/deal-network` was already
+  a marketing page; there is no stale form route to redirect.
