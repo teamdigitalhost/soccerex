@@ -9,6 +9,17 @@ import {
   submitDealNetworkIntake,
   ApiError,
 } from '../lib/soccerexApi'
+import { CAPABILITY_VALIDITY, NEED_OFFER_LABELS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
+
+// company Profile type → applicant side. club/federation are rightsholders
+// (Property side); everything else is treated as a company (Brand side).
+// Mirrors the backend mapping the apply flow already uses.
+function deriveSide(company) {
+  const t = company?.type
+  return t === 'club' || t === 'federation' ? 'property' : 'brand'
+}
+// Property = rightsholder, Brand = company — the values submitIntake expects.
+const SIDE_TO_BACKEND = { property: 'rightsholder', brand: 'company' }
 
 /* Deal Network unlisted apply flow.
  *
@@ -67,7 +78,9 @@ export default function DealNetworkApply() {
   // Matchmaking
   const [matchmakingToken, setMatchmakingToken] = useState('')
   const [mm, setMm] = useState({
+    side: 'brand',
     looking_for: [], can_offer: [], deal_types: [],
+    pain_points: [], pain_point_detail: '',
     one_sentence_pitch: '', deal_description: '',
     ideal_counterpart: '', budget_range: '',
     primary_geography: '', decision_timeline: '',
@@ -155,6 +168,7 @@ export default function DealNetworkApply() {
       setMatchmakingToken(res.matchmaking_token)
       setChosenPerson(res.person)
       setChosenCompany(res.company)
+      setMm((prev) => ({ ...prev, side: deriveSide(res.company) }))
       setStep(STEP_MATCHMAKING)
     } catch (err) {
       setError(err?.message || 'Could not save your profile.')
@@ -166,8 +180,16 @@ export default function DealNetworkApply() {
   async function handleMatchmakingSubmit() {
     setBusy(true); setError('')
     try {
+      // Only emit signals valid for the chosen side, so a stale tick from a
+      // pre-switch selection can never reach the backend's key validation.
+      const validFor = (col) => CAPABILITY_VALIDITY
+        .filter((row) => row[mm.side]?.[col])
+        .map((row) => row.key)
+      const lookingValid = new Set(validFor('looking'))
+      const offerValid = new Set(validFor('provide'))
+
       await submitDealNetworkIntake({
-        side: chosenCompany?.type === 'club' || chosenCompany?.type === 'federation' ? 'rightsholder' : 'company',
+        side: SIDE_TO_BACKEND[mm.side],
         company_name: chosenCompany?.display_name || companyName,
         primary_contact_name: chosenPerson?.display_name || personName,
         primary_contact_email: email || matched?.email,
@@ -177,11 +199,14 @@ export default function DealNetworkApply() {
         deal_description: mm.deal_description || undefined,
         ideal_counterpart: mm.ideal_counterpart || undefined,
         named_targets: mm.named_targets.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean),
-        looking_for: mm.looking_for,
-        can_offer: mm.can_offer,
+        looking_for: mm.looking_for.filter((k) => lookingValid.has(k)),
+        can_offer: mm.can_offer.filter((k) => offerValid.has(k)),
+        pain_points: mm.pain_points,
+        pain_point_detail: mm.pain_point_detail || undefined,
         budget_range: mm.budget_range || undefined,
         primary_geography: mm.primary_geography || undefined,
         decision_timeline: mm.decision_timeline || undefined,
+        matchmaking_token: matchmakingToken || undefined,
         source: 'frontend-deal-network-apply',
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
         marketing_opt_in: true,
@@ -499,9 +524,23 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
   const toggle = (key, v) => setMm({ ...mm, [key]: mm[key].includes(v) ? mm[key].filter((x) => x !== v) : [...mm[key], v] })
 
   const DEAL_TYPES = ['Sponsorship', 'Media rights', 'Content partnership', 'Technology / platform', 'Hospitality / experiences', 'Investment / M&A', 'Stadium / venue', 'Data / analytics', 'Merchandising / licensing']
-  const NEEDS = ['Brand exposure', 'Lead generation', 'Distribution', 'Investment / capital', 'Talent / partnership', 'Tech / product', 'Audience access', 'Geographic reach']
   const BUDGETS = ['Under $25k', '$25k - $50k', '$50k - $100k', '$100k - $250k', '$250k - $500k', '$500k - $1M', '$1M+', 'Prefer not to say']
   const REGIONS = ['Global', 'Americas', 'Europe', 'MENA / GCC', 'Africa', 'Asia', 'Oceania']
+
+  // Switching side prunes any ticked signal that is not valid for the new side,
+  // so the grid and the eventual payload stay consistent with the chosen side.
+  function setSide(side) {
+    const lookingValid = new Set(CAPABILITY_VALIDITY.filter((r) => r[side]?.looking).map((r) => r.key))
+    const offerValid = new Set(CAPABILITY_VALIDITY.filter((r) => r[side]?.provide).map((r) => r.key))
+    setMm({
+      ...mm,
+      side,
+      looking_for: mm.looking_for.filter((k) => lookingValid.has(k)),
+      can_offer: mm.can_offer.filter((k) => offerValid.has(k)),
+    })
+  }
+
+  const rows = CAPABILITY_VALIDITY.filter((r) => r[mm.side]?.looking || r[mm.side]?.provide)
 
   return (
     <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
@@ -517,6 +556,42 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
         Help us put you in the right rooms.
       </p>
 
+      {/* Which side are you? Drives the grid columns and the membership side
+          sent to the backend. Pre-selected from the claimed company's type,
+          but confirmable here so a defaulted side (e.g. a free-email signup
+          that lands on Brand) can be corrected before the grid renders. */}
+      <div className="mb-5">
+        <Label>Which best describes you?</Label>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { id: 'property', title: 'Property', sub: 'Rightsholder — club, federation, league, venue' },
+            { id: 'brand', title: 'Brand / Company', sub: 'Sponsor, investor, agency, technology, media' },
+          ].map((opt) => {
+            const active = mm.side === opt.id
+            return (
+              <button
+                key={opt.id} type="button" onClick={() => setSide(opt.id)}
+                style={{ textAlign: 'left', background: active ? 'rgba(107,58,168,0.08)' : '#f8f7f4', border: '1.5px solid ' + (active ? PURPLE : 'rgba(9,32,62,0.12)'), borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
+              >
+                <div className="font-heading font-semibold" style={{ fontSize: '0.95rem', color: active ? PURPLE : NAVY }}>{opt.title}</div>
+                <div className="font-body" style={{ fontSize: '0.72rem', color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{opt.sub}</div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Type-aware capability grid. Each row offers up to two checkboxes;
+          a cell renders only where it makes sense for the chosen side. */}
+      <div className="mb-5">
+        <Label>What are you looking for, and what can you provide?</Label>
+        <CapabilityGrid
+          rows={rows} side={mm.side}
+          looking={mm.looking_for} offer={mm.can_offer}
+          onToggle={(col, key) => toggle(col === 'looking' ? 'looking_for' : 'can_offer', key)}
+        />
+      </div>
+
       <Field
         label="One-sentence pitch (what do you want to do in football)"
         value={mm.one_sentence_pitch}
@@ -525,19 +600,23 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
         disabled={busy}
       />
 
+      {/* Pain points — secondary context for the concierge, kept optional.
+          Distinct from the need/offer grid (which drives matching). */}
+      <div className="mb-2">
+        <Label>What problems are you trying to solve? (optional)</Label>
+        <ChipGroup options={PAIN_OPTIONS.map((p) => p.label)} value={mm.pain_points.map((k) => PAIN_OPTIONS.find((p) => p.key === k)?.label).filter(Boolean)}
+          onToggle={(label) => {
+            const key = PAIN_OPTIONS.find((p) => p.label === label)?.key
+            if (key) toggle('pain_points', key)
+          }} />
+      </div>
+      {mm.pain_points.length > 0 && (
+        <Field label="Anything to add on those? (optional)" value={mm.pain_point_detail} onChange={(v) => setMm({ ...mm, pain_point_detail: v })} placeholder="A sentence or two of context helps the concierge." disabled={busy} textarea />
+      )}
+
       <div className="mb-4">
         <Label>Deal types you are open to</Label>
         <ChipGroup options={DEAL_TYPES} value={mm.deal_types} onToggle={(v) => toggle('deal_types', v)} />
-      </div>
-
-      <div className="mb-4">
-        <Label>What you are looking for</Label>
-        <ChipGroup options={NEEDS} value={mm.looking_for} onToggle={(v) => toggle('looking_for', v)} />
-      </div>
-
-      <div className="mb-4">
-        <Label>What you can offer</Label>
-        <ChipGroup options={NEEDS} value={mm.can_offer} onToggle={(v) => toggle('can_offer', v)} />
       </div>
 
       <Field label="Ideal counterpart (the kind of company / role)" value={mm.ideal_counterpart} onChange={(v) => setMm({ ...mm, ideal_counterpart: v })} placeholder="Mid-major MLS club head of partnerships" disabled={busy} textarea />
@@ -571,6 +650,37 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
         {busy ? <><Loader2 size={16} className="animate-spin" /> Submitting</> : <>Submit application <ArrowRight size={16} /></>}
       </button>
     </div>
+  )
+}
+
+function CapabilityGrid({ rows, side, looking, offer, onToggle }) {
+  return (
+    <div style={{ border: '1px solid rgba(9,32,62,0.1)', borderRadius: 10, overflow: 'hidden' }}>
+      <div className="grid items-center" style={{ gridTemplateColumns: '1fr 72px 72px', background: '#f8f7f4', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
+        <span />
+        <span className="font-mono uppercase tracking-[0.1em] text-center" style={{ fontSize: '0.56rem', color: '#7a8896', fontWeight: 700, padding: '8px 4px' }}>Looking<br />for</span>
+        <span className="font-mono uppercase tracking-[0.1em] text-center" style={{ fontSize: '0.56rem', color: '#7a8896', fontWeight: 700, padding: '8px 4px' }}>Can<br />provide</span>
+      </div>
+      {rows.map((row, i) => (
+        <div key={row.key} className="grid items-center" style={{ gridTemplateColumns: '1fr 72px 72px', borderTop: i === 0 ? 'none' : '1px solid rgba(9,32,62,0.06)' }}>
+          <span className="font-body" style={{ fontSize: '0.82rem', color: NAVY, padding: '10px 12px', lineHeight: 1.25 }}>{NEED_OFFER_LABELS[row.key]}</span>
+          <GridCell visible={!! row[side]?.looking} checked={looking.includes(row.key)} onClick={() => onToggle('looking', row.key)} />
+          <GridCell visible={!! row[side]?.provide} checked={offer.includes(row.key)} onClick={() => onToggle('provide', row.key)} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function GridCell({ visible, checked, onClick }) {
+  if (! visible) return <span style={{ display: 'grid', placeItems: 'center', color: 'rgba(9,32,62,0.18)', fontSize: '0.9rem' }}>·</span>
+  return (
+    <span style={{ display: 'grid', placeItems: 'center', padding: '8px 0' }}>
+      <button type="button" role="checkbox" aria-checked={checked} onClick={onClick}
+        style={{ width: 26, height: 26, borderRadius: 6, border: '1.5px solid ' + (checked ? PURPLE : 'rgba(9,32,62,0.25)'), background: checked ? PURPLE : '#fff', color: '#fff', display: 'grid', placeItems: 'center', cursor: 'pointer', padding: 0 }}>
+        {checked && <CheckCircle2 size={16} />}
+      </button>
+    </span>
   )
 }
 
