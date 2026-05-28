@@ -83,7 +83,7 @@ The 14 keys (key → label) and their per-type column validity
 | sponsorship_inventory | Sponsorship inventory | – / ✓ | ✓ / – |
 | fan_audience_access | Fan / audience access | – / ✓ | ✓ / – |
 | hospitality_experiences | Hospitality & experiences | – / ✓ | ✓ / – |
-| merchandising_licensing | Merchandising & licensing | – / ✓ | ✓ / – |
+| merchandising_licensing | Merchandising & licensing | – / ✓ | ✓ / ✓ |
 | investment_capital | Investment / capital | ✓ / – | – / ✓ |
 | technology_platform | Technology & platform | ✓ / – | – / ✓ |
 | media_broadcast_rights | Media & broadcast rights | ✓ / ✓ | ✓ / ✓ |
@@ -93,7 +93,7 @@ The 14 keys (key → label) and their per-type column validity
 | stadium_venue_infrastructure | Stadium / venue / infrastructure | ✓ / ✓ | ✓ / ✓ |
 | distribution_commercial_reach | Distribution & commercial reach | ✓ / ✓ | ✓ / ✓ |
 | ma_equity | M&A / equity | ✓ / ✓ | ✓ / ✓ |
-| advisory_services | Advisory & services | ✓ / – | ✓ / ✓ |
+| advisory_services | Advisory & services | ✓ / ✓ | ✓ / ✓ |
 
 Top block = typical non-reversible asymmetry; lower block = two-directional.
 The validity map is one frontend config object keyed by SignalTaxonomy key:
@@ -145,10 +145,11 @@ applicant). Reply-to = `enquiries@soccerex.com`.
    links to the existing portal.
 
 Stages 1–2 are automatic. Stages 3–4 each require a NEW Filament admin action to
-be built (they do not exist today). All four mailables are new — `app/Mail`
-currently has only `MagicLinkMail`, `LeadReceived` (admin), and
-`RightsHolderApplicationDecisionMail`; none are deal-network applicant
-lifecycle emails.
+be built (they do not exist today). All four mailables are new: `app/Mail`
+already holds 8 mailables (AdminBroadcastMail, CampaignMailable, InvoiceMail,
+LeadReceivedNotification, MagicLinkMail, ProfileInvitationMail,
+ProfileSelfServiceLinkMail, RightsHolderApplicationDecisionMail) but NONE are
+deal-network applicant lifecycle emails — so all four proposed here are net-new.
 
 ### 3. Marketing page → apply funnel (frontend, folds into v4-D copy work)
 
@@ -167,7 +168,9 @@ email
   → claim            (create/link person + company, issue matchmaking token,
                       + "claim confirmation" email IF new company created)
   → capability grid + one-sentence pitch + geography/budget/timeline
-  → submitIntake     (write application + "application received" email)
+  → submitIntake     (send matchmaking_token + side; server validates token,
+                      writes/updates application, sets Membership.side,
+                      sends "application received" email)
   → [admin] approve  (→ "approved" email)
   → [admin] propose  (→ "introductions proposed" email, links to portal)
   → portal
@@ -192,16 +195,31 @@ email
   side was defaulted / low-confidence, show an explicit one-tap "Which best
   describes you? Property (rightsholder) / Brand (company)" confirmation before
   the grid, and let it set the side. (This mirrors the old A1–A5 2-option
-  selector.) The chosen side should also persist to `Membership.side`.
-- **Membership.side is set once at claim from company type**, not from the grid.
-  A property that legitimately ticks some brand-side capabilities won't flip its
-  membership side — that's acceptable (side = primary identity; grid = granular
-  signals), but the implementation plan should make the precedence explicit:
-  the side-confirmation above wins over the type-derived default.
-- **Matchmaking token expiry.** The `deal-network-matchmaking` token is 60 min.
-  The grid + pitch can take a while. Plan must handle expiry gracefully (clear
-  "your link expired, re-enter your email" path) and define what happens on
-  re-submission / editing an already-submitted application (idempotency).
+  selector.)
+- **Where `side` actually persists (corrected).** `claim` does NOT create or
+  touch a `Membership` — it only creates/links Profiles and issues the
+  matchmaking token. `Membership.side` is set later in
+  `DealNetworkController::submitIntake`, from the `side` field in the submit
+  payload (the frontend derives it today at `DealNetworkApply.jsx`). So the
+  Property/Brand confirmation must drive the `side` value sent to `submitIntake`
+  — that is the single place side is written. The grid's per-capability signals
+  are separate from `side`: a property may tick some brand-side capabilities
+  without changing its membership side (side = primary identity; grid =
+  granular signals).
+- **Matchmaking token is currently a no-op at submit (must decide).** The real
+  risk is not expiry. `submitIntake` is a PUBLIC, unauthenticated route
+  (`routes/api.php`, `throttle:30,1`). The 60-min `deal-network-matchmaking`
+  token is captured client-side after `claim` but is NOT sent in the submit
+  payload and is never validated server-side — so the email-first/magic-link
+  verification does not actually gate the final submit, and `submitIntake` has
+  no idempotency (each call creates a fresh LeadSubmission + Intake;
+  `updateOrCreate` applies only to the Membership). The plan MUST decide to
+  thread the `matchmaking_token` into `submitIntake` and validate it
+  server-side, so: (a) the submit is tied to the verified email/profile from
+  `claim`, (b) re-submits update rather than duplicate, and (c) an expired
+  token routes the user back to "re-enter your email." Recommendation: require
+  + validate the token; treat a valid-token re-submit as an update to the
+  existing intake.
 - Capability **keys** (not labels) are the stored matching values; labels come
   from `SignalTaxonomy::needOfferMap()`. Keys must stay stable once shipped.
 - No deep-link redirect needed for the old intake — `/deal-network` was already
