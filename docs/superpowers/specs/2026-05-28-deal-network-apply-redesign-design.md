@@ -158,6 +158,39 @@ deal-network applicant lifecycle emails — so all four proposed here are net-ne
   v4 copy and point its CTAs ("REQUEST DEAL NETWORK ACCESS") at
   `/deal-network/apply`. One funnel.
 
+## Multiple stakeholders per company (Option A — chosen)
+
+Membership is **per company + event**, not per person. Multiple people from the
+same company are stakeholders, each with their **own Intake** under the one
+shared Membership (`Membership hasMany Intake` already exists).
+
+Required `submitIntake` changes (the current behavior is buggy for this case —
+it `updateOrCreate`s one membership keyed on a fuzzy email/name match and
+overwrites `attributes.deal_network_last_contact` on every submit):
+
+1. **Resolve the company from the `claim` result, not a fuzzy name match.**
+   Thread `company_id` (and `person_id`) from `claim` through the matchmaking
+   token context into `submitIntake`. The Membership attaches to the **company**
+   profile id, keyed `(company_profile_id, event_id)`.
+2. **Append, don't overwrite.** Each submission creates a NEW `Intake` row under
+   that membership, tagged with the submitting person (`submitted_by_email` +
+   the linked person profile id). Never clobber a prior stakeholder's intake.
+   Re-submission by the *same* person + same event updates *their* existing
+   intake (idempotency via the validated matchmaking token + submitter email),
+   not anyone else's.
+3. **Set `side` once.** The company-level `side` is set from the first intake
+   (or the Property/Brand confirmation). Later submissions do NOT flip it; a
+   disagreement is recorded on the intake and surfaced to the concierge as a
+   flag, not an overwrite.
+4. **Stop using `attributes.deal_network_last_contact` as the contact of
+   record.** Keep per-stakeholder identity on the Intake instead. The company
+   profile may keep a lightweight "most recent contact" pointer for convenience
+   but it is not authoritative.
+
+Concierge view: one company membership, N stakeholder intakes beneath it, each
+with that person's own wants/needs/pain-points. Matching is company-to-company;
+individual briefs are preserved.
+
 ## Data flow
 
 ```
