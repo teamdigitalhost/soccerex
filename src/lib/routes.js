@@ -26,6 +26,7 @@ export const GLOBAL_NETWORK  = '/global-network'
 export const GALLERY         = '/gallery'
 export const APP_PAGE        = '/app'
 export const DEAL_NETWORK    = '/deal-network'
+export const DEAL_NETWORK_APPLY = '/deal-network/apply'
 export const INVITE_PATTERN  = '/invite/:token'
 export const buildInviteUrl  = (token) => `/invite/${encodeURIComponent(token)}`
 

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { CONTACT, PROFILE_ACCESS } from '../lib/routes'
+import { CONTACT, PROFILE_ACCESS, DEAL_NETWORK_APPLY } from '../lib/routes'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 /* ═══ Deal Network: public marketing page ═══════════════════════════════
@@ -113,8 +113,6 @@ const CORE_OFFERINGS = [
   },
 ]
 
-const APPLY_MAILTO = 'mailto:enquiries@soccerex.com?subject=Deal%20Network%20application'
-
 export default function DealNetwork() {
   useScrollAnimations()
 
@@ -181,10 +179,10 @@ export default function DealNetwork() {
           </div>
 
           <div className="fade-up mt-10 flex flex-wrap items-center justify-center gap-3">
-            <a href={APPLY_MAILTO} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            <Link to={DEAL_NETWORK_APPLY} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 32px', fontSize: '0.78rem', textDecoration: 'none' }}>
-              Join the Deal Network <ArrowRight size={15} />
-            </a>
+              Request Deal Network access <ArrowRight size={15} />
+            </Link>
             <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.25)', padding: '14px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
               Speak with Soccerex <ArrowRight size={15} />
@@ -446,10 +444,10 @@ export default function DealNetwork() {
           </p>
 
           <div className="fade-up flex flex-wrap items-center justify-center gap-3">
-            <a href={APPLY_MAILTO} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            <Link to={DEAL_NETWORK_APPLY} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '17px 38px', fontSize: '0.8rem', textDecoration: 'none' }}>
-              Apply to Join the Deal Network <ArrowRight size={16} />
-            </a>
+              Request Deal Network access <ArrowRight size={16} />
+            </Link>
             <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.25)', padding: '16px 34px', fontSize: '0.8rem', textDecoration: 'none' }}>
               Speak with Soccerex <ArrowRight size={16} />
