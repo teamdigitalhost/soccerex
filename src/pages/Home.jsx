@@ -1313,7 +1313,9 @@ function HeritageSvgMap() {
 function HeritageMapSection() {
   return (
     <section className="relative" style={{ background: 'linear-gradient(135deg, #050d1a 0%, #0B213D 50%, #061729 100%)', overflow: 'visible' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: 'clamp(48px,6vw,72px) clamp(24px,5vw,80px) 0', position: 'relative', zIndex: 3 }}>
+      {/* Top padding must clear the white wavy divider above, or the GLOBAL
+          REACH eyebrow tucks under the wave. */}
+      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: 'clamp(88px,9vw,120px) clamp(24px,5vw,80px) 0', position: 'relative', zIndex: 3 }}>
         <p className="section-label text-brand-accent mb-4 fade-up">GLOBAL REACH</p>
         <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up gold-underline mx-auto" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
           57 Events. 21 Cities. 30 Years.
@@ -1323,11 +1325,7 @@ function HeritageMapSection() {
         </p>
       </div>
 
-      {/* Pull the globe canvas up to close the empty band between the heading
-          block and the visible sphere (the canvas carries top whitespace).
-          Moderate pull — enough to remove the dead band without crowding the
-          paragraph onto the sphere. */}
-      <div className="fade-up" style={{ marginTop: 'clamp(-130px, -7vw, -55px)' }}>
+      <div className="fade-up" style={{ marginTop: '-6vw' }}>
         <Suspense fallback={<div style={{ height: '600px' }} />}>
           <InteractiveGlobe />
         </Suspense>
