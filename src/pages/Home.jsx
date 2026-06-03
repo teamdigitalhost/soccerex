@@ -230,7 +230,7 @@ function ByTheNumbersSection() {
   ]
 
   return (
-    <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,130px) clamp(24px,5vw,80px)' }}>
+    <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,130px) clamp(24px,5vw,80px) clamp(28px,3.5vw,44px)' }}>
       <NetworkNodes color="#0D1B2A" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.06} />
       <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
         <div className="mb-14">
