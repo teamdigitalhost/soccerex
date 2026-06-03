@@ -408,7 +408,10 @@ function ArticleRow({ article, index }) {
     ? <a href={article.externalUrl} target="_blank" rel="noreferrer" className={className} style={style}>{children}</a>
     : <Link to={insightArticle(article.slug)} className={className} style={style}>{children}</Link>
   return (
-    <div className="fade-up" style={{ marginBottom: '40px', paddingBottom: '40px', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
+    /* No fade-up here: article rows load async from the manifest/CMS, which
+       races the scroll-reveal observer and can leave every row stuck at
+       opacity:0 (a huge blank column). Content list = always visible. */
+    <div style={{ marginBottom: '40px', paddingBottom: '40px', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
       <ArticleLink className="block" style={{ textDecoration: 'none' }}>
         {/* Show image when available */}
         {hasImage && (
