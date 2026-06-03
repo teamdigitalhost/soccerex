@@ -113,12 +113,14 @@ export default function InsightsList() {
     <div style={{ background: '#050d1a' }}>
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
-      <section className="inner-hero relative overflow-hidden flex items-center justify-center">
+      {/* Sized to its content (no inner-hero min-height) so there's no large
+          empty band at the top of the page. Top padding clears the fixed navbar. */}
+      <section className="relative overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.15} />
-        <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)' }}>
+        <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(96px,11vw,140px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)' }}>
           <div className="inner-hero-crest inner-hero-crest--lg flex justify-center fade-up">
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
               style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />

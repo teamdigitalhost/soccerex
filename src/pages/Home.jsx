@@ -1313,7 +1313,7 @@ function HeritageSvgMap() {
 function HeritageMapSection() {
   return (
     <section className="relative" style={{ background: 'linear-gradient(135deg, #050d1a 0%, #0B213D 50%, #061729 100%)', overflow: 'visible' }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px) 0', position: 'relative', zIndex: 3 }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center', padding: 'clamp(48px,6vw,72px) clamp(24px,5vw,80px) 0', position: 'relative', zIndex: 3 }}>
         <p className="section-label text-brand-accent mb-4 fade-up">GLOBAL REACH</p>
         <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up gold-underline mx-auto" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)' }}>
           57 Events. 21 Cities. 30 Years.
@@ -1323,7 +1323,9 @@ function HeritageMapSection() {
         </p>
       </div>
 
-      <div className="fade-up" style={{ marginTop: '-6vw' }}>
+      {/* Pull the globe canvas up to close the empty band between the heading
+          block and the visible sphere (the canvas carries top whitespace). */}
+      <div className="fade-up" style={{ marginTop: 'clamp(-200px, -12vw, -90px)' }}>
         <Suspense fallback={<div style={{ height: '600px' }} />}>
           <InteractiveGlobe />
         </Suspense>
