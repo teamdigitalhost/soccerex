@@ -221,11 +221,28 @@ function formatCmsDate(value) {
   return String(value).slice(0, 10)
 }
 
+/* Editorial placeholder tokens that occasionally survive into published CMS
+   bodies (e.g. a lone "CTA" line where a call-to-action was meant to go).
+   Drop any paragraph that is EXACTLY one of these (trimmed, case-insensitive,
+   ignoring surrounding brackets/punctuation) so they never render. We match
+   the whole paragraph only — a real sentence that happens to contain "CTA"
+   is left untouched. */
+const PLACEHOLDER_PARAGRAPHS = new Set([
+  'cta', 'cta here', 'cta goes here', 'insert cta', 'call to action',
+  'tbd', 'todo', 'placeholder', 'lorem ipsum', 'xxx',
+])
+
+function isPlaceholderParagraph(p) {
+  const norm = p.toLowerCase().replace(/^[[(]+|[\])]+$/g, '').replace(/[.:]+$/, '').trim()
+  return PLACEHOLDER_PARAGRAPHS.has(norm)
+}
+
 function bodyToParagraphs(body) {
   return String(body || '')
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean)
+    .filter((p) => !isPlaceholderParagraph(p))
 }
 
 function uniqueLabels(values) {
