@@ -1324,8 +1324,10 @@ function HeritageMapSection() {
       </div>
 
       {/* Pull the globe canvas up to close the empty band between the heading
-          block and the visible sphere (the canvas carries top whitespace). */}
-      <div className="fade-up" style={{ marginTop: 'clamp(-200px, -12vw, -90px)' }}>
+          block and the visible sphere (the canvas carries top whitespace).
+          Moderate pull — enough to remove the dead band without crowding the
+          paragraph onto the sphere. */}
+      <div className="fade-up" style={{ marginTop: 'clamp(-130px, -7vw, -55px)' }}>
         <Suspense fallback={<div style={{ height: '600px' }} />}>
           <InteractiveGlobe />
         </Suspense>
