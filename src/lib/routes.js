@@ -27,6 +27,10 @@ export const GALLERY         = '/gallery'
 export const APP_PAGE        = '/app'
 export const DEAL_NETWORK    = '/deal-network'
 export const DEAL_NETWORK_APPLY = '/deal-network/apply'
+// Preset the apply flow's entry side via ?track= (rightsholder | company |
+// capital). The apply page reads it to pre-select the right capability grid.
+export const dealNetworkApplyWithTrack = (track) =>
+  track ? `${DEAL_NETWORK_APPLY}?track=${encodeURIComponent(track)}` : DEAL_NETWORK_APPLY
 export const INVITE_PATTERN  = '/invite/:token'
 export const buildInviteUrl  = (token) => `/invite/${encodeURIComponent(token)}`
 

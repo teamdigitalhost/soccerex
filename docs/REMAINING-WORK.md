@@ -1,6 +1,6 @@
 # Soccerex website — remaining work backlog
 
-**Last updated:** 2026-06-03
+**Last updated:** 2026-06-04
 **Scope:** what's left after the comments-doc rounds (v2.1 / v2.2 / GN / v4) and the
 Deal Network apply build. Everything here is structural (backend / forms / new
 flow) or a larger copy+layout job — the small copy swaps are done and live.
@@ -31,74 +31,48 @@ source-of-truth hygiene, not urgent.
 
 ---
 
-## 1. Deal Network — third track: Capital & Impact Partners (C1)  ⬅ anchor
+## 1. Deal Network third track: Capital & Impact Partners (C1) ✅ DONE 2026-06-04
 
-**Why:** The deck defines THREE participation tracks, not two. The shipped apply
-flow is two-sided (Property/rightsholder vs Brand/company). The deck adds a
-distinct **Capital & Impact Partners** track — PE, family offices, financial
-institutions, funds, nonprofits — with its own value prop and an "apply to join /
-curated access" entry. Today these fold into the Brand side; the deck wants them
-as their own track.
+**Built and verified (tests + frontend build); NOT yet deployed.** Capital is now
+a first-class third matched side (`SIDE_CAPITAL`), not folded into Brand.
 
-**Needs a short spec first** (this changes the apply flow + capability model):
-- New side/track value beyond `property`/`brand`. Backend `Membership.side` is an
-  enum `company | rightsholder | both` (`app/Models/DealNetwork/Membership.php`) —
-  decide whether "capital" is a new side, a `member_type`, or a tag. The capability
-  grid (`Soccerex-front/src/pages/DealNetworkApply.jsx` → `CAPABILITIES`,
-  `deriveSide`, `SideConfirm`) is currently property/brand only.
-- The deck's Capital & Impact "What They Get": curated intros to clubs/leagues/
-  federations seeking capital, proprietary deal flow, closed roundtables, etc.
-- Entry: the `?track=capital` URL param already lands these on the company side as
-  a placeholder (`DealNetworkApply.jsx`, search `trackSide`) — wire it to the real
-  third track once it exists.
+Decision made: capital is a **new side**, not a member_type or tag. Note the prior
+"enum" assumption was wrong: `Membership.side` is a `VARCHAR(32)`, so adding
+`capital` needed **no migration**.
 
-**Effort:** medium. Spec → frontend (grid + a third SideConfirm option + track
-copy) → backend (`SignalTaxonomy`/`Membership` if the model needs a new value).
-
----
-
-## 2. Deal Network — 6-step process (C2)
-
-**Why:** The deck specifies a 6-step process; the shipped flow + marketing copy
-use a 4-step ("Intake → Curate → Connect → Follow Through").
-
-**Deck's 6 steps (use this exact language):**
-1. Intake & Profiling
-2. Discovery Calls
-3. Curated Matching
-4. Introduction Emails
-5. Bilateral Confirmation
-6. Pre-Scheduled Agenda
-
-**Where:** the "How it works" copy on `/deal-network` (`src/pages/DealNetwork.jsx`)
-and any step labels in the apply flow / portal. This is mostly copy + a step list,
-but "Discovery Calls" and "Bilateral Confirmation" are new concepts to reflect.
-
-**Effort:** small–medium (copy + a step component).
+- Backend: `Membership::SIDE_CAPITAL = 'capital'` in `SIDES`; both intake
+  controllers normalize capital aliases and set `meeting_entitlement = 0`
+  (concierge-scheduled, like rightsholders); matching workspace left column now
+  includes capital so capital firms pair against rightsholders via the existing
+  scorer; Filament badge/filter; demo seeder gains a capital firm + curated match.
+- Frontend: `CAPABILITY_VALIDITY` gained a `capital` column (provides
+  investment/advisory, both on M&A + infrastructure); third "Capital & Impact"
+  selector in `DealNetworkApply.jsx`; `SIDE_TO_BACKEND.capital = 'capital'`;
+  `?track=capital` no longer folds to Brand; capital-aware labels (ticket bands,
+  deal structures, mandate/thesis); per-track apply CTAs on `/deal-network`.
+- Tests: full DN suite green (29 passed) incl. a capital intake test.
+- Full design + rationale: the stakeholder proposal
+  `~/Downloads/Soccerex-Deal-Network-Intake-Architecture.{docx,pdf}` and memory
+  `project_soccerex_intake_architecture.md`.
 
 ---
 
-## 3. Deal Network — mirror the Hybrid Deck on /deal-network (C4) + deck-language pass
+## 2. Deal Network 6-step process (C2) ✅ DONE
 
-**Why:** The public `/deal-network` marketing page should mirror the deck
-structure and language. The deck is the bible.
+The deck's exact 6 steps (Intake & Profiling, Discovery Calls, Curated Matching,
+Introduction Emails, Bilateral Confirmation, Pre-Scheduled Agenda) are live in the
+"How it works" section of `/deal-network` (`src/pages/DealNetwork.jsx`).
 
-**Deck section order to mirror:**
-Overview → Why the Deal Network → The Two Sides + **Capital & Impact Layer** →
-Core Offerings (Curated Deal Facilitation / Roundtables & Deal Lunches /
-Year-Round Engagement) → How It Works (6 steps, see #2) → The Two Experiences
-(Companies vs Rightsholders) → The Timeline (~6 wk before → event week → post-event)
-→ How to Join (3 tracks: Rightsholders invited/free, Companies included-with-package,
-Capital & Impact apply-to-join).
+---
 
-**Plus a deck-language pass** across Deal Network surfaces (apply flow, portal,
-copy) so terminology matches the deck exactly.
+## 3. Deal Network mirror the Hybrid Deck on /deal-network (C4) ✅ DONE (overview level)
 
-**Where:** `src/pages/DealNetwork.jsx` (708 lines, currently the marketing page,
-no form — CTAs already point at `/deal-network/apply`).
-
-**Effort:** larger copy + layout rebuild. Best done after C1/C2 so the third track
-+ 6 steps are real when the page references them.
+`/deal-network` now mirrors the deck at an **overview level by explicit
+direction** ("I don't need the whole deck on the page, just an overview"): the
+three participation tracks (Rightsholders invited/free, Companies "Available to
+Sponsors & Exhibitors", Capital & Impact apply-to-join, each with a per-track
+apply CTA) and the 6-step process. The full section-by-section deck mirror was
+intentionally NOT built. Deck language is reflected across the apply flow.
 
 ---
 
@@ -178,6 +152,10 @@ Laravel Cloud, and Netlify changes can be coordinated in one launch window.
 ---
 
 ## Done this round (for reference)
+- Deal Network third matched side: Capital & Impact (`SIDE_CAPITAL`) end-to-end (C1) — built + tested, pending deploy
+- Deal Network 6-step process live on `/deal-network` (C2)
+- Deal Network `/deal-network` deck mirror at overview level + 3 participation tracks with per-track apply CTAs (C4)
+- Deal Network apply-redesign spec updated to as-built (`docs/superpowers/specs/2026-05-28-deal-network-apply-redesign-design.md`)
 - About v4 copy (hero/mission/core-values/discover/who-we-reach/timeline, delete Deals-That-Got-Done)
 - Riyadh v4 copy (anchor-event hero, themes w/ descriptions, why-attend, request-access)
 - C3 `?track=` entry param on the Deal Network apply flow

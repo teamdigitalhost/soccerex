@@ -1,8 +1,51 @@
-# Deal Network Apply Redesign — Design Spec
+# Deal Network Apply Redesign: Design Spec
 
 **Date:** 2026-05-28
-**Status:** Approved (pending implementation plan)
+**Status:** IMPLEMENTED and shipped. Extended 2026-06-04 with Capital as a true third matched side.
 **Repos touched:** `Soccerex-front` (React), `Soccerex-back` (Laravel)
+
+> ## As-built status (updated 2026-06-04)
+>
+> Everything in this spec shipped, then the model was extended. Read this banner
+> first; the body below is the original two-side (Property / Brand) design, kept
+> for rationale. Where it says "pending" or "must decide", or shows a two-column
+> capability table, the corrections are here.
+>
+> **Shipped from this spec:**
+> - Type-aware capability grid (the per-type `CAPABILITY_VALIDITY` map) in
+>   `src/lib/dealNetworkTaxonomy.js` + `DealNetworkApply.jsx`.
+> - All four lifecycle mailables under `app/Mail/DealNetwork/`:
+>   `ApplicationReceivedMail` (auto, fired in `submitIntake`),
+>   `ClaimConfirmationMail` (auto, fired in `claim` when a new company is created),
+>   `MembershipApprovedMail` (Filament `approve` action on
+>   `DealNetworkMembershipResource`, sets status=active),
+>   `IntroductionsProposedMail` (Filament `propose` action on
+>   `DealNetworkMatchResource`).
+> - Marketing funnel: `/deal-network` CTAs point at `/deal-network/apply`, now
+>   with per-track presets (`?track=rightsholder|company|capital`).
+> - Multi-stakeholder + matchmaking-token threading and idempotency: the
+>   `deal-network-matchmaking` token is now sent to and validated by
+>   `submitIntake`; re-submits update the existing intake instead of duplicating
+>   (covered by `ApplyTokenAnchoringTest`). Resolves the "token is a no-op at
+>   submit" risk listed at the bottom.
+>
+> **Extended 2026-06-04: Capital as a third matched side (`SIDE_CAPITAL`):**
+> - `side` is a `VARCHAR(32)`, not a DB enum, so NO migration was needed.
+>   `Membership::SIDE_CAPITAL = 'capital'` added to `SIDES`; both intake
+>   controllers normalize capital aliases and set `meeting_entitlement = 0`
+>   (concierge-scheduled, like rightsholders).
+> - The capability map gained a third `capital` column (see the updated table
+>   below). The apply flow has a third "Capital & Impact" selector;
+>   `SIDE_TO_BACKEND.capital = 'capital'`; capital-aware labels (ticket bands,
+>   deal structures, mandate/thesis).
+> - Matching workspace left column now includes capital, so capital firms pair
+>   against rightsholders through the existing side-agnostic scorer.
+> - Full Deal Network test suite green (29 passed), including a capital intake
+>   test. Built + verified, NOT yet deployed.
+>
+> Authoritative current overview: memory `project_soccerex_intake_architecture.md`
+> and the stakeholder proposal
+> `~/Downloads/Soccerex-Deal-Network-Intake-Architecture.{docx,pdf}`.
 
 ## Problem
 
@@ -76,32 +119,36 @@ free-text labels would 422. We reuse the 14 keys as the grid rows and add a
 migration.
 
 The 14 keys (key → label) and their per-type column validity
-(✓ = that checkbox renders for that side):
+(✓ = that checkbox renders for that side). The Capital column was added
+2026-06-04; capital is deliberately narrow and mandate-led (provides
+investment / advisory, seeks M&A and infrastructure deal flow):
 
-| key | label | Property: Look / Provide | Brand: Look / Provide |
-|---|---|---|---|
-| sponsorship_inventory | Sponsorship inventory | – / ✓ | ✓ / – |
-| fan_audience_access | Fan / audience access | – / ✓ | ✓ / – |
-| hospitality_experiences | Hospitality & experiences | – / ✓ | ✓ / – |
-| merchandising_licensing | Merchandising & licensing | – / ✓ | ✓ / ✓ |
-| investment_capital | Investment / capital | ✓ / – | – / ✓ |
-| technology_platform | Technology & platform | ✓ / – | – / ✓ |
-| media_broadcast_rights | Media & broadcast rights | ✓ / ✓ | ✓ / ✓ |
-| content_ip | Content & IP | ✓ / ✓ | ✓ / ✓ |
-| data_analytics | Data & analytics | ✓ / ✓ | ✓ / ✓ |
-| talent_representation | Talent & representation | ✓ / ✓ | ✓ / ✓ |
-| stadium_venue_infrastructure | Stadium / venue / infrastructure | ✓ / ✓ | ✓ / ✓ |
-| distribution_commercial_reach | Distribution & commercial reach | ✓ / ✓ | ✓ / ✓ |
-| ma_equity | M&A / equity | ✓ / ✓ | ✓ / ✓ |
-| advisory_services | Advisory & services | ✓ / ✓ | ✓ / ✓ |
+| key | label | Property: Look / Provide | Brand: Look / Provide | Capital: Look / Provide |
+|---|---|---|---|---|
+| sponsorship_inventory | Sponsorship inventory | – / ✓ | ✓ / – | – / – |
+| fan_audience_access | Fan / audience access | – / ✓ | ✓ / – | – / – |
+| hospitality_experiences | Hospitality & experiences | – / ✓ | ✓ / – | – / – |
+| merchandising_licensing | Merchandising & licensing | – / ✓ | ✓ / ✓ | – / – |
+| investment_capital | Investment / capital | ✓ / – | – / ✓ | – / ✓ |
+| technology_platform | Technology & platform | ✓ / – | – / ✓ | – / – |
+| media_broadcast_rights | Media & broadcast rights | ✓ / ✓ | ✓ / ✓ | – / – |
+| content_ip | Content & IP | ✓ / ✓ | ✓ / ✓ | – / – |
+| data_analytics | Data & analytics | ✓ / ✓ | ✓ / ✓ | – / – |
+| talent_representation | Talent & representation | ✓ / ✓ | ✓ / ✓ | – / – |
+| stadium_venue_infrastructure | Stadium / venue / infrastructure | ✓ / ✓ | ✓ / ✓ | ✓ / ✓ |
+| distribution_commercial_reach | Distribution & commercial reach | ✓ / ✓ | ✓ / ✓ | – / – |
+| ma_equity | M&A / equity | ✓ / ✓ | ✓ / ✓ | ✓ / ✓ |
+| advisory_services | Advisory & services | ✓ / ✓ | ✓ / ✓ | – / ✓ |
 
 Top block = typical non-reversible asymmetry; lower block = two-directional.
-The validity map is one frontend config object keyed by SignalTaxonomy key:
+The validity map is one frontend config object keyed by SignalTaxonomy key
+(now with three side columns):
 
 ```js
-{ key: 'sponsorship_inventory',
-  property: { looking: false, provide: true },
-  brand:    { looking: true,  provide: false } }
+{ key: 'investment_capital',
+  property: { looking: true,  provide: false },
+  brand:    { looking: false, provide: true  },
+  capital:  { looking: false, provide: true  } }
 ```
 
 Labels are pulled from `SignalTaxonomy::needOfferMap()` so the frontend and
@@ -219,7 +266,11 @@ email
 
 ## Risks / notes
 
-- **Free-email type bias (must address).** `claim` creates a brand-new company
+- **[RESOLVED 2026-06-04] Free-email type bias.** Addressed by the explicit
+  "Which best describes you?" side selector in `MatchmakingStep`, now a
+  three-option control (Property / Brand / Capital & Impact) that sets the
+  `side` sent to `submitIntake`. Original note below.
+- **Free-email type bias (original note).** `claim` creates a brand-new company
   as `TYPE_BRAND` by default, and `emailDomain()` skips free-email domains
   (gmail/yahoo/etc) for dedup. Result: a freemail applicant who creates a new
   company always lands on the **Brand** side, so the grid shows the brand
@@ -239,7 +290,12 @@ email
   are separate from `side`: a property may tick some brand-side capabilities
   without changing its membership side (side = primary identity; grid =
   granular signals).
-- **Matchmaking token is currently a no-op at submit (must decide).** The real
+- **[RESOLVED 2026-06-04] Matchmaking token no-op at submit.** The token is now
+  threaded into `submitIntake` and validated server-side; a valid-token
+  re-submit updates the existing intake instead of duplicating, anchored to the
+  verified company/person from `claim`. Verified by `ApplyTokenAnchoringTest`.
+  Original analysis below.
+- **Matchmaking token is currently a no-op at submit (original analysis).** The real
   risk is not expiry. `submitIntake` is a PUBLIC, unauthenticated route
   (`routes/api.php`, `throttle:30,1`). The 60-min `deal-network-matchmaking`
   token is captured client-side after `claim` but is NOT sent in the submit

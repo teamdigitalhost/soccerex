@@ -25,22 +25,26 @@ export const NEED_OFFER_OPTIONS = [
    the top block is the typical non-reversible asymmetry (a property provides
    sponsorship inventory, a brand looks for it); the lower block is
    two-directional. A row is hidden for a side only if neither column is valid.
-   Side keys: `property` (club/federation/rightsholder) and `brand` (company). */
+   Side keys: `property` (club/federation/rightsholder), `brand` (company), and
+   `capital` (capital & impact partners). Capital is deliberately narrow and
+   mandate-led: it provides investment / advisory and seeks M&A and
+   infrastructure deal flow, so it complements a rightsholder that is looking
+   for investment and providing equity / infrastructure. */
 export const CAPABILITY_VALIDITY = [
-  { key: 'sponsorship_inventory',         property: { looking: false, provide: true  }, brand: { looking: true,  provide: false } },
-  { key: 'fan_audience_access',           property: { looking: false, provide: true  }, brand: { looking: true,  provide: false } },
-  { key: 'hospitality_experiences',       property: { looking: false, provide: true  }, brand: { looking: true,  provide: false } },
-  { key: 'merchandising_licensing',       property: { looking: false, provide: true  }, brand: { looking: true,  provide: true  } },
-  { key: 'investment_capital',            property: { looking: true,  provide: false }, brand: { looking: false, provide: true  } },
-  { key: 'technology_platform',           property: { looking: true,  provide: false }, brand: { looking: false, provide: true  } },
-  { key: 'media_broadcast_rights',        property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  } },
-  { key: 'content_ip',                    property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  } },
-  { key: 'data_analytics',                property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  } },
-  { key: 'talent_representation',         property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  } },
-  { key: 'stadium_venue_infrastructure',  property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  } },
-  { key: 'distribution_commercial_reach', property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  } },
-  { key: 'ma_equity',                     property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  } },
-  { key: 'advisory_services',             property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  } },
+  { key: 'sponsorship_inventory',         property: { looking: false, provide: true  }, brand: { looking: true,  provide: false }, capital: { looking: false, provide: false } },
+  { key: 'fan_audience_access',           property: { looking: false, provide: true  }, brand: { looking: true,  provide: false }, capital: { looking: false, provide: false } },
+  { key: 'hospitality_experiences',       property: { looking: false, provide: true  }, brand: { looking: true,  provide: false }, capital: { looking: false, provide: false } },
+  { key: 'merchandising_licensing',       property: { looking: false, provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: false, provide: false } },
+  { key: 'investment_capital',            property: { looking: true,  provide: false }, brand: { looking: false, provide: true  }, capital: { looking: false, provide: true  } },
+  { key: 'technology_platform',           property: { looking: true,  provide: false }, brand: { looking: false, provide: true  }, capital: { looking: false, provide: false } },
+  { key: 'media_broadcast_rights',        property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: false, provide: false } },
+  { key: 'content_ip',                    property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: false, provide: false } },
+  { key: 'data_analytics',                property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: false, provide: false } },
+  { key: 'talent_representation',         property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: false, provide: false } },
+  { key: 'stadium_venue_infrastructure',  property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: true,  provide: true  } },
+  { key: 'distribution_commercial_reach', property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: false, provide: false } },
+  { key: 'ma_equity',                     property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: true,  provide: true  } },
+  { key: 'advisory_services',             property: { looking: true,  provide: true  }, brand: { looking: true,  provide: true  }, capital: { looking: false, provide: true  } },
 ]
 
 /* key → label, sourced from NEED_OFFER_OPTIONS so the grid and chips never drift. */

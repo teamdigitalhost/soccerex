@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { CONTACT, DEAL_NETWORK_APPLY } from '../lib/routes'
+import { CONTACT, DEAL_NETWORK_APPLY, dealNetworkApplyWithTrack } from '../lib/routes'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 /* ═══ Deal Network: public marketing page ═══════════════════════════════
@@ -267,9 +267,9 @@ export default function DealNetwork() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <AudienceCard icon={Trophy} title="Rightsholders" access="Invited, no fee" body="Clubs, leagues, federations, governing bodies, and player representatives. Invited and curated by Soccerex, with no cost to participate." items={RIGHTSHOLDER_TYPES} tint={NAVY} tintBg="rgba(9,32,62,0.08)" />
-            <AudienceCard icon={Briefcase} title="Companies" access="Available to Sponsors & Exhibitors" body="Brands, sponsors, agencies, and strategic partners. Deal Network access is included with, or added to, a Soccerex exhibitor or sponsor package." items={COMPANY_TYPES} tint={PURPLE} tintBg={PURPLE_SOFT} />
-            <AudienceCard icon={Building2} title="Capital & Impact Partners" access="Curated access, apply to join" body="The third force behind the biggest deals: capital, infrastructure, and mission-driven support. A dedicated curated track, reviewed for mandate fit." items={CAPITAL_IMPACT_TYPES} tint="var(--color-brand-accent)" tintBg="rgba(191,177,112,0.18)" />
+            <AudienceCard icon={Trophy} title="Rightsholders" access="Invited, no fee" body="Clubs, leagues, federations, governing bodies, and player representatives. Invited and curated by Soccerex, with no cost to participate." items={RIGHTSHOLDER_TYPES} tint={NAVY} tintBg="rgba(9,32,62,0.08)" applyTrack="rightsholder" ctaLabel="Request your invitation" />
+            <AudienceCard icon={Briefcase} title="Companies" access="Available to Sponsors & Exhibitors" body="Brands, sponsors, agencies, and strategic partners. Deal Network access is included with, or added to, a Soccerex exhibitor or sponsor package." items={COMPANY_TYPES} tint={PURPLE} tintBg={PURPLE_SOFT} applyTrack="company" ctaLabel="Apply as a company" />
+            <AudienceCard icon={Building2} title="Capital & Impact Partners" access="Curated access, apply to join" body="The third force behind the biggest deals: capital, infrastructure, and mission-driven support. A dedicated curated track, reviewed for mandate fit." items={CAPITAL_IMPACT_TYPES} tint="var(--color-brand-accent)" tintBg="rgba(191,177,112,0.18)" applyTrack="capital" ctaLabel="Apply to join" />
           </div>
         </div>
       </section>
@@ -370,7 +370,7 @@ function ConnectsCard({ icon, from, to }) {
 }
 
 /* ═══ "Who It Is For" card ═══════════════════════════════════════════════ */
-function AudienceCard({ icon, title, body, items, tint, tintBg, access }) {
+function AudienceCard({ icon, title, body, items, tint, tintBg, access, applyTrack, ctaLabel }) {
   return (
     <div className="fade-up" style={{
       background: '#fafaf7', borderRadius: 16, padding: 'clamp(24px,3vw,36px)',
@@ -409,6 +409,15 @@ function AudienceCard({ icon, title, body, items, tint, tintBg, access }) {
           </li>
         ))}
       </ul>
+      {applyTrack && (
+        <Link
+          to={dealNetworkApplyWithTrack(applyTrack)}
+          className="inline-flex items-center gap-1.5 font-body font-semibold"
+          style={{ marginTop: 22, color: tint, fontSize: '0.82rem', textDecoration: 'none', borderBottom: `1.5px solid ${tint}`, paddingBottom: 2 }}
+        >
+          {ctaLabel || 'Request access'} <ArrowRight size={14} />
+        </Link>
+      )}
     </div>
   )
 }

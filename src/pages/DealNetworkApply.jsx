@@ -19,8 +19,10 @@ function deriveSide(company) {
   const t = company?.type
   return t === 'club' || t === 'federation' ? 'property' : 'brand'
 }
-// Property = rightsholder, Brand = company — the values submitIntake expects.
-const SIDE_TO_BACKEND = { property: 'rightsholder', brand: 'company' }
+// Property = rightsholder, Brand = company, Capital = capital — the values
+// submitIntake expects. Capital is its own matched side (capital & impact
+// partners), not folded into Brand.
+const SIDE_TO_BACKEND = { property: 'rightsholder', brand: 'company', capital: 'capital' }
 
 /* Deal Network unlisted apply flow.
  *
@@ -38,6 +40,7 @@ const SIDE_TO_BACKEND = { property: 'rightsholder', brand: 'company' }
 const NAVY = '#09203e'
 const NAVY_DEEP = '#050d1a'
 const PURPLE = '#6b3aa8'
+const GOLD = '#8f8136' // capital & impact accent (darker gold for text contrast)
 
 const STEP_EMAIL = 'email'
 const STEP_SENT = 'sent'
@@ -56,16 +59,16 @@ export default function DealNetworkApply() {
   const testMode = isTestModeFromUrl()
 
   // C3: optional ?track= presets the entry side so a tracked link (e.g. from a
-  // "Rightsholders" CTA) lands the applicant on the right capability grid by
-  // default. They can still change it via the Property/Brand confirmation.
-  // 'capital' folds to the company/brand side until the dedicated Capital &
-  // Impact track ships (C1).
+  // "Rightsholders" or "Capital & Impact" CTA) lands the applicant on the right
+  // capability grid by default. They can still change it via the side selector.
   const trackParam = (params.get('track') || '').toLowerCase()
   const trackSide = (trackParam === 'rightsholder' || trackParam === 'property')
     ? 'property'
-    : (trackParam === 'company' || trackParam === 'brand' || trackParam === 'capital')
-      ? 'brand'
-      : ''
+    : (trackParam === 'capital' || trackParam === 'investor' || trackParam === 'impact')
+      ? 'capital'
+      : (trackParam === 'company' || trackParam === 'brand')
+        ? 'brand'
+        : ''
 
   const [step, setStep] = useState(tokenFromUrl ? STEP_PREVIEW : STEP_EMAIL)
   const [busy, setBusy] = useState(false)
@@ -557,8 +560,19 @@ function CondensedStep(props) {
 function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
   const toggle = (key, v) => setMm({ ...mm, [key]: mm[key].includes(v) ? mm[key].filter((x) => x !== v) : [...mm[key], v] })
 
-  const DEAL_TYPES = ['Sponsorship', 'Media rights', 'Content partnership', 'Technology / platform', 'Hospitality / experiences', 'Investment / M&A', 'Stadium / venue', 'Data / analytics', 'Merchandising / licensing']
-  const BUDGETS = ['Under $25k', '$25k - $50k', '$50k - $100k', '$100k - $250k', '$250k - $500k', '$500k - $1M', '$1M+', 'Prefer not to say']
+  const isCapital = mm.side === 'capital'
+
+  // Capital & impact partners think in structures and ticket sizes, not
+  // sponsorship deal types and marketing budgets, so the matchmaking inputs
+  // adapt to the chosen side.
+  const COMPANY_DEAL_TYPES = ['Sponsorship', 'Media rights', 'Content partnership', 'Technology / platform', 'Hospitality / experiences', 'Investment / M&A', 'Stadium / venue', 'Data / analytics', 'Merchandising / licensing']
+  const CAPITAL_STRUCTURES = ['Equity investment', 'Debt / financing', 'M&A', 'Joint venture', 'Infrastructure / project finance', 'Impact / mission-driven']
+  const DEAL_TYPES = isCapital ? CAPITAL_STRUCTURES : COMPANY_DEAL_TYPES
+
+  const COMPANY_BUDGETS = ['Under $25k', '$25k - $50k', '$50k - $100k', '$100k - $250k', '$250k - $500k', '$500k - $1M', '$1M+', 'Prefer not to say']
+  const CAPITAL_TICKETS = ['Under $500k', '$500k - $2M', '$2M - $10M', '$10M - $50M', '$50M+', 'Prefer not to say']
+  const BUDGETS = isCapital ? CAPITAL_TICKETS : COMPANY_BUDGETS
+
   const REGIONS = ['Global', 'Americas', 'Europe', 'MENA / GCC', 'Africa', 'Asia', 'Oceania']
 
   // Switching side prunes any ticked signal that is not valid for the new side,
@@ -596,18 +610,19 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           that lands on Brand) can be corrected before the grid renders. */}
       <div className="mb-5">
         <Label>Which best describes you?</Label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { id: 'property', title: 'Property', sub: 'Rightsholder — club, federation, league, venue' },
-            { id: 'brand', title: 'Brand / Company', sub: 'Sponsor, investor, agency, technology, media' },
+            { id: 'property', title: 'Property', sub: 'Rightsholder: club, federation, league, venue', accent: NAVY, tintBg: 'rgba(9,32,62,0.07)' },
+            { id: 'brand', title: 'Brand / Company', sub: 'Sponsor, agency, technology, media', accent: PURPLE, tintBg: 'rgba(107,58,168,0.08)' },
+            { id: 'capital', title: 'Capital & Impact', sub: 'Investor, fund, family office, foundation', accent: GOLD, tintBg: 'rgba(143,129,54,0.12)' },
           ].map((opt) => {
             const active = mm.side === opt.id
             return (
               <button
                 key={opt.id} type="button" onClick={() => setSide(opt.id)}
-                style={{ textAlign: 'left', background: active ? 'rgba(107,58,168,0.08)' : '#f8f7f4', border: '1.5px solid ' + (active ? PURPLE : 'rgba(9,32,62,0.12)'), borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
+                style={{ textAlign: 'left', background: active ? opt.tintBg : '#f8f7f4', border: '1.5px solid ' + (active ? opt.accent : 'rgba(9,32,62,0.12)'), borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
               >
-                <div className="font-heading font-semibold" style={{ fontSize: '0.95rem', color: active ? PURPLE : NAVY }}>{opt.title}</div>
+                <div className="font-heading font-semibold" style={{ fontSize: '0.95rem', color: active ? opt.accent : NAVY }}>{opt.title}</div>
                 <div className="font-body" style={{ fontSize: '0.72rem', color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{opt.sub}</div>
               </button>
             )
@@ -627,10 +642,10 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
       </div>
 
       <Field
-        label="One-sentence pitch (what do you want to do in football)"
+        label={isCapital ? 'Your mandate / thesis (one sentence)' : 'One-sentence pitch (what do you want to do in football)'}
         value={mm.one_sentence_pitch}
         onChange={(v) => setMm({ ...mm, one_sentence_pitch: v })}
-        placeholder="e.g. We want to launch a fan-data activation with two MLS clubs in 2026."
+        placeholder={isCapital ? 'e.g. We deploy $2-10M growth equity into clubs and venues across the Americas.' : 'e.g. We want to launch a fan-data activation with two MLS clubs in 2026.'}
         disabled={busy}
       />
 
@@ -649,11 +664,11 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
       )}
 
       <div className="mb-4">
-        <Label>Deal types you are open to</Label>
+        <Label>{isCapital ? 'Deal structures you pursue' : 'Deal types you are open to'}</Label>
         <ChipGroup options={DEAL_TYPES} value={mm.deal_types} onToggle={(v) => toggle('deal_types', v)} />
       </div>
 
-      <Field label="Ideal counterpart (the kind of company / role)" value={mm.ideal_counterpart} onChange={(v) => setMm({ ...mm, ideal_counterpart: v })} placeholder="Mid-major MLS club head of partnerships" disabled={busy} textarea />
+      <Field label={isCapital ? 'Ideal counterpart (the kind of rightsholder / asset)' : 'Ideal counterpart (the kind of company / role)'} value={mm.ideal_counterpart} onChange={(v) => setMm({ ...mm, ideal_counterpart: v })} placeholder={isCapital ? 'Clubs or venues with fundable commercial plans' : 'Mid-major MLS club head of partnerships'} disabled={busy} textarea />
 
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -664,7 +679,7 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           </select>
         </div>
         <div>
-          <Label>Budget range</Label>
+          <Label>{isCapital ? 'Typical ticket size' : 'Budget range'}</Label>
           <select value={mm.budget_range} onChange={(e) => setMm({ ...mm, budget_range: e.target.value })} style={{ width: '100%', padding: '10px 12px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6 }}>
             <option value="">Pick one</option>
             {BUDGETS.map((b) => <option key={b} value={b}>{b}</option>)}
