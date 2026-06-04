@@ -279,7 +279,7 @@ function ProfileChooser({ session, onSignOut, onPick, onEdit }) {
                   <div className="flex flex-wrap gap-2" style={{ width: '100%' }}>
                     <button type="button" onClick={() => onPick(p.slug, p)}
                       className="event-btn-outline-light"
-                      style={{ flex: '2 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11, background: 'var(--event-primary, #ff6b35)', color: '#fff', borderColor: 'var(--event-primary, #ff6b35)' }}>
+                      style={{ flex: '2 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11, background: 'var(--event-primary, #E91E63)', color: '#fff', borderColor: 'var(--event-primary, #E91E63)' }}>
                       Open portal <ArrowRight size={13} />
                     </button>
                     <button type="button" onClick={() => onEdit(p.slug)}
@@ -321,7 +321,9 @@ function Shell({ children }) {
       minHeight: '100vh',
       background: 'linear-gradient(180deg, #FFFFFF 0%, #FAFBFC 100%)',
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      padding: 'clamp(40px,6vw,80px) clamp(24px,4vw,40px)',
+      /* Reserve room for the fixed navbar (+ test banner when active) so
+         the page chrome doesn't tuck under it. */
+      padding: 'calc(var(--app-top-offset) + clamp(40px,6vw,80px)) clamp(24px,4vw,40px) clamp(40px,6vw,80px)',
     }}>
       {children}
     </div>

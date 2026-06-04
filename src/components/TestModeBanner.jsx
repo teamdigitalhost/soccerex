@@ -19,6 +19,11 @@ export default function TestModeBanner() {
 
     if (!active) return undefined
 
+    /* Publish the banner height as a CSS variable so sticky page
+       headers can offset themselves under both the banner and the
+       fixed navbar (see --app-nav-height). Cleared on unmount. */
+    document.documentElement.style.setProperty('--app-banner-height', '36px')
+
     /* Inject (or update) the robots noindex meta while test mode is on. */
     const TAG_ID = 'test-mode-robots'
     let tag = document.getElementById(TAG_ID)
@@ -31,6 +36,7 @@ export default function TestModeBanner() {
     tag.setAttribute('content', 'noindex, nofollow')
 
     return () => {
+      document.documentElement.style.removeProperty('--app-banner-height')
       const existing = document.getElementById(TAG_ID)
       if (existing) existing.remove()
     }

@@ -10,6 +10,7 @@ import PixelDivider from '../components/PixelDivider'
 import { submitDealNetworkIntake } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { CONTACT, MIAMI_2026, PROFILE_ACCESS } from '../lib/routes'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 /* ═══ Deal Network — public concierge intake ════════════════════════════════
  * Soccerex curates introductions. This page is the front door for brands,
@@ -139,6 +140,8 @@ export default function DealNetwork() {
   const [submitResult, setSubmitResult] = useState(null)
   const isTest = isTestModeFromUrl()
 
+  useScrollAnimations()
+
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.title = 'Soccerex Deal Network — Concierge Introductions'
@@ -217,33 +220,33 @@ export default function DealNetwork() {
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={42} opacity={0.18} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={42} opacity={0.18} />
         <div className="absolute pointer-events-none" style={{ top: '12%', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.12) 0%, transparent 60%)' }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '1000px', padding: 'clamp(70px,8vw,130px) clamp(24px,5vw,80px) clamp(60px,7vw,100px)' }}>
           <div className="inner-hero-crest flex justify-center fade-up">
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
-              style={{ filter: 'drop-shadow(0 8px 40px rgba(255,107,53,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
+              style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
-          <p className="section-label text-gold mb-5 fade-up">SOCCEREX DEAL NETWORK</p>
+          <p className="section-label text-white mb-5 fade-up" style={{ opacity: 0.85 }}>SOCCEREX DEAL NETWORK</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
             Concierge introductions{' '}
-            <span style={{ color: 'var(--color-gold)' }}>for serious commercial work.</span>
+            <span style={{ color: 'var(--color-brand-accent)' }}>for serious commercial work.</span>
           </h1>
-          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/75 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.2rem)', maxWidth: '760px' }}>
             The Deal Network is a private layer on top of Soccerex profiles. Tell us what you are buying, selling, or looking for, and what would make a meeting worth your time. Our team reviews every brief before any introduction is made.
           </p>
 
           <div className="fade-up mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3"
                style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)', fontFamily: 'Inter, sans-serif' }}>
-            <span className="inline-flex items-center gap-2"><Lock size={14} style={{ color: 'var(--color-gold)' }} /> Private until Soccerex approves a fit</span>
-            <span className="inline-flex items-center gap-2"><Sparkles size={14} style={{ color: 'var(--color-gold)' }} /> Curated, not algorithmic</span>
-            <span className="inline-flex items-center gap-2"><Shield size={14} style={{ color: 'var(--color-gold)' }} /> No public marketplace</span>
+            <span className="inline-flex items-center gap-2"><Lock size={14} style={{ color: 'var(--color-brand-accent)' }} /> Private until Soccerex approves a fit</span>
+            <span className="inline-flex items-center gap-2"><Sparkles size={14} style={{ color: 'var(--color-brand-accent)' }} /> Curated, not algorithmic</span>
+            <span className="inline-flex items-center gap-2"><Shield size={14} style={{ color: 'var(--color-brand-accent)' }} /> No public marketplace</span>
           </div>
 
           <div className="fade-up mt-10">
             <a href="#intake" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'var(--color-gold)', color: '#09203e', padding: '15px 32px', fontSize: '0.78rem', textDecoration: 'none' }}>
+              style={{ background: 'var(--color-brand-accent)', color: '#ffffff', padding: '15px 32px', fontSize: '0.78rem', textDecoration: 'none' }}>
               Submit a brief <ArrowRight size={15} />
             </a>
           </div>
@@ -255,7 +258,7 @@ export default function DealNetwork() {
       {/* ═══ HOW IT WORKS ═════════════════════════════════════════════════ */}
       <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #efece6 100%)', padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px) clamp(40px,4vw,60px)' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
-          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up" style={{ fontSize: '0.7rem', color: 'var(--color-gold)', fontWeight: 600 }}>
+          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
             How the Deal Network works
           </p>
           <h2 className="font-heading font-bold text-center mb-12 fade-up" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.25rem)', color: '#09203e' }}>
@@ -272,7 +275,7 @@ export default function DealNetwork() {
                 background: '#fff', borderRadius: '14px', padding: '28px 24px',
                 border: '1px solid rgba(9,32,62,0.08)', boxShadow: '0 6px 24px rgba(9,32,62,0.06)',
               }}>
-                <p className="font-mono" style={{ fontSize: '0.7rem', color: 'var(--color-gold)', letterSpacing: '0.18em', fontWeight: 700, marginBottom: 14 }}>{step.n}</p>
+                <p className="font-mono" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', letterSpacing: '0.18em', fontWeight: 700, marginBottom: 14 }}>{step.n}</p>
                 <h3 className="font-heading font-bold" style={{ fontSize: '1.05rem', color: '#09203e', marginBottom: 8 }}>{step.t}</h3>
                 <p className="font-body" style={{ fontSize: '0.88rem', color: '#586778', lineHeight: 1.55 }}>{step.d}</p>
               </div>
@@ -285,7 +288,7 @@ export default function DealNetwork() {
       <section id="intake" style={{ background: 'linear-gradient(180deg, #efece6 0%, #e7e4dd 100%)', padding: 'clamp(40px,5vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,140px)' }}>
         <div style={{ maxWidth: '980px', margin: '0 auto' }}>
           <div className="text-center mb-12 fade-up">
-            <p className="font-mono uppercase tracking-[0.18em] mb-3" style={{ fontSize: '0.7rem', color: 'var(--color-gold)', fontWeight: 600 }}>
+            <p className="font-mono uppercase tracking-[0.18em] mb-3" style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
               Your brief
             </p>
             <h2 className="font-heading font-bold mb-3" style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: '#09203e' }}>
@@ -327,16 +330,16 @@ export default function DealNetwork() {
                         transition: 'all 0.22s',
                         boxShadow: active ? '0 14px 32px rgba(9,32,62,0.22)' : 'none',
                       }}
-                      onMouseEnter={(e) => { if (!active) e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+                      onMouseEnter={(e) => { if (!active) e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
                       onMouseLeave={(e) => { if (!active) e.currentTarget.style.borderColor = 'rgba(9,32,62,0.10)' }}
                     >
                       <div className="flex items-start gap-3">
                         <div style={{
                           width: 38, height: 38, borderRadius: 9,
-                          background: active ? 'var(--color-gold)' : 'rgba(191,177,112,0.14)',
+                          background: active ? 'var(--color-brand-accent)' : 'rgba(191,177,112,0.14)',
                           display: 'grid', placeItems: 'center', flexShrink: 0,
                         }}>
-                          <Icon size={18} color={active ? '#09203e' : 'var(--color-gold)'} strokeWidth={2.2} />
+                          <Icon size={18} color={active ? '#09203e' : 'var(--color-brand-accent)'} strokeWidth={2.2} />
                         </div>
                         <div>
                           <p className="font-heading font-bold" style={{ fontSize: '1rem', marginBottom: 3 }}>{opt.label}</p>
@@ -443,7 +446,7 @@ export default function DealNetwork() {
               </p>
               <button type="submit" disabled={!canSubmit} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] whitespace-nowrap"
                 style={{
-                  background: canSubmit ? 'var(--color-gold)' : 'rgba(9,32,62,0.18)',
+                  background: canSubmit ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)',
                   color: '#09203e',
                   padding: '17px 38px',
                   fontSize: '0.82rem',
@@ -453,7 +456,7 @@ export default function DealNetwork() {
                   opacity: submitting ? 0.7 : 1,
                 }}
                 onMouseEnter={(e) => { if (canSubmit) e.currentTarget.style.background = '#d4c78e' }}
-                onMouseLeave={(e) => { if (canSubmit) e.currentTarget.style.background = 'var(--color-gold)' }}
+                onMouseLeave={(e) => { if (canSubmit) e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               >
                 {submitting
                   ? <><Loader2 size={16} className="prog-spin" /> Sending</>
@@ -490,17 +493,17 @@ function ConfirmationView({ result, side }) {
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={28} opacity={0.13} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={28} opacity={0.13} />
         <div className="relative z-10 text-center" style={{ maxWidth: '760px', padding: 'clamp(80px,10vw,160px) clamp(24px,5vw,80px)' }}>
           <div style={{
             width: 78, height: 78, borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--color-gold), #d4c78e)',
+            background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)',
             display: 'grid', placeItems: 'center', margin: '0 auto 32px',
             boxShadow: '0 20px 60px rgba(191,177,112,0.45)',
           }}>
             <Check size={36} color="#09203e" strokeWidth={2.5} />
           </div>
-          <p className="section-label text-gold mb-4">Brief received</p>
+          <p className="section-label text-brand-accent mb-4">Brief received</p>
           <h1 className="font-heading font-bold text-white leading-tight mb-6" style={{ fontSize: 'clamp(1.9rem, 4vw, 3.1rem)' }}>
             Thank you. The Soccerex team takes it from here.
           </h1>
@@ -520,7 +523,7 @@ function ConfirmationView({ result, side }) {
 
           <div className="mt-12 flex flex-wrap justify-center gap-3">
             <Link to={withTestSearch(MIAMI_2026)} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'var(--color-gold)', color: '#09203e', padding: '15px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
+              style={{ background: 'var(--color-brand-accent)', color: '#fff', padding: '15px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
               Explore Miami 2026 <ChevronRight size={15} />
             </Link>
             <Link to={withTestSearch(CONTACT)} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
@@ -546,7 +549,7 @@ function SectionHeader({ number, title, subtitle }) {
   return (
     <div className="mb-6">
       <div className="flex items-baseline gap-3 mb-1">
-        <span className="font-mono" style={{ fontSize: '0.72rem', color: 'var(--color-gold)', letterSpacing: '0.2em', fontWeight: 700 }}>{number}</span>
+        <span className="font-mono" style={{ fontSize: '0.72rem', color: 'var(--color-brand-accent)', letterSpacing: '0.2em', fontWeight: 700 }}>{number}</span>
         <h3 className="font-heading font-bold" style={{ fontSize: '1.2rem', color: '#09203e' }}>{title}</h3>
       </div>
       {subtitle && <p className="font-body" style={{ fontSize: '0.86rem', color: '#7a8896', lineHeight: 1.5, marginLeft: 30 }}>{subtitle}</p>}
@@ -561,7 +564,7 @@ function Divider() {
 function Label({ children, required }) {
   return (
     <label className="font-mono uppercase tracking-[0.1em] block mb-2" style={{ fontSize: '0.68rem', color: '#09203e', fontWeight: 600 }}>
-      {children}{required && <span style={{ color: 'var(--color-gold)', marginLeft: 4 }}>*</span>}
+      {children}{required && <span style={{ color: 'var(--color-brand-accent)', marginLeft: 4 }}>*</span>}
     </label>
   )
 }
@@ -572,7 +575,7 @@ function FormField({ icon: Icon, label, placeholder, type = 'text', required, te
       <Label required={required}>{label}</Label>
       <div style={{ position: 'relative' }}>
         {Icon && !textarea && (
-          <Icon size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-gold)', pointerEvents: 'none' }} />
+          <Icon size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-brand-accent)', pointerEvents: 'none' }} />
         )}
         {textarea ? (
           <textarea
@@ -582,7 +585,7 @@ function FormField({ icon: Icon, label, placeholder, type = 'text', required, te
             rows={rows}
             required={required}
             style={textareaStyle}
-            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.background = '#fff' }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
             onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
           />
         ) : (
@@ -593,7 +596,7 @@ function FormField({ icon: Icon, label, placeholder, type = 'text', required, te
             placeholder={placeholder}
             required={required}
             style={Icon ? inputStyleIcon : inputStyle}
-            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.background = '#fff' }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
             onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
           />
         )}
@@ -608,13 +611,13 @@ function SelectField({ icon: Icon, label, value, onChange, options }) {
       <Label>{label}</Label>
       <div style={{ position: 'relative' }}>
         {Icon && (
-          <Icon size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-gold)', pointerEvents: 'none', zIndex: 1 }} />
+          <Icon size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-brand-accent)', pointerEvents: 'none', zIndex: 1 }} />
         )}
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
           style={Icon ? selectStyleIcon : selectStyle}
-          onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-gold)'; e.currentTarget.style.background = '#fff' }}
+          onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-accent)'; e.currentTarget.style.background = '#fff' }}
           onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)'; e.currentTarget.style.background = '#f8f7f4' }}
         >
           {options.map((opt) => {
@@ -653,7 +656,7 @@ function ChipGroup({ options, value, onChange, single = false }) {
               cursor: 'pointer',
               transition: 'all 0.18s',
             }}
-            onMouseEnter={(e) => { if (!active) e.currentTarget.style.borderColor = 'var(--color-gold)' }}
+            onMouseEnter={(e) => { if (!active) e.currentTarget.style.borderColor = 'var(--color-brand-accent)' }}
             onMouseLeave={(e) => { if (!active) e.currentTarget.style.borderColor = 'rgba(9,32,62,0.12)' }}
           >
             {opt}
@@ -671,7 +674,7 @@ function Toggle({ label, value, onChange }) {
         onClick={() => onChange(!value)}
         style={{
           width: 42, height: 24, borderRadius: 999, position: 'relative',
-          background: value ? 'var(--color-gold)' : 'rgba(9,32,62,0.18)',
+          background: value ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)',
           transition: 'background 0.2s',
           flexShrink: 0,
         }}

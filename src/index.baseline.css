@@ -5,8 +5,8 @@
   --color-navy: #09203e;
   --color-navy-light: #0e2a4f;
   --color-navy-dark: #061729;
-  --color-gold: #bfb170;
-  --color-gold-light: #d4c78e;
+  --color-brand-accent: #bfb170;
+  --color-brand-accent-light: #d4c78e;
   --color-blue-accent: #1a3fbf;
   --color-midnight: #050d1a;
   --color-charcoal: #0c1a2e;
@@ -331,7 +331,7 @@
   width: 0;
   height: 2px;
   margin: 0.8rem auto 1rem;
-  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-brand-accent), transparent);
   transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -397,19 +397,19 @@
 
 /* ─── CTA buttons ────────────────────────────────────────────────────────── */
 .hero-cta-gold {
-  background: var(--color-gold);
+  background: var(--color-brand-accent);
   color: #09203e;
 }
 .hero-cta-gold:hover {
-  background: var(--color-gold-light);
+  background: var(--color-brand-accent-light);
 }
 .hero-cta-outline {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 .hero-cta-outline:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold);
+  border-color: var(--color-brand-accent);
+  color: var(--color-brand-accent);
 }
 
 /* ─── Oversized outline "30" background elements ─────────────────────────── */

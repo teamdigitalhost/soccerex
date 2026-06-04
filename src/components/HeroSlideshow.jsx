@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import Crest from './Crest'
+import { CONTACT } from '../lib/routes'
+import { withTestSearch } from '../lib/testMode'
+
+/* Static hero copy. The dark slideshow used to rotate through six
+   taglines letter-by-letter; that's retired in favour of the static
+   title + subtitle the light version landed on. */
+const HERO_TITLE = 'The Longest-Running Football Business Platform'
+const HERO_SUBTITLE = 'Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership'
 
 // ─── Hero images — built from manifest, shuffled fresh each visit ────────────
 let ALL_IMAGES = []
@@ -22,9 +30,10 @@ function buildPlaylist(heritage, modern) {
   const result = []
   let hi = 0, mi = 0
 
-  // Alternate 1 heritage, 1 modern until heritage runs out
-  while (hi < h.length && mi < m.length) {
+  // Phase 1: interleave heritage with modern (1 heritage, 2 modern)
+  while (hi < h.length && mi < m.length - 1) {
     result.push(h[hi++])
+    result.push(m[mi++])
     result.push(m[mi++])
   }
   // Any remaining heritage
@@ -35,10 +44,15 @@ function buildPlaylist(heritage, modern) {
   return result
 }
 
-// ─── Static tagline (CEO-approved statement) ────────────────────────────────
-// Rotating taglines archived in HeroSlideshow.baseline.jsx for future reuse.
-const HERO_TITLE    = 'The Longest-Running Football Business Platform'
-const HERO_SUBTITLE = 'Fueling the Global Growth of the Game Through World-Class Events, Insight, and Partnership'
+// ─── Rotating taglines (each completes "30 Years...") ───────────────────────
+const TAGLINES = [
+  'of Connecting the Football Industry',
+  'of Building Relationships That Matter',
+  'of Shaping the Global Game',
+  'Where Deals Get Done',
+  'at the Center of Football Business',
+  'of Uniting Clubs, Brands & Investors',
+]
 
 // ─── Letter-by-letter component ─────────────────────────────────────────────
 function CascadingText({ text, visible, className = '' }) {
@@ -72,127 +86,53 @@ function ParticleField() {
     const ctx = canvas.getContext('2d')
     let animId
     let particles = []
-    let frame = 0
-    const BURST_DURATION = 150 // frames for intro burst (~2.5s, celebratory)
-    const BURST_COUNT = 520 // dense confetti coverage (up ~50% from 350)
-    const AMBIENT_CAP = 160 // active ambient particles (up from 100)
 
     const resize = () => {
-      const w = canvas.offsetWidth
-      const h = canvas.offsetHeight
-      if (w === 0 || h === 0) return /* parent not laid out yet — try again next frame */
-      canvas.width = w * 2
-      canvas.height = h * 2
-      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
       ctx.scale(2, 2)
     }
     resize()
     window.addEventListener('resize', resize)
-    /* The crest image grows the parent after it loads, so observe size
-       changes and re-fit the canvas — otherwise it stays at its initial
-       (possibly 0x0) dimensions and never renders. */
-    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : null
-    if (ro) ro.observe(canvas)
 
     const W = () => canvas.offsetWidth
     const H = () => canvas.offsetHeight
 
-    // 30% scale-up applied to spawn radius + particle sizes.
-    const SCALE = 1.3
-
-    // Spawn a particle radiating outward from around the "30"
-    function spawn(isBurst = false) {
+    // Emit particles from an elliptical ring around center (where 30 lives)
+    function spawn() {
       const cx = W() / 2
       const cy = H() / 2
+      // Random angle
       const angle = Math.random() * Math.PI * 2
-      // Start near the digits — radius scaled up so the burst pattern is
-      // visibly wider around the badge.
-      const rx = (60 + Math.random() * 50) * SCALE
-      const ry = (40 + Math.random() * 30) * SCALE
+      // Start on an ellipse around the 30 (roughly matching digit bounds)
+      const rx = 80 + Math.random() * 40
+      const ry = 50 + Math.random() * 25
       const x = cx + Math.cos(angle) * rx
       const y = cy + Math.sin(angle) * ry
-
-      if (isBurst) {
-        // Burst particles: fast enough to reach screen edges, with spin
-        const maxDist = Math.max(W(), H()) / 2
-        const speed = (maxDist / 80) * (0.6 + Math.random() * 0.8) // calibrated to reach edges over ~80 frames
-        // Add tangential spin component (perpendicular to radial direction)
-        const spinStrength = 0.3 + Math.random() * 0.5
-        const spinDir = Math.random() > 0.5 ? 1 : -1
-        const radialVx = Math.cos(angle) * speed
-        const radialVy = Math.sin(angle) * speed
-        // Tangential = perpendicular to radial
-        const tangentVx = -Math.sin(angle) * speed * spinStrength * spinDir
-        const tangentVy = Math.cos(angle) * speed * spinStrength * spinDir
-        const life = 90 + Math.random() * 120
-        // Confetti colors: gold tones only — three shades for depth without
-        // breaking the gold story (deep, brand gold, warm highlight).
-        const colorRoll = Math.random()
-        let color
-        if (colorRoll < 0.5) color = 'gold'           // brand gold
-        else if (colorRoll < 0.8) color = 'gold-warm' // warm highlight
-        else color = 'gold-deep'                       // deeper amber
-        return {
-          x, y,
-          vx: radialVx + tangentVx,
-          vy: radialVy + tangentVy,
-          life,
-          maxLife: life,
-          size: (1 + Math.random() * 3.5) * SCALE,
-          color,
-          burst: true,
-        }
-      }
-      // Ambient particles: slow drift, but sized + coloured like burst
-      // particles so they read with the same presence (just at a calmer
-      // pace and direction).
-      const speed = 0.2 + Math.random() * 0.6
-      const colorRoll = Math.random()
-      let color
-      if (colorRoll < 0.5) color = 'gold'
-      else if (colorRoll < 0.8) color = 'gold-warm'
-      else color = 'gold-deep'
-      return {
-        x, y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        life: 150 + Math.random() * 250,
-        maxLife: 150 + Math.random() * 250,
-        size: (1 + Math.random() * 3.5) * SCALE, /* matches burst range */
-        color,
-        gold: true,
-        burst: false,
-      }
+      // Radiate outward from center
+      const speed = 0.15 + Math.random() * 0.35
+      const vx = Math.cos(angle) * speed
+      const vy = Math.sin(angle) * speed
+      const life = 120 + Math.random() * 180 // frames
+      const size = 0.5 + Math.random() * 1.5
+      // Gold or white-gold color
+      const gold = Math.random() > 0.3
+      return { x, y, vx, vy, life, maxLife: life, size, gold }
     }
 
     function tick() {
       ctx.clearRect(0, 0, W(), H())
-      frame++
 
-      // Intro burst: spawn many fast particles in the first ~1.5s
-      if (frame <= BURST_DURATION) {
-        const spawnRate = Math.ceil(BURST_COUNT / BURST_DURATION)
-        for (let s = 0; s < spawnRate; s++) {
-          particles.push(spawn(true))
-        }
-      }
-
-      // Ambient: continuous gentle emission
-      if (particles.length < AMBIENT_CAP) {
-        particles.push(spawn(false))
-        if (Math.random() > 0.4) particles.push(spawn(false))
-        if (Math.random() > 0.6) particles.push(spawn(false))
+      // Spawn 1-2 particles per frame
+      if (particles.length < 60) {
+        particles.push(spawn())
+        if (Math.random() > 0.5) particles.push(spawn())
       }
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i]
         p.x += p.vx
         p.y += p.vy
-        // Gentle deceleration for burst particles (graceful spiral outward)
-        if (p.burst) {
-          p.vx *= 0.992
-          p.vy *= 0.992
-        }
         p.life--
 
         if (p.life <= 0) {
@@ -200,23 +140,21 @@ function ParticleField() {
           continue
         }
 
+        // Fade in quickly, fade out slowly
         const progress = 1 - p.life / p.maxLife
         let alpha
-        if (progress < 0.08) {
-          alpha = progress / 0.08
+        if (progress < 0.1) {
+          alpha = progress / 0.1 // fade in
         } else {
-          alpha = 1 - (progress - 0.08) / 0.92
+          alpha = 1 - (progress - 0.1) / 0.9 // fade out
         }
-        // Run at full opacity for burst and ambient. The multiply blend
-        // keeps the gold warm rather than garish, and the larger sizes +
-        // higher density carry the effect further across the hero.
-        alpha *= p.burst ? 1.0 : 1.0
+        alpha *= 0.4 // keep subtle
 
-        /* Same three ember-gold tones for burst AND ambient — only
-           speed and lifetime differ between the two. */
-        if (p.color === 'gold')           ctx.fillStyle = `rgba(160, 110,  35, ${alpha})` // brand gold (deeper)
-        else if (p.color === 'gold-warm') ctx.fillStyle = `rgba(200, 155,  60, ${alpha})` // warm highlight
-        else                              ctx.fillStyle = `rgba(100,  65,  20, ${alpha})` // amber
+        if (p.gold) {
+          ctx.fillStyle = `rgba(197, 165, 114, ${alpha})`
+        } else {
+          ctx.fillStyle = `rgba(220, 210, 180, ${alpha})`
+        }
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
@@ -230,19 +168,20 @@ function ParticleField() {
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', resize)
-      if (ro) ro.disconnect()
     }
   }, [])
 
   return <canvas ref={canvasRef} className="hero-particles" />
 }
 
-// ─── 3D SVG "30" with Roboto Slab ───────────────────────────────────────────
+// ─── 3D SVG "30" with sweeping light — 3 and 0 breathe independently ────────
 function Hero30SVG() {
   return (
     <div className="hero-30-container" aria-label="30">
+      {/* Shared gradient defs */}
       <svg width="0" height="0" style={{ position: 'absolute' }}>
         <defs>
+          {/* Diagonal sweep for "3" — top-left to bottom-right */}
           <linearGradient id="sweepGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#8a7a4a" />
             <stop offset="35%" stopColor="#c5a572" />
@@ -252,6 +191,7 @@ function Hero30SVG() {
             <animateTransform attributeName="gradientTransform" type="translate"
               values="-1 -1; 1 1; 1 1" keyTimes="0; 0.44; 1" dur="4.5s" repeatCount="indefinite" />
           </linearGradient>
+          {/* Diagonal sweep for "0" — same direction, 0.5s stagger */}
           <linearGradient id="sweepGrad0" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#8a7a4a" />
             <stop offset="35%" stopColor="#c5a572" />
@@ -269,16 +209,19 @@ function Hero30SVG() {
       </svg>
 
       <div className="hero-30-digits">
+        {/* "3" — breathes on its own cycle */}
         <div className="hero-digit hero-digit-3">
-          <svg viewBox="5 0 90 160" className="hero-digit-svg">
+          <svg viewBox="10 0 80 160" className="hero-digit-svg">
             <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
               className="hero-30-shadow" fill="url(#shadowGrad)" dx="3" dy="3">3</text>
             <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
               className="hero-30-text" fill="url(#sweepGrad3)">3</text>
           </svg>
         </div>
+
+        {/* "0" — breathes on a different cycle */}
         <div className="hero-digit hero-digit-0">
-          <svg viewBox="0 0 95 160" className="hero-digit-svg">
+          <svg viewBox="5 0 90 160" className="hero-digit-svg">
             <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
               className="hero-30-shadow" fill="url(#shadowGrad)" dx="3" dy="3">0</text>
             <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
@@ -291,23 +234,20 @@ function Hero30SVG() {
 }
 
 // ─── Oversized animated outline "30" background elements ────────────────────
-/* Three drifting outline "30"s sit behind the crest. On the light hero they
-   read as ambient brand colour. Two blue layers (Soccerex navy → mid-blue)
-   bracket one ember-orange layer in the middle — the orange becomes the
-   visual hook, the blues anchor the brand. */
 function OutlineThirty() {
+  // SVG path for "30" — oversized, thin stroke, section-spanning
+  // Using a simplified geometric path for the numerals
   return (
     <div className="hero-outline-30s" aria-hidden="true">
-      {/* Layer 1: deep brand navy, drifting slowly. Higher opacity so it
-          actually reads against the cream wash. */}
+      {/* Layer 1: Shifted left, slower animation */}
       <svg className="hero-outline-svg hero-outline-1" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="outline1Grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"  stopColor="#09203e" stopOpacity="0" />
-            <stop offset="40%" stopColor="#09203e" stopOpacity="0.32" />
-            <stop offset="50%" stopColor="#1a3fbf" stopOpacity="0.46" />
-            <stop offset="60%" stopColor="#09203e" stopOpacity="0.32" />
-            <stop offset="100%" stopColor="#09203e" stopOpacity="0" />
+            <stop offset="0%" stopColor="#c5a572" stopOpacity="0" />
+            <stop offset="40%" stopColor="#c5a572" stopOpacity="0.12" />
+            <stop offset="50%" stopColor="#f0dca8" stopOpacity="0.2" />
+            <stop offset="60%" stopColor="#c5a572" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#c5a572" stopOpacity="0" />
             <animateTransform attributeName="gradientTransform" type="translate" from="-1.5 0" to="1.5 0" dur="6s" repeatCount="indefinite" />
           </linearGradient>
         </defs>
@@ -318,36 +258,34 @@ function OutlineThirty() {
         </text>
       </svg>
 
-      {/* Layer 2: Soccerex ember orange — the warm accent that drifts the
-          other direction. */}
+      {/* Layer 2: Shifted right, different timing */}
       <svg className="hero-outline-svg hero-outline-2" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="outline2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%"  stopColor="#ff6b35" stopOpacity="0" />
-            <stop offset="35%" stopColor="#ff6b35" stopOpacity="0.30" />
-            <stop offset="50%" stopColor="#ff8a5b" stopOpacity="0.46" />
-            <stop offset="65%" stopColor="#ff6b35" stopOpacity="0.30" />
-            <stop offset="100%" stopColor="#ff6b35" stopOpacity="0" />
+            <stop offset="0%" stopColor="#1a3fbf" stopOpacity="0" />
+            <stop offset="35%" stopColor="#1a3fbf" stopOpacity="0.08" />
+            <stop offset="50%" stopColor="#4a7aef" stopOpacity="0.15" />
+            <stop offset="65%" stopColor="#1a3fbf" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#1a3fbf" stopOpacity="0" />
             <animateTransform attributeName="gradientTransform" type="translate" from="1.5 0" to="-1.5 0" dur="8s" repeatCount="indefinite" />
           </linearGradient>
         </defs>
         <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central"
           className="hero-outline-numeral"
-          stroke="url(#outline2Grad)" fill="none" strokeWidth="1.0">
+          stroke="url(#outline2Grad)" fill="none" strokeWidth="0.8">
           30
         </text>
       </svg>
 
-      {/* Layer 3: lighter mid-blue, third phase. Slightly heavier stroke so
-          its slow drift reads as the calm background layer. */}
+      {/* Layer 3: Centered, very subtle, different phase */}
       <svg className="hero-outline-svg hero-outline-3" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="outline3Grad" x1="100%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%"  stopColor="#1a3fbf" stopOpacity="0" />
-            <stop offset="40%" stopColor="#1a3fbf" stopOpacity="0.22" />
-            <stop offset="50%" stopColor="#4a7aef" stopOpacity="0.34" />
-            <stop offset="60%" stopColor="#1a3fbf" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#1a3fbf" stopOpacity="0" />
+            <stop offset="0%" stopColor="#c5a572" stopOpacity="0" />
+            <stop offset="40%" stopColor="#c5a572" stopOpacity="0.06" />
+            <stop offset="50%" stopColor="#d4c78e" stopOpacity="0.1" />
+            <stop offset="60%" stopColor="#c5a572" stopOpacity="0.06" />
+            <stop offset="100%" stopColor="#c5a572" stopOpacity="0" />
             <animateTransform attributeName="gradientTransform" type="translate" from="-1 -0.5" to="1 0.5" dur="10s" repeatCount="indefinite" />
           </linearGradient>
         </defs>
@@ -378,8 +316,17 @@ export default function HeroSlideshow() {
         // Build a fresh shuffled playlist: heritage every 3rd, modern randomized
         ALL_IMAGES = buildPlaylist(data.heritage || [], data.modern || [])
         setImagesLoaded(true)
-        // Only preload the first 3 images; the rest load via rolling window
-        ALL_IMAGES.slice(0, 3).forEach((src) => { new Image().src = src })
+        // Preload first 5 immediately
+        ALL_IMAGES.slice(0, 5).forEach((src) => { new Image().src = src })
+        // Lazy preload the rest in batches
+        let i = 5
+        const preloadBatch = () => {
+          const batch = ALL_IMAGES.slice(i, i + 10)
+          batch.forEach((src) => { new Image().src = src })
+          i += 10
+          if (i < ALL_IMAGES.length) setTimeout(preloadBatch, 500)
+        }
+        setTimeout(preloadBatch, 2000)
       })
     const t = setTimeout(() => setTextReady(true), 500)
     return () => clearTimeout(t)
@@ -393,11 +340,6 @@ export default function HeroSlideshow() {
       setTimeout(() => {
         setCurrentImage((prev) => {
           const next = (prev + 1) % ALL_IMAGES.length
-          // Rolling preload: preload the 2 images ahead
-          const ahead1 = (next + 1) % ALL_IMAGES.length
-          const ahead2 = (next + 2) % ALL_IMAGES.length
-          new Image().src = ALL_IMAGES[ahead1]
-          new Image().src = ALL_IMAGES[ahead2]
           // At loop boundary, trigger gold flash
           if (next === 0) {
             setTransitioning(true)
@@ -406,22 +348,16 @@ export default function HeroSlideshow() {
           return next
         })
         setShowImage(true) // fade in new image
-      }, 800) // wait for fade-out
-    }, 4000) // 4s per image — fast cycling through 304 images
+      }, 600) // wait for fade-out
+    }, 2500) // 2.5s per image — fast cycling through 304 images
 
     return () => clearInterval(interval)
   }, [imagesLoaded])
 
-  // (Rotating tagline logic retired. Kept baseline copy in HeroSlideshow.baseline.jsx.)
+  /* Rotating tagline cycle retired — static title + subtitle now. */
 
   return (
-    /* data-theme="light" flips the slideshow to a cream/white treatment.
-       To revert to the original dark cinematic look, change to "dark" — the
-       full CSS for both themes lives in index.css and animations are
-       identical between modes. */
-    <section ref={sectionRef} data-theme="light"
-      className="hero-slideshow relative overflow-hidden flex items-center justify-center"
-      style={{ minHeight: '100dvh' }}>
+    <section ref={sectionRef} className="hero-slideshow relative overflow-hidden flex items-center justify-center" style={{ minHeight: '100dvh' }}>
       {/* Image layer — CSS transition driven */}
       <div
         className={`hero-image-layer ${showImage ? 'hero-img-visible' : 'hero-img-hidden'}`}
@@ -435,52 +371,68 @@ export default function HeroSlideshow() {
       {/* Gold/blue transition flash at loop boundary */}
       <div className={`hero-loop-transition ${transitioning ? 'hero-loop-active' : ''}`} aria-hidden="true" />
 
-      {/* Gradient overlay — light/dark variant driven by [data-theme] in CSS */}
+      {/* Dark gradient overlay */}
       <div className="hero-overlay" aria-hidden="true" />
 
-      {/* Text content — crest-led anniversary edition lockup */}
+      {/* Text content */}
       <div className={`hero-text relative z-10 text-center ${textReady ? 'hero-text-visible' : ''}`}
-        style={{ maxWidth: '900px', padding: 'clamp(40px,6vw,90px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
+        style={{ maxWidth: '900px', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
 
-        {/* Anniversary crest. In light mode we use the black crest so it
-            reads against the cream-washed photos.
+        {/* Eyebrow */}
+        <p
+          className="hero-eyebrow section-label mb-2"
+          style={{
+            /* Soccerex brand navy. Cream halo lifts it off whatever
+               photo + white-wash is showing beneath. */
+            color: '#09203e',
+            textShadow: '0 1px 0 rgba(255,248,244,0.7), 0 1px 12px rgba(255,248,244,0.55)',
+          }}
+        >
+          SOCCEREX &middot; EST. 1996
+        </p>
 
-            Layout: .hero-crest-wrap handles the entrance fade/scale.
-            .hero-crest-float is an inner element that runs a continuous
-            slow float so the float never fights the entrance transition.
-            .hero-crest-shine sits on top of the badge image with a mask
-            shaped to the badge silhouette + a sweeping gradient
-            background that's blended onto the black SVG, producing a
-            "polished metal" highlight that drifts across the crest. */}
+        {/* Anniversary badge — new square blue design, replaces the
+            old large "30 / YEARS" lockup. Square viewBox (100×100)
+            so we render at 1:1; .hero-crest-wrap CSS handles the
+            stacked white drop-shadow halo for the outer glow. */}
         <div className="hero-30-with-particles">
           <ParticleField />
-          <div className="hero-crest-wrap">
-            <div className="hero-crest-float">
-              <Crest variant="main" color="black" size={280} decorative />
-              <div className="hero-crest-shine" aria-hidden="true" />
-            </div>
+          <div className="hero-crest-wrap hero-crest-wrap--square">
+            <img
+              src="/brand/crests/crest-main-blue.svg"
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+            />
           </div>
         </div>
 
         {/* Gold divider */}
         <div className="hero-divider" />
 
-        {/* Title + subtitle. Title eased down a notch; subtitle pulled up
-            so it reads as a proper deck/subtitle pair, not headline + fine
-            print. Both sit over the cream dissolve below. */}
+        {/* Title — replaces the rotating tagline. Same large clamp
+            sizing as the light version. */}
         <p
           className="hero-static-tagline font-heading leading-tight"
           style={{
-            fontSize: 'clamp(1.35rem, 2.8vw, 2.3rem)',
+            fontSize: 'clamp(1.95rem, 5vw, 2.6rem)',
             maxWidth: '900px',
             margin: '1.5rem auto 0.85rem',
             fontWeight: 700,
-            lineHeight: 1.15,
-            letterSpacing: '-0.005em',
+            lineHeight: 1.12,
+            letterSpacing: '-0.01em',
+            /* Sits over the cream-wash bottom of the overlay — dark
+               navy reads cleanly. Soft cream halo lifts it off any
+               photo detail that's still showing through. */
+            color: '#0D1B2A',
+            textShadow: '0 1px 0 rgba(255,248,244,0.7), 0 2px 18px rgba(255,248,244,0.55)',
           }}
         >
           {HERO_TITLE}
         </p>
+
+        {/* Subtitle — replaces the old "World's Premier…" eyebrow-
+            style subline. */}
         <p
           className="hero-static-subtitle font-body leading-relaxed"
           style={{
@@ -489,6 +441,8 @@ export default function HeroSlideshow() {
             margin: '0 auto 2.5rem',
             fontWeight: 600,
             lineHeight: 1.4,
+            color: '#1d2a3d',
+            textShadow: '0 1px 0 rgba(255,248,244,0.65), 0 1px 14px rgba(255,248,244,0.5)',
           }}
         >
           {HERO_SUBTITLE}
@@ -496,15 +450,17 @@ export default function HeroSlideshow() {
 
         {/* CTAs */}
         <div className="hero-ctas flex flex-wrap items-center justify-center gap-4">
-          <a href="/events" style={{ textDecoration: 'none' }}
+          <button onClick={() => document.querySelector('#events')?.scrollIntoView({ behavior: 'smooth' })}
             className="hero-cta-gold inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer border-none">
             Explore Events <ArrowRight size={16} />
-          </a>
-          <a href="/contact"
+          </button>
+          <Link
+            to={withTestSearch(CONTACT)}
             className="hero-cta-outline inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-8 py-4 transition-all duration-300 cursor-pointer"
-            style={{ textDecoration: 'none' }}>
-            Join Soccerex
-          </a>
+            style={{ textDecoration: 'none', color: '#09203e', borderColor: '#09203e' }}
+          >
+            Contact Soccerex
+          </Link>
         </div>
       </div>
     </section>

@@ -45,16 +45,16 @@ export default function Gallery() {
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(191,177,112,0.04) 0%, transparent 60%)' }} />
         <Link to={HOME} className="gallery-back-link" style={{
           position: 'absolute', top: 'clamp(80px,10vw,120px)', left: 'clamp(24px,5vw,80px)',
-          color: 'var(--color-gold)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px',
+          color: 'var(--color-brand-accent)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px',
           fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase',
         }}>
           <ArrowLeft size={16} /> Back to Home
         </Link>
         <div className="inner-hero-crest flex justify-center" style={{ position: 'relative', zIndex: 1 }}>
           <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
-            style={{ filter: 'drop-shadow(0 8px 40px rgba(255,107,53,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
+            style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
         </div>
-        <p className="section-label text-gold mb-4" style={{ position: 'relative', zIndex: 1 }}>
+        <p className="section-label text-brand-accent mb-4" style={{ position: 'relative', zIndex: 1 }}>
           THE SOCCEREX GALLERY
         </p>
         <h1 className="font-heading font-bold text-white" style={{

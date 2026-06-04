@@ -199,7 +199,7 @@ function StepIndicator({ current, total, theme }) {
         <span key={i} style={{
           flex: '1 1 0', height: 3,
           background: i <= current
-            ? 'var(--event-primary, #ff6b35)'
+            ? 'var(--event-primary, #E91E63)'
             : theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(13,27,42,0.10)',
         }} />
       ))}

@@ -121,6 +121,10 @@ export async function getArticlesByPillar(slug, opts = {}) {
   return unwrap(await request(`/articles?pillar=${encodeURIComponent(slug)}`, opts))
 }
 
+export async function getArticle(slug, opts = {}) {
+  return unwrap(await request(`/articles/${encodeURIComponent(slug)}`, opts))
+}
+
 /** platform: 'linkedin' | 'instagram' | 'x' */
 export async function getSocialPostsByPillar(slug, platform, opts = {}) {
   const qs = new URLSearchParams({ pillar: slug })

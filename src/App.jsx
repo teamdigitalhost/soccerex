@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ThemePicker from './components/ThemePicker'
@@ -11,6 +11,24 @@ import {
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
   ROUTE_PATTERNS,
 } from './lib/routes'
+
+/* Map pathname to a theme class. Applied at app root so the navbar
+   and footer (which sit outside the page component) pick up the
+   event's --color-brand-accent override. Non-event routes get no class and
+   fall through to the base brand color defined in :root. */
+function themeClassFor(pathname) {
+  if (!pathname) return ''
+  if (pathname.startsWith(MIAMI_2026)) return 'theme-miami'
+  if (pathname.startsWith(EUROPE_2026)) return 'theme-europe'
+  if (pathname.startsWith(RIYADH_2027)) return 'theme-riyadh'
+  return ''
+}
+
+function AppShell({ children }) {
+  const location = useLocation()
+  const themeClass = themeClassFor(location.pathname)
+  return <div className={themeClass}>{children}</div>
+}
 
 // Code-split every page so only the active route's JS is loaded
 const Home = lazy(() => import('./pages/Home'))
@@ -47,6 +65,7 @@ function App() {
   return (
     <BrowserRouter>
       <TestModeBanner />
+      <AppShell>
       <Navbar />
       <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050d1a' }} />}>
         <Routes>
@@ -83,6 +102,7 @@ function App() {
         </Routes>
       </Suspense>
       <Footer />
+      </AppShell>
       <ThemePicker />
     </BrowserRouter>
   )

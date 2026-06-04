@@ -97,13 +97,13 @@ export default function Europe2026() {
             </span>
           </div>
 
-          {/* Europe-specific anniversary crest as the hero lockup */}
-          <div className="inner-hero-crest inner-hero-crest--xl flex justify-center fade-up">
+          {/* Main Soccerex 30-year badge as the hero lockup */}
+          <div className="inner-hero-crest inner-hero-crest--xl flex justify-center">
             <img
-              src="/brand/crests/crest-europe-white.svg"
-              alt="Soccerex Europe, Est. 1996, 30 Years"
+              src="/brand/crests/crest-main-white.svg"
+              alt="Soccerex, Est. 1996, 30 Years"
               style={{
-                filter: 'drop-shadow(0 10px 50px rgba(200, 48, 44, 0.5)) drop-shadow(0 0 110px rgba(200, 48, 44, 0.2))',
+                filter: 'drop-shadow(0 0 18px rgba(255,255,255,0.7)) drop-shadow(0 0 60px rgba(255,255,255,0.45)) drop-shadow(0 12px 40px rgba(0,0,0,0.5))',
               }}
             />
           </div>

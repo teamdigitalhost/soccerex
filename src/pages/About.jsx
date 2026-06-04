@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { CONTACT, EUROPE_2026 } from '../lib/routes'
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ─── Timeline data ──────────────────────────────────────────────────────────
 const TIMELINE = [
@@ -85,8 +86,8 @@ function FlipCard({ icon: Icon, title, desc, img, variant = 'centered' }) {
             width: variant === 'centered' ? '64px' : '60px',
             height: variant === 'centered' ? '64px' : '60px',
             borderRadius: '14px',
-            background: 'var(--color-gold)',
-            boxShadow: '0 8px 20px rgba(255,107,53,0.25)',
+            background: 'var(--color-brand-accent)',
+            boxShadow: '0 8px 20px rgba(233, 30, 99,0.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '18px',
           }}>
@@ -128,7 +129,7 @@ function FlipCard({ icon: Icon, title, desc, img, variant = 'centered' }) {
             <span style={{
               display: 'inline-block',
               padding: '4px 10px',
-              background: 'var(--color-gold)',
+              background: 'var(--color-brand-accent)',
               color: '#09203e',
               borderRadius: '100px',
               fontSize: '0.62rem',
@@ -184,17 +185,6 @@ function AnimatedCounter({ target, suffix = '' }) {
   return <span ref={ref}>0</span>
 }
 
-// ─── Scroll animations ─────────────────────────────────────────────────────
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal').forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-}
 
 export default function About() {
   useScrollAnimations()
@@ -212,7 +202,7 @@ export default function About() {
           filter: 'saturate(0.35) brightness(0.32)',
         }} />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(5,13,26,0.4) 0%, rgba(9,32,62,0.88) 100%)' }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={35} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={35} opacity={0.15} />
         {/* Radial gold glow */}
         <div className="absolute pointer-events-none" style={{ top: '10%', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
 
@@ -223,16 +213,16 @@ export default function About() {
               alt=""
               aria-hidden="true"
               style={{
-                filter: 'drop-shadow(0 8px 40px rgba(255, 107, 53, 0.35)) drop-shadow(0 0 90px rgba(255, 183, 3, 0.18))',
+                filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99, 0.35)) drop-shadow(0 0 90px rgba(255, 183, 3, 0.18))',
               }}
             />
           </div>
-          <p className="section-label text-gold mb-6 fade-up">ABOUT SOCCEREX</p>
+          <p className="section-label text-brand-accent mb-6 fade-up">ABOUT SOCCEREX</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 5.4rem)' }}>
             The Global Leader in the{' '}
-            <span style={{ color: 'var(--color-gold)' }}>Business of Football</span>
+            <span style={{ color: 'var(--color-brand-accent)' }}>Business of Football</span>
           </h1>
-          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/80 leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: 'clamp(1.05rem, 1.6vw, 1.35rem)', maxWidth: '820px', lineHeight: 1.55 }}>
             Since 1996, Soccerex has been the neutral ground where the global football industry comes together to connect, deal, and grow the game. Thirty years, three continents, one platform.
           </p>
@@ -256,7 +246,7 @@ export default function About() {
             <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>OUR MISSION</p>
             <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.6rem)', color: '#09203e' }}>
               To Fuel The Global Growth of the{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Football Community</span>{' '}
+              <span style={{ color: 'var(--color-brand-accent)' }}>Football Community</span>{' '}
               Through World-Class Events, Insights, and Partnerships.
             </h2>
             <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
@@ -264,7 +254,7 @@ export default function About() {
               Celebrating 30 years as the longest-running dedicated football business platform in the world, Soccerex has earned its position as the neutral ground where the global football community comes together. On our 30th anniversary, we continue to evolve. From an events company to a year-round platform. From a place where relationships begin to a system that ensures results.
             </p>
           </div>
-          <p className="font-mono uppercase tracking-[0.15em] text-center mb-6 fade-up" style={{ fontSize: '0.72rem', color: 'var(--color-gold)', fontWeight: 600 }}>
+          <p className="font-mono uppercase tracking-[0.15em] text-center mb-6 fade-up" style={{ fontSize: '0.72rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
             Core Values
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
@@ -301,7 +291,7 @@ export default function About() {
         <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>DISCOVER SOCCEREX</p>
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
-            We Are Football, <span style={{ color: 'var(--color-gold)' }}>Connected.</span>
+            We Are Football, <span style={{ color: 'var(--color-brand-accent)' }}>Connected.</span>
           </h2>
           <div className="fade-up mb-10" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, #09203e, rgba(9,32,62,0.3))' }} />
 
@@ -332,7 +322,7 @@ export default function About() {
 
       {/* ═══ STATS BAR ═════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden flex items-center" style={{ background: '#09203e', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8 w-full" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {[
             { num: '75k+', display: '75k+', label: 'Attendees', sub: 'Industry professionals across six continents' },
@@ -341,7 +331,7 @@ export default function About() {
             { num: '5k+', display: '5k+', label: 'Brands', sub: 'Sport, media, and technology worldwide' },
           ].map((s) => (
             <div key={s.label} className="text-center scale-up">
-              <p className="font-heading font-bold text-gold" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1 }}>
+              <p className="font-heading font-bold text-brand-accent" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1 }}>
                 <AnimatedCounter target={s.display || s.num} />
               </p>
               <p className="font-heading font-bold text-white text-sm uppercase tracking-widest mt-3">{s.label}</p>
@@ -365,7 +355,7 @@ export default function About() {
             <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>WHO WE REACH</p>
             <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', color: '#09203e' }}>
               Audience{' '}
-              <span style={{ color: 'var(--color-gold)' }}>Reach</span>
+              <span style={{ color: 'var(--color-brand-accent)' }}>Reach</span>
             </h2>
             <div className="fade-up mx-auto" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           </div>
@@ -401,7 +391,7 @@ export default function About() {
         <div className="relative z-10" style={{ maxWidth: '900px', margin: '0 auto' }}>
           <p className="section-label mb-4 fade-up text-center" style={{ color: '#09203e', fontWeight: 600 }}>OUR HISTORY</p>
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
-            30 Years of <span style={{ color: 'var(--color-gold)' }}>Milestones</span>
+            30 Years of <span style={{ color: 'var(--color-brand-accent)' }}>Milestones</span>
           </h2>
           <div className="fade-up mx-auto mb-12" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
 
@@ -418,13 +408,13 @@ export default function About() {
                 <div className="absolute" style={{
                   left: 'clamp(-6px, -0.8vw, -2px)', top: '6px', width: '14px', height: '14px',
                   borderRadius: '50%',
-                  background: i === TIMELINE.length - 1 ? 'var(--color-gold)' : '#09203e',
+                  background: i === TIMELINE.length - 1 ? 'var(--color-brand-accent)' : '#09203e',
                   border: '3px solid #f4f3f0',
                   boxShadow: i === TIMELINE.length - 1
                     ? '0 0 0 4px rgba(191,177,112,0.2), 0 0 20px rgba(191,177,112,0.4)'
                     : '0 0 0 4px rgba(9,32,62,0.08)',
                 }} />
-                <span className="font-mono text-xs uppercase tracking-widest" style={{ color: 'var(--color-gold)', fontWeight: 700 }}>{item.year}</span>
+                <span className="font-mono text-xs uppercase tracking-widest" style={{ color: 'var(--color-brand-accent)', fontWeight: 700 }}>{item.year}</span>
                 <h3 className="font-heading font-semibold mt-1 mb-2" style={{ fontSize: '1.15rem', color: '#09203e' }}>{item.title}</h3>
                 <p className="font-body leading-relaxed" style={{ fontSize: '0.92rem', color: '#666' }}>{item.desc}</p>
               </div>
@@ -444,14 +434,14 @@ export default function About() {
           filter: 'saturate(0.3) brightness(0.25)',
         }} />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(9,32,62,0.9) 0%, rgba(5,13,26,0.85) 100%)' }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.1} />
 
         <div className="relative z-10 text-center" style={{ maxWidth: '850px', margin: '0 auto' }}>
           <blockquote className="fade-up">
             <p className="font-heading font-bold text-white leading-snug mb-6 text-glow" style={{ fontSize: 'clamp(1.6rem, 3.2vw, 2.5rem)' }}>
               &ldquo;Take care of the game and the business takes care of itself.&rdquo;
             </p>
-            <div style={{ width: '60px', height: '2px', background: 'var(--color-gold)', margin: '0 auto 2rem' }} />
+            <div style={{ width: '60px', height: '2px', background: 'var(--color-brand-accent)', margin: '0 auto 2rem' }} />
           </blockquote>
           <p className="font-body text-white/70 leading-relaxed fade-up mx-auto mb-4" style={{ fontSize: '1.05rem', maxWidth: '720px' }}>
             It is this ethos, implemented for the first time in 1996 and carried since, that has ensured Soccerex kept its position as the number one global football business event.
@@ -474,7 +464,7 @@ export default function About() {
         <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <p className="section-label mb-4 fade-up text-center" style={{ color: '#09203e', fontWeight: 600 }}>PROVEN RETURN ON INVESTMENT</p>
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
-            Deals That Got Done at <span style={{ color: 'var(--color-gold)' }}>Soccerex</span>
+            Deals That Got Done at <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex</span>
           </h2>
           <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           <p className="font-body leading-relaxed mb-14 fade-up text-center mx-auto" style={{ color: '#666', maxWidth: '650px', fontSize: '1.02rem' }}>
@@ -507,22 +497,22 @@ export default function About() {
 
       {/* ═══ CTA ═══════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #09203e 0%, #0e2a4f 50%, #061729 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)', textAlign: 'center' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.1} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.08) 0%, transparent 60%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '700px', margin: '0 auto' }}>
           <h2 className="font-heading font-bold text-white mb-4 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            Be Part of What's <span style={{ color: 'var(--color-gold)' }}>Next</span>
+            Be Part of What's <span style={{ color: 'var(--color-brand-accent)' }}>Next</span>
           </h2>
-          <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/65 mb-10 fade-up leading-relaxed" style={{ fontSize: '1.05rem' }}>
             To enquire about hosting a Soccerex in your city, or to join our next event, get in touch.
           </p>
           <div className="flex flex-wrap justify-center gap-4 fade-up">
             <Link to={EUROPE_2026} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
-              style={{ background: 'var(--color-gold)', color: '#09203e', textDecoration: 'none' }}
+              style={{ background: 'var(--color-brand-accent)', color: '#fff', textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-gold)'; e.currentTarget.style.transform = 'translateY(0)' }}>
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)'; e.currentTarget.style.transform = 'translateY(0)' }}>
               Next Event <ArrowRight size={16} />
             </Link>
             <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"

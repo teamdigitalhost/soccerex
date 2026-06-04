@@ -225,9 +225,11 @@ export default function Miami2026() {
                   <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '12px', letterSpacing: '0.22em', lineHeight: 1.3 }}>THE GLOBAL GAME</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 mt-4" style={{ color: '#0D1B2A' }}>
+              <div className="flex items-center gap-2 mt-4" style={{ color: '#0D1B2A' }}>
                 <span className="miami-subhead" style={{ fontSize: '11px', color: '#607186' }}>1996</span>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#007C91', flexShrink: 0 }} />
                 <span style={{ flex: 1, height: 2, background: 'linear-gradient(90deg, #007C91, #E91E63)' }} />
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#E91E63', flexShrink: 0 }} />
                 <span className="miami-subhead" style={{ fontSize: '11px', color: '#E91E63' }}>2026</span>
               </div>
             </div>

@@ -6,9 +6,11 @@
   --color-navy: #09203e;
   --color-navy-light: #0e2a4f;
   --color-navy-dark: #061729;
-  /* Ember palette — primary ember orange, secondary golden yellow */
-  --color-gold: #ff6b35;
-  --color-gold-light: #ff8a5f;
+  /* Base brand accent. Temporarily set to Miami pink so the default
+     Soccerex chrome matches the active Miami push. Swap back here when
+     the brand wants a different anchor color. */
+  --color-brand-accent: #E91E63;
+  --color-brand-accent-light: #ff5b8a;
   --color-red: #ffb703;
   --color-red-light: #ffd166;
   --color-blue-accent: #1a3fbf;
@@ -25,6 +27,20 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
 }
+
+/* App-wide chrome heights. The navbar is fixed at 72px tall; the test
+   mode banner publishes its 36px height into --app-banner-height when
+   visible (see TestModeBanner.jsx). Page-level sticky headers consume
+   --app-top-offset so they stack cleanly under banner + navbar instead
+   of fighting them for top: 0. */
+:root {
+  --app-nav-height: 72px;
+  --app-banner-height: 0px;
+}
+@media (max-width: 640px) {
+  :root { --app-banner-height: 0px; } /* keep override consistent on narrow */
+}
+:root { --app-top-offset: calc(var(--app-nav-height) + var(--app-banner-height)); }
 
 /* Prevent accidental horizontal scroll on mobile from hero particle effects */
 html, body { overflow-x: hidden; max-width: 100vw; }
@@ -90,7 +106,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 /* Section divider line */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-brand-accent), transparent);
   transform: scaleX(0);
   transition: transform 1s ease;
 }
@@ -124,7 +140,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-gold), #1a3fbf);
+  background: linear-gradient(90deg, var(--color-brand-accent), #1a3fbf);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.8s ease;
@@ -189,7 +205,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   left: 0;
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-gold), rgba(191, 177, 112, 0.3));
+  background: linear-gradient(90deg, var(--color-brand-accent), rgba(191, 177, 112, 0.3));
 }
 
 /* ─── Hero Slideshow ─────────────────────────────────────────────────────── */
@@ -208,7 +224,10 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: saturate(0.3) sepia(0.15) brightness(0.85);
+  /* Photos run brighter + closer to full colour so the white wash
+     overlay produces a luminous, sunlit composition rather than a
+     muted dark wash. */
+  filter: saturate(0.85) brightness(1.0);
   transform-origin: center;
   transition: opacity 0.8s ease-in-out;
   animation: hero-ken-burns 4s ease-in-out infinite alternate;
@@ -223,6 +242,17 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 .hero-slideshow[data-theme="light"] .hero-img-hidden { opacity: 0; }
 .hero-img-visible { opacity: 1; }
 .hero-img-hidden { opacity: 0; }
+/* Two-layer crossfade: the just-promoted top layer briefly carries
+   .hero-img-emerging while React swaps its bg-image + z-index. The
+   class snaps opacity to 0 with NO transition, so the layer is
+   invisible the instant it's promoted. Once removed (two RAFs
+   later), the base .hero-image-layer transition: opacity 0.5s
+   carries opacity from 0 → 1, giving a real crossfade over the
+   previous top (which stays at opacity 1 behind). */
+.hero-img-emerging {
+  opacity: 0 !important;
+  transition: none !important;
+}
 
 @keyframes hero-ken-burns {
   from { transform: scale(1); }
@@ -242,12 +272,20 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 .hero-loop-active { opacity: 1; transition: opacity 0.3s ease; }
 
 /* Dark gradient overlay */
+/* White wash overlay — turns the dark hero into a brighter mood
+   without changing the section background. Keeps the soft centered
+   highlight behind the crest and adds a cream bottom gradient that
+   doubles as the contrast backdrop for the title + subtitle below. */
 .hero-overlay {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at center 45%, rgba(5, 13, 26, 0.55) 0%, transparent 70%),
-    linear-gradient(180deg, rgba(5, 13, 26, 0.55) 0%, rgba(5, 13, 26, 0.5) 35%, rgba(5, 13, 26, 0.6) 65%, rgba(9, 32, 62, 0.88) 100%);
+    radial-gradient(ellipse at center 45%, rgba(255, 248, 244, 0.55) 0%, transparent 65%),
+    linear-gradient(180deg,
+      rgba(255, 248, 244, 0.25) 0%,
+      rgba(255, 248, 244, 0.30) 35%,
+      rgba(255, 248, 244, 0.55) 65%,
+      rgba(255, 248, 244, 0.85) 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -305,14 +343,21 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   mix-blend-mode: multiply;
 }
 
-/* 30-year anniversary crest — entrance animation + ember glow halo */
+/* 30-year anniversary crest — entrance animation + white outer-glow
+   halo. The white silhouette is lifted off the photo by a stacked
+   drop-shadow filter that hugs the crest shape, not a rectangle. */
 .hero-crest-wrap {
   position: relative;
   z-index: 2;
   opacity: 0;
   transform: scale(0.88) translateY(8px);
   transition: opacity 1.2s ease, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 8px 40px rgba(255, 107, 53, 0.35)) drop-shadow(0 0 90px rgba(255, 183, 3, 0.18));
+  filter:
+    drop-shadow(0 0 12px  rgba(255, 255, 255, 0.85))
+    drop-shadow(0 0 32px  rgba(255, 255, 255, 0.70))
+    drop-shadow(0 0 80px  rgba(255, 255, 255, 0.45))
+    drop-shadow(0 0 160px rgba(255, 255, 255, 0.28))
+    drop-shadow(0 12px 36px rgba(13, 27, 42, 0.22));
   /* Aggressive negative margins claw back the SVG's intrinsic whitespace
      (the viewBox has ~20% empty space above and below the visible content). */
   margin-top: clamp(-140px, -13vh, -40px);
@@ -329,6 +374,20 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   width: auto !important;
   /* Clip ~18% off top and bottom to remove SVG viewBox whitespace */
   clip-path: inset(18% 0 18% 0);
+}
+
+/* Square-badge variant — the new blue badge has a 100×100 viewBox
+   (no top/bottom whitespace), so we cap both dimensions and skip
+   the clip-path. Negative margins are also unnecessary because the
+   SVG fills its viewBox edge-to-edge. */
+.hero-crest-wrap--square {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.hero-crest-wrap--square img {
+  height: clamp(260px, min(70vw, 55dvh), 560px) !important;
+  width: clamp(260px, min(70vw, 55dvh), 560px) !important;
+  clip-path: none !important;
 }
 
 /* Narrow viewports: don't force a full 100dvh hero. That wastes vertical space
@@ -459,7 +518,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   width: 0;
   height: 2px;
   margin: 0.8rem auto 1rem;
-  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-brand-accent), transparent);
   transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* Short viewports: drop the divider so the tagline gets the space instead */
@@ -504,6 +563,23 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
+/* Lift the hero text siblings ABOVE the crest wrapper (z-index: 2).
+   Without this, the wrapper's radial-gradient halo (which extends
+   past the wrapper bounds via negative inset) visually bleeds onto
+   the title/subtitle below it, washing them out. The whole
+   .hero-crest-wrap stacking context composites above its siblings
+   inside .hero-text, so bumping the text elements to z-index 3
+   pulls them on top of the halo bleed. */
+.hero-static-tagline,
+.hero-static-subtitle,
+.hero-divider,
+.hero-ctas,
+.hero-eyebrow,
+.hero-subline {
+  position: relative;
+  z-index: 3;
+}
+
 /* ─── Text reveal sequence via CSS class ─────────────────────────────────── */
 .hero-eyebrow,
 .hero-subline,
@@ -540,19 +616,21 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 
 /* ─── CTA buttons ────────────────────────────────────────────────────────── */
 .hero-cta-gold {
-  background: var(--color-gold);
-  color: #09203e;
+  background: var(--color-brand-accent);
+  /* White reads cleanly on the Miami-pink accent; navy on pink was
+     low-contrast and hard to read. */
+  color: #fff;
 }
 .hero-cta-gold:hover {
-  background: var(--color-gold-light);
+  background: var(--color-brand-accent-light);
 }
 .hero-cta-outline {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 .hero-cta-outline:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold);
+  border-color: var(--color-brand-accent);
+  color: var(--color-brand-accent);
 }
 
 /* ─── Light-theme overrides for text, divider, tagline, CTAs ─────────────── */
@@ -566,8 +644,15 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   text-shadow: 0 1px 0 rgba(255,248,244,0.5), 0 2px 18px rgba(255,248,244,0.45);
 }
 .hero-slideshow[data-theme="light"] .hero-static-subtitle {
-  color: #3a4a5a !important;
-  text-shadow: 0 1px 0 rgba(255,248,244,0.5), 0 1px 12px rgba(255,248,244,0.4);
+  /* Was #3a4a5a — washed against the bottom cream dissolve and the
+     bright crest halo above. Pull it closer to the title's navy so
+     it holds; hierarchy is carried by font-weight + size, not by
+     a near-grey tone that disappears on busy photo frames. */
+  color: #1d2a3d !important;
+  text-shadow:
+    0 1px 0 rgba(255,248,244,0.65),
+    0 1px 14px rgba(255,248,244,0.55),
+    0 2px 24px rgba(255,248,244,0.35);
 }
 .hero-slideshow[data-theme="light"] .hero-cta-outline {
   border-color: rgba(13, 27, 42, 0.30);
@@ -575,8 +660,8 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   background: rgba(255, 255, 255, 0.85);
 }
 .hero-slideshow[data-theme="light"] .hero-cta-outline:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold);
+  border-color: var(--color-brand-accent);
+  color: var(--color-brand-accent);
   background: #FFFFFF;
 }
 /* The black crest gets a stacked outer-glow filter — equivalent to
@@ -725,12 +810,24 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 /* ─── Tablet + Phone performance ─────────────────────────────────────────── */
 @media (max-width: 768px) {
   .hero-image-layer {
-    filter: saturate(0.25) sepia(0.15) brightness(0.75);
+    /* Brighter, slightly desaturated photo so the cream overlay reads
+       white/light instead of navy. Matches the desktop hero treatment. */
+    filter: saturate(0.85) brightness(1.0);
     /* Kill ken burns on mobile, saves a continuous compositor layer */
     animation: none !important;
   }
   .hero-overlay {
-    background: linear-gradient(180deg, rgba(5,13,26,0.6) 0%, rgba(5,13,26,0.5) 40%, rgba(5,13,26,0.65) 70%, rgba(9,32,62,0.9) 100%);
+    /* Cream/white overlay so the hero reads light on mobile too. Stronger
+       opacities than desktop because mobile viewports have less of the
+       bottom dissolve visible at once, so the overlay does more of the
+       work to lift the photo into the brand cream wash. */
+    background:
+      radial-gradient(ellipse at center 45%, rgba(255,248,244,0.70) 0%, transparent 70%),
+      linear-gradient(180deg,
+        rgba(255,248,244,0.55) 0%,
+        rgba(255,248,244,0.60) 35%,
+        rgba(255,248,244,0.80) 65%,
+        rgba(255,248,244,0.96) 100%);
   }
   .cascading-letter {
     transition-duration: 0.2s;
@@ -869,7 +966,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   letter-spacing: 0.08em;
-  color: var(--color-gold);
+  color: var(--color-brand-accent);
   text-transform: uppercase;
 }
 
@@ -891,12 +988,12 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 }
 .gallery-filter-pill:hover {
   border-color: rgba(191, 177, 112, 0.4);
-  color: var(--color-gold);
+  color: var(--color-brand-accent);
 }
 .gallery-filter-active {
   background: rgba(191, 177, 112, 0.12);
-  border-color: var(--color-gold);
-  color: var(--color-gold);
+  border-color: var(--color-brand-accent);
+  color: var(--color-brand-accent);
 }
 .gallery-filter-count {
   font-size: 11px;
@@ -989,7 +1086,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   letter-spacing: 0.1em;
-  color: var(--color-gold);
+  color: var(--color-brand-accent);
   text-transform: uppercase;
   margin-top: 4px;
 }
@@ -1270,7 +1367,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   letter-spacing: 0.08em;
-  color: var(--color-gold);
+  color: var(--color-brand-accent);
   margin-bottom: 6px;
 }
 .globe-tooltip-label {
@@ -1287,7 +1384,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--color-brand-accent);
   background: rgba(145, 123, 76, 0.15);
   border: 1px solid rgba(145, 123, 76, 0.3);
   border-radius: 100px;
@@ -1311,7 +1408,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
-  color: var(--color-gold);
+  color: var(--color-brand-accent);
   line-height: 1;
 }
 .globe-stat-label {
@@ -1401,7 +1498,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   position: absolute;
   inset: -3px;
   border-radius: 18px;
-  background: linear-gradient(135deg, var(--color-gold), #09203e, var(--color-gold), var(--color-red), var(--color-gold));
+  background: linear-gradient(135deg, var(--color-brand-accent), #09203e, var(--color-brand-accent), var(--color-red), var(--color-brand-accent));
   background-size: 300% 300%;
   animation: ev-border-sweep 8s ease infinite;
   z-index: -1;
@@ -1476,6 +1573,84 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 /* REDUCED MOTION for older/low-power devices                                  */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
+/* Mobile: kill the heaviest hero effects so the page stops dropping
+   frames. The crest shine mask + 7s glow pulse + 6.5s float and the
+   ParticleField canvas together overwhelm mobile GPUs. Keep the photo
+   crossfade and the cascading text — those are cheap.
+
+   Cut-off raised to 1279px so iPad landscape (~1024-1366px) and other
+   tablets also get the lightweight hero. The JS perf knob in
+   HeroSlideshow.jsx uses the same 1280px threshold. */
+@media (max-width: 1279px) {
+  /* Keep the slideshow fade between photos, but kill the ken-burns
+     zoom — a transform: scale animation running constantly on a
+     full-viewport background image was one of the largest GPU
+     bills on iPad. Slides still crossfade; they just don't slowly
+     zoom in while held. */
+  .hero-image-layer {
+    animation: none !important;
+    transition: opacity 0.5s ease-in-out !important;
+  }
+  /* Kill the mask-image based shine animation (very GPU heavy). */
+  .hero-crest-shine {
+    animation: none !important;
+    -webkit-mask-image: none !important;
+            mask-image: none !important;
+    opacity: 0 !important;
+  }
+  /* Stop the hover float keyframes from running continuously. Also
+     clear `will-change: transform` and `transform-style: preserve-3d`
+     from the base rule — they force the crest into its own
+     compositing layer to prep for the float animation, but with the
+     animation disabled they're just wasted GPU bookkeeping. */
+  .hero-crest-float {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+    transform-style: flat !important;
+  }
+  /* Hide the giant "30" outline SVGs entirely on iPad/phone. They
+     were designed as very-subtle desktop ambience and don't read
+     at all on these sizes — and they were still consuming compositor
+     layers + animation cycles. Faster + cleaner without them. */
+  .hero-outline-30s {
+    display: none !important;
+  }
+  /* Stop the GPU-expensive filter:drop-shadow pulse animation.
+     iOS Safari also drops the static drop-shadow when the child
+     SVG has clip-path, so the wrapper's filter alone leaves the
+     black crest unlifted on photos. Replace with a radial-gradient
+     halo painted behind the crest via ::before — same visual
+     result, no filter-clip-path interaction quirks. */
+  .hero-slideshow[data-theme="light"] .hero-crest-wrap {
+    animation: none !important;
+    filter: none !important;
+  }
+  .hero-slideshow[data-theme="light"] .hero-crest-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -18% -22%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 55% 50% at 50% 50%,
+        rgba(255, 255, 255, 0.92) 0%,
+        rgba(255, 252, 240, 0.70) 22%,
+        rgba(255, 244, 210, 0.45) 42%,
+        rgba(255, 230, 170, 0.22) 62%,
+        rgba(255, 255, 255, 0) 82%);
+    /* Prevent the radial halo from clipping the rest of the hero */
+    will-change: auto;
+  }
+  /* Push the hero content below the solid 72px navbar so the crest
+     stops tucking under it. The hero is centered with flex; padding
+     on the content node pushes it down without shrinking the canvas. */
+  .hero-slideshow .hero-text {
+    padding-top: clamp(110px, 18vh, 160px) !important;
+    padding-bottom: clamp(40px, 7vh, 80px) !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* Disable all scroll-triggered animations */
   .fade-up, .slide-left, .slide-right, .scale-up, .blur-reveal {
@@ -1483,6 +1658,15 @@ html, body { overflow-x: hidden; max-width: 100vw; }
     transform: none !important;
     filter: none !important;
     transition: none !important;
+  }
+  /* Disable hero crest motion + shine + pulsing glow */
+  .hero-crest-shine,
+  .hero-crest-float,
+  .hero-slideshow[data-theme="light"] .hero-crest-wrap {
+    animation: none !important;
+  }
+  .hero-crest-shine {
+    opacity: 0 !important;
   }
   /* Disable marquee scroll */
   .gn-marquee-track {
@@ -1535,9 +1719,11 @@ html, body { overflow-x: hidden; max-width: 100vw; }
   line-height: 1.1;
 }
 .home-event-cta--solid {
-  background: var(--color-gold, #bfb170);
-  color: #09203e;
-  border: 1px solid var(--color-gold, #bfb170);
+  background: var(--color-brand-accent, #bfb170);
+  /* White reads cleanly on the pink accent; navy on pink was
+     low-contrast and hard to read. */
+  color: #fff;
+  border: 1px solid var(--color-brand-accent, #bfb170);
 }
 .home-event-cta--solid:hover {
   transform: translateY(-1px);

@@ -7,20 +7,7 @@ import {
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { CONTACT, EUROPE_2026 } from '../lib/routes'
-
-// Scroll animations (same pattern as other pages)
-function useScrollAnimations() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }) },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    )
-    document.querySelectorAll('.fade-up, .slide-left, .slide-right, .scale-up').forEach((el) => {
-      if (!el.classList.contains('visible')) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
-}
+import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // Tier data
 const TIERS = [
@@ -179,16 +166,16 @@ export default function ThePitch() {
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={35} opacity={0.15} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={35} opacity={0.15} />
         <div className="absolute pointer-events-none" style={{ top: '10%', left: '50%', transform: 'translateX(-50%)', width: '800px', height: '800px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.1) 0%, transparent 60%)' }} />
 
         <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(140px,15vw,200px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>
-          <p className="section-label text-gold mb-6 fade-up">THE PITCH</p>
+          <p className="section-label text-brand-accent mb-6 fade-up">THE PITCH</p>
           <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.4rem, 6vw, 4.8rem)' }}>
             Where Football Innovation Meets{' '}
-            <span style={{ color: 'var(--color-gold)' }}>Institutional Capital.</span>
+            <span style={{ color: 'var(--color-brand-accent)' }}>Institutional Capital.</span>
           </h1>
-          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/70 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', maxWidth: '700px' }}>
             Football startups with real traction need more than exposure and mentorship. They need structured access to institutional capital and investor matchmaking.
           </p>
@@ -223,15 +210,15 @@ export default function ThePitch() {
 
       {/* ═══ THREE TIERS ═══════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #061729 0%, #09203e 50%, #0e2a4f 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={30} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.1} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.06) 0%, transparent 70%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <p className="section-label text-gold mb-4 fade-up text-center">THREE TIERS</p>
+          <p className="section-label text-brand-accent mb-4 fade-up text-center">THREE TIERS</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            A Structured Path to <span style={{ color: 'var(--color-gold)' }}>Capital</span>
+            A Structured Path to <span style={{ color: 'var(--color-brand-accent)' }}>Capital</span>
           </h2>
-          <div className="fade-up mx-auto mb-14" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-14" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {TIERS.map((t, i) => {
@@ -338,9 +325,9 @@ export default function ThePitch() {
 
       {/* ═══ INTEREST FORM ════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #0d2b52 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={20} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10" style={{ maxWidth: '720px', margin: '0 auto' }}>
-          <p className="section-label text-gold mb-4 fade-up text-center">APPLY NOW</p>
+          <p className="section-label text-brand-accent mb-4 fade-up text-center">APPLY NOW</p>
           <h2 className="font-heading font-bold text-white leading-tight mb-4 fade-up text-center text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             Apply to <span style={{ color: '#bfb170' }}>The Pitch</span>
           </h2>
@@ -445,7 +432,7 @@ export default function ThePitch() {
 
       {/* ═══ LAUNCH NOTE / CTA ════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #09203e 0%, #0e2a4f 50%, #061729 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)', textAlign: 'center' }}>
-        <NetworkNodes color="#ffffff" accentColor="var(--color-gold)" nodeCount={25} opacity={0.1} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.1} />
         <div className="absolute pointer-events-none" style={{ top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.08) 0%, transparent 60%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '700px', margin: '0 auto' }}>
@@ -453,15 +440,15 @@ export default function ThePitch() {
             <Sparkles size={32} style={{ color: '#bfb170' }} />
           </div>
           <h2 className="font-heading font-bold text-white mb-4 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            The Pitch Debuts at <span style={{ color: 'var(--color-gold)' }}>Soccerex Amsterdam</span>
+            The Pitch Debuts at <span style={{ color: 'var(--color-brand-accent)' }}>Soccerex Amsterdam</span>
           </h2>
-          <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-gold), transparent)' }} />
+          <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/65 mb-10 fade-up leading-relaxed" style={{ fontSize: '1.05rem' }}>
             May 2026. The first edition of a new capital marketplace for football technology.
           </p>
           <div className="flex flex-wrap justify-center gap-4 fade-up">
             <Link to={EUROPE_2026} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
-              style={{ background: 'var(--color-gold)', color: '#09203e', textDecoration: 'none' }}
+              style={{ background: 'var(--color-brand-accent)', color: '#fff', textDecoration: 'none' }}
               onMouseEnter={(e) => { e.currentTarget.style.background = '#d4c78e'; e.currentTarget.style.transform = 'translateY(-2px)' }}
               onMouseLeave={(e) => { e.currentTarget.style.background = '#bfb170'; e.currentTarget.style.transform = 'translateY(0)' }}
             >

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, INSIGHTS,
@@ -9,7 +9,7 @@ import {
 const navLinks = [
   { label: 'About',        to: ABOUT },
   { label: 'Events',       to: EVENTS },
-  { label: 'Network',      to: GLOBAL_NETWORK },
+  { label: 'Reach',        to: GLOBAL_NETWORK },
   { label: 'Deal Network', to: DEAL_NETWORK },
   { label: 'Insights',     to: INSIGHTS },
 ]
@@ -19,34 +19,26 @@ const navLinks = [
 const CTA_THEMES = [
   { match: MIAMI_2026,  bg: '#E91E63', hover: '#c81b58', text: '#FFFFFF' },
   { match: EUROPE_2026, bg: '#c8302c', hover: '#a72824', text: '#FFFFFF' },
-  { match: RIYADH_2027, bg: '#f2e93c', hover: '#d9d128', text: '#0D1B2A' },
+  { match: RIYADH_2027, bg: '#bfb170', hover: '#d4c78e', text: '#0D1B2A' },
 ]
-const CTA_DEFAULT = { bg: 'var(--color-gold)', hover: '#d4c78e', text: 'var(--color-navy, #0D1B2A)' }
+// White reads cleanly on the pink brand accent; navy-on-pink was the
+// low-contrast base-Soccerex case (event themes already use white).
+const CTA_DEFAULT = { bg: 'var(--color-brand-accent)', hover: '#d4c78e', text: '#FFFFFF' }
 
 function ctaThemeFor(pathname) {
   return CTA_THEMES.find((t) => pathname.startsWith(t.match)) || CTA_DEFAULT
 }
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
-  const navigate = useNavigate()
-  const isHome = location.pathname === '/'
-  const solid = scrolled || !isHome
+  /* Home navbar used to be transparent at the top of the dark hero,
+     but the hero is now light/cream — a transparent navbar makes the
+     white wordmark and nav links invisible against the cream and lets
+     the hero crest overlap the top of the page. Keep the solid navy
+     band on every route, every scroll position. */
+  const solid = true
   const cta = ctaThemeFor(location.pathname)
-
-  useEffect(() => {
-    let ticking = false
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => { setScrolled(window.scrollY > 80); ticking = false })
-        ticking = true
-      }
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   useEffect(() => {
     if (!location.state?.scrollTo) window.scrollTo(0, 0)
@@ -123,7 +115,7 @@ export default function Navbar() {
         <div className="flex-1 flex flex-col items-start justify-center gap-1 px-8">
           {navLinks.map((link, i) => (
             <Link key={link.to} to={link.to} onClick={() => setMenuOpen(false)}
-              className="nav-mobile-link font-heading font-bold text-white py-3 uppercase tracking-[0.05em] hover:text-gold transition-colors cursor-pointer text-left"
+              className="nav-mobile-link font-heading font-bold text-white py-3 uppercase tracking-[0.05em] hover:text-brand-accent transition-colors cursor-pointer text-left"
               style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', textDecoration: 'none', display: 'block', transitionDelay: menuOpen ? `${150 + i * 80}ms` : '0ms' }}>
               {link.label}
             </Link>
