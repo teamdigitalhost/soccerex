@@ -68,7 +68,7 @@ const THEMES = [
 const STATS = [
   { num: '40+',  label: 'Speakers on stage' },
   { num: '2',    label: 'Days of program' },
-  { num: '8',    label: 'Themes explored' },
+  { num: '16',   label: 'Themes explored' },
   { num: '30+',  label: 'Countries represented' },
 ]
 
@@ -325,7 +325,7 @@ export default function Europe2026() {
             Next stop: Miami, September 2026
           </h2>
           <p className="font-body text-white/65 mb-8" style={{ fontSize: '1.05rem' }}>
-            Nine months before the FIFA World Cup, the global football industry lands in Miami. Three days of executive content, networking, and commercial opportunity at Miami Freedom Park.
+            Nine months before the FIFA World Cup, the global football industry lands in Miami. Three days of executive content, networking, and commercial opportunity at Nu Stadium.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to={MIAMI_2026} className="event-btn-primary" style={{ padding: '18px 36px', fontSize: '15px' }}>

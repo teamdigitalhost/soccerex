@@ -38,9 +38,9 @@ export const sponsorshipSchema = [
   },
   {
     fields: [
-      { name: 'name',    label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoComplete: 'name' },
+      { name: 'name',    label: 'Your name *', required: true, placeholder: 'Your full name', autoComplete: 'name' },
       { name: 'role',    label: 'Your role *', required: true, placeholder: 'Head of Partnerships' },
-      { name: 'email',   label: 'Work email *', required: true, type: 'email', placeholder: 'eve@brand.com', autoComplete: 'email', span: 'full' },
+      { name: 'email',   label: 'Work email *', required: true, type: 'email', placeholder: 'you@company.com', autoComplete: 'email', span: 'full' },
       { name: 'phone',   label: 'Phone (optional)', type: 'tel', placeholder: '+1 305…' },
       { name: 'country', label: 'Country', placeholder: 'Country', suggest: COUNTRY_SUGGEST },
       { name: 'message', label: 'What company pain points can Soccerex help solve?', type: 'textarea', rows: 3, span: 'full',
@@ -54,8 +54,8 @@ export const sponsorshipSchema = [
 export const speakerSchema = [
   {
     fields: [
-      { name: 'name',     label: 'Your name *', required: true, placeholder: 'Eve Moneypenny', autoFocus: true, autoComplete: 'name' },
-      { name: 'email',    label: 'Email *', required: true, type: 'email', placeholder: 'eve@example.com', autoComplete: 'email' },
+      { name: 'name',     label: 'Your name *', required: true, placeholder: 'Your full name', autoFocus: true, autoComplete: 'name' },
+      { name: 'email',    label: 'Email *', required: true, type: 'email', placeholder: 'you@company.com', autoComplete: 'email' },
       { name: 'company',  label: 'Organisation', placeholder: 'Where you work' },
       { name: 'role',     label: 'Role', placeholder: 'Your role' },
       { name: 'topic',    label: 'What would you talk about? *', required: true, type: 'textarea', rows: 3, span: 'full',
@@ -69,7 +69,7 @@ export const speakerSchema = [
 export const newsletterSchema = [
   {
     fields: [
-      { name: 'email', label: 'Email *', required: true, type: 'email', placeholder: 'you@example.com', autoComplete: 'email', span: 'full', autoFocus: true },
+      { name: 'email', label: 'Email *', required: true, type: 'email', placeholder: 'Your email address', autoComplete: 'email', span: 'full', autoFocus: true },
     ],
   },
 ]
