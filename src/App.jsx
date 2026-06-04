@@ -6,7 +6,7 @@ import ThemePicker from './components/ThemePicker'
 import TestModeBanner from './components/TestModeBanner'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, APP_PAGE,
-  MIAMI_2026, EUROPE_2026, RIYADH_2027,
+  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, EUROPE_2026, RIYADH_2027,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK,
   INVITE_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
@@ -40,6 +40,7 @@ const Contact = lazy(() => import('./pages/Contact'))
 const Gallery = lazy(() => import('./pages/Gallery'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
+const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
 const Riyadh2027 = lazy(() => import('./pages/Riyadh2027'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
@@ -84,6 +85,7 @@ function App() {
           <Route path={GALLERY} element={<Gallery />} />
           <Route path={EUROPE_2026} element={<Europe2026 />} />
           <Route path={MIAMI_2026} element={<Miami2026 />} />
+          <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />
           <Route path={RIYADH_2027} element={<Riyadh2027 />} />
           <Route path={ROUTE_PATTERNS.pressRelease} element={<PressRelease />} />
           <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />

@@ -35,6 +35,10 @@ export const MIAMI_2026      = '/miami-2026'
 export const EUROPE_2026     = '/europe-2026'
 export const RIYADH_2027     = '/riyadh-2027'
 
+// Bespoke Miami press release page. Lives under /miami-2026 so the Miami
+// theme (Oswald + Montserrat, pink/teal palette) applies automatically.
+export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
+
 /* ─── Per-event API-driven pages ───────────────────────────────────────── */
 // Public label for this page is "Program Themes". Internally and in the URL
 // it stays "agenda-concept" — that is Soccerex's planning-vocabulary name
