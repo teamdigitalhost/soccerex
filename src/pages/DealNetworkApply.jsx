@@ -49,6 +49,18 @@ export default function DealNetworkApply() {
   const [params] = useSearchParams()
   const tokenFromUrl = params.get('token') || ''
 
+  // C3: optional ?track= presets the entry side so a tracked link (e.g. from a
+  // "Rightsholders" CTA) lands the applicant on the right capability grid by
+  // default. They can still change it via the Property/Brand confirmation.
+  // 'capital' folds to the company/brand side until the dedicated Capital &
+  // Impact track ships (C1).
+  const trackParam = (params.get('track') || '').toLowerCase()
+  const trackSide = (trackParam === 'rightsholder' || trackParam === 'property')
+    ? 'property'
+    : (trackParam === 'company' || trackParam === 'brand' || trackParam === 'capital')
+      ? 'brand'
+      : ''
+
   const [step, setStep] = useState(tokenFromUrl ? STEP_PREVIEW : STEP_EMAIL)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -78,7 +90,7 @@ export default function DealNetworkApply() {
   // Matchmaking
   const [matchmakingToken, setMatchmakingToken] = useState('')
   const [mm, setMm] = useState({
-    side: 'brand',
+    side: trackSide || 'brand',
     looking_for: [], can_offer: [], deal_types: [],
     pain_points: [], pain_point_detail: '',
     one_sentence_pitch: '', deal_description: '',
@@ -168,7 +180,9 @@ export default function DealNetworkApply() {
       setMatchmakingToken(res.matchmaking_token)
       setChosenPerson(res.person)
       setChosenCompany(res.company)
-      setMm((prev) => ({ ...prev, side: deriveSide(res.company) }))
+      // Track param wins over the company-type guess (lets a rightsholder who
+      // came in on a free-email address land on the property grid).
+      setMm((prev) => ({ ...prev, side: trackSide || deriveSide(res.company) }))
       setStep(STEP_MATCHMAKING)
     } catch (err) {
       setError(err?.message || 'Could not save your profile.')
