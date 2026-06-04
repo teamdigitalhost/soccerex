@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { ArrowLeft, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star } from 'lucide-react'
+import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME } from '../lib/routes'
+import { HOME, MIAMI_2026_PRESS_RELEASE } from '../lib/routes'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
@@ -112,6 +112,16 @@ export default function Miami2026() {
                 <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.05rem', letterSpacing: '0.04em' }}>23-25 September 2026</p>
               </div>
             </div>
+
+            <Link
+              to={MIAMI_2026_PRESS_RELEASE}
+              className="inline-flex items-center gap-2 mb-4"
+              style={{ textDecoration: 'none', background: '#0D1B2A', color: '#fff', padding: '14px 26px', fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 14 }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#E91E63' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#0D1B2A' }}
+            >
+              <FileText size={16} /> Read the Announcement <ArrowRight size={16} />
+            </Link>
 
             <div className="flex flex-wrap gap-3 items-center">
               <a

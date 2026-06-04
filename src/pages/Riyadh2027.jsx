@@ -13,7 +13,7 @@ const WHY_ATTEND = [
   { title: 'The Region Where Football Is Accelerating', desc: 'Saudi Arabia’s football transformation, Vision 2030, the Saudi Pro League, and the road to the 2034 FIFA World Cup make Riyadh one of the most important markets in the global game.' },
   { title: 'The Middle East Football Business Ecosystem', desc: 'Federations, clubs, ministries, investors, brands, rightsholders, innovators, and strategic partners come together to shape the region’s next phase of football growth.' },
   { title: 'Capital Meets Football', desc: 'Soccerex Middle East connects football’s global ecosystem with the capital, ownership groups, funds, family offices, and strategic investors driving growth across the region.' },
-  { title: 'Misk City Experience', desc: 'Hosted inside the Kingdom’s flagship cultural district, Soccerex Middle East creates a premium setting for executive networking, curated conversations, relationship-building, and long-term commercial opportunity.' },
+  { title: 'A Premium Riyadh Setting', desc: 'Hosted inside the Kingdom’s flagship cultural district, Soccerex Middle East creates a premium setting for executive networking, curated conversations, relationship-building, and long-term commercial opportunity.' },
 ]
 
 const THEMES = [
@@ -175,7 +175,7 @@ export default function Riyadh2027() {
           <div className="flex items-center justify-center gap-12 mb-6 flex-wrap">
             <div className="text-center">
               <p className="font-mono text-xs uppercase tracking-widest text-white/50 mb-1"><MapPin size={12} className="inline mr-1" /> Venue</p>
-              <p className="font-heading font-bold text-white text-xl">Misk City</p>
+              <p className="font-heading font-bold text-white text-xl">To Be Announced</p>
             </div>
             <div style={{ width: '60px', height: '2px', background: 'linear-gradient(90deg, transparent, var(--event-primary), transparent)' }} />
             <div className="text-center">
@@ -209,7 +209,7 @@ export default function Riyadh2027() {
                 Soccerex Middle East is the regional event of the Soccerex platform, connecting football’s global ecosystem with one of the world’s most ambitious sports markets.
               </p>
               <p className="font-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#444' }}>
-                Hosted at Misk City in Riyadh, it brings together federations, clubs, leagues, ministries, investors, rightsholders, brands, innovators, and solution providers at the center of the region’s football growth story.
+                Hosted in Riyadh, it brings together federations, clubs, leagues, ministries, investors, rightsholders, brands, innovators, and solution providers at the center of the region’s football growth story.
               </p>
               <p className="font-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#444' }}>
                 As Saudi Arabia builds toward the 2034 FIFA World Cup and continues investing across clubs, infrastructure, talent, media, technology, and fan engagement, Soccerex Middle East creates the environment where access turns into partnerships, investment, innovation, impact, and long-term commercial opportunity.

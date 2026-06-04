@@ -25,9 +25,9 @@ const UPCOMING = [
   {
     logo: '/events/middle-east/riyadh-logo-horizontal-placeholder.jpg',
     label: 'SOCCEREX RIYADH',
-    dates: 'January 2027',
+    dates: 'To Be Announced',
     city: 'Riyadh, Saudi Arabia',
-    venue: 'Misk City',
+    venue: '',
     image: '/events/middle-east/2026/sections/riyadh-skyline.jpg',
     accent: '#0f8f52',
     copy: 'The Middle East anchor event of the Soccerex platform, connecting football’s global ecosystem with one of the world’s fastest-growing sports markets and a region driving major investment, innovation, infrastructure, and long-term football growth.',

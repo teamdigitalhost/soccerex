@@ -6,7 +6,7 @@ import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
-import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, GALLERY, eventSpeakers, pressRelease } from '../lib/routes'
+import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, GALLERY, eventSpeakers, pressRelease } from '../lib/routes'
 import ImageGrid from '../components/ImageGrid'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { lazy, Suspense } from 'react'
@@ -179,6 +179,16 @@ function UpcomingEventSection() {
                 )
               })}
             </div>
+            {/* Prominent press-release callout */}
+            <Link
+              to={MIAMI_2026_PRESS_RELEASE}
+              className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-[0.15em] px-7 py-3.5 mt-3 transition-all duration-200"
+              style={{ textDecoration: 'none', background: '#0D1B2A', color: '#FFFFFF', border: '1px solid #0D1B2A' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#E91E63'; e.currentTarget.style.borderColor = '#E91E63' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#0D1B2A'; e.currentTarget.style.borderColor = '#0D1B2A' }}
+            >
+              <FileText size={15} /> Read the Announcement <ArrowRight size={15} />
+            </Link>
           </div>
 
           {/* Right: brand-asset card with logo lockup + dates */}
@@ -439,11 +449,11 @@ function EventsSection() {
     {
       city: 'RIYADH',
       name: 'Soccerex Middle East',
-      dates: 'January 2027',
-      venue: 'Misk City',
+      dates: 'To Be Announced',
+      venue: '',
       img: '/events/middle-east/2026/sections/riyadh-skyline.jpg',
       crest: '/brand/crests/crest-riyadh-white.svg',
-      learnMoreTo: '/riyadh-2027',
+      learnMoreTo: null,
       status: 'soon',
       accent: '#0f8f52',
       ctaTextColor: '#fff',
@@ -612,34 +622,39 @@ function EventsSection() {
                     <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.18em', marginTop: '14px' }}>
                       {event.name}
                     </p>
-                    {/* CTA row: Learn more always present, secondary CTA only when defined */}
-                    <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: event.ctaLabel ? '1fr 1fr' : '1fr', gap: '8px', position: 'relative', zIndex: 6 }}>
-                      <Link
-                        to={event.learnMoreTo}
-                        className="home-event-cta home-event-cta--ghost"
-                      >
-                        Learn more
-                      </Link>
-                      {event.ctaLabel && (event.ctaExternal ? (
-                        <a
-                          href={event.ctaHref}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="home-event-cta home-event-cta--solid"
-                          style={{ background: event.accent, borderColor: event.accent, color: event.ctaTextColor }}
-                        >
-                          {event.ctaLabel}
-                        </a>
-                      ) : (
-                        <Link
-                          to={event.ctaHref}
-                          className="home-event-cta home-event-cta--solid"
-                          style={{ background: event.accent, borderColor: event.accent, color: event.ctaTextColor }}
-                        >
-                          {event.ctaLabel}
-                        </Link>
-                      ))}
-                    </div>
+                    {/* CTA row: only when the event has a destination. Riyadh (TBA)
+                        has no details link and no register CTA, so it shows none. */}
+                    {(event.learnMoreTo || event.ctaLabel) && (
+                      <div style={{ marginTop: '16px', display: 'grid', gridTemplateColumns: (event.learnMoreTo && event.ctaLabel) ? '1fr 1fr' : '1fr', gap: '8px', position: 'relative', zIndex: 6 }}>
+                        {event.learnMoreTo && (
+                          <Link
+                            to={event.learnMoreTo}
+                            className="home-event-cta home-event-cta--ghost"
+                          >
+                            Learn more
+                          </Link>
+                        )}
+                        {event.ctaLabel && (event.ctaExternal ? (
+                          <a
+                            href={event.ctaHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="home-event-cta home-event-cta--solid"
+                            style={{ background: event.accent, borderColor: event.accent, color: event.ctaTextColor }}
+                          >
+                            {event.ctaLabel}
+                          </a>
+                        ) : (
+                          <Link
+                            to={event.ctaHref}
+                            className="home-event-cta home-event-cta--solid"
+                            style={{ background: event.accent, borderColor: event.accent, color: event.ctaTextColor }}
+                          >
+                            {event.ctaLabel}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

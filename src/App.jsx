@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ThemePicker from './components/ThemePicker'
@@ -41,7 +41,6 @@ const Gallery = lazy(() => import('./pages/Gallery'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
-const Riyadh2027 = lazy(() => import('./pages/Riyadh2027'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
 const InsightsList = lazy(() => import('./pages/InsightsList'))
@@ -86,7 +85,9 @@ function App() {
           <Route path={EUROPE_2026} element={<Europe2026 />} />
           <Route path={MIAMI_2026} element={<Miami2026 />} />
           <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />
-          <Route path={RIYADH_2027} element={<Riyadh2027 />} />
+          {/* Riyadh inner page is paused: redirect to the events list until the
+              event details (venue, dates) are confirmed. Page kept on disk. */}
+          <Route path={RIYADH_2027} element={<Navigate to={EVENTS} replace />} />
           <Route path={ROUTE_PATTERNS.pressRelease} element={<PressRelease />} />
           <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
           <Route path={TERMS} element={<TermsConditions />} />
