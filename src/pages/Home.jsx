@@ -1067,13 +1067,13 @@ function SpeakersShowcase() {
         </div>
         <div className="text-center mt-12 fade-up">
           <Link
-            to={eventSpeakers('soccerex-europe-2026')}
+            to={`${EVENTS}#speakers`}
             className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] cursor-pointer"
             style={{ background: '#09203e', color: '#fff', padding: '16px 34px', fontSize: '0.82rem', textDecoration: 'none', transition: 'all 0.3s' }}
             onMouseEnter={(e) => { e.currentTarget.style.background = '#0d2b52' }}
             onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e' }}
           >
-            View full speaker list <ArrowRight size={15} />
+            View all past speakers <ArrowRight size={15} />
           </Link>
         </div>
       </div>
@@ -1348,7 +1348,7 @@ function HeritageMapSection() {
         </p>
       </div>
 
-      <div className="fade-up" style={{ marginTop: 'clamp(0px, 1.5vw, 20px)' }}>
+      <div className="fade-up" style={{ marginTop: '-6vw' }}>
         <Suspense fallback={<div style={{ height: '600px' }} />}>
           <InteractiveGlobe />
         </Suspense>
