@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom'
 import { Mail, MapPin } from 'lucide-react'
 import {
-  HOME, PROFILE_ACCESS, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS, EUROPE_2026,
-  GALLERY, DEAL_NETWORK, MIAMI_2026, RIYADH_2027,
+  HOME, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS,
+  DEAL_NETWORK, EUROPE_2026, MIAMI_2026, RIYADH_2027,
 } from '../lib/routes'
 
 /* Route-aware accent. Mirrors the navbar's ctaThemeFor() so the
@@ -146,11 +146,6 @@ export default function Footer() {
                 { label: 'Global Network', to: GLOBAL_NETWORK },
                 { label: 'Deal Network', to: DEAL_NETWORK },
                 { label: 'Insights', to: INSIGHTS },
-                { label: 'Europe 2026', to: EUROPE_2026 },
-                { label: 'Gallery', to: GALLERY },
-                /* Self-service entry point for speakers, delegates,
-                   rights-holders, and sponsor/exhibitor companies. */
-                { label: 'Manage your profile', to: PROFILE_ACCESS },
               ].map(l => (
                 <li key={l.to} style={{ marginBottom: '12px' }}>
                   <Link to={l.to} style={{

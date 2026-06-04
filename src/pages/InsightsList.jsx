@@ -74,8 +74,6 @@ export default function InsightsList() {
     return () => { cancelled = true }
   }, [])
 
-  useEffect(() => { setPage(1) }, [activeCategory, searchQuery])
-
   // Unique categories (hide Uncategorized)
   const categories = useMemo(() => {
     const cats = new Set()
@@ -113,34 +111,35 @@ export default function InsightsList() {
     <div style={{ background: '#050d1a' }}>
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
-      {/* Sized to its content (no inner-hero min-height) so there's no large
-          empty band at the top of the page. Top padding clears the fixed navbar. */}
-      <section className="relative overflow-hidden flex items-center justify-center">
+      <section className="inner-hero relative overflow-hidden flex items-center justify-center" style={{ minHeight: 'clamp(360px, 50dvh, 500px)' }}>
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
         }} />
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.15} />
-        <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(96px,11vw,140px) clamp(24px,5vw,80px) clamp(50px,7vw,90px)' }}>
-          <div className="inner-hero-crest inner-hero-crest--lg flex justify-center fade-up">
+        <div className="relative z-10 text-center" style={{ maxWidth: '900px', padding: 'clamp(28px,4vw,56px) clamp(24px,5vw,80px) clamp(28px,4vw,48px)' }}>
+          <div className="inner-hero-crest inner-hero-crest--insights flex justify-center fade-up">
             <img src="/brand/crests/crest-main-white.svg" alt="" aria-hidden="true"
               style={{ filter: 'drop-shadow(0 8px 40px rgba(233, 30, 99,0.3)) drop-shadow(0 0 90px rgba(255,183,3,0.15))' }} />
           </div>
-          <p className="section-label text-brand-accent mb-5 fade-up">INSIGHTS</p>
-          <h1 className="font-heading font-bold text-white leading-[1.05] mb-6 fade-up text-glow" style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)' }}>
-            The Football Industry's{' '}
-            <span style={{ color: 'var(--color-brand-accent)' }}>Pulse</span>
+          <p className="section-label text-brand-accent mb-4 fade-up">SOCCEREX INSIGHTS</p>
+          <h1 className="font-heading font-bold text-white leading-[1.05] mb-5 fade-up text-glow" style={{ fontSize: 'clamp(2rem, 4.6vw, 3.8rem)' }}>
+            Market Intelligence for the Football{' '}
+            <span style={{ color: 'var(--color-brand-accent)' }}>Business Ecosystem</span>
           </h1>
-          <div className="fade-up mx-auto mb-6" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
+          <div className="fade-up mx-auto mb-5" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
           <p className="font-body text-white/70 leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', maxWidth: '640px' }}>
-            The latest trends and updates from influential industry players. Your one-stop solution for all football industry news.
+            Soccerex Insights tracks the trends, capital flows, partnerships, innovation, women’s football growth, and impact initiatives shaping the future of the game, helping the football business community stay informed, connected, and ahead.
+          </p>
+          <p className="font-body text-white/60 leading-relaxed fade-up mx-auto mt-3" style={{ fontSize: 'clamp(0.95rem, 1.2vw, 1.05rem)', maxWidth: '640px' }}>
+            Curated by Soccerex for the people building, investing in, and shaping the future of football business.
           </p>
         </div>
       </section>
 
-      <PixelDivider color="#f4f3f0" layers={4} height={90} speed={0.5} />
+      <PixelDivider color="#f4f3f0" layers={4} height={36} speed={0.5} />
 
       {/* ═══ MAIN CONTENT (2-column: articles + sidebar) ═══════════════════ */}
-      <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px)' }}>
+      <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(22px,3vw,42px) clamp(24px,5vw,80px) clamp(60px,8vw,100px)' }}>
         <div style={{ maxWidth: '1300px', margin: '0 auto' }}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
@@ -160,8 +159,8 @@ export default function InsightsList() {
                 </div>
               ) : (
                 <div>
-                  {visible.map((article, i) => (
-                    <ArticleRow key={article.id} article={article} index={i} />
+                  {visible.map((article) => (
+                    <ArticleRow key={article.id} article={article} />
                   ))}
                   {hasMore && (
                     <div className="text-center mt-10 fade-up">
@@ -190,7 +189,10 @@ export default function InsightsList() {
                     type="text"
                     placeholder="Search articles..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value)
+                      setPage(1)
+                    }}
                     style={{
                       width: '100%', padding: '13px 14px 13px 42px',
                       fontSize: '0.9rem', fontFamily: 'Inter, sans-serif',
@@ -238,7 +240,10 @@ export default function InsightsList() {
                   {categories.map((cat) => (
                     <button
                       key={cat}
-                      onClick={() => setActiveCategory(cat)}
+                      onClick={() => {
+                        setActiveCategory(cat)
+                        setPage(1)
+                      }}
                       className="flex items-center justify-between cursor-pointer border-none text-left w-full transition-all duration-200"
                       style={{
                         padding: '10px 14px',
@@ -397,22 +402,23 @@ function uniqueLabels(values) {
     })
 }
 
+function ArticleAnchor({ article, children, className, style }) {
+  if (article.externalUrl) {
+    return <a href={article.externalUrl} target="_blank" rel="noreferrer" className={className} style={style}>{children}</a>
+  }
+  return <Link to={insightArticle(article.slug)} className={className} style={style}>{children}</Link>
+}
+
 // ─── Article row (image when available, text-forward otherwise) ─────────────
-function ArticleRow({ article, index }) {
+function ArticleRow({ article }) {
   const displayCats = article.categories.filter((c) => c !== 'Uncategorized')
   const hasImage = !!article.featuredImage
-  /* Legacy manifest records can still carry external URLs. Native CMS
-     articles always route through /insights/:slug. */
-  const isExternal = !!article.externalUrl
-  const ArticleLink = ({ children, className, style }) => isExternal
-    ? <a href={article.externalUrl} target="_blank" rel="noreferrer" className={className} style={style}>{children}</a>
-    : <Link to={insightArticle(article.slug)} className={className} style={style}>{children}</Link>
   return (
     /* No fade-up here: article rows load async from the manifest/CMS, which
        races the scroll-reveal observer and can leave every row stuck at
        opacity:0 (a huge blank column). Content list = always visible. */
     <div style={{ marginBottom: '40px', paddingBottom: '40px', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
-      <ArticleLink className="block" style={{ textDecoration: 'none' }}>
+      <ArticleAnchor article={article} className="block" style={{ textDecoration: 'none' }}>
         {/* Show image when available */}
         {hasImage && (
           <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', marginBottom: '20px', aspectRatio: '16/8' }}>
@@ -425,7 +431,7 @@ function ArticleRow({ article, index }) {
             />
           </div>
         )}
-      </ArticleLink>
+      </ArticleAnchor>
 
       {/* Category + date */}
       <div className="flex flex-wrap items-center gap-3 mb-3">
@@ -443,14 +449,14 @@ function ArticleRow({ article, index }) {
       </div>
 
       {/* Title */}
-      <ArticleLink style={{ textDecoration: 'none' }}>
+      <ArticleAnchor article={article} style={{ textDecoration: 'none' }}>
         <h2 className="font-heading font-bold leading-snug mb-3 transition-colors duration-200" style={{ fontSize: 'clamp(1.3rem, 2.5vw, 1.8rem)', color: '#09203e' }}
           onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
           onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
         >
           {article.title}
         </h2>
-      </ArticleLink>
+      </ArticleAnchor>
 
       {/* Excerpt */}
       <p className="font-body leading-relaxed mb-5" style={{ fontSize: '0.95rem', color: '#555' }}>
@@ -458,10 +464,10 @@ function ArticleRow({ article, index }) {
       </p>
 
       {/* Read link */}
-      <ArticleLink className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+      <ArticleAnchor article={article} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
         style={{ fontSize: '0.78rem', color: 'var(--color-brand-accent)', textDecoration: 'none', transition: 'color 0.2s' }}>
         Continue Reading <ArrowRight size={14} />
-      </ArticleLink>
+      </ArticleAnchor>
     </div>
   )
 }

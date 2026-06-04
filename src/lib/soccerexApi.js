@@ -33,6 +33,8 @@ async function request(path, { method = 'GET', body, signal, test } = {}) {
   const url = withTestParam(`${API_BASE_URL}${path}`, { test })
   const headers = { Accept: 'application/json' }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
+  const apiTestSecret = getApiTestSecret(url)
+  if (apiTestSecret) headers['X-Soccerex-Test-Secret'] = apiTestSecret
 
   let res
   try {
@@ -58,6 +60,15 @@ async function request(path, { method = 'GET', body, signal, test } = {}) {
     throw new ApiError(message, { status: res.status, body: parsed })
   }
   return parsed
+}
+
+function getApiTestSecret(url) {
+  if (!/[?&]test=1(?:&|$)/.test(url) || typeof window === 'undefined') return ''
+  try {
+    return window.sessionStorage.getItem('soccerexApiTestSecret') || ''
+  } catch {
+    return ''
+  }
 }
 
 /* Most list endpoints return a raw array; the event detail endpoint wraps in
@@ -167,11 +178,15 @@ export async function declineInvitation(token, opts = {}) {
 /* ───── Deal Network unlisted apply flow ────────────────────────────────── */
 
 export async function dealNetworkApplyStart(email, opts = {}) {
-  return unwrap(await request('/deal-network/apply/start', {
+  const payload = await request('/deal-network/apply/start', {
     method: 'POST',
     body: { email },
     test: opts.test,
-  }))
+  })
+  const data = unwrap(payload)
+  return payload?.debug && data && typeof data === 'object'
+    ? { ...data, debug: payload.debug }
+    : data
 }
 
 export async function dealNetworkApplyPreview(token, opts = {}) {

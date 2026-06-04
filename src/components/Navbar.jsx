@@ -3,13 +3,13 @@ import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, INSIGHTS,
-  MIAMI_2026, EUROPE_2026, RIYADH_2027, PROFILE_ACCESS, DEAL_NETWORK,
+  MIAMI_2026, EUROPE_2026, RIYADH_2027, DEAL_NETWORK,
 } from '../lib/routes'
 
 const navLinks = [
   { label: 'About',                  to: ABOUT },
   { label: 'Events',                 to: EVENTS },
-  { label: 'Soccerex Global Platform', to: GLOBAL_NETWORK },
+  { label: 'Global Platform',        to: GLOBAL_NETWORK },
   { label: 'Deal Network',           to: DEAL_NETWORK },
   { label: 'Insights',               to: INSIGHTS },
 ]
@@ -53,9 +53,6 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  // Close menu on route change
-  useEffect(() => { setMenuOpen(false) }, [location.pathname])
-
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-400" style={{
@@ -68,21 +65,21 @@ export default function Navbar() {
             <img src="/logos/soccerex---logo-landscape-white.svg" alt="Soccerex" style={{ height: '28px', width: 'auto', display: 'block', pointerEvents: 'none' }} />
           </Link>
 
-          <div className="hidden lg:flex items-center gap-6">
+          <div className="desktop-nav-links">
             {navLinks.map((link) => (
               <Link key={link.to} to={link.to}
-                className="font-body font-semibold text-xs uppercase tracking-[0.15em] transition-colors duration-200 text-white/85 hover:text-white cursor-pointer whitespace-nowrap"
+                className="desktop-nav-link font-body font-semibold uppercase transition-colors duration-200 text-white/85 hover:text-white cursor-pointer whitespace-nowrap"
                 style={{ textDecoration: 'none' }}>
                 {link.label}
               </Link>
             ))}
           </div>
 
-          <div className="hidden lg:flex items-center gap-5">
+          <div className="desktop-nav-cta">
             {/* Sign in removed for now per v4 revisions doc (the
                 /profile-access route still exists for magic-link returns). */}
             <Link to={CONTACT}
-              className="inline-flex items-center gap-2 font-body font-semibold text-xs uppercase tracking-[0.12em] px-5 py-2.5 transition-all duration-300 cursor-pointer whitespace-nowrap"
+              className="nav-contact-link inline-flex items-center gap-2 font-body font-semibold uppercase transition-all duration-300 cursor-pointer whitespace-nowrap"
               style={{ background: cta.bg, border: `1px solid ${cta.bg}`, color: cta.text, textDecoration: 'none' }}
               onMouseEnter={e => { e.currentTarget.style.background = cta.hover; e.currentTarget.style.borderColor = cta.hover }}
               onMouseLeave={e => { e.currentTarget.style.background = cta.bg; e.currentTarget.style.borderColor = cta.bg }}
@@ -91,7 +88,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <button onClick={() => setMenuOpen(true)} className="lg:hidden w-11 h-11 flex items-center justify-center text-white bg-transparent border-none cursor-pointer" aria-label="Open menu">
+          <button onClick={() => setMenuOpen(true)} className="mobile-menu-toggle w-11 h-11 items-center justify-center text-white bg-transparent border-none cursor-pointer" aria-label="Open menu">
             <Menu size={22} />
           </button>
         </div>
@@ -117,11 +114,6 @@ export default function Navbar() {
             className="nav-mobile-link inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] px-8 py-4 mt-6 cursor-pointer border-none"
             style={{ background: cta.bg, color: cta.text, textDecoration: 'none', transitionDelay: menuOpen ? `${150 + navLinks.length * 80}ms` : '0ms' }}>
             Get in Touch
-          </Link>
-          <Link to={PROFILE_ACCESS} onClick={() => setMenuOpen(false)}
-            className="nav-mobile-link font-mono uppercase tracking-[0.2em] mt-4 cursor-pointer"
-            style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.7rem', textDecoration: 'none', transitionDelay: menuOpen ? `${150 + (navLinks.length + 1) * 80}ms` : '0ms' }}>
-            Sign in
           </Link>
         </div>
       </div>

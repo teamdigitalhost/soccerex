@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { Users, MessageSquare, Globe, KeyRound, MapPin, Mail, ArrowRight, Calendar, Ticket, FileText, ExternalLink, Handshake, Heart, Rocket, Shield, Network, Brain, Target, Award } from 'lucide-react'
 import { feature } from 'topojson-client'
 import { Link, useLocation } from 'react-router-dom'
@@ -6,11 +6,13 @@ import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
-import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, GALLERY, pressRelease } from '../lib/routes'
+import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, GALLERY, eventSpeakers, pressRelease } from '../lib/routes'
 import ImageGrid from '../components/ImageGrid'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { lazy, Suspense } from 'react'
 const InteractiveGlobe = lazy(() => import('../components/InteractiveGlobe'))
+
+const NU_STADIUM_IMAGE = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg'
 
 // ─── SECTION 1: HERO ─────────────────────────────────────────────────────────
 function HeroSection() {
@@ -92,7 +94,7 @@ function UpcomingEventSection() {
   // for it was removed at Soccerex's request; the page itself still exists
   // and is linked from the event-page tabs and from the Europe2026 callout.
   const eventLinks = [
-    { label: 'Buy Tickets',          href: 'https://soccerexmiami2026.eventify.io/t2/tickets/', external: true, primary: true, icon: Mail },
+    { label: 'Register Now',         href: 'https://soccerexmiami2026.eventify.io/t2/tickets/', external: true, primary: true, icon: Mail },
     { label: 'Event Info',           to: MIAMI_2026,                                                 icon: Globe },
   ]
 
@@ -199,7 +201,7 @@ function UpcomingEventSection() {
               <div className="flex items-center gap-3 mt-2">
                 <MapPin size={16} style={{ color: '#007C91' }} />
                 <div>
-                  <p className="font-heading font-semibold" style={{ fontSize: 15, color: '#0D1B2A' }}>Location to be announced</p>
+                  <p className="font-heading font-semibold" style={{ fontSize: 15, color: '#0D1B2A' }}>Nu Stadium</p>
                   <p className="font-body" style={{ fontSize: 12.5, color: '#607186' }}>Miami, USA</p>
                 </div>
               </div>
@@ -236,7 +238,7 @@ function ByTheNumbersSection() {
         <div className="mb-14">
           <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-brand-accent)', fontWeight: 600 }}>SOCCEREX BY THE NUMBERS</p>
           <h2 className="font-heading font-bold leading-tight fade-up" style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)', color: '#0D1B2A' }}>
-            57 Events. 21 Cities. <span style={{ color: 'var(--color-brand-accent)' }}>30 Years.</span>
+            30 Years. 57 Events. <span style={{ color: 'var(--color-brand-accent)' }}>One Global Football Business Platform.</span>
           </h2>
           <p className="font-body fade-up mt-4" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: '720px' }}>
             Since 1996, Soccerex has brought football&#x2019;s leaders together across the world&#x2019;s most important markets. That history now powers a year-round platform built to turn access into partnerships, investment, innovation, impact, and commercial opportunity.
@@ -423,11 +425,11 @@ function EventsSection() {
       city: 'MIAMI',
       name: 'Soccerex Miami',
       dates: '23-25 September 2026',
-      venue: 'Venue to be announced',
-      img: '/events/miami/2026/sections/miami-skyline.jpg',
+      venue: 'Nu Stadium',
+      img: NU_STADIUM_IMAGE,
       crest: '/brand/crests/crest-miami-white.svg',
       learnMoreTo: '/miami-2026',
-      ctaLabel: 'Buy Tickets',
+      ctaLabel: 'Register Now',
       ctaHref: 'https://soccerexmiami2026.eventify.io/t2/tickets/',
       ctaExternal: true,
       status: 'soon',
@@ -442,9 +444,6 @@ function EventsSection() {
       img: '/events/middle-east/2026/sections/riyadh-skyline.jpg',
       crest: '/brand/crests/crest-riyadh-white.svg',
       learnMoreTo: '/riyadh-2027',
-      ctaLabel: 'Pre-register',
-      ctaHref: '/riyadh-2027#pre-register',
-      ctaExternal: false,
       status: 'soon',
       accent: '#0f8f52',
       ctaTextColor: '#fff',
@@ -467,13 +466,14 @@ function EventsSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {events.map((event) => {
             const isMiami = event.city === 'MIAMI'
+            const isRiyadh = event.city === 'RIYADH'
             const isPast = event.status === 'past'
             const cityColor = event.accent
             const accentStripe = isMiami
               ? 'linear-gradient(90deg, #007C91 0%, #E91E63 50%, #FFB46A 100%)'
               : isPast
                 ? 'rgba(255,255,255,0.35)'
-                : 'var(--color-brand-accent)'
+                : event.accent
             const overlayGradient = isMiami
               ? 'linear-gradient(180deg, rgba(13,27,42,0.45) 0%, rgba(13,27,42,0.30) 28%, rgba(233,30,99,0.30) 60%, rgba(13,27,42,0.97) 100%)'
               : isPast
@@ -493,8 +493,8 @@ function EventsSection() {
                recap. */
             const cardGlow = isMiami
               ? '0 32px 72px -20px rgba(13,27,42,0.32), 0 0 48px rgba(233,30,99,0.42), 0 0 120px rgba(255,180,106,0.30)'
-              : event.city === 'RIYADH'
-                ? '0 32px 72px -20px rgba(13,27,42,0.30), 0 0 48px rgba(242,233,60,0.32), 0 0 110px rgba(242,233,60,0.20)'
+              : isRiyadh
+                ? '0 32px 72px -20px rgba(13,27,42,0.30), 0 0 48px rgba(15,143,82,0.32), 0 0 110px rgba(15,143,82,0.20)'
                 : '0 28px 60px -20px rgba(13,27,42,0.32), 0 0 48px rgba(13,27,42,0.18), 0 0 110px rgba(13,27,42,0.10)'
             return (
               <div
@@ -565,7 +565,7 @@ function EventsSection() {
                     {event.status === 'soon' && (
                       <div style={{
                         alignSelf: 'flex-start', marginBottom: '10px', padding: '5px 12px',
-                        background: isMiami ? '#E91E63' : 'rgba(255,255,255,0.1)',
+                        background: isMiami ? '#E91E63' : isRiyadh ? '#0f8f52' : 'rgba(255,255,255,0.1)',
                         backdropFilter: 'blur(8px)',
                         border: isMiami ? '1px solid rgba(255,255,255,0.4)' : '1px solid rgba(255,255,255,0.2)',
                         borderRadius: '100px',
@@ -967,6 +967,9 @@ function SocialProofSection() {
           <p className="font-body text-white/55 leading-relaxed fade-up mt-4" style={{ fontSize: '1rem', maxWidth: '720px' }}>
             Built over 30 years, the Soccerex ecosystem connects the people, capital, companies, and institutions shaping football&#x2019;s future, creating the foundation for events, dealmaking, investment, innovation, women&#x2019;s football, and impact.
           </p>
+          <p className="font-body text-white/55 leading-relaxed fade-up mt-4" style={{ fontSize: '1rem', maxWidth: '720px' }}>
+            For 30 years, Soccerex has connected football&#x2019;s global ecosystem, turning access into partnerships, investment, innovation, impact, and commercial opportunity.
+          </p>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -991,7 +994,7 @@ const HOME_SPEAKERS = [
   { name: 'Javier Tebas', title: 'President, LaLiga', img: '/images/events/speakers/speaker2.webp' },
   { name: 'Don Garber', title: 'Commissioner, MLS', img: '/images/events/speakers/speaker4.webp' },
   { name: 'Alessandro Del Piero', title: 'Former Footballer, Italy', img: '/images/events/speakers/speaker5.webp' },
-  { name: 'Kate Abdo', title: 'Broadcaster, CBS Sports', img: '/images/events/speakers/speaker22.webp' },
+  { name: 'Luigi De Siervo', title: 'CEO, Lega Serie A', img: '/images/events/speakers/speaker8.webp' },
   { name: 'Jorge Mas', title: 'Managing Owner, Inter Miami CF', img: '/images/events/speakers/speaker7.webp' },
   { name: 'Alexi Lalas', title: 'Broadcaster, FOX Sports', img: '/images/events/speakers/speaker29.webp' },
   { name: 'Eddy Cue', title: 'SVP of Services, Apple', img: '/images/events/speakers/speaker38.webp' },
@@ -1017,7 +1020,10 @@ function SpeakersShowcase() {
           </h2>
           <div className="fade-up mx-auto mb-6" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           <p className="font-body fade-up mx-auto" style={{ fontSize: '1.05rem', color: '#555', maxWidth: '680px' }}>
-            Presidents, commissioners, legends, operators, and innovators. The people shaping the future of football share the Soccerex stage.
+            Football’s decision-makers do not just gather at Soccerex. They shape what comes next.
+          </p>
+          <p className="font-body fade-up mx-auto mt-4" style={{ fontSize: '1.05rem', color: '#555', maxWidth: '680px' }}>
+            From presidents and commissioners to owners, investors, legends, operators, and innovators, the Soccerex stage brings together the voices driving the future of the global game.
           </p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -1044,13 +1050,15 @@ function SpeakersShowcase() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-10 fade-up">
-          <Link to={`${EVENTS}#speakers`} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-            style={{ background: '#09203e', color: '#fff', padding: '14px 32px', fontSize: '0.82rem', textDecoration: 'none', transition: 'all 0.3s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#0d2b52' }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#09203e' }}
+        <div className="text-center mt-12 fade-up">
+          <Link
+            to={eventSpeakers('soccerex-europe-2026')}
+            className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] cursor-pointer"
+            style={{ background: '#09203e', color: '#fff', padding: '16px 34px', fontSize: '0.82rem', textDecoration: 'none', transition: 'all 0.3s' }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = '#0d2b52' }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e' }}
           >
-            View all past speakers <ArrowRight size={14} />
+            View full speaker list <ArrowRight size={15} />
           </Link>
         </div>
       </div>
@@ -1325,7 +1333,7 @@ function HeritageMapSection() {
         </p>
       </div>
 
-      <div className="fade-up" style={{ marginTop: '-6vw' }}>
+      <div className="fade-up" style={{ marginTop: 'clamp(0px, 1.5vw, 20px)' }}>
         <Suspense fallback={<div style={{ height: '600px' }} />}>
           <InteractiveGlobe />
         </Suspense>

@@ -8,7 +8,8 @@ import { withTestSearch } from '../lib/testMode'
    taglines letter-by-letter; that's retired in favour of the static
    title + subtitle the light version landed on. */
 const HERO_TITLE = 'The Global Platform Where Football Business Gets Done'
-const HERO_SUBTITLE = 'Events. Dealmaking. Capital. Innovation. Women’s Football. Impact. One ecosystem built to turn access into outcomes.'
+const HERO_SUBTITLE = 'Events. Dealmaking. Capital. Innovation. Women’s Football. Impact.'
+const HERO_OUTCOME_LINE = 'One ecosystem built to turn access into outcomes.'
 
 // ─── Hero images — built from manifest, shuffled fresh each visit ────────────
 let ALL_IMAGES = []
@@ -56,7 +57,6 @@ const TAGLINES = [
 
 // ─── Letter-by-letter component ─────────────────────────────────────────────
 function CascadingText({ text, visible, className = '' }) {
-  const len = text.length
   return (
     <span className={`cascading-text ${className} ${visible ? 'cascading-visible' : ''}`} aria-label={text}>
       {text.split('').map((char, i) => (
@@ -432,6 +432,20 @@ export default function HeroSlideshow() {
           }}
         >
           {HERO_SUBTITLE}
+        </p>
+        <p
+          className="hero-static-subtitle font-body leading-relaxed"
+          style={{
+            fontSize: 'clamp(1rem, 1.6vw, 1.2rem)',
+            maxWidth: '720px',
+            margin: '-1.75rem auto 2.5rem',
+            fontWeight: 600,
+            lineHeight: 1.4,
+            color: '#1d2a3d',
+            textShadow: '0 1px 0 rgba(255,248,244,0.65), 0 1px 14px rgba(255,248,244,0.5)',
+          }}
+        >
+          {HERO_OUTCOME_LINE}
         </p>
 
         {/* CTAs */}

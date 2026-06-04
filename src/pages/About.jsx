@@ -1,20 +1,20 @@
-import { useEffect, useRef } from 'react'
-import { ArrowRight, Globe, Users, Mic, Newspaper, Shield, Network as NetworkIcon, Brain, Target, Award } from 'lucide-react'
+import { createElement, useEffect, useRef } from 'react'
+import { ArrowRight, Globe, Users, Shield, Network as NetworkIcon, Brain, Target, Award } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { CONTACT, EUROPE_2026, MIAMI_2026 } from '../lib/routes'
+import { CONTACT, MIAMI_2026 } from '../lib/routes'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ─── Timeline data ──────────────────────────────────────────────────────────
 const TIMELINE = [
   { year: '1996', title: 'Soccerex Begins at Wembley', desc: 'The first Soccerex football business event launches at Wembley Stadium, creating a new meeting point for the global business of the game.' },
   { year: '1998', title: 'Paris Expands the Platform', desc: 'Soccerex moves into mainland Europe, strengthening its international footprint and widening its football business network.' },
-  { year: '1999', title: 'Los Angeles Opens the Americas', desc: "Soccerex creates an early bridge between European and American football business leaders, expanding the platform's global reach." },
-  { year: '2000', title: 'Manchester Becomes a UK Home', desc: "Soccerex enters one of football's most important cities, deepening its connection to clubs, leagues, rightsholders, and commercial leaders." },
-  { year: '2001', title: 'Dubai Opens the Middle East', desc: "Soccerex establishes its first foothold in the Middle East, connecting football business leaders in one of the game's fastest-growing regions." },
-  { year: '2007', title: 'Johannesburg Brings Soccerex to Africa', desc: "Johannesburg hosts Soccerex's first African edition, a major milestone ahead of the 2010 FIFA World Cup." },
-  { year: '2009', title: 'Brazil Strengthens the South America Chapter', desc: "Brasilia hosts Soccerex's first South American forum, establishing deep roots in one of football's most influential markets." },
+  { year: '1999', title: 'Los Angeles Opens the Americas', desc: 'Soccerex creates an early bridge between European and American football business leaders, expanding the platform’s global reach.' },
+  { year: '2000', title: 'Manchester Becomes a UK Home', desc: 'Soccerex enters one of football’s most important cities, deepening its connection to clubs, leagues, rights holders, and commercial leaders.' },
+  { year: '2001', title: 'Dubai Opens the Middle East', desc: 'Soccerex establishes its first foothold in the Middle East, connecting football business leaders in one of the game’s fastest-growing regions.' },
+  { year: '2007', title: 'Johannesburg Brings Soccerex to Africa', desc: 'Johannesburg hosts Soccerex’s first African edition, a major milestone ahead of the 2010 FIFA World Cup.' },
+  { year: '2009', title: 'Brazil Strengthens the South America Chapter', desc: 'Brasilia hosts Soccerex’s first South American forum, establishing deep roots in one of football’s most influential markets.' },
   { year: '2010', title: 'Singapore Opens Asia', desc: 'The inaugural Asian Forum launches in Singapore, expanding Soccerex into another major growth region for football business.' },
   { year: '2010', title: 'Rio de Janeiro Becomes a Global Stage', desc: 'The Soccerex Global Convention moves to Rio, bringing together international leaders, legends, and decision-makers in a landmark football market.' },
   { year: '2014', title: 'Barbados Anchors the Americas Forum', desc: 'The inaugural Americas Forum brings senior football voices together in the region, including MLS Commissioner Don Garber.' },
@@ -23,30 +23,19 @@ const TIMELINE = [
   { year: '2018', title: 'Miami and China Mark New Growth Markets', desc: 'Soccerex Americas launches at Marlins Park in Miami while Soccerex China debuts in Zhuhai, strengthening the platform across two strategic markets.' },
   { year: '2020', title: 'Digital Innovation Extends the Ecosystem', desc: 'Soccerex Connected launches as a digital event series, reaching 2,000+ delegates across 100+ countries.' },
   { year: '2022', title: 'Soccerex Returns to Miami', desc: 'Soccerex returns to Miami Beach Convention Center with 2,000+ delegates, 650 rightsholders, and 100+ speakers.' },
-  { year: '2024', title: 'Amsterdam and Miami Build Momentum', desc: "Record-breaking editions in Amsterdam and Miami reinforce Soccerex's role as a global meeting point for football business." },
-  { year: '2025', title: 'Three Continents, One Platform', desc: "Soccerex expands across MENA, Europe, and the Americas, connecting football's global ecosystem through Cairo, Amsterdam, and Miami." },
+  { year: '2024', title: 'Amsterdam and Miami Build Momentum', desc: 'Record-breaking editions in Amsterdam and Miami reinforce Soccerex’s role as a global meeting point for football business.' },
+  { year: '2025', title: 'Three Continents, One Platform', desc: 'Soccerex expands across MENA, Europe, and the Americas, connecting football’s global ecosystem through Cairo, Amsterdam, and Miami.' },
   { year: '2026', title: '30th Anniversary and the Next Chapter', desc: 'Soccerex celebrates 30 years as the platform evolves beyond events into a year-round football business ecosystem built to turn access into outcomes.' },
 ]
 
-// ─── ROI case studies ───────────────────────────────────────────────────────
-// ROI_CASES retired with the "Deals That Got Done" section (v4 revisions doc).
-
-// ─── Network categories ─────────────────────────────────────────────────────
-const NETWORK = [
-  'Club executives and owners', 'League and federation leaders', 'Investors and family offices',
-  'Brands and sponsors', 'Media and broadcasters', 'Technology companies',
-  'Agents and intermediaries', 'Legal and financial advisors', 'Government and tourism bodies',
-  'Stadia and infrastructure', 'Performance and medical', 'Academy and youth development',
-]
-
 // ─── Flip card: icon/title/desc on front, event image on back ──────────────
-function FlipCard({ icon: Icon, title, desc, img, variant = 'centered' }) {
+function FlipCard({ icon, title, desc, img, variant = 'centered' }) {
   return (
     <div
       className="sx-flip scale-up"
       style={{
         perspective: '1000px',
-        height: variant === 'centered' ? '280px' : '270px',
+        height: variant === 'centered' ? '340px' : '320px',
       }}
     >
       <div className="sx-flip-inner" style={{
@@ -78,7 +67,7 @@ function FlipCard({ icon: Icon, title, desc, img, variant = 'centered' }) {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '18px',
           }}>
-            <Icon size={variant === 'centered' ? 30 : 28} color="#09203e" strokeWidth={2.2} />
+            {createElement(icon, { size: variant === 'centered' ? 30 : 28, color: '#09203e', strokeWidth: 2.2 })}
           </div>
           <h4 className="font-heading font-bold mb-3" style={{
             fontSize: variant === 'centered' ? '1rem' : '1.05rem',
@@ -205,12 +194,12 @@ export default function About() {
             />
           </div>
           <p className="section-label text-brand-accent mb-6 fade-up">ABOUT SOCCEREX</p>
-          <h1 className="font-heading font-bold text-white leading-[1.05] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.6rem, 6.5vw, 5rem)' }}>
-            The Platform Where{' '}
-            <span style={{ color: 'var(--color-brand-accent)' }}>Football Business Gets Done</span>
+          <h1 className="font-heading font-bold text-white leading-[1.05] mb-7 fade-up text-glow" style={{ fontSize: 'clamp(2.8rem, 7vw, 5.4rem)' }}>
+            The Platform Where Football{' '}
+            <span style={{ color: 'var(--color-brand-accent)' }}>Business Gets Done</span>
           </h1>
           <div className="fade-up mx-auto mb-8" style={{ width: '100px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
-          <p className="font-body text-white/80 leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: 'clamp(1.05rem, 1.6vw, 1.3rem)', maxWidth: '860px', lineHeight: 1.55 }}>
+          <p className="font-body text-white/80 leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: 'clamp(1.05rem, 1.6vw, 1.35rem)', maxWidth: '820px', lineHeight: 1.55 }}>
             Since 1996, Soccerex has served as neutral ground for the global football business ecosystem, connecting leaders, rightsholders, capital, brands, innovators, and strategic partners across the game. Thirty years, five continents, one platform built to turn access into partnerships, investment, innovation, impact, and commercial opportunity.
           </p>
           <p className="font-body text-white/55 fade-up font-mono uppercase tracking-widest" style={{ fontSize: '0.85rem', letterSpacing: '0.2em' }}>
@@ -232,14 +221,13 @@ export default function About() {
           <div className="text-center mb-16">
             <p className="section-label mb-4 fade-up" style={{ color: '#09203e', fontWeight: 600 }}>OUR MISSION</p>
             <h2 className="font-heading font-bold leading-tight mb-6 fade-up" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.6rem)', color: '#09203e' }}>
-              To Help the Football Business Ecosystem{' '}
-              <span style={{ color: 'var(--color-brand-accent)' }}>Connect, Grow, Invest, and Create Impact.</span>
+              To Help the Football Business Ecosystem Connect, Grow, Invest, and Create Impact.
             </h2>
             <div className="fade-up mx-auto mb-8" style={{ width: '80px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
-            <p className="font-body leading-relaxed fade-up mx-auto mb-4" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: '#444', maxWidth: '760px' }}>
+            <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: '#444', maxWidth: '720px' }}>
               Soccerex exists to bring the right people, capital, companies, and institutions together around the opportunities shaping the future of football.
             </p>
-            <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: '#444', maxWidth: '760px' }}>
+            <p className="font-body leading-relaxed fade-up mx-auto mt-4" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.1rem)', color: '#444', maxWidth: '720px' }}>
               Through events, Deal Network, HerSoccerex, market insight, and strategic partnerships, Soccerex creates the platform for relationships to become partnerships, partnerships to become growth, and growth to create lasting commercial and community value.
             </p>
           </div>
@@ -250,9 +238,9 @@ export default function About() {
             {[
               { icon: Shield, title: 'Neutrality & Trust', desc: 'Soccerex is independent, trusted, and open to the full football business ecosystem, creating neutral ground for meaningful engagement.', img: '/hero/03-TIER1-infantino-fifa-president.jpg' },
               { icon: NetworkIcon, title: 'Ecosystem Connectivity', desc: 'We connect leaders, rightsholders, capital, brands, innovators, and strategic partners across the global game.', img: '/hero/165-NEW6-europe-opening-speech-massive-crowd.jpg' },
-              { icon: Brain, title: 'Built Relationships', desc: "Our platform is powered by 30 years of relationships, credibility, and institutional trust across football's most important markets.", img: '/hero/04-TIER1-bobby-charlton-handprints.jpg' },
+              { icon: Brain, title: 'Built Relationships', desc: 'Our platform is powered by 30 years of relationships, credibility, and institutional trust across football’s most important markets.', img: '/hero/04-TIER1-bobby-charlton-handprints.jpg' },
               { icon: Target, title: 'Outcome-Driven Access', desc: 'We focus on turning access into partnerships, investment, innovation, impact, and measurable commercial opportunity.', img: '/images/about/networking-group.jpg' },
-              { icon: Award, title: 'Global Credibility', desc: 'A proven track record across five continents, 57 events, and three decades of football business leadership.', img: '/hero/07-TIER1-van-der-sar.jpg' },
+              { icon: Award, title: 'Global Credibility', desc: 'Soccerex has a proven track record across five continents, 57 events, and three decades of football business leadership.', img: '/hero/07-TIER1-van-der-sar.jpg' },
             ].map((p) => (
               <FlipCard
                 key={p.title}
@@ -296,7 +284,7 @@ export default function About() {
                 Today, Soccerex continues to evolve into a year-round football business platform, turning access into partnerships, investment, innovation, impact, and commercial opportunity.
               </p>
               <p className="font-body leading-relaxed slide-left" style={{ fontSize: '1.02rem', color: '#09203e', fontWeight: 600 }}>
-                Football is where we started. The global football business ecosystem is what we continue to build.
+                Born from football. Built to power the global football business ecosystem.
               </p>
             </div>
             <div className="lg:col-span-2 slide-right">
@@ -313,7 +301,7 @@ export default function About() {
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
 
       {/* ═══ STATS BAR ═════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden flex items-center" style={{ background: '#09203e', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
+      <section className="relative overflow-hidden flex flex-col items-center justify-center" style={{ background: '#09203e', padding: 'clamp(80px,10vw,120px) clamp(24px,5vw,80px)' }}>
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={20} opacity={0.1} />
         <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-8 w-full" style={{ maxWidth: '1100px', margin: '0 auto' }}>
           {[
@@ -356,15 +344,15 @@ export default function About() {
               The Football Business Ecosystem,{' '}
               <span style={{ color: 'var(--color-brand-accent)' }}>Connected</span>
             </h2>
-            <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
-            <p className="font-body leading-relaxed fade-up mx-auto" style={{ fontSize: '1.05rem', color: '#444', maxWidth: '760px' }}>
+            <p className="font-body leading-relaxed fade-up mx-auto mb-6" style={{ fontSize: '1.02rem', color: '#555', maxWidth: '760px' }}>
               Soccerex brings together the institutions, operators, capital partners, brands, innovators, and emerging platforms shaping where football goes next.
             </p>
+            <div className="fade-up mx-auto" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { title: 'Institutional Football Leaders', desc: 'FIFA, UEFA, CONCACAF, leagues, federations, governing bodies, clubs, competitions, and senior rightsholders across the global game.', icon: Globe, img: '/hero/16-TIER2-football-for-hope-youth.jpg' },
-              { title: 'Commercial & Industry Operators', desc: "Brands, sponsors, broadcasters, media platforms, agencies, event operators, consultants, advisors, and commercial decision-makers driving football's business growth.", icon: Users, img: '/hero/15-TIER2-asian-forum-panel.jpg' },
+              { title: 'Commercial & Industry Operators', desc: 'Brands, sponsors, broadcasters, media platforms, agencies, event operators, consultants, advisors, and commercial decision-makers driving football’s business growth.', icon: Users, img: '/hero/15-TIER2-asian-forum-panel.jpg' },
               { title: 'Capital, Innovation & Growth Partners', desc: 'Investors, family offices, funds, sports tech startups, digital platforms, academies, development organizations, impact partners, and emerging football economy builders.', icon: ArrowRight, img: '/hero/09-TIER1-jenny-chiu-diverse-panel.jpg' },
             ].map((item) => (
               <FlipCard
@@ -395,10 +383,10 @@ export default function About() {
           <h2 className="font-heading font-bold leading-tight mb-4 fade-up text-center" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#09203e' }}>
             30 Years Connecting the <span style={{ color: 'var(--color-brand-accent)' }}>Football Business Ecosystem</span>
           </h2>
-          <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
-          <p className="font-body leading-relaxed fade-up text-center mx-auto mb-12" style={{ fontSize: '1.05rem', color: '#444', maxWidth: '760px' }}>
+          <p className="font-body leading-relaxed fade-up text-center mx-auto mb-8" style={{ fontSize: '1.02rem', color: '#555', maxWidth: '760px' }}>
             From Wembley to Miami, Soccerex has spent three decades connecting the people, markets, and institutions shaping global football. What began as a pioneering football business gathering has evolved into a year-round platform built around access, partnerships, investment, innovation, impact, and commercial opportunity.
           </p>
+          <div className="fade-up mx-auto mb-12" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, #09203e, transparent)' }} />
 
           <div className="relative" style={{ paddingLeft: 'clamp(32px, 5vw, 50px)' }}>
             {/* Vertical timeline line */}
@@ -444,23 +432,18 @@ export default function About() {
         <div className="relative z-10 text-center" style={{ maxWidth: '850px', margin: '0 auto' }}>
           <blockquote className="fade-up">
             <p className="font-heading font-bold text-white leading-snug mb-6 text-glow" style={{ fontSize: 'clamp(1.6rem, 3.2vw, 2.5rem)' }}>
-              &ldquo;Take care of the game and the business takes care of itself.&rdquo;
+              &ldquo;Take care of the game, and the business takes care of itself.&rdquo;
             </p>
             <div style={{ width: '60px', height: '2px', background: 'var(--color-brand-accent)', margin: '0 auto 2rem' }} />
           </blockquote>
           <p className="font-body text-white/70 leading-relaxed fade-up mx-auto mb-4" style={{ fontSize: '1.05rem', maxWidth: '720px' }}>
             That principle has guided Soccerex since 1996, helping us build one of the most trusted networks in global football business.
           </p>
-          <p className="font-body text-white/60 leading-relaxed fade-up mx-auto" style={{ fontSize: '1rem', maxWidth: '740px' }}>
+          <p className="font-body text-white/60 leading-relaxed fade-up mx-auto" style={{ fontSize: '1rem', maxWidth: '720px' }}>
             Now entering our 30th year, Soccerex has hosted 57 events across 21 cities and welcomed more than 75,000 delegates. That legacy now powers a year-round platform built to turn access into partnerships, investment, innovation, impact, and commercial opportunity.
           </p>
         </div>
       </section>
-
-      {/* "Deals That Got Done" ROI section removed per v4 revisions doc. */}
-
-      {/* Wave divider: ethos → CTA */}
-      <PixelDivider color="#050d1a" layers={4} height={90} speed={0.6} />
 
       {/* ═══ CTA ═══════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #09203e 0%, #0e2a4f 50%, #061729 100%)', padding: 'clamp(100px,12vw,160px) clamp(24px,5vw,80px)', textAlign: 'center' }}>
@@ -472,9 +455,6 @@ export default function About() {
             Be Part of What's <span style={{ color: 'var(--color-brand-accent)' }}>Next</span>
           </h2>
           <div className="fade-up mx-auto mb-6" style={{ width: '60px', height: '3px', background: 'linear-gradient(90deg, transparent, var(--color-brand-accent), transparent)' }} />
-          <p className="font-body text-white/65 mb-10 fade-up leading-relaxed" style={{ fontSize: '1.05rem' }}>
-            To enquire about hosting a Soccerex in your city, or to join our next event, get in touch.
-          </p>
           <div className="flex flex-wrap justify-center gap-4 fade-up">
             <Link to={MIAMI_2026} className="inline-flex items-center gap-2 font-body font-semibold text-sm uppercase tracking-widest px-8 py-4 cursor-pointer transition-all duration-300"
               style={{ background: 'var(--color-brand-accent)', color: '#fff', textDecoration: 'none' }}

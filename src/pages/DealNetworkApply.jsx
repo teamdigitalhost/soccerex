@@ -10,6 +10,7 @@ import {
   ApiError,
 } from '../lib/soccerexApi'
 import { CAPABILITY_VALIDITY, NEED_OFFER_LABELS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
+import { isTestModeFromUrl } from '../lib/testMode'
 
 // company Profile type → applicant side. club/federation are rightsholders
 // (Property side); everything else is treated as a company (Brand side).
@@ -45,9 +46,14 @@ const STEP_CONDENSED = 'condensed'
 const STEP_MATCHMAKING = 'matchmaking'
 const STEP_DONE = 'done'
 
+function normalizeApplyEmail(value) {
+  return String(value || '').trim().replace(/[.,;:]+$/g, '').toLowerCase()
+}
+
 export default function DealNetworkApply() {
   const [params] = useSearchParams()
   const tokenFromUrl = params.get('token') || ''
+  const testMode = isTestModeFromUrl()
 
   // C3: optional ?track= presets the entry side so a tracked link (e.g. from a
   // "Rightsholders" CTA) lands the applicant on the right capability grid by
@@ -68,6 +74,7 @@ export default function DealNetworkApply() {
   // Email step state
   const [email, setEmail] = useState('')
   const [sentMessage, setSentMessage] = useState('')
+  const [debugMagicLink, setDebugMagicLink] = useState('')
 
   // Preview / claim state
   const [token, setToken] = useState(tokenFromUrl)
@@ -104,7 +111,7 @@ export default function DealNetworkApply() {
     if (! tokenFromUrl) return
     let cancelled = false
     setBusy(true)
-    dealNetworkApplyPreview(tokenFromUrl)
+    dealNetworkApplyPreview(tokenFromUrl, { test: testMode })
       .then((res) => {
         if (cancelled) return
         setMatched(res)
@@ -124,7 +131,7 @@ export default function DealNetworkApply() {
       })
       .finally(() => !cancelled && setBusy(false))
     return () => { cancelled = true }
-  }, [tokenFromUrl])
+  }, [tokenFromUrl, testMode])
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -134,11 +141,14 @@ export default function DealNetworkApply() {
 
   async function handleEmailSubmit(e) {
     e?.preventDefault?.()
-    if (! email.trim() || busy) return
+    const normalizedEmail = normalizeApplyEmail(email)
+    if (! normalizedEmail || busy) return
+    setEmail(normalizedEmail)
     setBusy(true); setError('')
     try {
-      const res = await dealNetworkApplyStart(email.trim())
+      const res = await dealNetworkApplyStart(normalizedEmail, { test: testMode })
       setSentMessage(res?.message || 'Check your inbox for a confirmation link.')
+      setDebugMagicLink(res?.debug?.deal_network_apply_url || '')
       setStep(STEP_SENT)
     } catch (err) {
       setError(err?.message || 'Could not send confirmation link.')
@@ -154,7 +164,7 @@ export default function DealNetworkApply() {
       return
     }
     try {
-      const res = await dealNetworkSearchCompanies(token, q.trim())
+      const res = await dealNetworkSearchCompanies(token, q.trim(), { test: testMode })
       setCompanyResults(Array.isArray(res) ? res : [])
     } catch { /* ignore */ }
   }
@@ -176,7 +186,7 @@ export default function DealNetworkApply() {
         payload.company_industry = companyIndustry.trim() || undefined
       }
 
-      const res = await dealNetworkApplyClaim(payload)
+      const res = await dealNetworkApplyClaim(payload, { test: testMode })
       setMatchmakingToken(res.matchmaking_token)
       setChosenPerson(res.person)
       setChosenCompany(res.company)
@@ -224,7 +234,7 @@ export default function DealNetworkApply() {
         source: 'frontend-deal-network-apply',
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
         marketing_opt_in: true,
-      })
+      }, { test: testMode })
       setStep(STEP_DONE)
     } catch (err) {
       setError(err?.message || 'Could not submit your application.')
@@ -257,7 +267,7 @@ export default function DealNetworkApply() {
           )}
 
           {step === STEP_EMAIL && <EmailStep email={email} setEmail={setEmail} busy={busy} onSubmit={handleEmailSubmit} />}
-          {step === STEP_SENT && <SentStep message={sentMessage} email={email} />}
+          {step === STEP_SENT && <SentStep message={sentMessage} email={email} debugMagicLink={debugMagicLink} />}
           {step === STEP_PREVIEW && matched && (
             <PreviewStep
               matched={matched}
@@ -307,7 +317,7 @@ export default function DealNetworkApply() {
 
 function EmailStep({ email, setEmail, busy, onSubmit }) {
   return (
-    <form onSubmit={onSubmit} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
+    <form noValidate onSubmit={onSubmit} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
       <p className="font-body" style={{ fontSize: '1rem', color: '#586778', marginBottom: 22, lineHeight: 1.6 }}>
         Start with your work email. We'll check our database and let you confirm your details. Most existing contacts can join in under 60 seconds.
       </p>
@@ -319,6 +329,7 @@ function EmailStep({ email, setEmail, busy, onSubmit }) {
         <input
           type="email" required value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onBlur={(e) => setEmail(normalizeApplyEmail(e.target.value))}
           placeholder="you@company.com"
           disabled={busy}
           style={{ width: '100%', padding: '14px 14px 14px 40px', fontSize: '0.95rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 8, color: NAVY, outline: 'none' }}
@@ -336,7 +347,7 @@ function EmailStep({ email, setEmail, busy, onSubmit }) {
   )
 }
 
-function SentStep({ message, email }) {
+function SentStep({ message, email, debugMagicLink }) {
   return (
     <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)', textAlign: 'center' }}>
       <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#d4f1e1', color: '#166534', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
@@ -349,6 +360,15 @@ function SentStep({ message, email }) {
       <p className="font-body mt-3" style={{ fontSize: '0.85rem', color: '#9aa6b3' }}>
         Sent to <span className="font-mono">{email}</span>
       </p>
+      {debugMagicLink && (
+        <a
+          href={debugMagicLink}
+          className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] mt-5"
+          style={{ background: NAVY, color: '#fff', padding: '12px 18px', fontSize: '0.72rem', borderRadius: 4, textDecoration: 'none' }}
+        >
+          Open test magic link <ArrowRight size={14} />
+        </a>
+      )}
     </div>
   )
 }
