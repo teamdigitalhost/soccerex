@@ -7,7 +7,7 @@ headers = []
 [functions."*"]
 
 [build]
-publish = "/Users/maven/Library/Mobile Documents/com~apple~CloudDocs/Sites/Soccerex-front-v4-revisions/dist"
+publish = "/Users/maven/Library/Mobile Documents/com~apple~CloudDocs/Sites/Soccerex-front/dist"
 publishOrigin = "config"
 commandOrigin = "config"
 command = "npm run build"
