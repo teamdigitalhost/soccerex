@@ -268,7 +268,7 @@ export default function DealNetwork() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <AudienceCard icon={Trophy} title="Rightsholders" access="Invited, no fee" body="Clubs, leagues, federations, governing bodies, and player representatives. Invited and curated by Soccerex, with no cost to participate." items={RIGHTSHOLDER_TYPES} tint={NAVY} tintBg="rgba(9,32,62,0.08)" />
-            <AudienceCard icon={Briefcase} title="Companies" access="Included with participation" body="Brands, sponsors, agencies, and strategic partners. Deal Network access is included with, or added to, a Soccerex exhibitor or sponsor package." items={COMPANY_TYPES} tint={PURPLE} tintBg={PURPLE_SOFT} />
+            <AudienceCard icon={Briefcase} title="Companies" access="Available to Sponsors & Exhibitors" body="Brands, sponsors, agencies, and strategic partners. Deal Network access is included with, or added to, a Soccerex exhibitor or sponsor package." items={COMPANY_TYPES} tint={PURPLE} tintBg={PURPLE_SOFT} />
             <AudienceCard icon={Building2} title="Capital & Impact Partners" access="Curated access, apply to join" body="The third force behind the biggest deals: capital, infrastructure, and mission-driven support. A dedicated curated track, reviewed for mandate fit." items={CAPITAL_IMPACT_TYPES} tint="var(--color-brand-accent)" tintBg="rgba(191,177,112,0.18)" />
           </div>
         </div>
