@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import {
   Handshake, Building2, Briefcase, ArrowRight, Sparkles, Shield,
   Trophy, Crosshair, ClipboardList, CheckCircle2, Globe,
+  PhoneCall, Mail, CalendarCheck,
 } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
@@ -32,12 +33,14 @@ const RIGHTSHOLDER_TYPES = [
   "Women's football properties", 'Football development organizations',
 ]
 
-const PARTNER_TYPES = [
+const COMPANY_TYPES = [
   'Brands and sponsors', 'Agencies and operators', 'Technology providers',
-  'Startups and innovators', 'Private equity groups', 'Family offices',
-  'Funds', 'Strategic investors', 'Financial institutions',
-  'Foundations and nonprofits', 'Impact-focused brands',
-  'Media and content platforms', 'Service providers and vendors',
+  'Startups and innovators', 'Media and content platforms', 'Service providers and vendors',
+]
+
+const CAPITAL_IMPACT_TYPES = [
+  'Private equity groups', 'Family offices', 'Funds and strategic investors',
+  'Financial institutions', 'Foundations and nonprofits', 'Impact-focused brands',
 ]
 
 const OUTCOME_LIST = [
@@ -208,15 +211,17 @@ export default function DealNetwork() {
             Curated Access, Built to Convert
           </h2>
           <p className="font-body text-center mx-auto fade-up mb-10" style={{ fontSize: '1rem', color: '#586778', lineHeight: 1.65, maxWidth: 760 }}>
-            The Deal Network gives participants a structured path into the right conversations, with Soccerex curating the fit, preparing the room, and supporting follow-through beyond the event.
+            From enrollment to outcomes, a structured six-step process. Soccerex curates the fit, prepares the room, and supports follow-through beyond the event. Every meeting is bilateral, confirmed by both sides before a slot is scheduled.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { n: '01', icon: ClipboardList, t: 'Intake',        d: 'Soccerex captures participant goals, priorities, target counterparties, and desired outcomes.' },
-              { n: '02', icon: Crosshair,     t: 'Curate',        d: 'We identify relevant matches across the Soccerex ecosystem based on fit, intent, and strategic value.' },
-              { n: '03', icon: Handshake,     t: 'Connect',       d: 'We pre-arrange meetings, roundtables, lunches, and executive conversations designed around real business objectives.' },
-              { n: '04', icon: CheckCircle2,  t: 'Follow Through',d: 'We track outcomes, support next steps, and continue surfacing opportunities year-round.' },
+              { n: '01', icon: ClipboardList, t: 'Intake & Profiling',     d: 'Companies and rightsholders complete a tailored intake capturing objectives, target counterparts, and meeting preferences.' },
+              { n: '02', icon: PhoneCall,     t: 'Discovery Calls',        d: 'The Soccerex team holds calls to gather richer context and make the matching as precise as possible.' },
+              { n: '03', icon: Crosshair,     t: 'Curated Matching',       d: 'Soccerex reviews intake and matches 3 to 5 relevant counterparts per participant by fit, intent, and strategic value.' },
+              { n: '04', icon: Mail,          t: 'Introduction Emails',    d: 'Introductions go to both sides, and each participant confirms which proposed counterparties they want to meet.' },
+              { n: '05', icon: Handshake,     t: 'Bilateral Confirmation', d: 'A joint email confirms mutual interest and locks the meeting. Only confirmed bilateral interest gets a scheduled slot.' },
+              { n: '06', icon: CalendarCheck, t: 'Pre-Scheduled Agenda',   d: 'Every participant receives a personal meeting schedule before the event. No cold approaches on the day.' },
             ].map((step) => {
               const Icon = step.icon
               return (
@@ -258,12 +263,13 @@ export default function DealNetwork() {
             Built for the Football Business Marketplace
           </h2>
           <p className="font-body text-center mx-auto fade-up mb-10" style={{ fontSize: '1rem', color: '#586778', lineHeight: 1.65, maxWidth: 760 }}>
-            The Deal Network connects both sides of the Soccerex ecosystem, rightsholders seeking commercial growth and partners seeking access to football’s most relevant opportunities.
+            The Deal Network brings together three curated groups across the Soccerex ecosystem: rightsholders, companies, and the capital and impact partners that help make deals possible. Every participant is reviewed and approved by Soccerex before being matched.
           </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <AudienceCard icon={Trophy} title="Rightsholders" body="For organizations with assets, audiences, competitions, influence, commercial inventory, development priorities, or strategic growth objectives." items={RIGHTSHOLDER_TYPES} tint={NAVY} />
-            <AudienceCard icon={Briefcase} title="Commercial, Capital & Innovation Partners" body="For organizations seeking access to football decision-makers, commercial inventory, investment opportunities, innovation channels, or strategic partnerships." items={PARTNER_TYPES} tint={PURPLE} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <AudienceCard icon={Trophy} title="Rightsholders" access="Invited, no fee" body="Clubs, leagues, federations, governing bodies, and player representatives. Invited and curated by Soccerex, with no cost to participate." items={RIGHTSHOLDER_TYPES} tint={NAVY} tintBg="rgba(9,32,62,0.08)" />
+            <AudienceCard icon={Briefcase} title="Companies" access="Included with participation" body="Brands, sponsors, agencies, and strategic partners. Deal Network access is included with, or added to, a Soccerex exhibitor or sponsor package." items={COMPANY_TYPES} tint={PURPLE} tintBg={PURPLE_SOFT} />
+            <AudienceCard icon={Building2} title="Capital & Impact Partners" access="Curated access, apply to join" body="The third force behind the biggest deals: capital, infrastructure, and mission-driven support. A dedicated curated track, reviewed for mandate fit." items={CAPITAL_IMPACT_TYPES} tint="var(--color-brand-accent)" tintBg="rgba(191,177,112,0.18)" />
           </div>
         </div>
       </section>
@@ -364,16 +370,23 @@ function ConnectsCard({ icon, from, to }) {
 }
 
 /* ═══ "Who It Is For" card ═══════════════════════════════════════════════ */
-function AudienceCard({ icon, title, body, items, tint }) {
+function AudienceCard({ icon, title, body, items, tint, tintBg, access }) {
   return (
     <div className="fade-up" style={{
       background: '#fafaf7', borderRadius: 16, padding: 'clamp(24px,3vw,36px)',
       border: '1px solid rgba(9,32,62,0.08)', boxShadow: '0 6px 22px rgba(9,32,62,0.05)',
     }}>
+      {access && (
+        <span className="font-mono" style={{
+          display: 'inline-block', marginBottom: 16, padding: '5px 12px', borderRadius: 100,
+          fontSize: '0.62rem', letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700,
+          color: tint, background: tintBg || PURPLE_SOFT,
+        }}>{access}</span>
+      )}
       <div className="flex items-center gap-3 mb-5">
         <span style={{
           width: 46, height: 46, borderRadius: 11,
-          background: tint === NAVY ? 'rgba(9,32,62,0.08)' : PURPLE_SOFT,
+          background: tintBg || (tint === NAVY ? 'rgba(9,32,62,0.08)' : PURPLE_SOFT),
           display: 'grid', placeItems: 'center',
         }}>
           {createElement(icon, { size: 22, color: tint, strokeWidth: 2.2 })}
