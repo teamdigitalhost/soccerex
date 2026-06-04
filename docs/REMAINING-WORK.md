@@ -147,6 +147,36 @@ text swap.
 
 ---
 
+## 6. Domain migration to soccerex.com (launch-gated)  ⬅ added 2026-06-03
+
+**Why:** Move the public site off `soccerex1.netlify.app` onto `soccerex.com`. Two
+possible paths, decide first: (A) simple Netlify custom-domain re-point (React stays
+on Netlify, backend stays at `soccerex.digitalhost.co`), or (B) the full
+consolidation described in `Soccerex-back/FRONTEND_MIGRATION_PLAN.md` (React folded
+into Laravel, split into `soccerex.com` public + `system.soccerex.com` backend).
+
+**Risk factors (from the 2026-06-03 audit):**
+- `soccerex.com` apex currently carries the company's Microsoft 365 email (MX) plus
+  the SES sending subdomains `news.` / `mail.`. Change ONLY the website-serving
+  records (apex A/ALIAS + www CNAME). Never touch MX or the `news.` / `mail.`
+  records, or both company email and the email-sending platform break.
+- `soccerex.com` appears to still serve a WordPress site (the insights manifest pulls
+  images from `soccerex.com/wp-content/...`). Confirm what is live there before DNS flip.
+- The frontend has zero hardcoded netlify URLs, so the React app needs no domain
+  change for path A. The dependencies are all backend: `CORS_ALLOWED_ORIGINS`,
+  `SOCCEREX_FRONTEND_URL`, and two hardcoded `soccerex1.netlify.app` fallbacks
+  (`config/services.php:63`, `app/Services/PlatformConfiguration.php:18`) to repoint.
+
+**Where:** DNS + Laravel Cloud env vars + the two backend fallbacks. No frontend code
+change for path A. Full runbook + risk table in the 2026-06-03 session audit.
+
+**Effort:** small for path A (DNS + env + 2 config edits + verify), large for path B.
+
+**Trigger:** do not execute until the public frontend is declared ready and DNS,
+Laravel Cloud, and Netlify changes can be coordinated in one launch window.
+
+---
+
 ## Done this round (for reference)
 - About v4 copy (hero/mission/core-values/discover/who-we-reach/timeline, delete Deals-That-Got-Done)
 - Riyadh v4 copy (anchor-event hero, themes w/ descriptions, why-attend, request-access)
