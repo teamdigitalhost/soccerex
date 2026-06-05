@@ -5,7 +5,7 @@ import Footer from './components/Footer'
 import ThemePicker from './components/ThemePicker'
 import TestModeBanner from './components/TestModeBanner'
 import {
-  HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, APP_PAGE,
+  HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, EUROPE_2026, RIYADH_2027,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK,
   INVITE_PATTERN,
@@ -38,6 +38,7 @@ const GlobalNetwork = lazy(() => import('./pages/GlobalNetwork'))
 const Events = lazy(() => import('./pages/Events'))
 const Contact = lazy(() => import('./pages/Contact'))
 const Gallery = lazy(() => import('./pages/Gallery'))
+const PastSpeakers = lazy(() => import('./pages/PastSpeakers'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
@@ -82,6 +83,7 @@ function App() {
           <Route path={INSIGHTS} element={<InsightsList />} />
           <Route path={ROUTE_PATTERNS.insightArticle} element={<InsightArticle />} />
           <Route path={GALLERY} element={<Gallery />} />
+          <Route path={PAST_SPEAKERS} element={<PastSpeakers />} />
           <Route path={EUROPE_2026} element={<Europe2026 />} />
           <Route path={MIAMI_2026} element={<Miami2026 />} />
           <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />

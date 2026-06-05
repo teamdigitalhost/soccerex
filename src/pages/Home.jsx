@@ -6,7 +6,8 @@ import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
-import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, GALLERY, eventSpeakers, pressRelease } from '../lib/routes'
+import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, GALLERY, eventSpeakers, pressRelease, PAST_SPEAKERS } from '../lib/routes'
+import { FEATURED_SPEAKERS as HOME_SPEAKERS } from '../data/speakers'
 import ImageGrid from '../components/ImageGrid'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { lazy, Suspense } from 'react'
@@ -1004,20 +1005,8 @@ function SocialProofSection() {
 }
 
 // ─── SPEAKERS SHOWCASE (Home page highlight) ────────────────────────────────
-const HOME_SPEAKERS = [
-  { name: 'Gianni Infantino', title: 'President, FIFA', img: '/images/events/speakers/speaker1.webp' },
-  { name: 'Javier Tebas', title: 'President, LaLiga', img: '/images/events/speakers/speaker2.webp' },
-  { name: 'Don Garber', title: 'Commissioner, MLS', img: '/images/events/speakers/speaker4.webp' },
-  { name: 'Alessandro Del Piero', title: 'Former Footballer, Italy', img: '/images/events/speakers/speaker5.webp' },
-  { name: 'Luigi De Siervo', title: 'CEO, Lega Serie A', img: '/images/events/speakers/speaker8.webp' },
-  { name: 'Jorge Mas', title: 'Managing Owner, Inter Miami CF', img: '/images/events/speakers/speaker7.webp' },
-  { name: 'Alexi Lalas', title: 'Broadcaster, FOX Sports', img: '/images/events/speakers/speaker29.webp' },
-  { name: 'Eddy Cue', title: 'SVP of Services, Apple', img: '/images/events/speakers/speaker38.webp' },
-  { name: 'Julie Uhrman', title: 'CEO, Angel City FC', img: '/images/events/speakers/speaker41.webp' },
-  { name: 'Jill Ellis', title: 'Chief Football Officer, FIFA', img: '/images/events/speakers/speaker53.webp' },
-  { name: 'Paul Barber OBE', title: 'Chief Executive, Brighton & Hove Albion', img: '/images/events/speakers/speaker21.webp' },
-  { name: 'Victor Montagliani', title: 'President, CONCACAF', img: '/images/events/speakers/speaker3.webp' },
-]
+// HOME_SPEAKERS (the curated famous-first set) lives in ../data/speakers and is
+// imported at the top of this file so the /past-speakers page shares it.
 
 function SpeakersShowcase() {
   return (
@@ -1067,7 +1056,7 @@ function SpeakersShowcase() {
         </div>
         <div className="text-center mt-12 fade-up">
           <Link
-            to={`${EVENTS}#speakers`}
+            to={PAST_SPEAKERS}
             className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] cursor-pointer"
             style={{ background: '#09203e', color: '#fff', padding: '16px 34px', fontSize: '0.82rem', textDecoration: 'none', transition: 'all 0.3s' }}
             onMouseEnter={(e) => { e.currentTarget.style.background = '#0d2b52' }}
