@@ -44,6 +44,9 @@ export const RIYADH_2027     = '/riyadh-2027'
 // theme (Oswald + Montserrat, pink/teal palette) applies automatically.
 export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
 
+// Email-gated Miami 2026 sponsor + exhibitor pricing page.
+export const MIAMI_2026_PRICING = `${MIAMI_2026}/pricing`
+
 /* ─── Per-event API-driven pages ───────────────────────────────────────── */
 // Public label for this page is "Program Themes". Internally and in the URL
 // it stays "agenda-concept" — that is Soccerex's planning-vocabulary name

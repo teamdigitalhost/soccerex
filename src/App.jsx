@@ -1,12 +1,13 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ThemePicker from './components/ThemePicker'
 import TestModeBanner from './components/TestModeBanner'
+import { trackPageView } from './lib/soccerexApi'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
-  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, EUROPE_2026, RIYADH_2027,
+  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, EUROPE_2026, RIYADH_2027,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK,
   INVITE_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
@@ -31,6 +32,33 @@ function AppShell({ children }) {
   return <div className={themeClass}>{children}</div>
 }
 
+/* Fires a fire-and-forget page-view beacon on every route change. Carries the
+   pricing-unlock email (if present) so views can be tied to a known lead. */
+function PageViewTracker() {
+  const location = useLocation()
+  useEffect(() => {
+    let sid = null
+    try {
+      sid = sessionStorage.getItem('sx_sid')
+      if (!sid) { sid = 's-' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); sessionStorage.setItem('sx_sid', sid) }
+    } catch { /* ignore */ }
+    let email = null
+    try { email = localStorage.getItem('sx_pricing_email') || null } catch { /* ignore */ }
+    const qs = new URLSearchParams(location.search)
+    trackPageView({
+      session_id: sid,
+      path: location.pathname,
+      title: typeof document !== 'undefined' ? document.title : null,
+      referrer: typeof document !== 'undefined' ? (document.referrer || null) : null,
+      email,
+      utm_source: qs.get('utm_source'),
+      utm_medium: qs.get('utm_medium'),
+      utm_campaign: qs.get('utm_campaign'),
+    })
+  }, [location.pathname])
+  return null
+}
+
 // Code-split every page so only the active route's JS is loaded
 const Home = lazy(() => import('./pages/Home'))
 const About = lazy(() => import('./pages/About'))
@@ -42,6 +70,7 @@ const PastSpeakers = lazy(() => import('./pages/PastSpeakers'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
+const MiamiPricing = lazy(() => import('./pages/MiamiPricing'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
 const InsightsList = lazy(() => import('./pages/InsightsList'))
@@ -69,6 +98,7 @@ function App() {
   return (
     <BrowserRouter>
       <TestModeBanner />
+      <PageViewTracker />
       <AppShell>
       <Navbar />
       <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050d1a' }} />}>
@@ -86,6 +116,7 @@ function App() {
           <Route path={PAST_SPEAKERS} element={<PastSpeakers />} />
           <Route path={EUROPE_2026} element={<Europe2026 />} />
           <Route path={MIAMI_2026} element={<Miami2026 />} />
+          <Route path={MIAMI_2026_PRICING} element={<MiamiPricing />} />
           <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />
           {/* Riyadh inner page is paused: redirect to the events list until the
               event details (venue, dates) are confirmed. Page kept on disk. */}

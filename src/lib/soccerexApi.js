@@ -213,6 +213,42 @@ export async function dealNetworkApplyClaim(payload, opts = {}) {
   }))
 }
 
+/* ── Email-gated pricing access (magic-link + profile creation) ─────────── */
+
+// Step 1: send the magic link. Returns { ok, message }.
+export async function pricingAccessStart(email, { eventSlug, returnPath, test } = {}) {
+  return unwrap(await request('/pricing/access/start', {
+    method: 'POST',
+    body: { email, event_slug: eventSlug, return_path: returnPath },
+    test,
+  }))
+}
+
+// Step 2: verify the clicked link. Returns { access, profile, grant, event_slug, packages }.
+export async function pricingAccessVerify(token, { name, company, test } = {}) {
+  return unwrap(await request('/pricing/access/verify', {
+    method: 'POST',
+    body: { token, name, company },
+    test,
+  }))
+}
+
+// Re-fetch packages on a later visit with a stored grant. Returns { packages }.
+export async function pricingPackages(grant, { eventSlug, test } = {}) {
+  return unwrap(await request('/pricing/packages', {
+    method: 'POST',
+    body: { grant, event_slug: eventSlug },
+    test,
+  }))
+}
+
+// Fire-and-forget page-view beacon. Never throws (analytics must not break UX).
+export async function trackPageView(payload, { test } = {}) {
+  try {
+    await request('/analytics/page-view', { method: 'POST', body: payload, test })
+  } catch { /* swallow: analytics is best-effort */ }
+}
+
 /** platform: 'linkedin' | 'instagram' | 'x' */
 export async function getSocialPostsByPillar(slug, platform, opts = {}) {
   const qs = new URLSearchParams({ pillar: slug })
