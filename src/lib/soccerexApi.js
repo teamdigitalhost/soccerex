@@ -215,16 +215,22 @@ export async function dealNetworkApplyClaim(payload, opts = {}) {
 
 /* ── Email-gated pricing access (magic-link + profile creation) ─────────── */
 
-// Step 1: send the magic link. Returns { ok, message }.
-export async function pricingAccessStart(email, { eventSlug, returnPath, test } = {}) {
+// Public: the gated categories + reveal mode (config-driven on the backend).
+// Returns { event_slug, reveal_mode, categories: [{ key, label, blurb, path }] }.
+export async function pricingCategories({ test } = {}) {
+  return unwrap(await request('/pricing/categories', { test }))
+}
+
+// Step 1: send the magic link for a category. Returns { ok, message }.
+export async function pricingAccessStart(email, { eventSlug, returnPath, category, test } = {}) {
   return unwrap(await request('/pricing/access/start', {
     method: 'POST',
-    body: { email, event_slug: eventSlug, return_path: returnPath },
+    body: { email, event_slug: eventSlug, return_path: returnPath, category },
     test,
   }))
 }
 
-// Step 2: verify the clicked link. Returns { access, profile, grant, event_slug, packages }.
+// Step 2: verify the clicked link. Returns { access, profile, grant, category, packages }.
 export async function pricingAccessVerify(token, { name, company, test } = {}) {
   return unwrap(await request('/pricing/access/verify', {
     method: 'POST',
@@ -233,11 +239,21 @@ export async function pricingAccessVerify(token, { name, company, test } = {}) {
   }))
 }
 
-// Re-fetch packages on a later visit with a stored grant. Returns { packages }.
-export async function pricingPackages(grant, { eventSlug, test } = {}) {
+// Team preview: allowlisted email + passcode unlock a category, no email round-trip
+// and no lead created. Returns { access, preview, grant, category, packages }.
+export async function pricingPreview(email, passcode, category, { test } = {}) {
+  return unwrap(await request('/pricing/access/preview', {
+    method: 'POST',
+    body: { email, passcode, category },
+    test,
+  }))
+}
+
+// Re-fetch a category's packages on a later visit with a stored grant. Returns { category, packages }.
+export async function pricingPackages(grant, { eventSlug, category, test } = {}) {
   return unwrap(await request('/pricing/packages', {
     method: 'POST',
-    body: { grant, event_slug: eventSlug },
+    body: { grant, event_slug: eventSlug, category },
     test,
   }))
 }

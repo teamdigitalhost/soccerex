@@ -7,7 +7,7 @@ import TestModeBanner from './components/TestModeBanner'
 import { trackPageView } from './lib/soccerexApi'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
-  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, EUROPE_2026, RIYADH_2027,
+  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, EUROPE_2026, RIYADH_2027,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK,
   INVITE_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
@@ -71,6 +71,7 @@ const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
 const MiamiPricing = lazy(() => import('./pages/MiamiPricing'))
+const PricingChooser = lazy(() => import('./pages/PricingChooser'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
 const InsightsList = lazy(() => import('./pages/InsightsList'))
@@ -116,7 +117,8 @@ function App() {
           <Route path={PAST_SPEAKERS} element={<PastSpeakers />} />
           <Route path={EUROPE_2026} element={<Europe2026 />} />
           <Route path={MIAMI_2026} element={<Miami2026 />} />
-          <Route path={MIAMI_2026_PRICING} element={<MiamiPricing />} />
+          <Route path={MIAMI_2026_PRICING} element={<PricingChooser />} />
+          <Route path={MIAMI_2026_PRICING_CATEGORY} element={<MiamiPricing />} />
           <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />
           {/* Riyadh inner page is paused: redirect to the events list until the
               event details (venue, dates) are confirmed. Page kept on disk. */}
