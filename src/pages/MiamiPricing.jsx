@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useParams, useSearchParams, Link } from 'react-router-dom'
-import { Lock, Mail, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Lock, Mail, ArrowRight, CheckCircle2, ChevronDown, Check } from 'lucide-react'
 import {
   pricingAccessStart, pricingAccessVerify, pricingPackages, pricingPreview, pricingCategories,
 } from '../lib/soccerexApi'
@@ -208,17 +208,57 @@ export default function MiamiPricing() {
 
 function PackageGrid({ items }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {items.map((p) => (
-        <div key={p.slug} style={{ background: '#fff', borderRadius: 12, padding: '22px 20px', boxShadow: '0 8px 24px rgba(9,32,62,0.08)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <p className="font-heading font-bold" style={{ fontSize: '1.05rem', color: NAVY, lineHeight: 1.25 }}>{p.name}</p>
-          {p.subtitle && <p className="font-body" style={{ fontSize: '0.82rem', color: '#7a8694' }}>{p.subtitle}</p>}
-          <p className="font-heading font-bold" style={{ fontSize: '1.5rem', color: 'var(--color-brand-accent)', marginTop: 6 }}>{p.price_display || 'Contact for pricing'}</p>
-          {typeof p.benefit_count === 'number' && p.benefit_count > 0 && (
-            <p className="font-body" style={{ fontSize: '0.78rem', color: '#7a8694' }}>{p.benefit_count} inclusions</p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+      {items.map((p) => <PackageCard key={p.slug} p={p} />)}
+    </div>
+  )
+}
+
+function PackageCard({ p }) {
+  const [open, setOpen] = useState(false)
+  const benefits = Array.isArray(p.benefits) ? p.benefits : []
+  const count = benefits.length || p.benefit_count || 0
+  return (
+    <div style={{ background: '#fff', borderRadius: 12, padding: '22px 20px', boxShadow: '0 8px 24px rgba(9,32,62,0.08)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <p className="font-heading font-bold" style={{ fontSize: '1.05rem', color: NAVY, lineHeight: 1.25 }}>{p.name}</p>
+      {p.summary && (
+        <p className="font-body" style={{ fontSize: '0.9rem', color: '#3f5066', lineHeight: 1.5 }}>{p.summary}</p>
+      )}
+      <p className="font-heading font-bold" style={{ fontSize: '1.5rem', color: 'var(--color-brand-accent)', marginTop: 2 }}>{p.price_display || 'Contact for pricing'}</p>
+
+      {count > 0 && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="font-body"
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginTop: 4, padding: '8px 0', background: 'none', border: 'none', borderTop: '1px solid #eef1f5', cursor: 'pointer', color: NAVY, fontSize: '0.82rem', fontWeight: 600 }}
+        >
+          <span>{open ? "What's included" : `What's included (${count})`}</span>
+          <ChevronDown size={16} style={{ transition: 'transform 150ms ease', transform: open ? 'rotate(180deg)' : 'none' }} />
+        </button>
+      )}
+
+      {open && benefits.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {p.body && (
+            <p className="font-body" style={{ fontSize: '0.82rem', color: '#586778', lineHeight: 1.55 }}>{p.body}</p>
           )}
+          <ul style={{ display: 'flex', flexDirection: 'column', gap: 8, listStyle: 'none', padding: 0, margin: 0 }}>
+            {benefits.map((b, i) => (
+              <li key={i} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                <Check size={15} color="#1f7a4d" style={{ flexShrink: 0, marginTop: 2 }} />
+                <span className="font-body" style={{ fontSize: '0.82rem', color: '#3f5066', lineHeight: 1.45 }}>
+                  <span style={{ fontWeight: 600, color: NAVY }}>
+                    {b.label}{b.quantity > 1 ? ` ×${b.quantity}` : ''}
+                  </span>
+                  {b.note ? <span style={{ color: '#7a8694' }}>{`: ${b.note}`}</span> : null}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
-      ))}
+      )}
     </div>
   )
 }
