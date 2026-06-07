@@ -258,6 +258,16 @@ export async function pricingPackages(grant, { eventSlug, category, test } = {})
   }))
 }
 
+// Register interest in a specific package (high-intent: creates a scored lead +
+// an assigned sales callback). Needs the unlock grant. Returns { ok, assigned, rep_name }.
+export async function pricingInterest({ grant, package_slug, contact_method, phone, best_time, name, note, budget } = {}, { test } = {}) {
+  return unwrap(await request('/pricing/interest', {
+    method: 'POST',
+    body: { grant, package_slug, contact_method, phone, best_time, name, note, budget },
+    test,
+  }))
+}
+
 // Fire-and-forget page-view beacon. Never throws (analytics must not break UX).
 export async function trackPageView(payload, { test } = {}) {
   try {
