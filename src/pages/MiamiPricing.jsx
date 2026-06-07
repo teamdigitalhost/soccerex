@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { useParams, useSearchParams, Link } from 'react-router-dom'
+import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom'
 import { Lock, Mail, ArrowRight, CheckCircle2, Check, X } from 'lucide-react'
 import {
   pricingAccessStart, pricingAccessVerify, pricingPackages, pricingPreview, pricingCategories,
@@ -26,6 +26,7 @@ function priceOf(p) {
 
 export default function MiamiPricing() {
   const { category } = useParams()
+  const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const [phase, setPhase] = useState('loading') // loading | gate | sent | unlocked
   const [packages, setPackages] = useState([])
@@ -58,12 +59,19 @@ export default function MiamiPricing() {
       .then((res) => {
         if (!alive) return
         if (res?.reveal_mode) setRevealMode(res.reveal_mode)
-        const found = (res?.categories || []).find((c) => c.key === category)
-        if (found) setMeta({ label: found.label, blurb: found.blurb })
+        const cats = res?.categories || []
+        const found = cats.find((c) => c.key === category)
+        if (found) {
+          setMeta({ label: found.label, blurb: found.blurb })
+        } else if (cats.length > 0) {
+          // Unknown category in the URL: bounce to the chooser rather than
+          // render a gate that the backend would reject.
+          navigate(MIAMI_2026_PRICING, { replace: true })
+        }
       })
       .catch(() => { /* fall back to the title-cased slug + open mode */ })
     return () => { alive = false }
-  }, [category])
+  }, [category, navigate])
 
   // Resolve access exactly once: token in URL > stored grant (this category) > gate.
   const resolvedRef = useRef(false)
@@ -180,7 +188,7 @@ export default function MiamiPricing() {
               </div>
               <h2 className="font-heading font-bold text-center" style={{ fontSize: '1.4rem', color: NAVY, marginBottom: 8 }}>Unlock {meta.label}</h2>
               <p className="font-body text-center" style={{ fontSize: '0.95rem', color: '#586778', marginBottom: 22, lineHeight: 1.55 }}>
-                Enter your email and we will send a secure link to view the pricing.
+                Enter your email and we will send a one-time link that unlocks the pricing on this page.
               </p>
               {error && <p className="font-body" style={{ color: '#b3261e', fontSize: '0.85rem', marginBottom: 14 }}>{error}</p>}
 
@@ -190,7 +198,7 @@ export default function MiamiPricing() {
                   <input type="text" placeholder="Your name (optional)" value={name} onChange={(e) => setName(e.target.value)} className="font-body" style={inputStyle} />
                   <input type="text" placeholder="Company (optional)" value={company} onChange={(e) => setCompany(e.target.value)} className="font-body" style={inputStyle} />
                   <button type="submit" disabled={busy} className="font-body font-semibold uppercase" style={primaryBtn(busy)}>
-                    {busy ? 'Sending…' : <>Email me the pricing <ArrowRight size={15} /></>}
+                    {busy ? 'Sending…' : <>Email me an access link <ArrowRight size={15} /></>}
                   </button>
                 </form>
               ) : (
