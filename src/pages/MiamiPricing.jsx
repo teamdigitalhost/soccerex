@@ -466,7 +466,7 @@ function InterestForm({ grant, packageSlug, packageName, defaultName, budget }) 
         </>
       )}
 
-      <textarea placeholder="Anything specific you'd like to discuss? (optional)" value={note} onChange={(e) => setNote(e.target.value)} rows={2} className="font-body" style={{ ...inputStyle, resize: 'vertical' }} />
+      <textarea placeholder="Comments or questions" value={note} onChange={(e) => setNote(e.target.value)} rows={2} className="font-body" style={{ ...inputStyle, resize: 'vertical' }} />
 
       <button type="submit" disabled={stage === 'sending'} className="font-body font-semibold uppercase" style={primaryBtn(stage === 'sending')}>
         {stage === 'sending' ? 'Sending…' : <>Send request <ArrowRight size={15} /></>}
