@@ -17,7 +17,7 @@ import {
   readProfileAccessSession, clearProfileAccessSession,
 } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
-import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
+import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor, profileView } from '../lib/routes'
 import { buildIcs, downloadIcs } from '../lib/ics'
 
 /* PersonalPortal renders every role a single person profile has access to,
@@ -260,6 +260,9 @@ function PortalHeader({ profile, session, onSignOut, slug }) {
           </div>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
+          <Link to={withTestSearch(profileView(slug))} className="event-btn-outline-light" style={{ padding: '8px 14px', fontSize: 11 }}>
+            <Eye size={12} /> View profile
+          </Link>
           <Link to={withTestSearch(profileEditor(slug))} className="event-btn-outline-light" style={{ padding: '8px 14px', fontSize: 11 }}>
             <Edit3 size={12} /> Edit profile
           </Link>

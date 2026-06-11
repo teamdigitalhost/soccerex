@@ -86,6 +86,7 @@ const EventSpeakers = lazy(() => import('./pages/EventSpeakers'))
 const EventSpeakerProfile = lazy(() => import('./pages/EventSpeakerProfile'))
 const ProfileAccess = lazy(() => import('./pages/ProfileAccess'))
 const ProfileEditor = lazy(() => import('./pages/ProfileEditor'))
+const ProfileView = lazy(() => import('./pages/ProfileView'))
 const CompanyPortal = lazy(() => import('./pages/CompanyPortal'))
 const PersonalPortal = lazy(() => import('./pages/PersonalPortal'))
 const DealNetworkPage = lazy(() => import('./pages/DealNetwork'))
@@ -145,6 +146,7 @@ function App() {
           {/* Profile self-service editor (passwordless via emailed link) */}
           <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />
+          <Route path={ROUTE_PATTERNS.profileView} element={<ProfileView />} />
           <Route path={ROUTE_PATTERNS.companyPortal} element={<CompanyPortal />} />
           <Route path={ROUTE_PATTERNS.personalPortal} element={<PersonalPortal />} />
         </Routes>

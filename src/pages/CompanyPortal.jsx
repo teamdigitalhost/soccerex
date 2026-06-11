@@ -3,12 +3,12 @@ import { Link, useNavigate, useParams, useLocation } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, Edit3, Upload, AlertCircle, Loader2, LogOut,
   Calendar, CheckCircle2, Circle, FileText, Ticket, Wallet, X, Plus,
-  Building2, ExternalLink, UserPlus, Image, HelpCircle, MessageSquare, Send,
+  Building2, ExternalLink, UserPlus, Image, HelpCircle, MessageSquare, Send, Eye,
 } from 'lucide-react'
 import { getCompanyPortal, assignCompanyPass, managePortalPass, inviteCompanyTeammate, revokeCompanyTeammate, downloadBriefingPack, postDeliverableUpdate, ApiError } from '../lib/soccerexApi'
 import { readProfileAccessSession, clearProfileAccessSession } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
-import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor } from '../lib/routes'
+import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor, profileView } from '../lib/routes'
 import DealNetworkPortalSection from '../components/DealNetworkPortalSection'
 import EventDayToggle from '../components/EventDayToggle'
 
@@ -81,7 +81,7 @@ export default function CompanyPortal() {
 
   return (
     <div className="event-page theme-soccerex" style={{ background: '#FAFBFC', minHeight: '100vh', paddingTop: 'var(--app-top-offset)' }}>
-      <PortalHeader profile={profile} session={session} onSignOut={signOut} />
+      <PortalHeader profile={profile} session={session} onSignOut={signOut} slug={slug} />
 
       <section style={{ padding: 'clamp(24px,3vw,40px) clamp(24px,5vw,60px) clamp(80px,10vw,120px)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -135,7 +135,7 @@ export default function CompanyPortal() {
 
 /* ─── Header ───────────────────────────────────────────────────────────── */
 
-function PortalHeader({ profile, session, onSignOut }) {
+function PortalHeader({ profile, session, onSignOut, slug }) {
   const expiresAt = session?.expires_at ? new Date(session.expires_at) : null
   return (
     <header style={{
@@ -161,7 +161,13 @@ function PortalHeader({ profile, session, onSignOut }) {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
+          <Link to={withTestSearch(profileView(slug))} className="event-btn-outline-light" style={{ padding: '8px 14px', fontSize: 11 }}>
+            <Eye size={12} /> View profile
+          </Link>
+          <Link to={withTestSearch(profileEditor(slug))} className="event-btn-outline-light" style={{ padding: '8px 14px', fontSize: 11 }}>
+            <Edit3 size={12} /> Edit profile
+          </Link>
           {expiresAt && (
             <span className="miami-body" style={{ fontSize: 11, color: '#607186' }}>
               Session: {expiresAt.toLocaleString()}

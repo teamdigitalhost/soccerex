@@ -79,6 +79,8 @@ export const insightArticle  = (slug) => `${INSIGHTS}/${encodeURIComponent(slug)
 export const PROFILE_ACCESS  = '/profile-access'
 export const PROFILE_EXPIRED = `${PROFILE_ACCESS}?expired=1`
 export const profileEditor   = (slug) => `${PROFILE_ACCESS}/edit/${encodeURIComponent(slug)}`
+/* Read-only profile card — what the profile looks like, without edit chrome. */
+export const profileView     = (slug) => `${PROFILE_ACCESS}/view/${encodeURIComponent(slug)}`
 export const companyPortal   = (slug) => `${PROFILE_ACCESS}/portal/${encodeURIComponent(slug)}`
 /* Personal portal: aggregates speaker / delegate / rights-holder / VIP roles
    for a single person profile into one neutral, timeless dashboard. */
@@ -96,6 +98,7 @@ export const REFUND_POLICY   = '/refund-policy'
 export const ROUTE_PATTERNS = {
   insightArticle:      `${INSIGHTS}/:slug`,
   profileEditor:       `${PROFILE_ACCESS}/edit/:slug`,
+  profileView:         `${PROFILE_ACCESS}/view/:slug`,
   companyPortal:       `${PROFILE_ACCESS}/portal/:slug`,
   personalPortal:      `${PROFILE_ACCESS}/me/:slug`,
   pressRelease:        `${PRESS}/:slug`,

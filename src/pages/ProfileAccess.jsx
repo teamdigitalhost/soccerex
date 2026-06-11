@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowRight, Check, Loader2, AlertCircle, LogOut, KeyRound, Shield } from 'lucide-react'
+import { Link, useSearchParams } from 'react-router-dom'
+import {
+  ArrowRight, Check, Loader2, AlertCircle, LogOut, KeyRound, Shield,
+  Building2, User, Eye, Edit3, ExternalLink,
+} from 'lucide-react'
 import {
   requestProfileAccess, previewProfileAccess, exchangeProfileAccess, ApiError,
 } from '../lib/soccerexApi'
@@ -8,11 +11,10 @@ import {
   readProfileAccessSession, writeProfileAccessSession, clearProfileAccessSession,
 } from '../lib/profileAccessAuth'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
-import { HOME, CONTACT, PRIVACY_POLICY, profileEditor, companyPortal, personalPortal } from '../lib/routes'
+import { HOME, CONTACT, PRIVACY_POLICY, profileEditor, profileView, companyPortal, personalPortal } from '../lib/routes'
 
 export default function ProfileAccess() {
   const [params, setParams] = useSearchParams()
-  const navigate = useNavigate()
   const token = params.get('token')
 
   const [session, setSession] = useState(() => readProfileAccessSession())
@@ -46,15 +48,7 @@ export default function ProfileAccess() {
     return <ProfileChooser session={session} onSignOut={() => {
       clearProfileAccessSession()
       setSession(null)
-    }}
-      onPick={(slug, profile) => {
-        /* Companies → sponsor portal. Persons → unified personal portal that
-           pulls speaker / delegate / rights-holder / VIP roles in parallel. */
-        const isCompany = profile?.profile_kind === 'company' || profile?.is_company === true
-        const target = isCompany ? companyPortal(slug) : personalPortal(slug)
-        navigate(withTestSearch(target))
-      }}
-      onEdit={(slug) => navigate(withTestSearch(profileEditor(slug)))} />
+    }} />
   }
 
   return <RequestForm />
@@ -246,7 +240,7 @@ function TokenLanding({ token, onExchanged, onSignOut }) {
 
 /* ─── Signed-in chooser ─────────────────────────────────────────────────── */
 
-function ProfileChooser({ session, onSignOut, onPick, onEdit }) {
+function ProfileChooser({ session, onSignOut }) {
   const profiles = Array.isArray(session.profiles) ? session.profiles : []
   const expiresAt = session.expires_at ? new Date(session.expires_at) : null
 
@@ -265,30 +259,7 @@ function ProfileChooser({ session, onSignOut, onPick, onEdit }) {
           <ul className="flex flex-col gap-2 mt-5 text-left">
             {profiles.map((p) => (
               <li key={p.slug}>
-                <div className="profile-pick" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
-                  <div className="flex items-center justify-between gap-3" style={{ width: '100%' }}>
-                    <div>
-                      <p className="miami-headline" style={{ fontSize: 14, color: '#0D1B2A' }}>{p.display_name || p.legal_name || p.slug}</p>
-                      {(p.profile_kind || p.type) && (
-                        <p className="miami-body" style={{ fontSize: 11, color: '#607186', textTransform: 'capitalize' }}>
-                          {[p.profile_kind, p.type].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(' · ')}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2" style={{ width: '100%' }}>
-                    <button type="button" onClick={() => onPick(p.slug, p)}
-                      className="event-btn-outline-light"
-                      style={{ flex: '2 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11, background: 'var(--event-primary, #E91E63)', color: '#fff', borderColor: 'var(--event-primary, #E91E63)' }}>
-                      Open portal <ArrowRight size={13} />
-                    </button>
-                    <button type="button" onClick={() => onEdit(p.slug)}
-                      className="event-btn-outline-light"
-                      style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11 }}>
-                      Edit profile
-                    </button>
-                  </div>
-                </div>
+                <ProfileCard profile={p} />
               </li>
             ))}
           </ul>
@@ -311,6 +282,125 @@ function ProfileChooser({ session, onSignOut, onPick, onEdit }) {
       <FooterLinks />
     </Shell>
   )
+}
+
+/* One card per profile inside the signed-in chooser: identity row, primary
+   actions (view / edit / portal), then "Unlocked areas" chips driven by the
+   per-profile capabilities object. Older session payloads (no capabilities)
+   simply render without the chips row. */
+function ProfileCard({ profile: p }) {
+  /* Companies → sponsor portal. Persons → unified personal portal that
+     pulls speaker / delegate / rights-holder / VIP roles in parallel. */
+  const isCompany = p?.profile_kind === 'company' || p?.is_company === true
+  const portalPath = isCompany ? companyPortal(p.slug) : personalPortal(p.slug)
+  const caps = p?.capabilities || null
+
+  /* Speaker / delegate / rights-holder / VIP are sections inside the
+     personal portal; Deal Network lives in whichever portal the profile
+     kind maps to. Agenda reviews are external per-event links. */
+  const areaChips = []
+  if (caps?.speaker) areaChips.push({ key: 'speaker', label: 'Speaker', to: personalPortal(p.slug) })
+  if (caps?.delegate) areaChips.push({ key: 'delegate', label: 'Delegate', to: personalPortal(p.slug) })
+  if (caps?.rights_holder) areaChips.push({ key: 'rights_holder', label: 'Rights holder', to: personalPortal(p.slug) })
+  if (caps?.vip) areaChips.push({ key: 'vip', label: 'VIP', to: personalPortal(p.slug) })
+  if (caps?.deal_network) areaChips.push({ key: 'deal_network', label: 'Deal Network', to: portalPath })
+  const agendaChips = Array.isArray(caps?.agenda_collaborations)
+    ? caps.agenda_collaborations.filter((c) => c && c.review_url)
+    : []
+
+  return (
+    <div className="profile-pick" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
+      <div className="flex items-center gap-3" style={{ width: '100%' }}>
+        <ProfileAvatar profile={p} isCompany={isCompany} />
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <p className="miami-headline" style={{ fontSize: 14, color: '#0D1B2A' }}>{p.display_name || p.legal_name || p.slug}</p>
+          {p.type && p.type !== p.profile_kind && (
+            <p className="miami-body" style={{ fontSize: 11, color: '#607186', textTransform: 'capitalize' }}>{p.type}</p>
+          )}
+        </div>
+        <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{
+          fontSize: 9, letterSpacing: '0.16em', flexShrink: 0,
+          background: 'rgba(13,27,42,0.06)', color: '#3a4a5a', padding: '3px 8px',
+        }}>
+          {isCompany ? <Building2 size={10} /> : <User size={10} />} {isCompany ? 'Company' : 'Person'}
+        </span>
+      </div>
+
+      <div className="flex flex-wrap gap-2" style={{ width: '100%' }}>
+        <Link to={withTestSearch(profileView(p.slug))}
+          className="event-btn-outline-light"
+          style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11 }}>
+          <Eye size={12} /> View profile
+        </Link>
+        <Link to={withTestSearch(profileEditor(p.slug))}
+          className="event-btn-outline-light"
+          style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11 }}>
+          <Edit3 size={12} /> Edit profile
+        </Link>
+        <Link to={withTestSearch(portalPath)}
+          className="event-btn-outline-light"
+          style={{ flex: '1 1 0', justifyContent: 'center', padding: '10px 14px', fontSize: 11, background: 'var(--event-primary, #E91E63)', color: '#fff', borderColor: 'var(--event-primary, #E91E63)' }}>
+          {isCompany ? 'Company portal' : 'Personal portal'} <ArrowRight size={13} />
+        </Link>
+      </div>
+
+      {(areaChips.length > 0 || agendaChips.length > 0) && (
+        <div style={{ width: '100%' }}>
+          <p className="font-mono uppercase" style={{ fontSize: 9, letterSpacing: '0.2em', color: '#607186', marginBottom: 6 }}>
+            Unlocked areas
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {areaChips.map((chip) => (
+              <Link key={chip.key} to={withTestSearch(chip.to)} style={areaChipStyle}>
+                {chip.label}
+              </Link>
+            ))}
+            {agendaChips.map((c, i) => (
+              <a key={c.review_url || i} href={c.review_url} style={areaChipStyle}>
+                <ExternalLink size={10} /> Agenda review{c.event_name ? ` — ${c.event_name}` : ''}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ProfileAvatar({ profile: p, isCompany }) {
+  const src = isCompany
+    ? (p.logo_url || p.photo_url || p.featured_image)
+    : (p.photo_url || p.logo_url || p.featured_image)
+  if (src) {
+    return (
+      <img src={src} alt="" style={{
+        width: 40, height: 40, flexShrink: 0,
+        objectFit: isCompany ? 'contain' : 'cover',
+        borderRadius: isCompany ? 0 : 999,
+        border: '1px solid rgba(13,27,42,0.10)',
+        background: '#FFFFFF',
+      }} />
+    )
+  }
+  return (
+    <div style={{
+      width: 40, height: 40, flexShrink: 0,
+      borderRadius: isCompany ? 0 : 999,
+      border: '1px dashed rgba(13,27,42,0.18)',
+      display: 'grid', placeItems: 'center', background: '#FAFBFC',
+    }}>
+      {isCompany ? <Building2 size={16} style={{ color: '#9aa6b3' }} /> : <User size={16} style={{ color: '#9aa6b3' }} />}
+    </div>
+  )
+}
+
+const areaChipStyle = {
+  display: 'inline-flex', alignItems: 'center', gap: 4,
+  fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase',
+  color: 'var(--event-primary, #E91E63)',
+  background: 'var(--event-tile-soft, rgba(233,30,99,0.08))',
+  border: '1px solid var(--event-primary-border, rgba(233,30,99,0.25))',
+  padding: '4px 10px', textDecoration: 'none',
 }
 
 /* ─── Shared layout pieces ──────────────────────────────────────────────── */
