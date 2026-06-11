@@ -3,13 +3,15 @@ import { useSearchParams } from 'react-router-dom'
 import {
   Star, Loader2, AlertTriangle, Send, PencilLine, Plus, X,
   CalendarDays, MapPin, MessageSquare, CornerDownRight, CheckCircle2,
-  Lightbulb, Users,
+  Lightbulb, Users, UserPlus, UserCheck, Mail,
 } from 'lucide-react'
 import {
   getAgendaCollabSession,
   postAgendaCollabComment,
   submitAgendaCollabSuggestion,
   setAgendaCollabVote,
+  createAgendaCollabProfile,
+  requestProfileAccess,
 } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 
@@ -78,6 +80,7 @@ export default function AgendaCollab() {
   const [linkInvalid, setLinkInvalid] = useState(!token) // also set on 404 / 403
   const [error, setError] = useState('')
   const [session, setSession] = useState(null)
+  const [profileJustCreated, setProfileJustCreated] = useState(false)
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -182,6 +185,19 @@ export default function AgendaCollab() {
     })
   }
 
+  async function handleCreateProfile({ name, title }) {
+    const res = await createAgendaCollabProfile(
+      { token, name, ...(title ? { title } : {}) },
+      { test: testMode },
+    )
+    setSession((prev) => (prev ? {
+      ...prev,
+      profile: res?.profile || prev.profile,
+      needs_profile: false,
+    } : prev))
+    setProfileJustCreated(true)
+  }
+
   /* group topics by theme, preserving server order */
   const themeGroups = useMemo(() => {
     const groups = []
@@ -253,7 +269,7 @@ export default function AgendaCollab() {
     )
   }
 
-  const { collaborator, event, my_suggestions: mySuggestions = [] } = session
+  const { collaborator, event, profile, needs_profile: needsProfile, my_suggestions: mySuggestions = [] } = session
 
   return (
     <Shell>
@@ -295,6 +311,22 @@ export default function AgendaCollab() {
       {/* ═══ CONTENT ════════════════════════════════════════════════════ */}
       <section style={{ background: CREAM }}>
         <div className="mx-auto" style={{ maxWidth: 860, padding: 'clamp(36px,5vw,64px) clamp(16px,4vw,40px) clamp(56px,7vw,90px)' }}>
+
+          {/* ── Soccerex profile nudge / identity bar ────────────────── */}
+          {needsProfile && !profile && (
+            <CreateProfileCard
+              defaultName={collaborator?.name || ''}
+              onSubmit={handleCreateProfile}
+            />
+          )}
+          {profile && (
+            <IdentityBar
+              profile={profile}
+              email={collaborator?.email}
+              justCreated={profileJustCreated}
+              testMode={testMode}
+            />
+          )}
 
           {themeGroups.length === 0 && (
             <div className="text-center font-body" style={{ color: '#7a8896', padding: '40px 0' }}>
@@ -341,6 +373,120 @@ export default function AgendaCollab() {
 
 function Shell({ children }) {
   return <div style={{ background: NAVY_DEEP, minHeight: '100vh' }}>{children}</div>
+}
+
+/* ═══ Soccerex profile card (one-time, non-blocking) ═══════════════════ */
+
+function CreateProfileCard({ defaultName, onSubmit }) {
+  const [name, setName] = useState(defaultName)
+  const [title, setTitle] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  async function submit(e) {
+    e?.preventDefault?.()
+    if (busy || !name.trim()) return
+    setBusy(true); setError('')
+    try {
+      await onSubmit({ name: name.trim(), title: title.trim() || undefined })
+    } catch (err) {
+      setError(err?.message || 'Could not create your profile.')
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div style={{ background: '#fff', border: '1px solid rgba(191,177,112,0.55)', borderRadius: 14, padding: 'clamp(18px,3vw,28px)', marginBottom: 28, boxShadow: '0 6px 24px rgba(9,32,62,0.06)' }}>
+      <div className="flex items-start gap-3">
+        <span style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(191,177,112,0.16)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+          <UserPlus size={18} style={{ color: 'var(--color-brand-accent)' }} />
+        </span>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-heading font-bold" style={{ fontSize: '1.05rem', color: NAVY }}>
+            One quick step — create your Soccerex profile
+          </h3>
+          <p className="font-body" style={{ fontSize: '0.85rem', color: '#7a8896', marginTop: 2 }}>
+            Your profile connects your agenda feedback with everything else you do
+            with Soccerex — speaking, the Deal Network, and event access.
+          </p>
+        </div>
+      </div>
+
+      <form onSubmit={submit} style={{ marginTop: 16 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3">
+          <PanelField label="Name" value={name} onChange={setName} disabled={busy} required />
+          <PanelField label="Title / role" value={title} onChange={setTitle} disabled={busy} placeholder="Optional — e.g. Commercial Director" />
+        </div>
+        {error && <p className="font-body mb-2" style={{ fontSize: '0.78rem', color: '#b91c1c' }}>{error}</p>}
+        <button
+          type="submit" disabled={busy || !name.trim()}
+          className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.14em]"
+          style={{
+            background: name.trim() ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.14)',
+            color: NAVY, padding: '10px 20px', fontSize: '0.7rem', border: 'none',
+            borderRadius: 4, cursor: name.trim() && !busy ? 'pointer' : 'not-allowed',
+          }}
+        >
+          {busy ? <><Loader2 size={13} className="animate-spin" /> Creating</> : <>Create my profile</>}
+        </button>
+      </form>
+    </div>
+  )
+}
+
+/* ═══ Identity bar (profile already linked) ════════════════════════════ */
+
+function IdentityBar({ profile, email, justCreated, testMode }) {
+  const [busy, setBusy] = useState(false)
+  const [sent, setSent] = useState(false)
+  const [error, setError] = useState('')
+
+  async function requestPortalLink() {
+    if (busy || sent || !email) return
+    setBusy(true); setError('')
+    try {
+      await requestProfileAccess({ email }, { test: testMode })
+      setSent(true)
+    } catch (err) {
+      setError(err?.message || 'Could not send your portal link.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div style={{ background: '#fff', border: '1px solid rgba(9,32,62,0.08)', borderRadius: 12, padding: '12px 18px', marginBottom: 28, boxShadow: '0 4px 16px rgba(9,32,62,0.05)' }}>
+      <div className="flex flex-wrap items-center gap-3">
+        <span style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(191,177,112,0.16)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+          {justCreated
+            ? <CheckCircle2 size={16} color="#15803d" />
+            : <UserCheck size={16} style={{ color: 'var(--color-brand-accent)' }} />}
+        </span>
+        <span className="font-body flex-1 min-w-0" style={{ fontSize: '0.88rem', color: NAVY }}>
+          {justCreated && <strong style={{ fontWeight: 600, color: '#15803d' }}>Profile created. </strong>}
+          Connected as <strong style={{ fontWeight: 600 }}>{profile.display_name}</strong>
+        </span>
+        {sent ? (
+          <span className="inline-flex items-center gap-2 font-body" style={{ fontSize: '0.82rem', color: '#15803d' }}>
+            <CheckCircle2 size={14} /> Check your inbox — we emailed you a secure link to your Soccerex portal.
+          </span>
+        ) : (
+          <button
+            type="button" onClick={requestPortalLink} disabled={busy || !email}
+            className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.14em]"
+            style={{
+              background: 'transparent', color: NAVY, padding: '8px 14px', fontSize: '0.66rem',
+              border: '1px solid rgba(9,32,62,0.18)', borderRadius: 4,
+              cursor: busy || !email ? 'not-allowed' : 'pointer', flexShrink: 0,
+            }}
+          >
+            {busy ? <><Loader2 size={13} className="animate-spin" /> Sending</> : <><Mail size={13} style={{ color: 'var(--color-brand-accent)' }} /> Open my Soccerex portal</>}
+          </button>
+        )}
+      </div>
+      {error && <p className="font-body mt-1.5" style={{ fontSize: '0.78rem', color: '#b91c1c' }}>{error}</p>}
+    </div>
+  )
 }
 
 /* ═══ Topic card ═══════════════════════════════════════════════════════ */

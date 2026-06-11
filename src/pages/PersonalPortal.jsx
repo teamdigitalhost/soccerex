@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
+import { Component, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams, useLocation } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, Edit3, LogOut, Loader2, AlertCircle, Calendar, Clock,
   MapPin, Mic, Ticket, Star, CheckCircle2, Circle, Users, FileText, Upload,
   Megaphone, Sparkles, Shield, Crown, ExternalLink, Bookmark, BookmarkCheck,
-  UserCheck, EyeOff, Eye, Building2, Plus,
+  UserCheck, EyeOff, Eye, Building2, Plus, MessageSquare,
 } from 'lucide-react'
 import {
   getSpeakerPortal, getRightsHolderPortal, getDelegatePortal, getVipPortal,
+  getAgendaCollabPortal,
   rsvpVipExperience, setDelegateSavedSession,
   getDelegateNetworking, updateDelegateNetworking,
   ApiError,
@@ -33,7 +34,7 @@ export default function PersonalPortal() {
   const navigate = useNavigate()
   const location = useLocation()
   const [session, setSession] = useState(() => readProfileAccessSession())
-  const [data, setData] = useState({ speaker: undefined, rightsHolder: undefined, delegate: undefined, vip: undefined })
+  const [data, setData] = useState({ speaker: undefined, rightsHolder: undefined, delegate: undefined, vip: undefined, agendaCollab: undefined })
   const [error, setError] = useState(null)
 
   /* Bounce to /profile-access if there's no edit_token */
@@ -57,7 +58,7 @@ export default function PersonalPortal() {
     if (!editToken) return
     let cancelled = false
     setError(null)
-    setData({ speaker: undefined, rightsHolder: undefined, delegate: undefined, vip: undefined })
+    setData({ speaker: undefined, rightsHolder: undefined, delegate: undefined, vip: undefined, agendaCollab: undefined })
 
     /* Load each portal in parallel. 401 invalidates the whole session; 404
        (no role for this profile) just leaves that bucket null. */
@@ -73,14 +74,16 @@ export default function PersonalPortal() {
       wrap(getRightsHolderPortal(slug, editToken, { test: isTest })),
       wrap(getDelegatePortal(slug, editToken, { test: isTest })),
       wrap(getVipPortal(slug, editToken, { test: isTest })),
+      wrap(getAgendaCollabPortal(slug, editToken, { test: isTest })),
     ])
-      .then(([speaker, rightsHolder, delegate, vip]) => {
+      .then(([speaker, rightsHolder, delegate, vip, agendaCollab]) => {
         if (cancelled) return
         setData({
           speaker: speaker.ok ? speaker.data : null,
           rightsHolder: rightsHolder.ok ? rightsHolder.data : null,
           delegate: delegate.ok ? delegate.data : null,
           vip: vip.ok ? vip.data : null,
+          agendaCollab: agendaCollab.ok ? agendaCollab.data : null,
         })
       })
       .catch((err) => {
@@ -104,6 +107,30 @@ export default function PersonalPortal() {
     return loader().then((next) => setData((prev) => ({ ...prev, [key]: next })))
   }
 
+  /* Event-day mode: detect whether any role has a session/experience today.
+     If so, default the toggle ON. User can flip it off.
+     NOTE: these hooks must run on every render — they sit ABOVE the
+     !editToken early return below, otherwise React throws a hook-order
+     error ("rendered more hooks than during the previous render") the
+     moment a fresh session hydrates, blanking the whole page. */
+  const hasItemToday = (() => {
+    const today = new Date(); today.setHours(0,0,0,0)
+    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1)
+    const isTodayIso = (v) => {
+      if (! v) return false
+      const d = new Date(v); return d >= today && d < tomorrow
+    }
+    // The portals return these in more than one shape (delegate schedule can
+    // be a day-grouped object); only probe arrays or this render throws.
+    const asArray = (v) => (Array.isArray(v) ? v : [])
+    if (asArray(data.speaker?.sessions).some((s) => isTodayIso(s.starts_at || s.start_time))) return true
+    if (asArray(data.delegate?.schedule).some((s) => isTodayIso(s.starts_at || s.start_time))) return true
+    if (asArray(data.vip?.experiences).some((e) => isTodayIso(e.starts_at))) return true
+    return false
+  })()
+  const [eventDayMode, setEventDayMode] = useState(hasItemToday)
+  useEffect(() => { setEventDayMode(hasItemToday) }, [hasItemToday])
+
   if (!editToken) return null
 
   /* Loading until all four parallel calls have settled, so the user never
@@ -113,30 +140,16 @@ export default function PersonalPortal() {
     || data.rightsHolder === undefined
     || data.delegate === undefined
     || data.vip === undefined
+    || data.agendaCollab === undefined
   const profile = data.speaker?.profile || data.delegate?.profile || data.rightsHolder?.profile || data.vip?.profile
 
   const hasSpeaker = !!data.speaker
   const hasRights  = !!data.rightsHolder
   const hasDelegate = !!data.delegate
   const hasVip = !!data.vip
-  const noRoles = !loading && !hasSpeaker && !hasRights && !hasDelegate && !hasVip
-
-  /* Event-day mode: detect whether any role has a session/experience today.
-     If so, default the toggle ON. User can flip it off. */
-  const hasItemToday = (() => {
-    const today = new Date(); today.setHours(0,0,0,0)
-    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1)
-    const isTodayIso = (v) => {
-      if (! v) return false
-      const d = new Date(v); return d >= today && d < tomorrow
-    }
-    if (data.speaker?.sessions?.some((s) => isTodayIso(s.starts_at || s.start_time))) return true
-    if (data.delegate?.schedule?.some((s) => isTodayIso(s.starts_at || s.start_time))) return true
-    if (data.vip?.experiences?.some((e) => isTodayIso(e.starts_at))) return true
-    return false
-  })()
-  const [eventDayMode, setEventDayMode] = useState(hasItemToday)
-  useEffect(() => { setEventDayMode(hasItemToday) }, [hasItemToday])
+  const agendaCollabs = Array.isArray(data.agendaCollab?.collaborations) ? data.agendaCollab.collaborations : []
+  const hasAgendaCollab = agendaCollabs.length > 0
+  const noRoles = !loading && !hasSpeaker && !hasRights && !hasDelegate && !hasVip && !hasAgendaCollab
 
   return (
     <div className="event-page theme-soccerex" style={{ background: '#FAFBFC', minHeight: '100vh', paddingTop: 'var(--app-top-offset)' }}>
@@ -144,6 +157,7 @@ export default function PersonalPortal() {
 
       <section style={{ padding: 'clamp(24px,3vw,40px) clamp(24px,5vw,60px) clamp(80px,10vw,120px)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <PortalErrorBoundary>
           {error && <ErrorBanner error={error} />}
           {loading && !error && <Loading label="Loading your portal" />}
 
@@ -182,10 +196,39 @@ export default function PersonalPortal() {
               onRefresh={() => reloadSection('delegate', () => getDelegatePortal(slug, editToken, { test: isTest }))}
             />
           )}
+
+          {hasAgendaCollab && (
+            <AgendaCollabSection collaborations={agendaCollabs} />
+          )}
+          </PortalErrorBoundary>
         </div>
       </section>
     </div>
   )
+}
+
+/* Last-resort guard: a render error in any one section must not white-screen
+   the whole portal (profiles arrive in many shapes — new collaborator-only
+   profiles have no speaker/delegate data at all). */
+class PortalErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { err: null } }
+
+  static getDerivedStateFromError(err) { return { err } }
+
+  render() {
+    if (this.state.err) {
+      return (
+        <div style={{ background: '#FFF6F6', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 12, padding: 18, marginBottom: 16 }}>
+          <p className="font-heading font-bold" style={{ fontSize: 14, color: '#991B1B' }}>This section hit a snag</p>
+          <p className="font-body" style={{ fontSize: 12.5, color: '#7F1D1D', marginTop: 4 }}>
+            {String(this.state.err?.message || this.state.err)}
+          </p>
+        </div>
+      )
+    }
+
+    return this.props.children
+  }
 }
 
 /* ─── Header ───────────────────────────────────────────────────────────── */
@@ -1001,6 +1044,47 @@ function DirectoryCard({ entry }) {
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+/* ─── Agenda collaborations section ────────────────────────────────────── */
+
+function AgendaCollabSection({ collaborations }) {
+  return (
+    <section className="portal-section mb-6">
+      <SectionHeader Icon={MessageSquare} kicker="Advisor" title="Agenda collaborations" />
+      <div className="flex flex-col gap-3">
+        {collaborations.map((c, i) => <AgendaCollabCard key={c.review_url || i} collab={c} />)}
+      </div>
+    </section>
+  )
+}
+
+function AgendaCollabCard({ collab: c }) {
+  const comments = c.comments_count ?? 0
+  const suggestions = c.suggestions_count ?? 0
+  const stars = c.votes_count ?? 0
+  return (
+    <div style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.10)', padding: 18, display: 'flex', alignItems: 'flex-start', gap: 14, flexWrap: 'wrap' }}>
+      <div style={{ minWidth: 0, flex: 1 }}>
+        <p className="font-heading font-bold" style={{ fontSize: 15, color: '#0D1B2A' }}>{c.event?.name}</p>
+        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1">
+          {c.event?.starts_on && (
+            <span className="inline-flex items-center gap-1.5 font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.16em', color: '#607186' }}>
+              <Calendar size={11} /> {fmtDate(c.event.starts_on)}
+            </span>
+          )}
+        </div>
+        <p className="font-body mt-2" style={{ fontSize: 12.5, color: '#3a4a5a' }}>
+          You've left {comments} comment{comments === 1 ? '' : 's'} · {suggestions} suggestion{suggestions === 1 ? '' : 's'} · {stars} star{stars === 1 ? '' : 's'}
+        </p>
+      </div>
+      {c.review_url && (
+        <a href={c.review_url} className="event-btn-primary" style={{ padding: '8px 14px', fontSize: 11 }}>
+          <ExternalLink size={12} /> Open agenda review
+        </a>
+      )}
     </div>
   )
 }

@@ -644,6 +644,17 @@ export async function respondToDealNetworkMeeting(slug, editToken, meetingId, bo
   ))
 }
 
+/* ───── Agenda collaboration portal (profile-access overview) ──────────────
+ * Read-only summary of every agenda review the person has been invited to,
+ * for the stacked personal portal. 404 = no collaborations for this profile.
+ */
+export async function getAgendaCollabPortal(slug, editToken, opts = {}) {
+  return unwrap(await authedRequest(
+    `/profile-access/profiles/${encodeURIComponent(slug)}/agenda-collab-portal`,
+    { token: editToken, test: opts.test },
+  ))
+}
+
 /* ───── Agenda collaborator review (external advisors, token link) ─────────
  * Outside advisors receive a personal link (/agenda-collab?token=...) to
  * review draft agenda topics: comment, star, and suggest edits / new topics.
@@ -686,6 +697,18 @@ export async function setAgendaCollabVote({ token, topic_id, vote } = {}, opts =
   return unwrap(await request('/agenda-collab/votes', {
     method: 'POST',
     body: { token, topic_id, vote },
+    test: opts.test,
+  }))
+}
+
+/**
+ * Create the minimal Soccerex person profile for a collaborator and link it
+ * to their invite. payload: { token, name, title? } → { profile }.
+ */
+export async function createAgendaCollabProfile(payload, opts = {}) {
+  return unwrap(await request('/agenda-collab/profile', {
+    method: 'POST',
+    body: payload,
     test: opts.test,
   }))
 }
