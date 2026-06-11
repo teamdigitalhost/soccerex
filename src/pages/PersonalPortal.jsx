@@ -19,6 +19,7 @@ import {
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { PROFILE_ACCESS, PROFILE_EXPIRED, profileEditor, profileView } from '../lib/routes'
 import { buildIcs, downloadIcs } from '../lib/ics'
+import DealNetworkPortalSection from '../components/DealNetworkPortalSection'
 
 /* PersonalPortal renders every role a single person profile has access to,
    in one stacked dashboard. Each role's endpoint is loaded in parallel and
@@ -149,6 +150,9 @@ export default function PersonalPortal() {
   const hasVip = !!data.vip
   const agendaCollabs = Array.isArray(data.agendaCollab?.collaborations) ? data.agendaCollab.collaborations : []
   const hasAgendaCollab = agendaCollabs.length > 0
+  /* Deal Network membership is recorded against the profile; the session's
+     capability flags (stamped at sign-in) tell us whether to surface it. */
+  const hasDealNetwork = !!session?.profiles?.find((p) => p.slug === slug)?.capabilities?.deal_network
   const noRoles = !loading && !hasSpeaker && !hasRights && !hasDelegate && !hasVip && !hasAgendaCollab
 
   return (
@@ -199,6 +203,18 @@ export default function PersonalPortal() {
 
           {hasAgendaCollab && (
             <AgendaCollabSection collaborations={agendaCollabs} />
+          )}
+
+          {hasDealNetwork && (
+            <DealNetworkPortalSection
+              slug={slug}
+              editToken={editToken}
+              isTest={isTest}
+              onUnauthorized={() => {
+                clearProfileAccessSession(); setSession(null)
+                navigate(PROFILE_EXPIRED, { replace: true })
+              }}
+            />
           )}
           </PortalErrorBoundary>
         </div>

@@ -343,7 +343,7 @@ export default function DealNetworkApply() {
               busy={busy} onSubmit={handleMatchmakingSubmit}
             />
           )}
-          {step === STEP_DONE && <DoneStep person={chosenPerson} company={chosenCompany} />}
+          {step === STEP_DONE && <DoneStep person={chosenPerson} email={email || matched?.email} testMode={testMode} />}
         </div>
       </section>
     </div>
@@ -831,7 +831,22 @@ function OtherInline({ value, onChange, disabled }) {
   )
 }
 
-function DoneStep({ person, company }) {
+function DoneStep({ person, email, testMode }) {
+  const [portalRequested, setPortalRequested] = useState(false)
+  const [portalBusy, setPortalBusy] = useState(false)
+
+  async function requestPortalLink() {
+    if (! email || portalBusy) return
+    setPortalBusy(true)
+    try {
+      const { requestProfileAccess } = await import('../lib/soccerexApi')
+      await requestProfileAccess({ email }, { test: testMode })
+      setPortalRequested(true)
+    } catch { setPortalRequested(true) /* response is intentionally identical either way */ } finally {
+      setPortalBusy(false)
+    }
+  }
+
   return (
     <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)', textAlign: 'center' }}>
       <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)', display: 'grid', placeItems: 'center', margin: '0 auto 20px', boxShadow: '0 20px 60px rgba(191,177,112,0.45)' }}>
@@ -844,6 +859,26 @@ function DoneStep({ person, company }) {
       <p className="font-body" style={{ fontSize: '0.85rem', color: '#9aa6b3' }}>
         Expect to hear back within two business days.
       </p>
+
+      {/* Profile continuity: the application lives on their Soccerex profile —
+          hand them the door to it instead of a dead end. */}
+      <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(9,32,62,0.08)', textAlign: 'left' }}>
+        <p className="font-mono uppercase tracking-[0.16em]" style={{ fontSize: '0.62rem', color: PURPLE, fontWeight: 700, marginBottom: 6 }}>Your Soccerex profile</p>
+        <p className="font-body" style={{ fontSize: '0.9rem', color: '#586778', lineHeight: 1.6, marginBottom: 12 }}>
+          This application is saved to <strong>{person?.display_name}</strong>'s Soccerex profile. Your portal keeps everything in one place — Deal Network requests and meetings, event access, speaking, and your profile details.
+        </p>
+        {portalRequested ? (
+          <p className="font-body" style={{ fontSize: '0.88rem', color: '#166534' }}>
+            ✓ Check your inbox — we emailed you a secure link to your Soccerex portal.
+          </p>
+        ) : (
+          <button type="button" onClick={requestPortalLink} disabled={portalBusy}
+            className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.12em]"
+            style={{ background: NAVY, color: '#fff', padding: '11px 18px', fontSize: '0.72rem', border: 'none', borderRadius: 6, cursor: portalBusy ? 'wait' : 'pointer' }}>
+            {portalBusy ? <><Loader2 size={14} className="animate-spin" /> Sending</> : <>Open my Soccerex portal <ArrowRight size={14} /></>}
+          </button>
+        )}
+      </div>
     </div>
   )
 }
