@@ -8,7 +8,7 @@ import { trackPageView } from './lib/soccerexApi'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, EUROPE_2026, RIYADH_2027,
-  INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK,
+  INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK, AGENDA_COLLAB,
   INVITE_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
   ROUTE_PATTERNS,
@@ -91,6 +91,7 @@ const PersonalPortal = lazy(() => import('./pages/PersonalPortal'))
 const DealNetworkPage = lazy(() => import('./pages/DealNetwork'))
 const InviteAccept = lazy(() => import('./pages/InviteAccept'))
 const DealNetworkApply = lazy(() => import('./pages/DealNetworkApply'))
+const AgendaCollab = lazy(() => import('./pages/AgendaCollab'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
 // Unreleased verticals (HerSoccerex, The Pitch) kept on disk but
 // no longer routed until announced. Restore routes in App.jsx when launching.
@@ -139,6 +140,8 @@ function App() {
           <Route path={INVITE_PATTERN} element={<InviteAccept />} />
           {/* Deal Network unlisted apply flow (email-first + profile match) */}
           <Route path="/deal-network/apply" element={<DealNetworkApply />} />
+          {/* External agenda-collaborator review (personal ?token= link) */}
+          <Route path={AGENDA_COLLAB} element={<AgendaCollab />} />
           {/* Profile self-service editor (passwordless via emailed link) */}
           <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />

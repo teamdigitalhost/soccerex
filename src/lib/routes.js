@@ -32,6 +32,9 @@ export const DEAL_NETWORK_APPLY = '/deal-network/apply'
 // capital). The apply page reads it to pre-select the right capability grid.
 export const dealNetworkApplyWithTrack = (track) =>
   track ? `${DEAL_NETWORK_APPLY}?track=${encodeURIComponent(track)}` : DEAL_NETWORK_APPLY
+// External agenda-collaborator review (personal link with ?token=...).
+// Distributed by email to invited advisors; not linked from site navigation.
+export const AGENDA_COLLAB   = '/agenda-collab'
 export const INVITE_PATTERN  = '/invite/:token'
 export const buildInviteUrl  = (token) => `/invite/${encodeURIComponent(token)}`
 

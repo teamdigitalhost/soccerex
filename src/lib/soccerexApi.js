@@ -644,6 +644,52 @@ export async function respondToDealNetworkMeeting(slug, editToken, meetingId, bo
   ))
 }
 
+/* ───── Agenda collaborator review (external advisors, token link) ─────────
+ * Outside advisors receive a personal link (/agenda-collab?token=...) to
+ * review draft agenda topics: comment, star, and suggest edits / new topics.
+ * Auth is the opaque token carried in each POST body — no bearer header.
+ * 404 = unknown token, 403 = revoked; callers branch on ApiError.status.
+ */
+export async function getAgendaCollabSession(token, opts = {}) {
+  return unwrap(await request('/agenda-collab/session', {
+    method: 'POST',
+    body: { token },
+    test: opts.test,
+    signal: opts.signal,
+  }))
+}
+
+export async function postAgendaCollabComment({ token, topic_id, body, parent_id } = {}, opts = {}) {
+  return unwrap(await request('/agenda-collab/comments', {
+    method: 'POST',
+    body: { token, topic_id, body, ...(parent_id ? { parent_id } : {}) },
+    test: opts.test,
+  }))
+}
+
+/**
+ * payload shape:
+ *   { token, type: 'new_topic' | 'edit',
+ *     topic_id?  (required for 'edit'),
+ *     title?     (required for 'new_topic'),
+ *     summary?, theme?, audience?, note? }
+ */
+export async function submitAgendaCollabSuggestion(payload, opts = {}) {
+  return unwrap(await request('/agenda-collab/suggestions', {
+    method: 'POST',
+    body: payload,
+    test: opts.test,
+  }))
+}
+
+export async function setAgendaCollabVote({ token, topic_id, vote } = {}, opts = {}) {
+  return unwrap(await request('/agenda-collab/votes', {
+    method: 'POST',
+    body: { token, topic_id, vote },
+    test: opts.test,
+  }))
+}
+
 /* ───── Public lead intake (unauthenticated; preregisterLead lives above) ── */
 export async function submitLead(kind, payload, opts = {}) {
   return unwrap(await request(`/leads/${encodeURIComponent(kind)}`, {
