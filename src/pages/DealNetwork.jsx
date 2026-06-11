@@ -2,12 +2,12 @@ import { createElement, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Handshake, Building2, Briefcase, ArrowRight, Sparkles, Shield,
-  Trophy, Crosshair, ClipboardList, CheckCircle2, Globe,
+  Trophy, Crosshair, ClipboardList, Globe,
   PhoneCall, Mail, CalendarCheck,
 } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { CONTACT, DEAL_NETWORK_APPLY, dealNetworkApplyWithTrack } from '../lib/routes'
+import { PROFILE_ACCESS, dealNetworkApplyWithTrack } from '../lib/routes'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 /* ═══ Deal Network: public marketing page ═══════════════════════════════
@@ -95,13 +95,8 @@ export default function DealNetwork() {
           }} />
           <p className="font-body text-white/80 leading-relaxed fade-up mx-auto"
              style={{ fontSize: 'clamp(1.05rem, 1.5vw, 1.2rem)', maxWidth: '780px' }}>
-            An invite-driven dealmaking platform connecting football decision-makers, rightsholders, capital partners, brands, innovators, and strategic organizations through the Soccerex ecosystem.
+            Built on 30 years of trusted relationships across global football, the Soccerex Deal Network is an invite-driven platform connecting decision-makers, rightsholders, brands, and capital partners through structured access designed to deliver real commercial outcomes.
           </p>
-
-          <div className="fade-up mt-7 mx-auto font-body text-white/65"
-               style={{ fontSize: '1rem', maxWidth: '640px', lineHeight: 1.7 }}>
-            <p>Built on 30 years of trusted relationships across global football, the Soccerex Deal Network creates structured access to qualified counterparties and curated opportunities designed to move from introductions to partnerships, investment, innovation, impact, and measurable commercial outcomes.</p>
-          </div>
 
           <p className="font-heading font-semibold fade-up mt-8 mx-auto"
              style={{ color: 'var(--color-brand-accent)', fontSize: 'clamp(1rem, 1.6vw, 1.25rem)', letterSpacing: '0.02em' }}>
@@ -116,85 +111,22 @@ export default function DealNetwork() {
           </div>
 
           <div className="fade-up mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Link to={DEAL_NETWORK_APPLY} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            {/* Anchor: scrolls to the three application tracks below. */}
+            <a href="#join-the-deal-network"
+              onClick={(e) => { e.preventDefault(); document.getElementById('join-the-deal-network')?.scrollIntoView({ behavior: 'smooth' }) }}
+              className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 32px', fontSize: '0.78rem', textDecoration: 'none' }}>
-              Request Deal Network access <ArrowRight size={15} />
-            </Link>
-            <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+              Join the Deal Network <ArrowRight size={15} />
+            </a>
+            <Link to={PROFILE_ACCESS} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.25)', padding: '14px 30px', fontSize: '0.78rem', textDecoration: 'none' }}>
-              Speak with Soccerex <ArrowRight size={15} />
+              Login to Deal Network <ArrowRight size={15} />
             </Link>
           </div>
         </div>
       </section>
 
       <PixelDivider color="#f4f3f0" layers={4} height={90} speed={0.5} />
-
-      {/* ═══ THE ECOSYSTEM IS THE ADVANTAGE ══════════════════════════════ */}
-      <section style={{
-        background: 'linear-gradient(180deg, #f4f3f0 0%, #efece6 100%)',
-        padding: 'clamp(60px,7vw,110px) clamp(24px,5vw,80px) clamp(40px,5vw,80px)',
-      }}>
-        <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
-          <div className="text-center mb-12">
-            <p className="font-mono uppercase tracking-[0.18em] mb-3 fade-up"
-               style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
-              THE ECOSYSTEM IS THE ADVANTAGE
-            </p>
-            <h2 className="font-heading font-bold mb-5 fade-up"
-                style={{ fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', color: NAVY, lineHeight: 1.15 }}>
-              30 Years of Access. Structured for Outcomes.
-            </h2>
-            <p className="font-body mx-auto fade-up"
-               style={{ fontSize: '1.02rem', color: '#586778', lineHeight: 1.65, maxWidth: '780px' }}>
-              For 30 years, Soccerex has built trusted relationships across the global football ecosystem. The Deal Network activates that access with structure, connecting the right stakeholders before, during, and after Soccerex events to create qualified meetings, strategic introductions, capital connectivity, and measurable commercial outcomes.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ WHAT THE DEAL NETWORK DOES ═══════════════════════════════════ */}
-      <section style={{
-        background: '#fff',
-        padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)',
-      }}>
-        <div style={{ maxWidth: '980px', margin: '0 auto' }}>
-          <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up"
-             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
-            WHAT THE DEAL NETWORK DOES
-          </p>
-          <h2 className="font-heading font-bold text-center mb-10 fade-up"
-              style={{ fontSize: 'clamp(1.7rem, 3vw, 2.35rem)', color: NAVY, lineHeight: 1.2 }}>
-            Connecting the Right Counterparties Across Football Business
-          </h2>
-          <p className="font-body text-center mx-auto fade-up mb-10" style={{ fontSize: '1rem', color: '#586778', lineHeight: 1.65, maxWidth: 760 }}>
-            The Deal Network creates structured access between rightsholders, companies, capital partners, innovators, and strategic organizations across the Soccerex ecosystem.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            <ConnectsCard
-              icon={Trophy}
-              from="Rightsholders"
-              to="Connect with brands, sponsors, agencies, technology providers, investors, foundations, and strategic partners aligned with your commercial and growth objectives."
-            />
-            <ConnectsCard
-              icon={Building2}
-              from="Companies, Capital & Innovation Partners"
-              to="Access federations, leagues, clubs, competitions, member associations, women’s football properties, and football development opportunities through curated Deal Network pathways."
-            />
-          </div>
-
-          <div className="text-center fade-up">
-            <p className="font-body" style={{ fontSize: '1rem', color: '#586778', marginBottom: 10 }}>
-              The objective is simple:
-            </p>
-            <p className="font-heading font-bold"
-               style={{ fontSize: 'clamp(1.4rem, 2.6vw, 2rem)', color: NAVY }}>
-              Less noise. <span style={{ color: 'var(--color-brand-accent)' }}>More relevance.</span> Higher-value outcomes.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* ═══ HOW IT WORKS ═════════════════════════════════════════════════ */}
       <section style={{
@@ -216,9 +148,9 @@ export default function DealNetwork() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { n: '01', icon: ClipboardList, t: 'Intake & Profiling',     d: 'Companies and rightsholders complete a tailored intake capturing objectives, target counterparts, and meeting preferences.' },
+              { n: '01', icon: ClipboardList, t: 'Intake & Profiling',     d: 'Rightsholders, commercial partners, and capital partners each complete a tailored intake capturing their objectives, target counterparts, and meeting preferences.' },
               { n: '02', icon: PhoneCall,     t: 'Discovery Calls',        d: 'The Soccerex team holds calls to gather richer context and make the matching as precise as possible.' },
-              { n: '03', icon: Crosshair,     t: 'Curated Matching',       d: 'Soccerex reviews intake and matches 3 to 5 relevant counterparts per participant by fit, intent, and strategic value.' },
+              { n: '03', icon: Crosshair,     t: 'Curated Matching',       d: 'Soccerex reviews intake and matches relevant counterparts per participant by fit, intent, and strategic value.' },
               { n: '04', icon: Mail,          t: 'Introduction Emails',    d: 'Introductions go to both sides, and each participant confirms which proposed counterparties they want to meet.' },
               { n: '05', icon: Handshake,     t: 'Bilateral Confirmation', d: 'A joint email confirms mutual interest and locks the meeting. Only confirmed bilateral interest gets a scheduled slot.' },
               { n: '06', icon: CalendarCheck, t: 'Pre-Scheduled Agenda',   d: 'Every participant receives a personal meeting schedule before the event. No cold approaches on the day.' },
@@ -252,7 +184,8 @@ export default function DealNetwork() {
       </section>
 
       {/* ═══ WHO IT IS FOR ════════════════════════════════════════════════ */}
-      <section style={{ background: '#fff', padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)' }}>
+      {/* id anchors the hero's "Join the Deal Network" button. */}
+      <section id="join-the-deal-network" style={{ background: '#fff', padding: 'clamp(60px,7vw,100px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <p className="font-mono uppercase tracking-[0.18em] mb-3 text-center fade-up"
              style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
@@ -263,13 +196,13 @@ export default function DealNetwork() {
             Built for the Football Business Marketplace
           </h2>
           <p className="font-body text-center mx-auto fade-up mb-10" style={{ fontSize: '1rem', color: '#586778', lineHeight: 1.65, maxWidth: 760 }}>
-            The Deal Network brings together three curated groups across the Soccerex ecosystem: rightsholders, companies, and the capital and impact partners that help make deals possible. Every participant is reviewed and approved by Soccerex before being matched.
+            The Deal Network brings together three curated groups across the Soccerex ecosystem: rightsholders, commercial partners, and the capital partners that help make deals possible. Every participant is reviewed and approved by Soccerex before being matched.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <AudienceCard icon={Trophy} title="Rightsholders" access="By invitation" body="Clubs, leagues, federations, governing bodies, and player representatives. Invited and curated by Soccerex." items={RIGHTSHOLDER_TYPES} tint={NAVY} tintBg="rgba(9,32,62,0.08)" applyTrack="rightsholder" ctaLabel="Request your invitation" />
-            <AudienceCard icon={Briefcase} title="Companies" access="By application" body="Brands, sponsors, agencies, and strategic partners, curated by Soccerex." items={COMPANY_TYPES} tint={PURPLE} tintBg={PURPLE_SOFT} applyTrack="company" ctaLabel="Apply as a company" />
-            <AudienceCard icon={Building2} title="Capital & Impact Partners" access="Curated access, apply to join" body="The third force behind the biggest deals: capital, infrastructure, and mission-driven support. A dedicated curated track, reviewed for mandate fit." items={CAPITAL_IMPACT_TYPES} tint="var(--color-brand-accent)" tintBg="rgba(191,177,112,0.18)" applyTrack="capital" ctaLabel="Apply to join" />
+            <AudienceCard icon={Trophy} title="Rightsholders" body="Clubs, leagues, federations, governing bodies, and player representatives. Invited and curated by Soccerex." items={RIGHTSHOLDER_TYPES} tint={NAVY} tintBg="rgba(9,32,62,0.08)" applyTrack="rightsholder" ctaLabel="Apply as Rightsholder" />
+            <AudienceCard icon={Briefcase} title="Commercial Partner" body="Brands, sponsors, agencies, and strategic partners, curated by Soccerex." items={COMPANY_TYPES} tint={PURPLE} tintBg={PURPLE_SOFT} applyTrack="company" ctaLabel="Apply as Commercial Partner" />
+            <AudienceCard icon={Building2} title="Capital Partner / Nonprofit" body="The third force behind the biggest deals: capital, infrastructure, and mission-driven support. A dedicated curated track, reviewed for mandate fit." items={CAPITAL_IMPACT_TYPES} tint="var(--color-brand-accent)" tintBg="rgba(191,177,112,0.18)" applyTrack="capital" ctaLabel="Apply as Capital Provider / Nonprofit" />
           </div>
         </div>
       </section>
@@ -310,79 +243,17 @@ export default function DealNetwork() {
         </div>
       </section>
 
-      {/* ═══ JOIN / APPLY ═════════════════════════════════════════════════ */}
-      <section style={{ background: NAVY_DEEP, padding: 'clamp(70px,8vw,120px) clamp(24px,5vw,80px)' }}>
-        <div style={{ maxWidth: '880px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
-          <p className="font-mono uppercase tracking-[0.18em] mb-3 fade-up"
-             style={{ fontSize: '0.7rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
-            JOIN THE DEAL NETWORK
-          </p>
-          <h2 className="font-heading font-bold text-white fade-up mb-6"
-              style={{ fontSize: 'clamp(1.9rem, 3.6vw, 2.8rem)', lineHeight: 1.15 }}>
-            The football industry already gathers at Soccerex.
-          </h2>
-          <p className="font-body text-white/75 fade-up mx-auto"
-             style={{ fontSize: '1.05rem', lineHeight: 1.7, maxWidth: '720px', marginBottom: 32 }}>
-            The Deal Network turns that access into qualified conversations, strategic partnerships, investment opportunities, and measurable commercial outcomes.
-          </p>
-          <p className="font-heading font-semibold fade-up mx-auto"
-             style={{ color: 'var(--color-brand-accent)', fontSize: 'clamp(1.05rem, 1.8vw, 1.35rem)', lineHeight: 1.6, marginBottom: 32 }}>
-            Right people. Right room. Real outcomes.
-          </p>
-
-          <div className="fade-up flex flex-wrap items-center justify-center gap-3">
-            <Link to={DEAL_NETWORK_APPLY} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '17px 38px', fontSize: '0.8rem', textDecoration: 'none' }}>
-              Request Deal Network access <ArrowRight size={16} />
-            </Link>
-            <Link to={CONTACT} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.25)', padding: '16px 34px', fontSize: '0.8rem', textDecoration: 'none' }}>
-              Speak with Soccerex <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
-    </div>
-  )
-}
-
-/* ═══ "What the Deal Network Does" card ═══════════════════════════════════ */
-function ConnectsCard({ icon, from, to }) {
-  return (
-    <div className="fade-up" style={{
-      background: '#fafaf7', borderRadius: 14, padding: '24px 24px',
-      border: '1px solid rgba(9,32,62,0.08)',
-    }}>
-      <div className="flex items-center gap-3 mb-3">
-        <span style={{
-          width: 40, height: 40, borderRadius: 10,
-          background: 'rgba(191,177,112,0.18)', display: 'grid', placeItems: 'center',
-        }}>
-          {createElement(icon, { size: 20, color: 'var(--color-brand-accent)', strokeWidth: 2.2 })}
-        </span>
-        <h3 className="font-heading font-bold" style={{ fontSize: '1.05rem', color: NAVY }}>{from}</h3>
-      </div>
-      <p className="font-body" style={{ fontSize: '0.92rem', color: '#586778', lineHeight: 1.6 }}>
-        <span style={{ color: NAVY, fontWeight: 500 }}>{to}</span>
-      </p>
     </div>
   )
 }
 
 /* ═══ "Who It Is For" card ═══════════════════════════════════════════════ */
-function AudienceCard({ icon, title, body, items, tint, tintBg, access, applyTrack, ctaLabel }) {
+function AudienceCard({ icon, title, body, items, tint, tintBg, applyTrack, ctaLabel }) {
   return (
-    <div className="fade-up" style={{
+    <div className="fade-up flex flex-col" style={{
       background: '#fafaf7', borderRadius: 16, padding: 'clamp(24px,3vw,36px)',
       border: '1px solid rgba(9,32,62,0.08)', boxShadow: '0 6px 22px rgba(9,32,62,0.05)',
     }}>
-      {access && (
-        <span className="font-mono" style={{
-          display: 'inline-block', marginBottom: 16, padding: '5px 12px', borderRadius: 100,
-          fontSize: '0.62rem', letterSpacing: '0.16em', textTransform: 'uppercase', fontWeight: 700,
-          color: tint, background: tintBg || PURPLE_SOFT,
-        }}>{access}</span>
-      )}
       <div className="flex items-center gap-3 mb-5">
         <span style={{
           width: 46, height: 46, borderRadius: 11,
@@ -398,7 +269,7 @@ function AudienceCard({ icon, title, body, items, tint, tintBg, access, applyTra
           {body}
         </p>
       )}
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4" style={{ listStyle: 'none', padding: 0, margin: '0 0 22px' }}>
         {items.map((item) => (
           <li key={item} className="font-body" style={{
             fontSize: '0.88rem', color: '#586778',
@@ -412,10 +283,15 @@ function AudienceCard({ icon, title, body, items, tint, tintBg, access, applyTra
       {applyTrack && (
         <Link
           to={dealNetworkApplyWithTrack(applyTrack)}
-          className="inline-flex items-center gap-1.5 font-body font-semibold"
-          style={{ marginTop: 22, color: tint, fontSize: '0.82rem', textDecoration: 'none', borderBottom: `1.5px solid ${tint}`, paddingBottom: 2 }}
+          className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.12em] text-center"
+          style={{
+            marginTop: 'auto', paddingTop: 14, paddingBottom: 14,
+            background: tint, color: '#fff', borderRadius: 8,
+            fontSize: '0.76rem', textDecoration: 'none', width: '100%',
+            display: 'flex', alignSelf: 'flex-end',
+          }}
         >
-          {ctaLabel || 'Request access'} <ArrowRight size={14} />
+          {ctaLabel || 'Apply'} <ArrowRight size={15} />
         </Link>
       )}
     </div>

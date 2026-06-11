@@ -9,7 +9,7 @@ import {
   submitDealNetworkIntake,
   ApiError,
 } from '../lib/soccerexApi'
-import { CAPABILITY_VALIDITY, NEED_OFFER_LABELS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
+import { INTAKE_FORMS, INTAKE_REGIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
 import { isTestModeFromUrl } from '../lib/testMode'
 
 // company Profile type → applicant side. club/federation are rightsholders
@@ -97,16 +97,30 @@ export default function DealNetworkApply() {
   const [companyQuery, setCompanyQuery] = useState('')
   const [companyResults, setCompanyResults] = useState([])
 
-  // Matchmaking
+  // Matchmaking — tailored per-side intake (2026-06 intake forms doc)
   const [matchmakingToken, setMatchmakingToken] = useState('')
   const [mm, setMm] = useState({
     side: trackSide || 'brand',
-    looking_for: [], can_offer: [], deal_types: [],
+    // company information extras
+    website: '', phone: '', attendance: '',
+    // about your organization
+    organization_type: '', organization_type_other: '',
+    league_level: '', industry_sector: '', aum_range: '',
+    primary_geography: '', primary_geography_other: '',
+    // your deal / mandate
+    pitch: '',
+    looking_for: [], looking_other: '',
+    can_offer: [], offer_other: '',
     pain_points: [], pain_point_detail: '',
-    one_sentence_pitch: '', deal_description: '',
-    ideal_counterpart: '', budget_range: '',
-    primary_geography: '', decision_timeline: '',
-    named_targets: '',
+    deal_types: [], deal_types_other: '',
+    deal_structures: [], deal_structures_other: '',
+    // counterpart & parameters
+    ideal_counterpart: '', named_targets: '',
+    budget_range: '', budget_other: '',
+    investment_geography: '', leagues_interest: '',
+    decision_timeline: '',
+    // additional context
+    additional_context: '',
   })
 
   // Load preview when arriving with a token
@@ -207,13 +221,16 @@ export default function DealNetworkApply() {
   async function handleMatchmakingSubmit() {
     setBusy(true); setError('')
     try {
-      // Only emit signals valid for the chosen side, so a stale tick from a
-      // pre-switch selection can never reach the backend's key validation.
-      const validFor = (col) => CAPABILITY_VALIDITY
-        .filter((row) => row[mm.side]?.[col])
-        .map((row) => row.key)
-      const lookingValid = new Set(validFor('looking'))
-      const offerValid = new Set(validFor('provide'))
+      const form = INTAKE_FORMS[mm.side]
+      // Only emit signal keys that this side's form actually renders, so a
+      // stale tick from a pre-switch selection can never reach the backend's
+      // key validation.
+      const lookingValid = new Set((form.lookingFor || []).map(([key]) => key))
+      const offerValid = new Set((form.canProvide || []).map(([key]) => key))
+      const painValid = new Set([...form.pains, 'other'])
+      const resolveOther = (value, other) => (value === 'Other' ? (other.trim() || undefined) : (value || undefined))
+      const withOther = (list, other) => [...list, ...(other.trim() ? [other.trim()] : [])]
+      const splitList = (text) => text.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean)
 
       await submitDealNetworkIntake({
         side: SIDE_TO_BACKEND[mm.side],
@@ -221,18 +238,33 @@ export default function DealNetworkApply() {
         primary_contact_name: chosenPerson?.display_name || personName,
         primary_contact_email: email || matched?.email,
         primary_contact_title: personTitle,
-        deal_types: mm.deal_types,
-        one_sentence_pitch: mm.one_sentence_pitch || undefined,
-        deal_description: mm.deal_description || undefined,
+        website: mm.website.trim() || companyWebsite.trim() || undefined,
+        primary_contact_phone: mm.phone.trim() || undefined,
+        decision_maker_attendance: mm.attendance || undefined,
+        organization_type: resolveOther(mm.organization_type, mm.organization_type_other),
+        league_level: mm.side === 'property' ? (mm.league_level || undefined) : undefined,
+        industry_sector: mm.side === 'brand' ? (mm.industry_sector || undefined) : undefined,
+        aum_range: mm.side === 'capital' ? (mm.aum_range || undefined) : undefined,
+        one_sentence_pitch: mm.pitch.trim().slice(0, 500) || undefined,
+        deal_description: mm.pitch.trim() || undefined,
+        deal_types: withOther(mm.deal_types, mm.deal_types_other),
+        deal_structure_preferences: form.dealStructures ? withOther(mm.deal_structures, mm.deal_structures_other) : undefined,
         ideal_counterpart: mm.ideal_counterpart || undefined,
-        named_targets: mm.named_targets.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean),
+        named_targets: splitList(mm.named_targets),
         looking_for: mm.looking_for.filter((k) => lookingValid.has(k)),
-        can_offer: mm.can_offer.filter((k) => offerValid.has(k)),
-        pain_points: mm.pain_points,
+        looking_for_other: mm.looking_other.trim() || undefined,
+        // Capital partners are implicitly capital providers; the doc's capital
+        // form has no separate "can provide" question.
+        can_offer: mm.side === 'capital' ? ['investment_capital'] : mm.can_offer.filter((k) => offerValid.has(k)),
+        can_offer_other: mm.offer_other.trim() || undefined,
+        pain_points: mm.pain_points.filter((k) => painValid.has(k)),
         pain_point_detail: mm.pain_point_detail || undefined,
-        budget_range: mm.budget_range || undefined,
-        primary_geography: mm.primary_geography || undefined,
+        budget_range: mm.budget_range === 'Other' ? (mm.budget_other.trim() || undefined) : (mm.budget_range || undefined),
+        primary_geography: resolveOther(mm.primary_geography, mm.primary_geography_other),
+        investment_geography: mm.side === 'capital' ? (mm.investment_geography || undefined) : undefined,
+        leagues_competitions: mm.side === 'capital' ? splitList(mm.leagues_interest) : undefined,
         decision_timeline: mm.decision_timeline || undefined,
+        additional_context: mm.additional_context.trim() || undefined,
         matchmaking_token: matchmakingToken || undefined,
         source: 'frontend-deal-network-apply',
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
@@ -559,36 +591,34 @@ function CondensedStep(props) {
 
 function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
   const toggle = (key, v) => setMm({ ...mm, [key]: mm[key].includes(v) ? mm[key].filter((x) => x !== v) : [...mm[key], v] })
+  const set = (key) => (v) => setMm({ ...mm, [key]: v })
 
+  const form = INTAKE_FORMS[mm.side]
   const isCapital = mm.side === 'capital'
 
-  // Capital & impact partners think in structures and ticket sizes, not
-  // sponsorship deal types and marketing budgets, so the matchmaking inputs
-  // adapt to the chosen side.
-  const COMPANY_DEAL_TYPES = ['Sponsorship', 'Media rights', 'Content partnership', 'Technology / platform', 'Hospitality / experiences', 'Investment / M&A', 'Stadium / venue', 'Data / analytics', 'Merchandising / licensing']
-  const CAPITAL_STRUCTURES = ['Equity investment', 'Debt / financing', 'M&A', 'Joint venture', 'Infrastructure / project finance', 'Impact / mission-driven']
-  const DEAL_TYPES = isCapital ? CAPITAL_STRUCTURES : COMPANY_DEAL_TYPES
-
-  const COMPANY_BUDGETS = ['Under $25k', '$25k - $50k', '$50k - $100k', '$100k - $250k', '$250k - $500k', '$500k - $1M', '$1M+', 'Prefer not to say']
-  const CAPITAL_TICKETS = ['Under $500k', '$500k - $2M', '$2M - $10M', '$10M - $50M', '$50M+', 'Prefer not to say']
-  const BUDGETS = isCapital ? CAPITAL_TICKETS : COMPANY_BUDGETS
-
-  const REGIONS = ['Global', 'Americas', 'Europe', 'MENA / GCC', 'Africa', 'Asia', 'Oceania']
-
-  // Switching side prunes any ticked signal that is not valid for the new side,
-  // so the grid and the eventual payload stay consistent with the chosen side.
+  // Switching side prunes any ticked signal that the new side's form does not
+  // render, so the chips and the eventual payload stay consistent.
   function setSide(side) {
-    const lookingValid = new Set(CAPABILITY_VALIDITY.filter((r) => r[side]?.looking).map((r) => r.key))
-    const offerValid = new Set(CAPABILITY_VALIDITY.filter((r) => r[side]?.provide).map((r) => r.key))
+    const next = INTAKE_FORMS[side]
+    const lookingValid = new Set((next.lookingFor || []).map(([key]) => key))
+    const offerValid = new Set((next.canProvide || []).map(([key]) => key))
+    const painValid = new Set([...next.pains, 'other'])
     setMm({
       ...mm,
       side,
+      organization_type: '', organization_type_other: '',
+      league_level: '', industry_sector: '', aum_range: '',
       looking_for: mm.looking_for.filter((k) => lookingValid.has(k)),
       can_offer: mm.can_offer.filter((k) => offerValid.has(k)),
+      pain_points: mm.pain_points.filter((k) => painValid.has(k)),
+      deal_types: [], deal_structures: [],
+      budget_range: '', budget_other: '',
     })
   }
 
-  const rows = CAPABILITY_VALIDITY.filter((r) => r[mm.side]?.looking || r[mm.side]?.provide)
+  const painLabel = (key) => form.painLabels?.[key]
+    || PAIN_OPTIONS.find((p) => p.key === key)?.label
+    || key
 
   return (
     <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
@@ -599,22 +629,19 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
         </span>
       </div>
 
-      <h2 className="font-heading font-bold mb-2" style={{ fontSize: '1.2rem', color: NAVY }}>Deal-network questions</h2>
+      <h2 className="font-heading font-bold mb-2" style={{ fontSize: '1.2rem', color: NAVY }}>Deal Network intake</h2>
       <p className="font-body mb-5" style={{ fontSize: '0.9rem', color: '#586778', lineHeight: 1.55 }}>
-        Help us put you in the right rooms.
+        A tailored intake for your side of the marketplace. Help us put you in the right rooms.
       </p>
 
-      {/* Which side are you? Drives the grid columns and the membership side
-          sent to the backend. Pre-selected from the claimed company's type,
-          but confirmable here so a defaulted side (e.g. a free-email signup
-          that lands on Brand) can be corrected before the grid renders. */}
-      <div className="mb-5">
+      {/* Side selector — drives which tailored form renders below. */}
+      <div className="mb-6">
         <Label>Which best describes you?</Label>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { id: 'property', title: 'Property', sub: 'Rightsholder: club, federation, league, venue', accent: NAVY, tintBg: 'rgba(9,32,62,0.07)' },
-            { id: 'brand', title: 'Brand / Company', sub: 'Sponsor, agency, technology, media', accent: PURPLE, tintBg: 'rgba(107,58,168,0.08)' },
-            { id: 'capital', title: 'Capital & Impact', sub: 'Investor, fund, family office, foundation', accent: GOLD, tintBg: 'rgba(143,129,54,0.12)' },
+            { id: 'property', title: 'Rightsholder', sub: 'Club, federation, league, venue, agency', accent: NAVY, tintBg: 'rgba(9,32,62,0.07)' },
+            { id: 'brand', title: 'Commercial Partner', sub: 'Brand, sponsor, technology, media, agency', accent: PURPLE, tintBg: 'rgba(107,58,168,0.08)' },
+            { id: 'capital', title: 'Capital Partner / Nonprofit', sub: 'Investor, fund, family office, foundation', accent: GOLD, tintBg: 'rgba(143,129,54,0.12)' },
           ].map((opt) => {
             const active = mm.side === opt.id
             return (
@@ -630,66 +657,117 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
         </div>
       </div>
 
-      {/* Type-aware capability grid. Each row offers up to two checkboxes;
-          a cell renders only where it makes sense for the chosen side. */}
-      <div className="mb-5">
-        <Label>What are you looking for, and what can you provide?</Label>
-        <CapabilityGrid
-          rows={rows} side={mm.side}
-          looking={mm.looking_for} offer={mm.can_offer}
-          onToggle={(col, key) => toggle(col === 'looking' ? 'looking_for' : 'can_offer', key)}
-        />
+      {/* ── COMPANY INFORMATION ─────────────────────────────────────────── */}
+      <SectionHeading>Company information</SectionHeading>
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Website" value={mm.website} onChange={set('website')} placeholder="https://yourcompany.com" type="url" disabled={busy} />
+        <Field label="Phone / WhatsApp" value={mm.phone} onChange={set('phone')} placeholder="+1 305 555 0100" disabled={busy} />
       </div>
-
-      <Field
-        label={isCapital ? 'Your mandate / thesis (one sentence)' : 'One-sentence pitch (what do you want to do in football)'}
-        value={mm.one_sentence_pitch}
-        onChange={(v) => setMm({ ...mm, one_sentence_pitch: v })}
-        placeholder={isCapital ? 'e.g. We deploy $2-10M growth equity into clubs and venues across the Americas.' : 'e.g. We want to launch a fan-data activation with two MLS clubs in 2026.'}
-        disabled={busy}
-      />
-
-      {/* Pain points — secondary context for the concierge, kept optional.
-          Distinct from the need/offer grid (which drives matching). */}
-      <div className="mb-2">
-        <Label>What problems are you trying to solve? (optional)</Label>
-        <ChipGroup options={PAIN_OPTIONS.map((p) => p.label)} value={mm.pain_points.map((k) => PAIN_OPTIONS.find((p) => p.key === k)?.label).filter(Boolean)}
+      <div className="mb-4">
+        <Label>Will the decision-maker attend Miami?</Label>
+        <ChipGroup options={['Yes', 'No', 'TBC']} value={mm.attendance ? [mm.attendance === 'tbc' ? 'TBC' : mm.attendance === 'yes' ? 'Yes' : 'No'] : []}
           onToggle={(label) => {
-            const key = PAIN_OPTIONS.find((p) => p.label === label)?.key
-            if (key) toggle('pain_points', key)
+            const v = label.toLowerCase()
+            setMm({ ...mm, attendance: mm.attendance === v ? '' : v })
           }} />
       </div>
+
+      {/* ── ABOUT YOUR ORGANIZATION ─────────────────────────────────────── */}
+      <SectionHeading>About your organization</SectionHeading>
+      <SelectField
+        label={form.orgTypeLabel}
+        value={mm.organization_type}
+        onChange={set('organization_type')}
+        options={[...form.orgTypes, 'Other']}
+        disabled={busy}
+      />
+      {mm.organization_type === 'Other' && (
+        <Field label={`${form.orgTypeLabel} (other)`} value={mm.organization_type_other} onChange={set('organization_type_other')} placeholder="Type it in" disabled={busy} />
+      )}
+      {mm.side === 'property' && (
+        <SelectField label="League / competition level" value={mm.league_level} onChange={set('league_level')} options={form.leagueLevels} disabled={busy} />
+      )}
+      {mm.side === 'brand' && (
+        <SelectField label="Industry / sector" value={mm.industry_sector} onChange={set('industry_sector')} options={form.industries} disabled={busy} />
+      )}
+      {isCapital && (
+        <SelectField label="Assets under management / capital deployed (ballpark)" value={mm.aum_range} onChange={set('aum_range')} options={form.aumRanges} disabled={busy} />
+      )}
+      <SelectField label="Primary geography / market" value={mm.primary_geography} onChange={set('primary_geography')} options={[...INTAKE_REGIONS, 'Other']} disabled={busy} />
+      {mm.primary_geography === 'Other' && (
+        <Field label="Primary geography (other)" value={mm.primary_geography_other} onChange={set('primary_geography_other')} placeholder="Type it in" disabled={busy} />
+      )}
+
+      {/* ── YOUR DEAL / YOUR MANDATE ────────────────────────────────────── */}
+      <SectionHeading>{isCapital ? 'Your mandate' : 'Your deal'}</SectionHeading>
+      <Field label={form.pitchLabel} value={mm.pitch} onChange={set('pitch')} placeholder={form.pitchPlaceholder} disabled={busy} textarea />
+
+      <div className="mb-4">
+        <Label>{form.lookingForLabel || 'What are you looking for? (select all that apply)'}</Label>
+        <KeyedChips options={form.lookingFor} value={mm.looking_for} onToggle={(k) => toggle('looking_for', k)} />
+        <OtherInline value={mm.looking_other} onChange={set('looking_other')} disabled={busy} />
+      </div>
+
+      {form.canProvide && (
+        <div className="mb-4">
+          <Label>What can you provide? (select all that apply)</Label>
+          <KeyedChips options={form.canProvide} value={mm.can_offer} onToggle={(k) => toggle('can_offer', k)} />
+          <OtherInline value={mm.offer_other} onChange={set('offer_other')} disabled={busy} />
+        </div>
+      )}
+
+      <div className="mb-2">
+        <Label>What problems are you trying to solve? (select all that apply)</Label>
+        <KeyedChips options={[...form.pains.map((k) => [k, painLabel(k)]), ['other', 'Other']]} value={mm.pain_points} onToggle={(k) => toggle('pain_points', k)} />
+      </div>
       {mm.pain_points.length > 0 && (
-        <Field label="Anything to add on those? (optional)" value={mm.pain_point_detail} onChange={(v) => setMm({ ...mm, pain_point_detail: v })} placeholder="A sentence or two of context helps the concierge." disabled={busy} textarea />
+        <Field label="Anything to add on those? (optional)" value={mm.pain_point_detail} onChange={set('pain_point_detail')} placeholder="A sentence or two of context helps the concierge." disabled={busy} textarea />
       )}
 
       <div className="mb-4">
-        <Label>{isCapital ? 'Deal structures you pursue' : 'Deal types you are open to'}</Label>
-        <ChipGroup options={DEAL_TYPES} value={mm.deal_types} onToggle={(v) => toggle('deal_types', v)} />
+        <Label>{form.dealTypesLabel || 'Deal types you are open to (select all that apply)'}</Label>
+        <ChipGroup options={form.dealTypes} value={mm.deal_types} onToggle={(v) => toggle('deal_types', v)} />
+        <OtherInline value={mm.deal_types_other} onChange={set('deal_types_other')} disabled={busy} />
       </div>
 
-      <Field label={isCapital ? 'Ideal counterpart (the kind of rightsholder / asset)' : 'Ideal counterpart (the kind of company / role)'} value={mm.ideal_counterpart} onChange={(v) => setMm({ ...mm, ideal_counterpart: v })} placeholder={isCapital ? 'Clubs or venues with fundable commercial plans' : 'Mid-major MLS club head of partnerships'} disabled={busy} textarea />
+      {form.dealStructures && (
+        <div className="mb-4">
+          <Label>Deal structure preference (select all that apply)</Label>
+          <ChipGroup options={form.dealStructures} value={mm.deal_structures} onToggle={(v) => toggle('deal_structures', v)} />
+          <OtherInline value={mm.deal_structures_other} onChange={set('deal_structures_other')} disabled={busy} />
+        </div>
+      )}
+
+      {/* ── COUNTERPART & DEAL PARAMETERS ───────────────────────────────── */}
+      <SectionHeading>Counterpart &amp; deal parameters</SectionHeading>
+      <Field label={form.counterpartLabel} value={mm.ideal_counterpart} onChange={set('ideal_counterpart')} placeholder={form.counterpartPlaceholder} disabled={busy} textarea />
+      <Field label="Named targets (optional — specific clubs, leagues, federations, or companies, one per line)" value={mm.named_targets} onChange={set('named_targets')} placeholder={'Atlanta United\nLA Galaxy\nFC Cincinnati'} disabled={busy} textarea />
 
       <div className="grid grid-cols-2 gap-3">
-        <div>
-          <Label>Primary geography</Label>
-          <select value={mm.primary_geography} onChange={(e) => setMm({ ...mm, primary_geography: e.target.value })} className="portal-input" style={{ width: '100%', padding: '10px 12px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6 }}>
-            <option value="">Pick one</option>
-            {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
-          </select>
-        </div>
-        <div>
-          <Label>{isCapital ? 'Typical ticket size' : 'Budget range'}</Label>
-          <select value={mm.budget_range} onChange={(e) => setMm({ ...mm, budget_range: e.target.value })} style={{ width: '100%', padding: '10px 12px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6 }}>
-            <option value="">Pick one</option>
-            {BUDGETS.map((b) => <option key={b} value={b}>{b}</option>)}
-          </select>
-        </div>
+        <SelectField label={form.budgetLabel} value={mm.budget_range} onChange={set('budget_range')} options={[...form.budgets, 'Other']} disabled={busy} />
+        <Field label="Decision timeline (optional)" value={mm.decision_timeline} onChange={set('decision_timeline')} placeholder="Q3 2026, before Miami, etc." disabled={busy} />
       </div>
+      {mm.budget_range === 'Other' && (
+        <Field label={`${form.budgetLabel} (other)`} value={mm.budget_other} onChange={set('budget_other')} placeholder="Type it in" disabled={busy} />
+      )}
 
-      <Field label="Named targets (optional, one per line)" value={mm.named_targets} onChange={(v) => setMm({ ...mm, named_targets: v })} placeholder="Atlanta United\nLA Galaxy\nFC Cincinnati" disabled={busy} textarea />
+      {isCapital && (
+        <>
+          <SelectField label="Primary geography of investment interest" value={mm.investment_geography} onChange={set('investment_geography')} options={INTAKE_REGIONS} disabled={busy} />
+          <Field label="Leagues or competitions of interest (optional)" value={mm.leagues_interest} onChange={set('leagues_interest')} placeholder="e.g., MLS, Liga MX, Championship, Brasileirão" disabled={busy} />
+        </>
+      )}
 
-      <Field label="Decision timeline (optional)" value={mm.decision_timeline} onChange={(v) => setMm({ ...mm, decision_timeline: v })} placeholder="Q3 2026, before Miami, etc." disabled={busy} />
+      {/* ── ADDITIONAL CONTEXT ──────────────────────────────────────────── */}
+      <SectionHeading>Additional context</SectionHeading>
+      <Field
+        label="Anything else we should know? (optional)"
+        value={mm.additional_context} onChange={set('additional_context')}
+        placeholder={isCapital
+          ? "Context that doesn't fit above — prior deal attempts, specific constraints, ESG mandates, fund cycle timing, etc."
+          : "Context that doesn't fit above — prior deal attempts, specific constraints, preferences, etc."}
+        disabled={busy} textarea
+      />
 
       <button
         type="button" onClick={onSubmit} disabled={busy}
@@ -702,34 +780,54 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
   )
 }
 
-function CapabilityGrid({ rows, side, looking, offer, onToggle }) {
+function SectionHeading({ children }) {
   return (
-    <div style={{ border: '1px solid rgba(9,32,62,0.1)', borderRadius: 10, overflow: 'hidden' }}>
-      <div className="grid items-center" style={{ gridTemplateColumns: '1fr 72px 72px', background: '#f8f7f4', borderBottom: '1px solid rgba(9,32,62,0.08)' }}>
-        <span />
-        <span className="font-mono uppercase tracking-[0.1em] text-center" style={{ fontSize: '0.56rem', color: '#7a8896', fontWeight: 700, padding: '8px 4px' }}>Looking<br />for</span>
-        <span className="font-mono uppercase tracking-[0.1em] text-center" style={{ fontSize: '0.56rem', color: '#7a8896', fontWeight: 700, padding: '8px 4px' }}>Can<br />provide</span>
-      </div>
-      {rows.map((row, i) => (
-        <div key={row.key} className="grid items-center" style={{ gridTemplateColumns: '1fr 72px 72px', borderTop: i === 0 ? 'none' : '1px solid rgba(9,32,62,0.06)' }}>
-          <span className="font-body" style={{ fontSize: '0.82rem', color: NAVY, padding: '10px 12px', lineHeight: 1.25 }}>{NEED_OFFER_LABELS[row.key]}</span>
-          <GridCell visible={!! row[side]?.looking} checked={looking.includes(row.key)} onClick={() => onToggle('looking', row.key)} />
-          <GridCell visible={!! row[side]?.provide} checked={offer.includes(row.key)} onClick={() => onToggle('provide', row.key)} />
-        </div>
-      ))}
+    <div className="font-mono uppercase tracking-[0.18em]" style={{
+      fontSize: '0.64rem', color: 'var(--color-brand-accent)', fontWeight: 700,
+      borderTop: '1px solid rgba(9,32,62,0.08)', paddingTop: 18, marginTop: 22, marginBottom: 14,
+    }}>{children}</div>
+  )
+}
+
+function SelectField({ label, value, onChange, options, disabled }) {
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <Label>{label}</Label>
+      <select value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}
+        style={{ width: '100%', padding: '10px 12px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY }}>
+        <option value="">Choose one</option>
+        {options.map((o) => <option key={o} value={o}>{o}</option>)}
+      </select>
     </div>
   )
 }
 
-function GridCell({ visible, checked, onClick }) {
-  if (! visible) return <span style={{ display: 'grid', placeItems: 'center', color: 'rgba(9,32,62,0.18)', fontSize: '0.9rem' }}>·</span>
+/* Chips whose VALUES are taxonomy keys but whose labels vary per side. */
+function KeyedChips({ options, value, onToggle }) {
   return (
-    <span style={{ display: 'grid', placeItems: 'center', padding: '8px 0' }}>
-      <button type="button" role="checkbox" aria-checked={checked} onClick={onClick}
-        style={{ width: 26, height: 26, borderRadius: 6, border: '1.5px solid ' + (checked ? PURPLE : 'rgba(9,32,62,0.25)'), background: checked ? PURPLE : '#fff', color: '#fff', display: 'grid', placeItems: 'center', cursor: 'pointer', padding: 0 }}>
-        {checked && <CheckCircle2 size={16} />}
-      </button>
-    </span>
+    <div className="flex flex-wrap gap-2">
+      {options.map(([key, label]) => {
+        const active = value.includes(key)
+        return (
+          <button key={key} type="button" onClick={() => onToggle(key)}
+            style={{ background: active ? NAVY : '#f8f7f4', color: active ? '#fff' : NAVY, border: '1px solid ' + (active ? NAVY : 'rgba(9,32,62,0.12)'), borderRadius: 999, padding: '6px 12px', fontSize: '0.78rem', cursor: 'pointer' }}>
+            {label}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+/* Small free-text "Other (type in)" companion below a chip group. */
+function OtherInline({ value, onChange, disabled }) {
+  return (
+    <input
+      type="text" value={value} disabled={disabled}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder="Other (type in)"
+      style={{ width: '100%', marginTop: 8, padding: '8px 12px', fontSize: '0.85rem', background: '#fcfbf9', border: '1px dashed rgba(9,32,62,0.18)', borderRadius: 6, color: NAVY, outline: 'none' }}
+    />
   )
 }
 
