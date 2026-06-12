@@ -1,4 +1,4 @@
-import { createElement, useEffect } from 'react'
+import { createElement, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Handshake, Building2, Briefcase, ArrowRight, Sparkles, Shield,
@@ -43,6 +43,48 @@ const CAPITAL_IMPACT_TYPES = [
   'Financial institutions', 'Foundations and nonprofits', 'Impact-focused brands',
 ]
 
+/* The three Deal Network application tracks, rendered as a tabbed widget in
+   the "Who It Is For" section — one track visible at a time so the visitor
+   only scrolls the length of the card they care about. */
+const TRACKS = [
+  {
+    id: 'rightsholder',
+    tab: 'Rightsholders',
+    icon: Trophy,
+    title: 'Rightsholders',
+    body: 'Clubs, leagues, federations, governing bodies, and player representatives. Invited and curated by Soccerex.',
+    items: RIGHTSHOLDER_TYPES,
+    tint: NAVY,
+    tintBg: 'rgba(9,32,62,0.08)',
+    applyTrack: 'rightsholder',
+    ctaLabel: 'Apply as Rightsholder',
+  },
+  {
+    id: 'company',
+    tab: 'Commercial Partner',
+    icon: Briefcase,
+    title: 'Commercial Partner',
+    body: 'Brands, sponsors, agencies, and strategic partners, curated by Soccerex.',
+    items: COMPANY_TYPES,
+    tint: PURPLE,
+    tintBg: PURPLE_SOFT,
+    applyTrack: 'company',
+    ctaLabel: 'Apply as Commercial Partner',
+  },
+  {
+    id: 'capital',
+    tab: 'Capital Partner / Nonprofit',
+    icon: Building2,
+    title: 'Capital Partner / Nonprofit',
+    body: 'The third force behind the biggest deals: capital, infrastructure, and mission-driven support. A dedicated curated track, reviewed for mandate fit.',
+    items: CAPITAL_IMPACT_TYPES,
+    tint: 'var(--color-brand-accent)',
+    tintBg: 'rgba(191,177,112,0.18)',
+    applyTrack: 'capital',
+    ctaLabel: 'Apply as Capital Provider / Nonprofit',
+  },
+]
+
 const OUTCOME_LIST = [
   'Sponsor pipeline', 'Capital connectivity',
   'Federation and rightsholder pathways', 'Curated dealmaking',
@@ -52,7 +94,12 @@ const OUTCOME_LIST = [
 ]
 
 export default function DealNetwork() {
-  useScrollAnimations()
+  // Active application track in the tabbed "Who It Is For" widget.
+  const [activeTrackId, setActiveTrackId] = useState(TRACKS[0].id)
+  // Re-scan for animated elements when the visible track changes — the
+  // freshly mounted AudienceCard renders with `.fade-up` (opacity 0) and
+  // needs the observer to mark it visible.
+  useScrollAnimations(activeTrackId)
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -199,11 +246,50 @@ export default function DealNetwork() {
             The Deal Network brings together three curated groups across the Soccerex ecosystem: rightsholders, commercial partners, and the capital partners that help make deals possible. Every participant is reviewed and approved by Soccerex before being matched.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <AudienceCard icon={Trophy} title="Rightsholders" body="Clubs, leagues, federations, governing bodies, and player representatives. Invited and curated by Soccerex." items={RIGHTSHOLDER_TYPES} tint={NAVY} tintBg="rgba(9,32,62,0.08)" applyTrack="rightsholder" ctaLabel="Apply as Rightsholder" />
-            <AudienceCard icon={Briefcase} title="Commercial Partner" body="Brands, sponsors, agencies, and strategic partners, curated by Soccerex." items={COMPANY_TYPES} tint={PURPLE} tintBg={PURPLE_SOFT} applyTrack="company" ctaLabel="Apply as Commercial Partner" />
-            <AudienceCard icon={Building2} title="Capital Partner / Nonprofit" body="The third force behind the biggest deals: capital, infrastructure, and mission-driven support. A dedicated curated track, reviewed for mandate fit." items={CAPITAL_IMPACT_TYPES} tint="var(--color-brand-accent)" tintBg="rgba(191,177,112,0.18)" applyTrack="capital" ctaLabel="Apply as Capital Provider / Nonprofit" />
+          {/* Track tabs: one per application track. Active tab fills with the
+              track's tint; inactive tabs stay white with a border so the row
+              reads as clickable tabs at a glance. */}
+          <div role="tablist" aria-label="Deal Network application tracks"
+               className="fade-up flex flex-wrap items-center justify-center gap-3" style={{ marginBottom: 32 }}>
+            {TRACKS.map((track) => {
+              const active = track.id === activeTrackId
+              // Gold accent needs navy text for contrast (matches the hero CTA);
+              // navy and purple tabs take white text.
+              const activeText = track.id === 'capital' ? NAVY : '#fff'
+              return (
+                <button
+                  key={track.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  aria-controls={`track-panel-${track.id}`}
+                  onClick={() => setActiveTrackId(track.id)}
+                  className="font-body font-semibold uppercase tracking-[0.12em]"
+                  style={{
+                    padding: '15px 30px', borderRadius: 999, cursor: 'pointer',
+                    fontSize: '0.8rem', lineHeight: 1.2,
+                    background: active ? track.tint : '#fff',
+                    color: active ? activeText : NAVY,
+                    border: active ? '2px solid transparent' : '2px solid rgba(9,32,62,0.22)',
+                    boxShadow: active ? '0 8px 22px rgba(9,32,62,0.18)' : 'none',
+                    transition: 'background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease',
+                  }}
+                >
+                  {track.tab}
+                </button>
+              )
+            })}
           </div>
+
+          {/* One track at a time, full width, so the visitor only scrolls the
+              length of the card they picked. Keyed remount keeps the card's
+              fade-up animation in sync with the tab switch. */}
+          {TRACKS.filter((track) => track.id === activeTrackId).map((track) => (
+            <div key={track.id} id={`track-panel-${track.id}`} role="tabpanel" style={{ maxWidth: 640, margin: '0 auto' }}>
+              <AudienceCard icon={track.icon} title={track.title} body={track.body} items={track.items}
+                tint={track.tint} tintBg={track.tintBg} applyTrack={track.applyTrack} ctaLabel={track.ctaLabel} />
+            </div>
+          ))}
         </div>
       </section>
 

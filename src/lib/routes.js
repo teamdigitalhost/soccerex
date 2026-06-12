@@ -37,6 +37,10 @@ export const dealNetworkApplyWithTrack = (track) =>
 export const AGENDA_COLLAB   = '/agenda-collab'
 export const INVITE_PATTERN  = '/invite/:token'
 export const buildInviteUrl  = (token) => `/invite/${encodeURIComponent(token)}`
+// Public sales-call scheduler. Each salesperson shares a personal booking
+// link (/schedule/{code}); not linked from site navigation.
+export const SCHEDULE_CALL_PATTERN = '/schedule/:code'
+export const scheduleCall    = (code) => `/schedule/${encodeURIComponent(code)}`
 
 /* ─── Event landing pages ──────────────────────────────────────────────── */
 export const MIAMI_2026      = '/miami-2026'

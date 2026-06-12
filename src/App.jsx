@@ -10,6 +10,7 @@ import {
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, EUROPE_2026, RIYADH_2027,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK, AGENDA_COLLAB,
   INVITE_PATTERN,
+  SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
   ROUTE_PATTERNS,
 } from './lib/routes'
@@ -93,6 +94,7 @@ const DealNetworkPage = lazy(() => import('./pages/DealNetwork'))
 const InviteAccept = lazy(() => import('./pages/InviteAccept'))
 const DealNetworkApply = lazy(() => import('./pages/DealNetworkApply'))
 const AgendaCollab = lazy(() => import('./pages/AgendaCollab'))
+const ScheduleCall = lazy(() => import('./pages/ScheduleCall'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
 // Unreleased verticals (HerSoccerex, The Pitch) kept on disk but
 // no longer routed until announced. Restore routes in App.jsx when launching.
@@ -139,6 +141,7 @@ function App() {
           <Route path={ROUTE_PATTERNS.eventSpeaker} element={<EventSpeakerProfile />} />
           {/* Invitation accept (admin issues invite_token, link lands here) */}
           <Route path={INVITE_PATTERN} element={<InviteAccept />} />
+          <Route path={SCHEDULE_CALL_PATTERN} element={<ScheduleCall />} />
           {/* Deal Network unlisted apply flow (email-first + profile match) */}
           <Route path="/deal-network/apply" element={<DealNetworkApply />} />
           {/* External agenda-collaborator review (personal ?token= link) */}

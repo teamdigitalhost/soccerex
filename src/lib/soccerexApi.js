@@ -213,6 +213,32 @@ export async function dealNetworkApplyClaim(payload, opts = {}) {
   }))
 }
 
+/* ───── Public sales-call scheduler (per-salesperson booking link) ─────────
+ * Each salesperson shares /schedule/{code}. Both endpoints are public.
+ *
+ * Availability returns { salesperson_name, duration_minutes, timezone,
+ *   days: [{ date: 'YYYY-MM-DD', label: 'Mon 15 Jun',
+ *            slots: [{ start: ISO8601, label: '14:00' }] }] }.
+ * 404 = unknown code or scheduling disabled for that salesperson.
+ */
+export async function getSchedulerAvailability(code, opts = {}) {
+  return unwrap(await request(`/scheduler/${encodeURIComponent(code)}/availability`, opts))
+}
+
+/**
+ * Book a slot. payload: { start, name, email, company?, notes? }.
+ * 201 → { starts_at, ends_at, timezone, salesperson_name }.
+ * 409 = the slot was taken in the meantime — refresh availability and let
+ * the visitor pick another time (callers branch on ApiError.status).
+ */
+export async function bookSchedulerSlot(code, payload, opts = {}) {
+  return unwrap(await request(`/scheduler/${encodeURIComponent(code)}/book`, {
+    method: 'POST',
+    body: payload,
+    test: opts.test,
+  }))
+}
+
 /* ── Email-gated pricing access (magic-link + profile creation) ─────────── */
 
 // Public: the gated categories + reveal mode (config-driven on the backend).
