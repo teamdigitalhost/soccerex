@@ -229,7 +229,7 @@ export default function Miami2026() {
         <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-start mb-16">
             <div className="relative">
-              <img src={`${IMG}/sections/miami-night.jpg`} alt="Miami at night" style={{ width: '100%', objectFit: 'cover', aspectRatio: '4/3', boxShadow: '0 24px 60px -28px rgba(13,27,42,0.45)' }} />
+              <img src={`${IMG}/sections/nu-stadium-exterior.jpg`} alt="NU Stadium at Miami Freedom Park, future home of Inter Miami CF" style={{ width: '100%', objectFit: 'cover', aspectRatio: '16/10', boxShadow: '0 24px 60px -28px rgba(13,27,42,0.45)' }} />
               <div className="absolute" style={{ left: -14, top: -14, width: 64, height: 64, background: 'var(--miami-sunset)', zIndex: -1, opacity: 0.9 }} />
               <div className="absolute" style={{ right: -14, bottom: -14, width: 96, height: 96, border: '2px solid #007C91', zIndex: -1 }} />
             </div>
