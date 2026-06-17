@@ -367,8 +367,9 @@ function SmartErrorBanner({ error }) {
           {e.title && <div className="text-sm font-semibold" style={{ marginBottom: 2 }}>{e.title}</div>}
           <div className="text-sm" style={{ opacity: e.title ? 0.92 : 1 }}>{e.message}</div>
           {e.reference && (
-            <div className="text-xs" style={{ marginTop: 6, opacity: 0.75 }}>
-              Reference <span style={{ fontFamily: 'ui-monospace, monospace', fontWeight: 700 }}>{e.reference}</span> — quote this if you get in touch.
+            <div className="text-xs" style={{ marginTop: 6, opacity: 0.85 }}>
+              Try again in a few moments, or contact a Soccerex rep with this error code:{' '}
+              <span style={{ fontFamily: 'ui-monospace, monospace', fontWeight: 700 }}>{e.reference}</span>
             </div>
           )}
         </div>
