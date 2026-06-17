@@ -11,6 +11,7 @@ import {
 } from '../lib/soccerexApi'
 import { INTAKE_FORMS, INTAKE_REGIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
 import { isTestModeFromUrl } from '../lib/testMode'
+import { describeError } from '../lib/smartError'
 
 // company Profile type → applicant side. club/federation are rightsholders
 // (Property side); everything else is treated as a company (Brand side).
@@ -142,7 +143,7 @@ export default function DealNetworkApply() {
       })
       .catch((err) => {
         if (cancelled) return
-        setError(err?.message || 'This link is invalid or expired.')
+        setError(describeError(err, 'This link is invalid or expired.'))
         setStep(STEP_EMAIL)
         setToken('')
       })
@@ -168,7 +169,7 @@ export default function DealNetworkApply() {
       setDebugMagicLink(res?.debug?.deal_network_apply_url || '')
       setStep(STEP_SENT)
     } catch (err) {
-      setError(err?.message || 'Could not send confirmation link.')
+      setError(describeError(err, 'Could not send confirmation link.'))
     } finally {
       setBusy(false)
     }
@@ -212,7 +213,7 @@ export default function DealNetworkApply() {
       setMm((prev) => ({ ...prev, side: trackSide || deriveSide(res.company) }))
       setStep(STEP_MATCHMAKING)
     } catch (err) {
-      setError(err?.message || 'Could not save your profile.')
+      setError(describeError(err, 'Could not save your profile.'))
     } finally {
       setBusy(false)
     }
@@ -272,7 +273,7 @@ export default function DealNetworkApply() {
       }, { test: testMode })
       setStep(STEP_DONE)
     } catch (err) {
-      setError(err?.message || 'Could not submit your application.')
+      setError(describeError(err, 'Could not submit your application.'))
     } finally {
       setBusy(false)
     }
@@ -295,11 +296,7 @@ export default function DealNetworkApply() {
             Apply to join
           </h1>
 
-          {error && (
-            <div className="mb-4 px-4 py-3 rounded-lg" style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.35)', color: '#fecaca' }}>
-              <div className="text-sm">{error}</div>
-            </div>
-          )}
+          {error && <SmartErrorBanner error={error} />}
 
           {step === STEP_EMAIL && <EmailStep email={email} setEmail={setEmail} busy={busy} onSubmit={handleEmailSubmit} />}
           {step === STEP_SENT && <SentStep message={sentMessage} email={email} debugMagicLink={debugMagicLink} />}
@@ -346,6 +343,36 @@ export default function DealNetworkApply() {
           {step === STEP_DONE && <DoneStep person={chosenPerson} email={email || matched?.email} testMode={testMode} />}
         </div>
       </section>
+    </div>
+  )
+}
+
+// Respectable, traceable error banner. Server faults (not the user's fault)
+// read warmer/calmer than user-fixable validation errors, and show the
+// reference so the visitor can quote it to us.
+function SmartErrorBanner({ error }) {
+  const e = typeof error === 'string' ? { tone: 'user', message: error } : (error || {})
+  const isServer = e.tone === 'server'
+  const palette = isServer
+    ? { bg: 'rgba(245,158,11,0.13)', border: 'rgba(245,158,11,0.4)', fg: '#fde68a' }
+    : e.tone === 'warn'
+      ? { bg: 'rgba(245,158,11,0.13)', border: 'rgba(245,158,11,0.4)', fg: '#fde68a' }
+      : { bg: 'rgba(239,68,68,0.15)', border: 'rgba(239,68,68,0.35)', fg: '#fecaca' }
+
+  return (
+    <div className="mb-4 px-4 py-3 rounded-lg" style={{ background: palette.bg, border: `1px solid ${palette.border}`, color: palette.fg }}>
+      <div className="flex items-start gap-2.5">
+        <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: 2 }} />
+        <div style={{ minWidth: 0 }}>
+          {e.title && <div className="text-sm font-semibold" style={{ marginBottom: 2 }}>{e.title}</div>}
+          <div className="text-sm" style={{ opacity: e.title ? 0.92 : 1 }}>{e.message}</div>
+          {e.reference && (
+            <div className="text-xs" style={{ marginTop: 6, opacity: 0.75 }}>
+              Reference <span style={{ fontFamily: 'ui-monospace, monospace', fontWeight: 700 }}>{e.reference}</span> — quote this if you get in touch.
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
