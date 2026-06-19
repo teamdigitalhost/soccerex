@@ -84,6 +84,11 @@ export default function DealNetworkPortalSection({ slug, editToken, isTest, onUn
   const summary     = portal?.membership_summary || {}
   const guidance    = portal?.guidance || {}
 
+  /* Membership must be approved (status "active") to be a real member. Rows
+     that exist but aren't active yet are applicants pending review. */
+  const isMember    = memberships.some((m) => String(m.status || '').toLowerCase() === 'active')
+  const isApplicant = !isMember && memberships.length > 0
+
   /* Show the panel even when the user has no membership yet — the empty
      state is the invitation to start a brief. */
 
@@ -106,28 +111,35 @@ export default function DealNetworkPortalSection({ slug, editToken, isTest, onUn
 
       {!loading && !error && (
         <div className="flex flex-col gap-5 mt-5">
-          {/* Membership status — only renders if backend returned membership rows */}
-          {memberships.length > 0 && <MembershipCard summary={summary} memberships={memberships} />}
+          {/* Applicants (no approved membership yet) get a pending-review state,
+              not the full member portal. */}
+          {isApplicant && <PendingReviewBanner />}
 
-          {/* Current brief(s) */}
+          {/* Membership status — only renders if backend returned membership rows */}
+          {memberships.length > 0 && <MembershipCard summary={summary} memberships={memberships} isMember={isMember} />}
+
+          {/* Current brief(s) / their submitted application */}
           <BriefsCard
             intakes={intakes}
             onEdit={(intake) => { setEditingIntake(intake); setEditorOpen(true) }}
             onNew={() => { setEditingIntake(null); setEditorOpen(true) }}
           />
 
-          {/* Curated matches */}
-          <MatchesCard matches={matches} />
-
-          {/* Meetings */}
-          <MeetingsCard
-            meetings={meetings}
-            slug={slug}
-            editToken={editToken}
-            isTest={isTest}
-            onChanged={loadPortal}
-            onUnauthorized={onUnauthorized}
-          />
+          {/* Member-only: curated matches + concierge meetings stay hidden until
+              the membership is approved, so the network isn't a free-for-all. */}
+          {isMember && (
+            <>
+              <MatchesCard matches={matches} />
+              <MeetingsCard
+                meetings={meetings}
+                slug={slug}
+                editToken={editToken}
+                isTest={isTest}
+                onChanged={loadPortal}
+                onUnauthorized={onUnauthorized}
+              />
+            </>
+          )}
 
           {/* Large-file guidance */}
           {(guidance.large_files || guidance.concierge) && (
@@ -192,8 +204,27 @@ function Stat({ label, value }) {
   )
 }
 
+/* ─── Pending review (applicants) ───────────────────────────────────────── */
+function PendingReviewBanner() {
+  return (
+    <div style={{
+      background: 'rgba(191,164,111,0.10)',
+      border: '1px solid rgba(191,164,111,0.4)',
+      borderRadius: 12,
+      padding: '14px 16px',
+    }}>
+      <p className="miami-headline" style={{ fontSize: '0.95rem', color: '#0D1B2A', marginBottom: 4 }}>
+        Your application is under review
+      </p>
+      <p className="miami-body" style={{ fontSize: 13, color: '#3a4a5a' }}>
+        Thanks for applying to the Deal Network. Our team is reviewing your brief — you'll unlock curated matches and concierge meetings once your membership is approved. You can keep editing your brief below in the meantime.
+      </p>
+    </div>
+  )
+}
+
 /* ─── Membership ────────────────────────────────────────────────────────── */
-function MembershipCard({ summary, memberships }) {
+function MembershipCard({ summary, memberships, isMember = true }) {
   const primary = memberships[0] || {}
   return (
     <div style={subcardStyle}>
@@ -208,14 +239,14 @@ function MembershipCard({ summary, memberships }) {
         <div className="flex-1" style={{ minWidth: 200 }}>
           <p className="miami-subhead" style={{ fontSize: 10, color: '#607186', letterSpacing: '0.2em' }}>MEMBERSHIP</p>
           <p className="miami-headline" style={{ fontSize: '1rem', color: '#0D1B2A', marginBottom: 4 }}>
-            {prettyTier(primary.tier) || 'Active member'}{primary.event_name ? ` · ${primary.event_name}` : ''}
+            {isMember ? (prettyTier(primary.tier) || 'Active member') : 'Application pending review'}{primary.event_name ? ` · ${primary.event_name}` : ''}
           </p>
           <p className="miami-body" style={{ fontSize: 12, color: '#586778' }}>
-            Status <span style={{ color: '#0D1B2A', fontWeight: 600 }}>{prettyStatus(primary.status) || 'Active'}</span>
-            {primary.meeting_entitlement != null && (
+            Status <span style={{ color: '#0D1B2A', fontWeight: 600 }}>{prettyStatus(primary.status) || (isMember ? 'Active' : 'Pending')}</span>
+            {isMember && primary.meeting_entitlement != null && (
               <> · Meeting entitlement <span style={{ color: '#0D1B2A', fontWeight: 600 }}>{primary.meeting_entitlement}</span></>
             )}
-            {summary.match_count != null && (
+            {isMember && summary.match_count != null && (
               <> · Matches curated <span style={{ color: '#0D1B2A', fontWeight: 600 }}>{summary.match_count}</span></>
             )}
           </p>
