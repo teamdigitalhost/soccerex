@@ -86,6 +86,14 @@ export async function getAgendaConcept(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}/agenda-concept`, opts))
 }
 
+/** Public applause on an agenda concept. Unlimited; batches several claps per call. Returns { claps }. */
+export async function clapConcept(slug, topicSlug, count = 1) {
+  return request(`/events/${encodeURIComponent(slug)}/agenda-concept/${encodeURIComponent(topicSlug)}/clap`, {
+    method: 'POST',
+    body: { count },
+  })
+}
+
 export async function getAgenda(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}/agenda`, opts))
 }
@@ -700,6 +708,30 @@ export async function postAgendaCollabComment({ token, topic_id, body, parent_id
   return unwrap(await request('/agenda-collab/comments', {
     method: 'POST',
     body: { token, topic_id, body, ...(parent_id ? { parent_id } : {}) },
+    test: opts.test,
+  }))
+}
+
+/* ───── Speaker casting: on-system response (personal ?token= link) ──────── */
+/** Resolve a candidacy token → what the response page should show. 404 = bad token. */
+export async function getCastingContext(token, opts = {}) {
+  return unwrap(await request(`/casting/respond?token=${encodeURIComponent(token)}`, {
+    test: opts.test,
+    signal: opts.signal,
+  }))
+}
+
+/** Record the prospect's response. action: 'interested' | 'propose' | 'decline'. */
+export async function submitCastingResponse({ token, action, note, condition, proposed_topic } = {}, opts = {}) {
+  return unwrap(await request('/casting/respond', {
+    method: 'POST',
+    body: {
+      token,
+      action,
+      ...(note ? { note } : {}),
+      ...(condition ? { condition } : {}),
+      ...(proposed_topic ? { proposed_topic } : {}),
+    },
     test: opts.test,
   }))
 }
