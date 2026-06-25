@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, Calendar, MapPin, Users, Megaphone, Layers, AlertCircle, Loader2, Plus } from 'lucide-react'
+import { ArrowLeft, Calendar, MapPin, Users, Megaphone, Layers, AlertCircle, Loader2 } from 'lucide-react'
 import { getEvent, getAgendaConcept } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { eventThemeClass } from '../lib/eventTheme'
@@ -110,19 +110,21 @@ export default function EventAgendaConcept() {
               {/* Topic grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {filteredTopics.map((topic) => (
-                  <TopicCard key={topic.id} topic={topic} onSuggest={() => openSubmissionFor(topic)} />
+                  <TopicCard key={topic.id} topic={topic} />
                 ))}
               </div>
 
-              {/* Free-form submission below */}
+              {/* One place to get involved — no "suggest a speaker" on every topic.
+                  The form's kind chooser (speaker / topic / session) asks only the
+                  questions relevant to what they pick. */}
               <div className="mt-12 p-7 rounded-2xl text-center" style={{ background: 'var(--event-tile-soft)', border: '1px solid rgba(13,27,42,0.06)' }}>
-                <p className="miami-subhead mb-2" style={{ color: 'var(--event-primary)', fontSize: 11 }}>None of these fit?</p>
-                <h3 className="miami-headline mb-2" style={{ fontSize: '1.4rem', color: '#0D1B2A' }}>Suggest a topic of your own</h3>
+                <p className="miami-subhead mb-2" style={{ color: 'var(--event-primary)', fontSize: 11 }}>Want to be part of the programme?</p>
+                <h3 className="miami-headline mb-2" style={{ fontSize: '1.4rem', color: '#0D1B2A' }}>Suggest a speaker or a topic</h3>
                 <p className="miami-body mb-5" style={{ fontSize: '0.95rem', color: '#3a4a5a', maxWidth: 560, margin: '0 auto 20px' }}>
-                  Have a program theme we have not listed? Pitch it directly to the Soccerex program team.
+                  Have someone in mind for the stage, a theme we have not listed, or a session you would like to lead? Tell the Soccerex program team here — we will ask only what is relevant to your idea.
                 </p>
                 <button type="button" onClick={() => openSubmissionFor(null)} className="miami-pill-primary" style={{ display: 'inline-flex' }}>
-                  <Plus size={15} /> Suggest a topic
+                  <Megaphone size={15} /> Suggest a speaker or topic
                 </button>
               </div>
             </>
@@ -135,13 +137,13 @@ export default function EventAgendaConcept() {
         onClose={() => setSubmissionOpen(false)}
         eventSlug={slug}
         topic={submissionTopic}
-        defaultKind={submissionTopic ? 'speaker_interest' : 'topic_suggestion'}
+        defaultKind="speaker_interest"
       />
     </div>
   )
 }
 
-function TopicCard({ topic, onSuggest }) {
+function TopicCard({ topic }) {
   const status = STATUS_STYLE[topic.status] || STATUS_STYLE.proposed
   const statusLabel = STATUS_LABEL[topic.status] || topic.status
 
@@ -210,11 +212,6 @@ function TopicCard({ topic, onSuggest }) {
             <span>{topic.submissions_count} interest{topic.submissions_count === 1 ? '' : 's'}</span>
           )}
         </div>
-        {topic.accepts_speaker_interest && (
-          <button type="button" onClick={onSuggest} className="miami-pill-outline" style={{ padding: '8px 16px', fontSize: 11 }}>
-            <Megaphone size={13} /> Suggest a speaker
-          </button>
-        )}
       </div>
     </article>
   )
