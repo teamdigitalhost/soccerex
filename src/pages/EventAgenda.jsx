@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Calendar, Clock, MapPin, List, LayoutGrid, Star } from 'lucide-react'
+import { Calendar, Clock, MapPin, List, LayoutGrid, Star, Video } from 'lucide-react'
 import { getEvent, getAgenda } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { eventSpeaker } from '../lib/routes'
@@ -118,22 +118,34 @@ function ViewBtn({ active, onClick, icon: Icon, label }) {
 function TimelineView({ group }) {
   return (
     <div className="grid gap-6" style={{ gridTemplateColumns: `repeat(${Math.max(1, group.stages.length)}, minmax(260px, 1fr))` }}>
-      {group.stages.map((stage) => (
+      {group.stages.map((stage) => {
+        const isTvStudio = stage.kind === 'tv_studio'
+        return (
         <div key={stage.slug || stage.name} style={{
           background: '#FAFBFC',
-          border: '1px solid rgba(13,27,42,0.08)',
+          border: isTvStudio ? '1.5px solid var(--event-primary)' : '1px solid rgba(13,27,42,0.08)',
           borderRadius: 14, padding: 16, minWidth: 0,
         }}>
           <div className="flex items-center gap-2 mb-4 pb-3" style={{ borderBottom: '1px solid rgba(13,27,42,0.08)' }}>
-            <span style={{ width: 8, height: 8, borderRadius: 999, background: 'var(--event-primary)' }} />
+            {isTvStudio
+              ? <Video size={14} style={{ color: 'var(--event-primary)' }} />
+              : <span style={{ width: 8, height: 8, borderRadius: 999, background: 'var(--event-primary)' }} />}
             <p className="miami-headline" style={{ fontSize: 13, color: '#0D1B2A', letterSpacing: '0.04em' }}>{stage.name}</p>
+            {isTvStudio && (
+              <span style={{
+                fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+                color: '#fff', background: 'var(--event-primary)', padding: '2px 6px', borderRadius: 4,
+                fontFamily: 'Montserrat, sans-serif',
+              }}>TV Studio</span>
+            )}
             <span className="miami-body" style={{ fontSize: 11, color: '#607186', marginLeft: 'auto' }}>{stage.sessions.length}</span>
           </div>
           <div className="flex flex-col gap-2">
             {stage.sessions.map((s) => <SessionCard key={s.id} session={s} compact />)}
           </div>
         </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
@@ -294,7 +306,7 @@ function groupByDayAndStage(sessions, eventSlug) {
     const byStage = new Map()
     for (const s of daySessions) {
       const key = s.stage?.slug || s.stage?.name || 'unscheduled'
-      if (!byStage.has(key)) byStage.set(key, { slug: key, name: s.stage?.name || 'Unscheduled', sessions: [] })
+      if (!byStage.has(key)) byStage.set(key, { slug: key, name: s.stage?.name || 'Unscheduled', kind: s.stage?.kind, sessions: [] })
       byStage.get(key).sessions.push(s)
     }
     result.push({
