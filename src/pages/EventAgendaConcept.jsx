@@ -254,11 +254,15 @@ export function EventHeader({ event, slug, active, loading }) {
   })()
 
   return (
+    <>
+      {/* Spacer clears the fixed 72px global navbar so this sub-nav (and its
+          Program themes / Schedule / Speakers tabs) is never hidden behind it. */}
+      <div aria-hidden="true" style={{ height: 72 }} />
     <header style={{
       borderBottom: '1px solid rgba(13,27,42,0.08)',
       background: '#FFFFFF',
       padding: 'clamp(20px, 3vw, 32px) clamp(24px, 5vw, 80px)',
-      position: 'sticky', top: 0, zIndex: 20, backdropFilter: 'blur(8px)',
+      position: 'sticky', top: 72, zIndex: 20, backdropFilter: 'blur(8px)',
     }}>
       <div className="flex items-center justify-between gap-6 flex-wrap" style={{ maxWidth: 1240, margin: '0 auto' }}>
         <div className="flex items-center gap-4 flex-wrap">
@@ -294,6 +298,7 @@ export function EventHeader({ event, slug, active, loading }) {
         </nav>
       </div>
     </header>
+    </>
   )
 }
 
