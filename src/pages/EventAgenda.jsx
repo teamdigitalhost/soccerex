@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Calendar, Clock, MapPin, List, LayoutGrid } from 'lucide-react'
+import { Calendar, Clock, MapPin, List, LayoutGrid, Star } from 'lucide-react'
 import { getEvent, getAgenda } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { eventSpeaker } from '../lib/routes'
@@ -147,13 +147,15 @@ function ListView({ group }) {
 }
 
 function SessionCard({ session, compact }) {
+  const featured = !!session.is_featured
   return (
     <article style={{
-      background: '#FFFFFF',
-      border: '1px solid rgba(13,27,42,0.10)',
+      background: featured ? 'var(--event-tile-soft, #FFFFFF)' : '#FFFFFF',
+      border: featured ? '1.5px solid var(--event-primary)' : '1px solid rgba(13,27,42,0.10)',
       borderRadius: 12,
       padding: compact ? 14 : 18,
       display: 'flex', flexDirection: 'column', gap: 10,
+      boxShadow: featured ? '0 6px 20px rgba(13,27,42,0.10)' : 'none',
     }}>
       <div className="flex items-center gap-3 flex-wrap">
         <span className="miami-subhead" style={{
@@ -163,6 +165,18 @@ function SessionCard({ session, compact }) {
           <Clock size={11} style={{ display: 'inline', marginRight: 4 }} />
           {formatTime(session.starts_at)} - {formatTime(session.ends_at)}
         </span>
+        {featured && (
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            padding: '2px 8px', borderRadius: 4,
+            fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
+            color: '#FFFFFF', background: 'var(--event-primary)',
+            fontFamily: 'Montserrat, sans-serif',
+          }}>
+            <Star size={10} style={{ fill: 'currentColor' }} />
+            Featured
+          </span>
+        )}
         {session.format && (
           <span style={{
             padding: '2px 8px', borderRadius: 4,
