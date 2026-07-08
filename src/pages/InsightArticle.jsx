@@ -122,12 +122,15 @@ export default function InsightArticle() {
             </p>
           )}
 
-          {/* Body paragraphs */}
-          {article.paragraphs.map((p, i) => (
-            <p key={i} className="font-body leading-[1.8] mb-5" style={{ fontSize: '1.05rem', color: '#333' }}>
-              {p}
-            </p>
-          ))}
+          {/* Body: rich blocks (headings, lists, quotes) for CMS articles;
+              plain paragraphs for the legacy static manifest. */}
+          {article.blocks && article.blocks.length
+            ? article.blocks.map((b, i) => renderBlock(b, i))
+            : article.paragraphs.map((p, i) => (
+                <p key={i} className="font-body leading-[1.8] mb-5" style={{ fontSize: '1.05rem', color: '#333' }}>
+                  {p}
+                </p>
+              ))}
 
           {/* Inline images if any */}
           {article.inlineImages && article.inlineImages.length > 0 && (
@@ -212,6 +215,7 @@ function normalizeCmsArticleDetail(a) {
     date: formatCmsDate(a.published_at),
     featuredImage: a.hero_image_url || a.og_image_url || '',
     paragraphs: bodyToParagraphs(a.body),
+    blocks: parseBlocks(a.body),
     inlineImages: [],
   }
 }
@@ -225,7 +229,7 @@ function formatCmsDate(value) {
    bodies (e.g. a lone "CTA" line where a call-to-action was meant to go).
    Drop any paragraph that is EXACTLY one of these (trimmed, case-insensitive,
    ignoring surrounding brackets/punctuation) so they never render. We match
-   the whole paragraph only — a real sentence that happens to contain "CTA"
+   the whole paragraph only, so a real sentence that happens to contain "CTA"
    is left untouched. */
 const PLACEHOLDER_PARAGRAPHS = new Set([
   'cta', 'cta here', 'cta goes here', 'insert cta', 'call to action',
@@ -243,6 +247,93 @@ function bodyToParagraphs(body) {
     .map((p) => p.trim())
     .filter(Boolean)
     .filter((p) => !isPlaceholderParagraph(p))
+}
+
+/* Parse a CMS body into typed blocks. Supports the light Markdown the Articles
+   admin produces: ## / ### headings, - or * bullet lists, 1. numbered lists,
+   > quotes, and paragraphs. Inline **bold**, *italic*, `code` and [links](url)
+   are handled at render time. Blank lines separate blocks. */
+function parseBlocks(body) {
+  const raw = String(body || '')
+    .split(/\n{2,}/)
+    .map((b) => b.trim())
+    .filter(Boolean)
+    .filter((b) => !isPlaceholderParagraph(b))
+
+  return raw.map((b) => {
+    const lines = b.split('\n').map((l) => l.trim()).filter(Boolean)
+    if (/^###\s+/.test(b)) return { type: 'h3', text: b.replace(/^###\s+/, '') }
+    if (/^##\s+/.test(b)) return { type: 'h2', text: b.replace(/^##\s+/, '') }
+    if (/^#\s+/.test(b)) return { type: 'h2', text: b.replace(/^#\s+/, '') }
+    if (lines.length && lines.every((l) => /^>\s?/.test(l))) {
+      return { type: 'quote', text: lines.map((l) => l.replace(/^>\s?/, '')).join(' ') }
+    }
+    if (lines.length && lines.every((l) => /^[-*]\s+/.test(l))) {
+      return { type: 'ul', items: lines.map((l) => l.replace(/^[-*]\s+/, '')) }
+    }
+    if (lines.length && lines.every((l) => /^\d+\.\s+/.test(l))) {
+      return { type: 'ol', items: lines.map((l) => l.replace(/^\d+\.\s+/, '')) }
+    }
+    // Legacy house style writes section headings as short standalone lines
+    // (no ## marker). Promote those to headings so older articles read as well
+    // as ones authored with explicit Markdown.
+    if (looksLikeHeading(b)) return { type: 'h2', text: b }
+    return { type: 'p', text: b.replace(/\n/g, ' ') }
+  })
+}
+
+/* A single short line with no sentence-ending punctuation, e.g.
+   "Patterns and anticipation" or "Precision or emotion?". Deliberately strict
+   so real (short) paragraphs are never mistaken for headings. */
+function looksLikeHeading(text) {
+  if (text.includes('\n')) return false
+  if (text.length > 60) return false
+  const words = text.split(/\s+/).filter(Boolean)
+  if (words.length < 2 || words.length > 8) return false
+  if (/[.,;:]$/.test(text)) return false
+  if (!/^[A-Z"'(#]/.test(text)) return false
+  return true
+}
+
+/* Inline formatting: **bold**, *italic* / _italic_, `code`, [text](url). */
+function renderInline(text, keyPrefix) {
+  const nodes = []
+  let rest = String(text)
+  let k = 0
+  const re = /(\*\*([^*]+)\*\*)|(\*([^*]+)\*)|(_([^_]+)_)|(`([^`]+)`)|(\[([^\]]+)\]\(([^)\s]+)\))/
+  while (rest.length) {
+    const m = rest.match(re)
+    if (!m) { nodes.push(rest); break }
+    if (m.index > 0) nodes.push(rest.slice(0, m.index))
+    const key = `${keyPrefix}-${k++}`
+    if (m[1]) nodes.push(<strong key={key}>{m[2]}</strong>)
+    else if (m[3]) nodes.push(<em key={key}>{m[4]}</em>)
+    else if (m[5]) nodes.push(<em key={key}>{m[6]}</em>)
+    else if (m[7]) nodes.push(<code key={key} style={{ background: 'rgba(9,32,62,0.06)', padding: '1px 6px', borderRadius: '4px', fontSize: '0.95em' }}>{m[8]}</code>)
+    else if (m[9]) nodes.push(<a key={key} href={m[11]} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-brand-accent)', textDecoration: 'underline' }}>{m[10]}</a>)
+    rest = rest.slice(m.index + m[0].length)
+  }
+  return nodes
+}
+
+function renderBlock(b, i) {
+  const key = `blk-${i}`
+  if (b.type === 'h2') {
+    return <h2 key={key} className="font-heading font-bold" style={{ color: '#09203e', fontSize: '1.55rem', lineHeight: 1.25, margin: '2.4rem 0 0.9rem' }}>{renderInline(b.text, key)}</h2>
+  }
+  if (b.type === 'h3') {
+    return <h3 key={key} className="font-heading font-bold" style={{ color: '#09203e', fontSize: '1.2rem', lineHeight: 1.3, margin: '1.9rem 0 0.6rem' }}>{renderInline(b.text, key)}</h3>
+  }
+  if (b.type === 'quote') {
+    return <blockquote key={key} className="font-body" style={{ borderLeft: '4px solid var(--color-brand-accent)', paddingLeft: '20px', margin: '1.6rem 0', color: '#09203e', fontStyle: 'italic', fontSize: '1.12rem', lineHeight: 1.6 }}>{renderInline(b.text, key)}</blockquote>
+  }
+  if (b.type === 'ul') {
+    return <ul key={key} className="font-body" style={{ listStyle: 'disc', paddingLeft: '1.4rem', margin: '0 0 1.4rem', color: '#333', fontSize: '1.05rem', lineHeight: 1.8 }}>{b.items.map((it, j) => <li key={j} style={{ marginBottom: '0.4rem' }}>{renderInline(it, `${key}-${j}`)}</li>)}</ul>
+  }
+  if (b.type === 'ol') {
+    return <ol key={key} className="font-body" style={{ listStyle: 'decimal', paddingLeft: '1.4rem', margin: '0 0 1.4rem', color: '#333', fontSize: '1.05rem', lineHeight: 1.8 }}>{b.items.map((it, j) => <li key={j} style={{ marginBottom: '0.4rem' }}>{renderInline(it, `${key}-${j}`)}</li>)}</ol>
+  }
+  return <p key={key} className="font-body leading-[1.8] mb-5" style={{ fontSize: '1.05rem', color: '#333' }}>{renderInline(b.text, key)}</p>
 }
 
 function uniqueLabels(values) {
