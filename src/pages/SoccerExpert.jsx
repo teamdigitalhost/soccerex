@@ -79,8 +79,8 @@ export default function SoccerExpert() {
               >
                 <div style={{
                   display: 'inline-flex', alignItems: 'center', gap: '8px',
-                  padding: '6px 12px', background: 'rgba(191,177,112,0.15)',
-                  border: '1px solid rgba(191,177,112,0.3)',
+                  padding: '6px 12px', background: '#ffffff',
+                  border: '1px solid rgba(9,32,62,0.10)', boxShadow: '0 1px 4px rgba(0,0,0,0.18)',
                   borderRadius: '100px', color: 'var(--color-brand-accent)',
                   fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em',
                   textTransform: 'uppercase', marginBottom: '20px',

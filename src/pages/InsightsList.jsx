@@ -438,7 +438,8 @@ function ArticleRow({ article }) {
         {displayCats.map((cat) => (
           <span key={cat} className="font-mono uppercase tracking-[0.12em]" style={{
             fontSize: '0.62rem', color: 'var(--color-brand-accent)', fontWeight: 600,
-            background: 'rgba(191,177,112,0.1)', padding: '4px 10px', borderRadius: '4px',
+            background: '#ffffff', padding: '4px 10px', borderRadius: '4px',
+            border: '1px solid rgba(9,32,62,0.10)', boxShadow: '0 1px 3px rgba(9,32,62,0.10)',
           }}>
             {cat}
           </span>

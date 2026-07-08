@@ -1562,7 +1562,7 @@ function VerticalsShowcase() {
                   <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
                     <Icon size={26} color="#09203e" strokeWidth={2} />
                   </div>
-                  <span className="inline-block font-mono uppercase tracking-[0.15em] mb-4" style={{ fontSize: '0.6rem', color: 'var(--color-brand-accent)', background: 'rgba(191,177,112,0.12)', padding: '4px 12px', borderRadius: '4px', fontWeight: 600 }}>New</span>
+                  <span className="inline-block font-mono uppercase tracking-[0.15em] mb-4" style={{ fontSize: '0.6rem', color: 'var(--color-brand-accent)', background: '#ffffff', padding: '4px 12px', borderRadius: '4px', fontWeight: 600, border: '1px solid rgba(9,32,62,0.10)', boxShadow: '0 1px 4px rgba(0,0,0,0.18)' }}>New</span>
                   <h3 className="font-heading font-bold mb-3" style={{ fontSize: '1.4rem', color: '#fff' }}>{v.title}</h3>
                   <p className="font-body mb-6" style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.5 }}>{v.tagline}</p>
                   <span className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.12em]" style={{ fontSize: '0.78rem', color: 'var(--color-brand-accent)' }}>

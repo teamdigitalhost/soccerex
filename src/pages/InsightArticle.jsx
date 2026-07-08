@@ -84,8 +84,8 @@ export default function InsightArticle() {
               {article.categories.filter((c) => c !== 'Uncategorized').map((cat) => (
                 <span key={cat} className="font-mono uppercase tracking-[0.15em]" style={{
                   fontSize: '0.65rem', color: 'var(--color-brand-accent)', fontWeight: 600,
-                  background: 'rgba(191,177,112,0.12)', padding: '5px 14px', borderRadius: '6px',
-                  border: '1px solid rgba(191,177,112,0.2)',
+                  background: '#ffffff', padding: '5px 14px', borderRadius: '6px',
+                  border: '1px solid rgba(9,32,62,0.10)', boxShadow: '0 1px 4px rgba(0,0,0,0.18)',
                 }}>
                   {cat}
                 </span>
