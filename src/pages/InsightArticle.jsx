@@ -262,6 +262,8 @@ function parseBlocks(body) {
 
   return raw.map((b) => {
     const lines = b.split('\n').map((l) => l.trim()).filter(Boolean)
+    const img = b.match(/^!\[(.*?)\]\((\S+?)\)$/)
+    if (img) return { type: 'image', alt: img[1], src: img[2] }
     if (/^###\s+/.test(b)) return { type: 'h3', text: b.replace(/^###\s+/, '') }
     if (/^##\s+/.test(b)) return { type: 'h2', text: b.replace(/^##\s+/, '') }
     if (/^#\s+/.test(b)) return { type: 'h2', text: b.replace(/^#\s+/, '') }
@@ -318,6 +320,18 @@ function renderInline(text, keyPrefix) {
 
 function renderBlock(b, i) {
   const key = `blk-${i}`
+  if (b.type === 'image') {
+    return (
+      <figure key={key} style={{ margin: '2.4rem 0' }}>
+        <img src={b.src} alt={b.alt} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }} />
+        {b.alt && (
+          <figcaption className="font-body" style={{ marginTop: '0.6rem', fontSize: '0.82rem', color: '#6b7280', textAlign: 'center', fontStyle: 'italic' }}>
+            {b.alt}
+          </figcaption>
+        )}
+      </figure>
+    )
+  }
   if (b.type === 'h2') {
     return <h2 key={key} className="font-heading font-bold" style={{ color: '#09203e', fontSize: '1.55rem', lineHeight: 1.25, margin: '2.4rem 0 0.9rem' }}>{renderInline(b.text, key)}</h2>
   }
