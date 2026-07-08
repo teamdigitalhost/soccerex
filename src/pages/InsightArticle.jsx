@@ -262,8 +262,8 @@ function parseBlocks(body) {
 
   return raw.map((b) => {
     const lines = b.split('\n').map((l) => l.trim()).filter(Boolean)
-    const img = b.match(/^!\[(.*?)\]\((\S+?)\)$/)
-    if (img) return { type: 'image', alt: img[1], src: img[2] }
+    const img = b.match(/^!\[(.*?)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)$/)
+    if (img) return { type: 'image', alt: img[1], src: img[2], credit: img[3] || '' }
     if (/^###\s+/.test(b)) return { type: 'h3', text: b.replace(/^###\s+/, '') }
     if (/^##\s+/.test(b)) return { type: 'h2', text: b.replace(/^##\s+/, '') }
     if (/^#\s+/.test(b)) return { type: 'h2', text: b.replace(/^#\s+/, '') }
@@ -321,12 +321,16 @@ function renderInline(text, keyPrefix) {
 function renderBlock(b, i) {
   const key = `blk-${i}`
   if (b.type === 'image') {
+    const caption = (b.alt || '').trim()
+    const credit = (b.credit || '').trim()
     return (
       <figure key={key} style={{ margin: '2.4rem 0' }}>
-        <img src={b.src} alt={b.alt} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }} />
-        {b.alt && (
+        <img src={b.src} alt={caption} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }} />
+        {(caption || credit) && (
           <figcaption className="font-body" style={{ marginTop: '0.6rem', fontSize: '0.82rem', color: '#6b7280', textAlign: 'center', fontStyle: 'italic' }}>
-            {b.alt}
+            {caption}
+            {caption && credit ? ' ' : ''}
+            {credit && <span style={{ fontStyle: 'normal', color: '#9ca3af' }}>{caption ? '· ' : ''}{credit}</span>}
           </figcaption>
         )}
       </figure>
