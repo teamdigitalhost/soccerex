@@ -143,6 +143,9 @@ export default function InsightArticle() {
               ))}
             </div>
           )}
+
+          {/* Rotating call-to-action */}
+          {article.cta && <PromoBand cta={article.cta} />}
         </div>
       </section>
 
@@ -217,6 +220,21 @@ function normalizeCmsArticleDetail(a) {
     paragraphs: bodyToParagraphs(a.body),
     blocks: parseBlocks(a.body),
     inlineImages: [],
+    cta: normalizeCta(a.cta),
+  }
+}
+
+/* The rotating call-to-action the API picked for this page view (a weighted
+   pick from the article's CTA category). Null when the article has no CTA
+   category or nothing live is running in it. */
+function normalizeCta(cta) {
+  if (!cta || !cta.title || !cta.cta_url) return null
+  return {
+    title: String(cta.title),
+    body: String(cta.body || ''),
+    label: String(cta.cta_label || 'Learn more'),
+    url: String(cta.cta_url),
+    image: cta.image_url || '',
   }
 }
 
@@ -352,6 +370,54 @@ function renderBlock(b, i) {
     return <ol key={key} className="font-body" style={{ listStyle: 'decimal', paddingLeft: '1.4rem', margin: '0 0 1.4rem', color: '#333', fontSize: '1.05rem', lineHeight: 1.8 }}>{b.items.map((it, j) => <li key={j} style={{ marginBottom: '0.4rem' }}>{renderInline(it, `${key}-${j}`)}</li>)}</ol>
   }
   return <p key={key} className="font-body leading-[1.8] mb-5" style={{ fontSize: '1.05rem', color: '#333' }}>{renderInline(b.text, key)}</p>
+}
+
+/* The article's rotating call-to-action, rendered as a self-contained band at
+   the foot of the body. Dark card on the light body background so it reads as a
+   deliberate break, not another paragraph. Image is optional. */
+function PromoBand({ cta }) {
+  return (
+    <a
+      href={cta.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group"
+      style={{
+        display: 'flex', flexWrap: 'wrap', alignItems: 'stretch', gap: 0,
+        margin: '3.5rem 0 0', borderRadius: '16px', overflow: 'hidden',
+        textDecoration: 'none', background: 'linear-gradient(135deg, #09203e 0%, #050d1a 100%)',
+        border: '1px solid rgba(191,177,112,0.25)', boxShadow: '0 16px 50px rgba(9,32,62,0.22)',
+      }}
+    >
+      {cta.image && (
+        <div style={{ flex: '1 1 200px', minHeight: '160px', maxWidth: '260px', overflow: 'hidden' }}>
+          <img src={cta.image} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+      )}
+      <div style={{ flex: '2 1 320px', padding: 'clamp(24px,4vw,36px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <p className="font-mono uppercase tracking-[0.15em]" style={{ fontSize: '0.62rem', color: 'var(--color-brand-accent)', fontWeight: 600, marginBottom: '10px' }}>
+          Soccerex
+        </p>
+        <h3 className="font-heading font-bold text-white leading-snug" style={{ fontSize: 'clamp(1.25rem,2.5vw,1.6rem)', marginBottom: cta.body ? '10px' : '18px' }}>
+          {cta.title}
+        </h3>
+        {cta.body && (
+          <p className="font-body" style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginBottom: '18px' }}>
+            {cta.body}
+          </p>
+        )}
+        <span
+          className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.1em] self-start"
+          style={{
+            fontSize: '0.78rem', color: '#09203e', background: 'var(--color-brand-accent)',
+            padding: '11px 22px', borderRadius: '8px', transition: 'transform 0.2s',
+          }}
+        >
+          {cta.label} <ArrowRight size={14} />
+        </span>
+      </div>
+    </a>
+  )
 }
 
 function uniqueLabels(values) {
