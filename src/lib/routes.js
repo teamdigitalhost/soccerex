@@ -47,6 +47,11 @@ export const MIAMI_2026      = '/miami-2026'
 export const EUROPE_2026     = '/europe-2026'
 export const RIYADH_2027     = '/riyadh-2027'
 
+// Past-event recap pages (e.g. /miami-2025). Keeps the historical URLs from the
+// previous site so old links resolve to a recap instead of a blank page.
+export const EVENT_RECAP_PATTERN = '/:eventSlug'
+export const eventRecap = (slug) => `/${slug}`
+
 // Bespoke Miami press release page. Lives under /miami-2026 so the Miami
 // theme (Oswald + Montserrat, pink/teal palette) applies automatically.
 export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`

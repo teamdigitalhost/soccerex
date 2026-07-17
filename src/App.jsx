@@ -8,6 +8,7 @@ import { trackPageView } from './lib/soccerexApi'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, EUROPE_2026, RIYADH_2027,
+  EVENT_RECAP_PATTERN,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK, AGENDA_COLLAB,
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
@@ -77,6 +78,7 @@ const PressRelease = lazy(() => import('./pages/PressRelease'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
 const InsightsList = lazy(() => import('./pages/InsightsList'))
 const InsightArticle = lazy(() => import('./pages/InsightArticle'))
+const EventRecap = lazy(() => import('./pages/EventRecap'))
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
 const TermsConditions = lazy(() => import('./pages/TermsConditions'))
 const CookiePolicy = lazy(() => import('./pages/CookiePolicy'))
@@ -152,6 +154,11 @@ function App() {
           <Route path={ROUTE_PATTERNS.profileView} element={<ProfileView />} />
           <Route path={ROUTE_PATTERNS.companyPortal} element={<CompanyPortal />} />
           <Route path={ROUTE_PATTERNS.personalPortal} element={<PersonalPortal />} />
+          {/* Past-event recap pages: /miami-2025, etc. Renders from the RECENT data;
+              an unknown slug redirects to /events (never blank). */}
+          <Route path={EVENT_RECAP_PATTERN} element={<EventRecap />} />
+          {/* Safety net so any other unknown path lands on /events instead of blank. */}
+          <Route path="*" element={<Navigate to={EVENTS} replace />} />
         </Routes>
       </Suspense>
       <Footer />

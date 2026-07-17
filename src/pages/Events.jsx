@@ -36,7 +36,8 @@ const UPCOMING = [
 ]
 
 // ═══ RECENT EVENTS (past) ═════════════════════════════════════════════════════
-const RECENT = [
+// Exported so the per-event recap pages (/miami-2025, etc.) render from the same data.
+export const RECENT = [
   {
     logo: '/images/events/logos/europe.webp',
     label: 'SOCCEREX EUROPE 2026',
@@ -54,7 +55,10 @@ const RECENT = [
     city: 'Miami Beach Convention Center',
     image: '/images/events/events/miami-2025-stage.jpg', // verified: shows "SOCCEREX MIAMI" on screen
     copy: 'In 2025, we hosted three large-scale events for the first time since 2019, marking a major milestone for the global football business industry. The trifecta of major gatherings continued with Soccerex Miami, which took place from 11th to 13th November at the Miami Beach Convention Center. Bringing together key stakeholders from across the football ecosystem, the event served as a global platform for innovation, collaboration, and shaping the future of the game.',
-    link: 'https://soccerex.com/miami-2025/',
+    slug: 'miami-2025',
+    region: 'miami',
+    link: '/miami-2025',
+    internal: true,
   },
   {
     logo: '/images/events/logos/europe.webp',
@@ -63,7 +67,10 @@ const RECENT = [
     city: 'Johan Cruijff ArenA, Amsterdam',
     image: '/images/events/events/europe-2025-knvb-stage.jpg', // VERIFIED: KNVB-branded Soccerex Europe 2025 stage, Amsterdam
     copy: 'Building on the success of Soccerex Europe 2024, which featured an insightful session on how AI was transforming football and standout discussions with speakers from TikTok, Ajax, and LALIGA, the football industry\'s premier European event returned to Amsterdam in 2025. Amsterdam, full of football innovation and rich history, provided the perfect backdrop for Soccerex Europe 2025. The renowned Johan Cruijff ArenA, an international leader in sustainability and fan experience, was the ideal venue for an event that celebrated and shaped the future of the beautiful game. Having previously staged Champions League finals and UEFA Euro 2000, this year\'s event proved to be a landmark gathering for federations, leagues, clubs, brands, media, governing bodies, and legends from across the globe.',
-    link: 'https://soccerex.com/europe-2025/',
+    slug: 'europe-2025',
+    region: 'europe',
+    link: '/europe-2025',
+    internal: true,
   },
   {
     logo: '/images/events/logos/mena.webp',
@@ -72,7 +79,10 @@ const RECENT = [
     city: 'Cairo, Egypt',
     image: '/images/events/events/mena-2025-cairo-signing.jpg', // VERIFIED: MENA Cairo 2025 signing ceremony
     copy: 'Following the success of Soccerex Europe and Miami in 2024, 2025 saw us host three large-scale events for the first time since 2019. The football business industry\'s trifecta of major gatherings began with Soccerex MENA, in partnership with Sports Expo, held from February 23-26. This event was hosted in Cairo, Egypt, home of "The Pharaohs," the most successful national team in Africa Cup of Nations history.',
-    link: 'https://soccerex.com/mena-2025/',
+    slug: 'mena-2025',
+    region: 'all',
+    link: '/mena-2025',
+    internal: true,
   },
   {
     logo: '/images/events/logos/miami.webp',
@@ -81,7 +91,10 @@ const RECENT = [
     city: 'Miami, USA',
     image: '/images/events/events/miami-2024-verified.jpg', // VERIFIED: packed keynote in hotel ballroom, Miami
     copy: 'After our fourth and most recent instalment in the magic city in November 2023 which saw 29-year-old Soccerex records shattered, it was confirmed that the USA is truly the beautiful games\' adopted home. With a World Cup to look forward to in under two years (by the time of the event), broadcasting figures at an all-time high and the MLS becoming a truly global product (even being home to arguably the greatest player in history), it is a remarkably exciting time for Soccer in the Americas.',
-    link: 'https://soccerex.com/miami-2024/',
+    slug: 'miami-2024',
+    region: 'miami',
+    link: '/miami-2024',
+    internal: true,
   },
   {
     logo: '/images/events/logos/europe.webp',
@@ -90,7 +103,10 @@ const RECENT = [
     city: 'Johan Cruijff ArenA, Amsterdam',
     image: '/images/events/events/europe-2025-verified.jpg', // VERIFIED: packed keynote, blue lit venue, Europe
     copy: 'It was a memorable occasion as football returned to European soil for the first time since 2019, hosted at the iconic home of AFC Ajax. After nearly 5 years, Soccerex brought the football business community together again in Amsterdam, just before the start of the European Championships in Germany.',
-    link: 'https://soccerex.com/europe-2024/',
+    slug: 'europe-2024',
+    region: 'europe',
+    link: '/europe-2024',
+    internal: true,
   },
   {
     logo: '/images/events/logos/miami.webp',
@@ -99,7 +115,10 @@ const RECENT = [
     city: 'Mana Wynwood Convention Center, Miami',
     image: '/images/events/events/miami-2023-verified.jpg', // VERIFIED: outdoor "SOCCEREX MIAMI" banner with crowd
     copy: 'Soccerex Miami will be held at the wonderful Mana Wynwood Convention Center, a venue that has been leading the way in the entertainment and arts industries since 2010. 70+ speakers will take the main stage, providing insight on a myriad of topics including but not limited to, performance, broadcasting, good governance, fan engagement, athlete development, technology, analytics, and major tournaments.',
-    link: 'https://soccerex.com/miami-2023/',
+    slug: 'miami-2023',
+    region: 'miami',
+    link: '/miami-2023',
+    internal: true,
   },
 ]
 
@@ -159,7 +178,7 @@ function EventCard({ event, index, dark = false }) {
         {event.comingSoon && (
           event.detailsLink ? (
             <Link to={event.detailsLink} className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.15em] fade-up mt-4" style={{ fontSize: '0.72rem', color: accent, background: 'rgba(255,255,255,0.08)', padding: '8px 16px', borderRadius: '6px', fontWeight: 600, textDecoration: 'none', cursor: 'pointer' }}>
-              Coming Soon <ArrowRight size={14} />
+              View Details <ArrowRight size={14} />
             </Link>
           ) : (
             <span className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.15em] fade-up mt-4" style={{ fontSize: '0.72rem', color: accent, background: 'rgba(255,255,255,0.08)', padding: '8px 16px', borderRadius: '6px', fontWeight: 600 }}>
@@ -342,7 +361,7 @@ export default function Events() {
                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: accent }} />
                   {e.comingSoon ? (
                     <div style={{ position: 'absolute', top: 20, right: 20, padding: '6px 12px', background: accent, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '100px', color: '#fff', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                      Coming Soon
+                      {e.detailsLink ? 'View Details' : 'Coming Soon'}
                     </div>
                   ) : (
                     <div style={{ position: 'absolute', top: 20, right: 20, padding: '6px 12px', background: 'var(--color-brand-accent)', borderRadius: '100px', color: '#fff', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
