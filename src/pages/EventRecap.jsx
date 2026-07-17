@@ -1,25 +1,45 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, MapPin, Images, Calendar } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import ImageGrid from '../components/ImageGrid'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { EVENTS, GALLERY, MIAMI_2026 } from '../lib/routes'
 import { RECENT } from './Events'
 
 // Recap page for a past Soccerex event. Data comes from the same RECENT array the
-// Events page uses, so the write-up, dates, and hero image live in one place.
+// Events page uses; photos are pulled inline from the gallery manifest, filtered
+// to the event's region, so the moments show on the page itself.
 export default function EventRecap() {
   const { eventSlug } = useParams()
   const event = RECENT.find((e) => e.slug === eventSlug)
 
-  useScrollAnimations()
+  const [photos, setPhotos] = useState([])
+  useScrollAnimations(photos.length) // re-scan when the inline gallery mounts
   useEffect(() => { window.scrollTo(0, 0) }, [eventSlug])
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('/gallery-manifest.json')
+      .then((r) => r.json())
+      .then((all) => {
+        if (cancelled || !Array.isArray(all)) return
+        const region = event?.region
+        const matched = region && region !== 'all'
+          ? all.filter((img) => Array.isArray(img.categories) && img.categories.includes(region))
+          : all
+        setPhotos(matched.length ? matched : all)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [eventSlug]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Unknown slug: send them to the events listing rather than a blank page.
   if (!event) return <Navigate to={EVENTS} replace />
 
   const copyArray = Array.isArray(event.copy) ? event.copy : [event.copy]
+  const galleryTo = event.region && event.region !== 'all' ? `${GALLERY}?filter=${event.region}` : GALLERY
 
   return (
     <div style={{ background: '#050d1a' }}>
@@ -78,10 +98,6 @@ export default function EventRecap() {
           ))}
 
           <div className="flex flex-wrap items-center gap-4 mt-10 fade-up">
-            <Link to={event.region && event.region !== 'all' ? `${GALLERY}?filter=${event.region}` : GALLERY} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-              style={{ background: '#09203e', color: '#fff', padding: '16px 34px', fontSize: '0.8rem', textDecoration: 'none' }}>
-              <Images size={16} /> View Photos
-            </Link>
             <Link to={EVENTS} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: 'transparent', color: '#09203e', padding: '16px 34px', fontSize: '0.8rem', textDecoration: 'none', border: '1px solid #09203e' }}>
               All Events <ArrowRight size={16} />
@@ -91,6 +107,33 @@ export default function EventRecap() {
       </section>
 
       <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
+
+      {/* ═══ INLINE GALLERY (photos from this event's region) ═══════════════ */}
+      {photos.length > 0 && (
+        <>
+          <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #09203e 0%, #050d1a 100%)', padding: 'clamp(80px,10vw,130px) clamp(24px,5vw,80px)' }}>
+            <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={22} opacity={0.08} />
+            <div className="relative z-10" style={{ maxWidth: '1300px', margin: '0 auto' }}>
+              <div className="text-center mb-12">
+                <p className="section-label mb-4 fade-up" style={{ color: 'var(--color-brand-accent)', fontWeight: 600 }}>GALLERY</p>
+                <h2 className="font-heading font-bold text-white leading-tight fade-up text-glow" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}>
+                  Moments from the event
+                </h2>
+              </div>
+              <div className="fade-up">
+                <ImageGrid images={photos} columns={3} showCaptions={false} maxItems={12} />
+              </div>
+              <div className="text-center mt-10 fade-up">
+                <Link to={galleryTo} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+                  style={{ background: 'var(--color-brand-accent)', color: '#09203e', padding: '16px 36px', fontSize: '0.8rem', textDecoration: 'none' }}>
+                  <Images size={16} /> View full gallery <ArrowRight size={16} />
+                </Link>
+              </div>
+            </div>
+          </section>
+          <PixelDivider color="#050d1a" layers={4} height={90} speed={0.5} />
+        </>
+      )}
 
       {/* ═══ NEXT EVENT CTA ═════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0000 0%, #3a0a0a 50%, #1a0000 100%)', padding: 'clamp(80px,10vw,130px) clamp(24px,5vw,80px)' }}>

@@ -1,46 +1,19 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import Lightbox from './Lightbox'
 
+// Masonry image grid. Images render directly with native loading="lazy" so the
+// browser handles deferring off-screen downloads — simpler and more robust than
+// a hand-rolled IntersectionObserver (the previous version observed items with
+// an observer it then disconnected, so nothing ever loaded).
 export default function ImageGrid({ images, columns = 3, showCaptions = true, maxItems = null }) {
   const [lightboxIndex, setLightboxIndex] = useState(null)
-  const [loadedImages, setLoadedImages] = useState(new Set())
-  const observerRef = useRef(null)
 
   const displayImages = maxItems ? images.slice(0, maxItems) : images
-  const eagerLoad = maxItems && maxItems <= 20 // small grids load eagerly
+  // Small, capped grids (e.g. an event recap's 12 photos) load eagerly so they
+  // always appear; the big gallery stays lazy for performance.
+  const eager = maxItems != null && maxItems <= 20
 
-  // Lazy loading with IntersectionObserver (only for large grids)
-  useEffect(() => {
-    if (eagerLoad) {
-      // Load all immediately for small grids
-      setLoadedImages(new Set(displayImages.map((img) => img.src)))
-      return
-    }
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const src = entry.target.dataset.src
-            if (src) {
-              setLoadedImages((prev) => new Set([...prev, src]))
-              observerRef.current?.unobserve(entry.target)
-            }
-          }
-        })
-      },
-      { rootMargin: '300px' }
-    )
-
-    return () => observerRef.current?.disconnect()
-  }, [eagerLoad, displayImages.length])
-
-  const observeRef = (el) => {
-    if (el && observerRef.current) {
-      observerRef.current.observe(el)
-    }
-  }
-
-  // Distribute images into columns for masonry
+  // Distribute images across columns for the masonry layout.
   const columnArrays = Array.from({ length: columns }, () => [])
   displayImages.forEach((img, i) => {
     columnArrays[i % columns].push({ ...img, globalIndex: i })
@@ -55,21 +28,15 @@ export default function ImageGrid({ images, columns = 3, showCaptions = true, ma
               <div
                 key={img.src}
                 className="gallery-item"
-                ref={eagerLoad ? undefined : observeRef}
-                data-src={img.src}
                 onClick={() => setLightboxIndex(img.globalIndex)}
               >
                 <div className="gallery-item-inner">
-                  {loadedImages.has(img.src) ? (
-                    <img
-                      src={img.src}
-                      alt={img.caption}
-                      className="gallery-image"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="gallery-placeholder" />
-                  )}
+                  <img
+                    src={img.src}
+                    alt={img.caption}
+                    className="gallery-image"
+                    loading={eager ? 'eager' : 'lazy'}
+                  />
                   {showCaptions && (
                     <div className="gallery-caption-overlay">
                       <p className="gallery-caption-title">{img.caption}</p>
