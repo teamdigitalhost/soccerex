@@ -30,3 +30,6 @@ dist-ssr
 # Raw brand kit (kept out of git/deploy; processed assets live under
 # public/events/<event>/{graphics,icons}/)
 public/brand/
+
+# Per-copy workspace role marker (PRIMARY vs BACKUP) — local only
+WORKSPACE_ROLE.md
