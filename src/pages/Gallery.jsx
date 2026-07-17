@@ -15,9 +15,16 @@ const FILTERS = [
   { key: 'culture', label: 'Culture & Art' },
 ]
 
+const FILTER_KEYS = FILTERS.map((f) => f.key)
+
 export default function Gallery() {
   const [images, setImages] = useState([])
-  const [activeFilter, setActiveFilter] = useState('all')
+  // Honor a ?filter= deep link (e.g. from a past-event recap's "View Photos").
+  const initialFilter = (() => {
+    const q = new URLSearchParams(window.location.search).get('filter')
+    return q && FILTER_KEYS.includes(q) ? q : 'all'
+  })()
+  const [activeFilter, setActiveFilter] = useState(initialFilter)
 
   useEffect(() => {
     fetch('/gallery-manifest.json')

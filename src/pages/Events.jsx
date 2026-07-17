@@ -193,7 +193,7 @@ function EventCard({ event, index, dark = false }) {
               onMouseEnter={e => { e.currentTarget.style.background = '#d4c78e' }}
               onMouseLeave={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
             >
-              View Details <ArrowRight size={16} />
+              {event.slug ? 'View Recap' : 'View Details'} <ArrowRight size={16} />
             </Link>
           ) : (
             <a href={event.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em] fade-up mt-4"

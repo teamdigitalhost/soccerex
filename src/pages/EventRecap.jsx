@@ -78,7 +78,7 @@ export default function EventRecap() {
           ))}
 
           <div className="flex flex-wrap items-center gap-4 mt-10 fade-up">
-            <Link to={GALLERY} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            <Link to={event.region && event.region !== 'all' ? `${GALLERY}?filter=${event.region}` : GALLERY} className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
               style={{ background: '#09203e', color: '#fff', padding: '16px 34px', fontSize: '0.8rem', textDecoration: 'none' }}>
               <Images size={16} /> View Photos
             </Link>
