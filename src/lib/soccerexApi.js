@@ -350,6 +350,13 @@ export async function submitDealNetworkIntake(payload, opts = {}) {
   }))
 }
 
+/* Admin-minted signed preview: forwards the exact signature params to the
+   signed API route, so the URL expires and needs no email gate. */
+export async function getProfilePreview(revisionId, { expires, signature } = {}) {
+  const qs = new URLSearchParams({ expires: expires || '', signature: signature || '' })
+  return unwrap(await request(`/profile-preview/${encodeURIComponent(revisionId)}?${qs.toString()}`))
+}
+
 /* ───── Profile self-service (auth via short-lived edit_token) ───────────── */
 
 async function authedRequest(path, { method = 'GET', body, token, signal, formData, test } = {}) {

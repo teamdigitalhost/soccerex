@@ -91,6 +91,8 @@ export const profileEditor   = (slug) => `${PROFILE_ACCESS}/edit/${encodeURIComp
 /* Read-only profile card — what the profile looks like, without edit chrome. */
 export const profileView     = (slug) => `${PROFILE_ACCESS}/view/${encodeURIComponent(slug)}`
 export const companyPortal   = (slug) => `${PROFILE_ACCESS}/portal/${encodeURIComponent(slug)}`
+/* Admin-only signed preview of a pending profile revision, ungated (see ProfilePreview). */
+export const PROFILE_PREVIEW = '/profile-preview'
 /* Personal portal: aggregates speaker / delegate / rights-holder / VIP roles
    for a single person profile into one neutral, timeless dashboard. */
 export const personalPortal  = (slug) => `${PROFILE_ACCESS}/me/${encodeURIComponent(slug)}`
@@ -108,6 +110,7 @@ export const ROUTE_PATTERNS = {
   insightArticle:      `${INSIGHTS}/:slug`,
   profileEditor:       `${PROFILE_ACCESS}/edit/:slug`,
   profileView:         `${PROFILE_ACCESS}/view/:slug`,
+  profilePreview:      `${PROFILE_PREVIEW}/:revisionId`,
   companyPortal:       `${PROFILE_ACCESS}/portal/:slug`,
   personalPortal:      `${PROFILE_ACCESS}/me/:slug`,
   pressRelease:        `${PRESS}/:slug`,

@@ -131,7 +131,7 @@ function ViewHeader({ profile, slug, isCompany }) {
 
 /* ─── Profile card ─────────────────────────────────────────────────────── */
 
-function ProfileCard({ profile: p, isCompany }) {
+export function ProfileCard({ profile: p, isCompany }) {
   const socials = Object.entries(p.socials || {}).filter(([, url]) => !!url)
   /* The Brand Assets editor stores its shared asset URLs in links with
      category "asset" — those are internal, so only public links show here. */
