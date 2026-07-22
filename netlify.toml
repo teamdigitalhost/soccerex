@@ -5,6 +5,18 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# Admin-minted signed preview pages: keep them out of search indexes at the HTTP
+# layer (the pages also inject a robots meta client-side, but headers are authoritative).
+[[headers]]
+  for = "/profile-preview/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/article-preview/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 # SPA fallback so React Router routes like /events, /about, /contact work on refresh
 [[redirects]]
   from = "/*"

@@ -93,6 +93,9 @@ export const profileView     = (slug) => `${PROFILE_ACCESS}/view/${encodeURIComp
 export const companyPortal   = (slug) => `${PROFILE_ACCESS}/portal/${encodeURIComponent(slug)}`
 /* Admin-only signed preview of a pending profile revision, ungated (see ProfilePreview). */
 export const PROFILE_PREVIEW = '/profile-preview'
+
+/* Signed, shareable preview of an article draft, ungated (see ArticlePreview). */
+export const ARTICLE_PREVIEW = '/article-preview'
 /* Personal portal: aggregates speaker / delegate / rights-holder / VIP roles
    for a single person profile into one neutral, timeless dashboard. */
 export const personalPortal  = (slug) => `${PROFILE_ACCESS}/me/${encodeURIComponent(slug)}`
@@ -111,6 +114,7 @@ export const ROUTE_PATTERNS = {
   profileEditor:       `${PROFILE_ACCESS}/edit/:slug`,
   profileView:         `${PROFILE_ACCESS}/view/:slug`,
   profilePreview:      `${PROFILE_PREVIEW}/:revisionId`,
+  articlePreview:      `${ARTICLE_PREVIEW}/:articleId`,
   companyPortal:       `${PROFILE_ACCESS}/portal/:slug`,
   personalPortal:      `${PROFILE_ACCESS}/me/:slug`,
   pressRelease:        `${PRESS}/:slug`,

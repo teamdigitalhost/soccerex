@@ -357,6 +357,13 @@ export async function getProfilePreview(revisionId, { expires, signature } = {})
   return unwrap(await request(`/profile-preview/${encodeURIComponent(revisionId)}?${qs.toString()}`))
 }
 
+/* Admin-minted signed preview of an article in ANY status (drafts included):
+   same signature-forwarding scheme, shareable for 7 days. */
+export async function getArticlePreview(articleId, { expires, signature } = {}) {
+  const qs = new URLSearchParams({ expires: expires || '', signature: signature || '' })
+  return unwrap(await request(`/article-preview/${encodeURIComponent(articleId)}?${qs.toString()}`))
+}
+
 /* ───── Profile self-service (auth via short-lived edit_token) ───────────── */
 
 async function authedRequest(path, { method = 'GET', body, token, signal, formData, test } = {}) {

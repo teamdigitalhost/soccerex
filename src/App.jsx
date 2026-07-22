@@ -91,6 +91,7 @@ const ProfileAccess = lazy(() => import('./pages/ProfileAccess'))
 const ProfileEditor = lazy(() => import('./pages/ProfileEditor'))
 const ProfileView = lazy(() => import('./pages/ProfileView'))
 const ProfilePreview = lazy(() => import('./pages/ProfilePreview'))
+const ArticlePreview = lazy(() => import('./pages/ArticlePreview'))
 const CompanyPortal = lazy(() => import('./pages/CompanyPortal'))
 const PersonalPortal = lazy(() => import('./pages/PersonalPortal'))
 const DealNetworkPage = lazy(() => import('./pages/DealNetwork'))
@@ -154,6 +155,7 @@ function App() {
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />
           <Route path={ROUTE_PATTERNS.profileView} element={<ProfileView />} />
           <Route path={ROUTE_PATTERNS.profilePreview} element={<ProfilePreview />} />
+          <Route path={ROUTE_PATTERNS.articlePreview} element={<ArticlePreview />} />
           <Route path={ROUTE_PATTERNS.companyPortal} element={<CompanyPortal />} />
           <Route path={ROUTE_PATTERNS.personalPortal} element={<PersonalPortal />} />
           {/* Past-event recap pages: /miami-2025, etc. Renders from the RECENT data;

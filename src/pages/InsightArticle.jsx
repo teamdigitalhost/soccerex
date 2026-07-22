@@ -54,6 +54,13 @@ export default function InsightArticle() {
     .filter((a) => a.slug !== slug && a.categories.some((c) => article.categories.includes(c)))
     .slice(0, 3)
 
+  return <ArticleLayout article={article} related={related} />
+}
+
+/* The full article page, shared with the admin draft preview (ArticlePreview),
+   which supplies its own article and an empty related list — so a draft renders
+   EXACTLY as it will look once published. */
+export function ArticleLayout({ article, related = [] }) {
   return (
     <div style={{ background: '#050d1a' }}>
 
@@ -200,7 +207,7 @@ export default function InsightArticle() {
   )
 }
 
-function normalizeCmsArticleDetail(a) {
+export function normalizeCmsArticleDetail(a) {
   const slug = a.slug || ''
   const title = a.title || 'Untitled'
   const categories = uniqueLabels([
