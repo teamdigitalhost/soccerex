@@ -78,9 +78,15 @@ export default function LeadForm({
 
     setStatus('submitting'); setErrors({}); setTopError('')
     try {
+      /* Click token handed over by the email that sent them here (see PageViewTracker). Passing it
+         with the submission is what lets the backend credit this conversion to the campaign that
+         produced it, instead of recording an anonymous inbound lead. */
+      let sx
+      try { sx = localStorage.getItem('sx_click_token') || undefined } catch { /* ignore */ }
       await submitLead(kind, {
         ...extraPayload,
         ...values,
+        sx,
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
       }, { test: isTestModeFromUrl() })
       setStatus('success')
