@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT } from '../lib/routes'
+import { HOME, MIAMI_2026_PRESS_RELEASE, SPONSOR, EXHIBIT } from '../lib/routes'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
@@ -146,8 +146,8 @@ export default function Miami2026() {
               {/* Hero Sponsor/Exhibit now route to the dedicated landing pages
                   (each carries its own value copy, floor imagery, and lead
                   form) rather than opening an inline modal. */}
-              <Link to={MIAMI_2026_SPONSOR} className="miami-cta-box">Sponsor</Link>
-              <Link to={MIAMI_2026_EXHIBIT} className="miami-cta-box">Exhibit</Link>
+              <Link to={SPONSOR} className="miami-cta-box">Sponsor</Link>
+              <Link to={EXHIBIT} className="miami-cta-box">Exhibit</Link>
               {/* Speaker CTA removed per GN revisions doc — Miami hero now
                   surfaces Sponsor + Exhibit only. */}
             </div>

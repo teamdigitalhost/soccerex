@@ -7,7 +7,7 @@ import TestModeBanner from './components/TestModeBanner'
 import { trackPageView } from './lib/soccerexApi'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
-  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, EUROPE_2026, RIYADH_2027,
+  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, SPONSOR, EXHIBIT, EUROPE_2026, RIYADH_2027,
   EVENT_RECAP_PATTERN,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK, AGENDA_COLLAB,
   INVITE_PATTERN,
@@ -23,6 +23,9 @@ import {
 function themeClassFor(pathname) {
   if (!pathname) return ''
   if (pathname.startsWith(MIAMI_2026)) return 'theme-miami'
+  // Evergreen sponsor/exhibit pages currently wear the Miami skin (per brand
+  // direction); keep navbar + footer accent consistent with the page.
+  if (pathname === SPONSOR || pathname === EXHIBIT) return 'theme-miami'
   if (pathname.startsWith(EUROPE_2026)) return 'theme-europe'
   if (pathname.startsWith(RIYADH_2027)) return 'theme-riyadh'
   return ''
@@ -72,8 +75,8 @@ const PastSpeakers = lazy(() => import('./pages/PastSpeakers'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
-const MiamiSponsor = lazy(() => import('./pages/MiamiSponsor'))
-const MiamiExhibit = lazy(() => import('./pages/MiamiExhibit'))
+const Sponsor = lazy(() => import('./pages/Sponsor'))
+const Exhibit = lazy(() => import('./pages/Exhibit'))
 const MiamiPricing = lazy(() => import('./pages/MiamiPricing'))
 const PricingChooser = lazy(() => import('./pages/PricingChooser'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
@@ -130,8 +133,12 @@ function App() {
           <Route path={MIAMI_2026_PRICING} element={<PricingChooser />} />
           <Route path={MIAMI_2026_PRICING_CATEGORY} element={<MiamiPricing />} />
           <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />
-          <Route path={MIAMI_2026_SPONSOR} element={<MiamiSponsor />} />
-          <Route path={MIAMI_2026_EXHIBIT} element={<MiamiExhibit />} />
+          {/* Evergreen platform-level sponsor + exhibit pages */}
+          <Route path={SPONSOR} element={<Sponsor />} />
+          <Route path={EXHIBIT} element={<Exhibit />} />
+          {/* Legacy Miami-scoped URLs redirect to the evergreen pages */}
+          <Route path={MIAMI_2026_SPONSOR} element={<Navigate to={SPONSOR} replace />} />
+          <Route path={MIAMI_2026_EXHIBIT} element={<Navigate to={EXHIBIT} replace />} />
           {/* Riyadh inner page is paused: redirect to the events list until the
               event details (venue, dates) are confirmed. Page kept on disk. */}
           <Route path={RIYADH_2027} element={<Navigate to={EVENTS} replace />} />
