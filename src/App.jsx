@@ -50,12 +50,23 @@ function PageViewTracker() {
     let email = null
     try { email = localStorage.getItem('sx_pricing_email') || null } catch { /* ignore */ }
     const qs = new URLSearchParams(location.search)
+    /* Identity handed over by an email click (?sx=<opaque per-send token>). Persist it so every
+       later page view and form submit from this browser stays tied to the lead who clicked, not
+       only the first landing. Without it the visit reads as organic traffic and the conversion can
+       never be credited back to the campaign that produced it. */
+    let clickToken = null
+    try {
+      const fromUrl = qs.get('sx')
+      if (fromUrl) localStorage.setItem('sx_click_token', fromUrl)
+      clickToken = fromUrl || localStorage.getItem('sx_click_token') || null
+    } catch { /* ignore */ }
     trackPageView({
       session_id: sid,
       path: location.pathname,
       title: typeof document !== 'undefined' ? document.title : null,
       referrer: typeof document !== 'undefined' ? (document.referrer || null) : null,
       email,
+      sx: clickToken,
       utm_source: qs.get('utm_source'),
       utm_medium: qs.get('utm_medium'),
       utm_campaign: qs.get('utm_campaign'),
