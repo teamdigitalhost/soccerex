@@ -98,7 +98,7 @@ export default function Exhibit() {
           </div>
 
           <p className="miami-kicker" style={{ color: '#00C6D7' }}>Exhibit at Soccerex</p>
-          <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)', color: '#fff', lineHeight: 1.08, maxWidth: 900 }}>
+          <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)', color: '#fff', lineHeight: 1.08, maxWidth: 900, textWrap: 'balance' }}>
             Put your product in front of the people who buy it.<br />
             <span className="miami-text-gradient">On the floor where football does business.</span>
           </h1>

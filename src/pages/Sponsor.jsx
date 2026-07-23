@@ -9,7 +9,7 @@ import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
-const HERO_IMG = '/hero/268-NEW9-miami-audience-session.jpg'
+const HERO_IMG = '/hero/177-NEW6-miami-packed-diverse-audience.jpg'
 const ICN = '/events/miami/2026/icons'
 
 /* Lead intake shared across every CTA. `inquiry_type: 'partner'` is the value
@@ -77,7 +77,7 @@ const STATS = [
 ]
 
 const GALLERY = [
-  { src: '/hero/177-NEW6-miami-packed-diverse-audience.jpg', caption: 'A packed, senior audience' },
+  { src: '/hero/25-NEW-packed-keynote-miami.jpg', caption: 'A packed keynote' },
   { src: '/hero/170-NEW6-miami-two-speakers-soccerex-branding.jpg', caption: 'Your brand on the stage' },
   { src: '/hero/147-MISC-infantino-wide-shot-soccerex-branding.jpg', caption: 'The names that move the game' },
   { src: '/hero/173-NEW6-miami-speaker-purple-lighting-mic.jpg', caption: 'The main-stage moment' },
@@ -95,7 +95,7 @@ export default function Sponsor() {
 
       {/* ─── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', minHeight: 'min(88vh, 760px)', display: 'flex', alignItems: 'flex-end' }}>
-        <img src={HERO_IMG} alt="A full room of football industry delegates at a Soccerex session" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
+        <img src={HERO_IMG} alt="A packed room of football industry delegates at a Soccerex session" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '65% center', opacity: 0.5 }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,27,42,0.55) 0%, rgba(13,27,42,0.35) 40%, rgba(13,27,42,0.94) 100%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '1180px', margin: '0 auto', width: '100%', padding: 'clamp(90px,12vw,130px) clamp(24px,5vw,72px) clamp(48px,6vw,72px)' }}>
@@ -110,8 +110,9 @@ export default function Sponsor() {
           </div>
 
           <p className="miami-kicker" style={{ color: '#00C6D7' }}>Sponsorship &amp; Partnership</p>
-          <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)', color: '#fff', lineHeight: 1.08, maxWidth: 900 }}>
-            The whole football industry, in one room.<br />
+          <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)', color: '#fff', lineHeight: 1.08, maxWidth: 900, textWrap: 'balance' }}>
+            The whole football industry,<br />
+            in one room.<br />
             <span className="miami-text-gradient">Your brand, in the middle of it.</span>
           </h1>
           <p className="miami-body mt-6 mb-9" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.15rem)', color: 'rgba(255,255,255,0.82)', maxWidth: 680, lineHeight: 1.6 }}>
