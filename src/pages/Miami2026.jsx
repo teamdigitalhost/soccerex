@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026_PRESS_RELEASE } from '../lib/routes'
+import { HOME, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT } from '../lib/routes'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
@@ -143,32 +143,11 @@ export default function Miami2026() {
             </div>
 
             <div className="grid grid-cols-2 gap-3 mt-5" style={{ maxWidth: 420 }}>
-              <InquiryModalButton
-                kind="sponsorship-inquiry"
-                label="Sponsor"
-                modalTitle="Sponsor Soccerex Miami"
-                eyebrow="Sponsorship inquiry"
-                intro="Tell us about your brand and what you want to achieve in Miami. We will send the right sponsorship pack."
-                schema={sponsorshipSchema}
-                extraPayload={{ event_slug: 'soccerex-miami-2026', inquiry_intent: 'sponsor', source: 'miami-hero-sponsor' }}
-                submitLabel="Send inquiry"
-                successTitle="Inquiry received."
-                successBody="A partnerships lead will follow up by email."
-                buttonClassName="miami-cta-box"
-              />
-              <InquiryModalButton
-                kind="sponsorship-inquiry"
-                label="Exhibit"
-                modalTitle="Exhibit at Soccerex Miami"
-                eyebrow="Exhibitor inquiry"
-                intro="Tell us about your stand needs and product mix. We will send the exhibitor pack and floor plan."
-                schema={sponsorshipSchema}
-                extraPayload={{ event_slug: 'soccerex-miami-2026', inquiry_intent: 'exhibit', source: 'miami-hero-exhibit' }}
-                submitLabel="Send inquiry"
-                successTitle="Inquiry received."
-                successBody="An exhibitor lead will follow up by email."
-                buttonClassName="miami-cta-box"
-              />
+              {/* Hero Sponsor/Exhibit now route to the dedicated landing pages
+                  (each carries its own value copy, floor imagery, and lead
+                  form) rather than opening an inline modal. */}
+              <Link to={MIAMI_2026_SPONSOR} className="miami-cta-box">Sponsor</Link>
+              <Link to={MIAMI_2026_EXHIBIT} className="miami-cta-box">Exhibit</Link>
               {/* Speaker CTA removed per GN revisions doc — Miami hero now
                   surfaces Sponsor + Exhibit only. */}
             </div>

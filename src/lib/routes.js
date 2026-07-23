@@ -56,6 +56,12 @@ export const eventRecap = (slug) => `/${slug}`
 // theme (Oswald + Montserrat, pink/teal palette) applies automatically.
 export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
 
+// Dedicated Miami sponsor + exhibitor landing pages. Both live under
+// /miami-2026 so the Miami theme applies automatically, and both drive the
+// same sponsorship-inquiry lead intake (differentiated by inquiry_intent).
+export const MIAMI_2026_SPONSOR = `${MIAMI_2026}/sponsor`
+export const MIAMI_2026_EXHIBIT = `${MIAMI_2026}/exhibit`
+
 // Miami 2026 pricing. `/pricing` is the public chooser; each category
 // (partnership | exhibition) is its own independently-gated page. Category keys
 // + labels come from the backend, so this just builds the route shape.
