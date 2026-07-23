@@ -9,7 +9,10 @@ import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
-const HERO_IMG = '/hero/167-NEW6-miami-stage-soccerex-branding-speakers.jpg'
+/* Hero uses a text-free packed-room shot so the headline reads cleanly over
+   it. Stage/branding shots carry "SOCCEREX MIAMI" lettering that competes with
+   the foreground copy, so they stay in the captioned gallery strip below. */
+const HERO_IMG = '/hero/268-NEW9-miami-audience-session.jpg'
 const ICN = '/events/miami/2026/icons'
 
 /* Lead intake shared across every CTA on this page. `inquiry_type: 'partner'`
@@ -82,7 +85,7 @@ export default function MiamiSponsor() {
 
       {/* ─── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', minHeight: 'min(88vh, 760px)', display: 'flex', alignItems: 'flex-end' }}>
-        <img src={HERO_IMG} alt="Soccerex Miami main stage with brand signage in front of a full audience" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+        <img src={HERO_IMG} alt="A full room of football industry delegates at a Soccerex Miami session" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,27,42,0.55) 0%, rgba(13,27,42,0.35) 40%, rgba(13,27,42,0.94) 100%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: '1180px', margin: '0 auto', width: '100%', padding: 'clamp(90px,12vw,130px) clamp(24px,5vw,72px) clamp(48px,6vw,72px)' }}>
