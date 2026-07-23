@@ -7,7 +7,7 @@ import TestModeBanner from './components/TestModeBanner'
 import { trackPageView } from './lib/soccerexApi'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
-  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, SPONSOR, EXHIBIT, EUROPE_2026, RIYADH_2027,
+  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
   EVENT_RECAP_PATTERN,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK, AGENDA_COLLAB,
   INVITE_PATTERN,
@@ -139,6 +139,10 @@ function App() {
           {/* Legacy Miami-scoped URLs redirect to the evergreen pages */}
           <Route path={MIAMI_2026_SPONSOR} element={<Navigate to={SPONSOR} replace />} />
           <Route path={MIAMI_2026_EXHIBIT} element={<Navigate to={EXHIBIT} replace />} />
+          {/* Natural-language aliases used in outreach copy and decks. Without these the
+              catch-all sent them to /events, losing the lead's actual intent. */}
+          <Route path={EXHIBITOR} element={<Navigate to={EXHIBIT} replace />} />
+          <Route path={SPONSORSHIP} element={<Navigate to={SPONSOR} replace />} />
           {/* Riyadh inner page is paused: redirect to the events list until the
               event details (venue, dates) are confirmed. Page kept on disk. */}
           <Route path={RIYADH_2027} element={<Navigate to={EVENTS} replace />} />

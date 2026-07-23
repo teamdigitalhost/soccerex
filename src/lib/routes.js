@@ -67,6 +67,13 @@ export const MIAMI_2026_EXHIBIT = `${MIAMI_2026}/exhibit`
 export const SPONSOR = '/sponsor'
 export const EXHIBIT = '/exhibit'
 
+// Natural-language aliases people actually type and link to (outreach copy and
+// decks say "exhibitor information"/"sponsorship"). Without these the catch-all
+// silently swallows them to /events, so a lead who clicked an exhibitor CTA lands
+// on a generic listing with no exhibit content. Redirect to the canonical pages.
+export const EXHIBITOR = '/exhibitor'
+export const SPONSORSHIP = '/sponsorship'
+
 // Miami 2026 pricing. `/pricing` is the public chooser; each category
 // (partnership | exhibition) is its own independently-gated page. Category keys
 // + labels come from the backend, so this just builds the route shape.
