@@ -588,15 +588,17 @@ function RequestSentCard({ requested, salespersonName }) {
         fontSize: '1rem', color: '#586778', lineHeight: 1.6, marginBottom: 22,
         maxWidth: 460, marginLeft: 'auto', marginRight: 'auto',
       }}>
-        We have your availability. {salespersonName ? `${salespersonName} or a colleague` : 'Somebody'} on the
-        Soccerex sales team will email <strong style={{ color: NAVY }}>{requested.email}</strong> with times to confirm.
+        We have your availability, and a confirmation is on its way to{' '}
+        <strong style={{ color: NAVY }}>{requested.email}</strong>.{' '}
+        {salespersonName ? `${salespersonName} or a colleague` : 'Somebody'} on the Soccerex sales team
+        will follow up with times that work.
       </p>
 
       <div className="inline-flex items-start gap-2 font-body" style={{
         fontSize: '0.9rem', color: '#586778', lineHeight: 1.5, textAlign: 'left', maxWidth: 420,
       }}>
         <Clock size={15} color="var(--color-brand-accent)" style={{ flexShrink: 0, marginTop: 3 }} />
-        <span>Nothing else to do for now. If your plans change, just reply to that email.</span>
+        <span>Nothing else to do for now. If your plans change, just reply to that email and it reaches a person.</span>
       </div>
     </div>
   )
