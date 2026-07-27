@@ -222,7 +222,7 @@ export async function dealNetworkApplyClaim(payload, opts = {}) {
 }
 
 /* ───── Public sales-call scheduler (per-salesperson booking link) ─────────
- * Each salesperson shares /schedule/{code}. Both endpoints are public.
+ * Each salesperson shares /schedule/{code}. All three endpoints are public.
  *
  * Availability returns { salesperson_name, duration_minutes, timezone,
  *   days: [{ date: 'YYYY-MM-DD', label: 'Mon 15 Jun',
@@ -241,6 +241,23 @@ export async function getSchedulerAvailability(code, opts = {}) {
  */
 export async function bookSchedulerSlot(code, payload, opts = {}) {
   return unwrap(await request(`/scheduler/${encodeURIComponent(code)}/book`, {
+    method: 'POST',
+    body: payload,
+    test: opts.test,
+  }))
+}
+
+/**
+ * Ask for a call when the calendar has nothing open. payload:
+ * { name, email, company?, availability, notes? }, where `availability` is the
+ * visitor's own free text answer to "when are you generally free".
+ * 201 → the queued request; any salesperson can claim it and reply with times.
+ * 404 = unknown code or scheduling disabled (same as availability).
+ * 422 = validation, with ApiError .body.errors as a field -> string[] map.
+ * 429 = throttled. Callers branch on ApiError.status, as they do for booking.
+ */
+export async function requestSchedulerCall(code, payload, opts = {}) {
+  return unwrap(await request(`/scheduler/${encodeURIComponent(code)}/request`, {
     method: 'POST',
     body: payload,
     test: opts.test,
