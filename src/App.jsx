@@ -7,7 +7,7 @@ import TestModeBanner from './components/TestModeBanner'
 import { trackPageView } from './lib/soccerexApi'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
-  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, MIAMI_2026_ACCOMMODATIONS, MIAMI_2026_ACCOMMODATIONS_MISSPELLED, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
+  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, MIAMI_2026_ACCOMMODATIONS, MIAMI_2026_ACCOMMODATIONS_MISSPELLED, ACCOMMODATIONS, ACCOMMODATIONS_MISSPELLED, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
   EVENT_RECAP_PATTERN,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK, AGENDA_COLLAB,
   INVITE_PATTERN,
@@ -25,7 +25,7 @@ function themeClassFor(pathname) {
   if (pathname.startsWith(MIAMI_2026)) return 'theme-miami'
   // Evergreen sponsor/exhibit pages currently wear the Miami skin (per brand
   // direction); keep navbar + footer accent consistent with the page.
-  if (pathname === SPONSOR || pathname === EXHIBIT) return 'theme-miami'
+  if (pathname === SPONSOR || pathname === EXHIBIT || pathname === ACCOMMODATIONS) return 'theme-miami'
   if (pathname.startsWith(EUROPE_2026)) return 'theme-europe'
   if (pathname.startsWith(RIYADH_2027)) return 'theme-riyadh'
   return ''
@@ -145,8 +145,11 @@ function App() {
           <Route path={MIAMI_2026_PRICING} element={<PricingChooser />} />
           <Route path={MIAMI_2026_PRICING_CATEGORY} element={<MiamiPricing />} />
           <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />
-          <Route path={MIAMI_2026_ACCOMMODATIONS} element={<MiamiAccommodations />} />
-          <Route path={MIAMI_2026_ACCOMMODATIONS_MISSPELLED} element={<Navigate to={MIAMI_2026_ACCOMMODATIONS} replace />} />
+          <Route path={ACCOMMODATIONS} element={<MiamiAccommodations />} />
+          <Route path={ACCOMMODATIONS_MISSPELLED} element={<Navigate to={ACCOMMODATIONS} replace />} />
+          {/* Legacy Miami-scoped accommodations URLs redirect to the evergreen page */}
+          <Route path={MIAMI_2026_ACCOMMODATIONS} element={<Navigate to={ACCOMMODATIONS} replace />} />
+          <Route path={MIAMI_2026_ACCOMMODATIONS_MISSPELLED} element={<Navigate to={ACCOMMODATIONS} replace />} />
           {/* Evergreen platform-level sponsor + exhibit pages */}
           <Route path={SPONSOR} element={<Sponsor />} />
           <Route path={EXHIBIT} element={<Exhibit />} />
