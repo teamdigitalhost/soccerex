@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, MapPin, Calendar, BedDouble, ShieldCheck, Lock,
-  Plane, Clock, Globe2, Car, ExternalLink, BadgeCheck, Building2,
+  Plane, Clock, Globe2, Car, ExternalLink, BadgeCheck,
 } from 'lucide-react'
 import { HOME, MIAMI_2026 } from '../lib/routes'
 
@@ -18,32 +18,60 @@ const SKYLINE_IMG = '/events/miami/2026/sections/miami-skyline.jpg'
  * SEPTEMBER (092026) so delegates land on the right dates. Confirm with the
  * property that the Soccerex group rate (GPC=SMM) covers 22-26 September 2026.
  */
+/*
+ * Ordered closest-to-venue first. Property identities confirmed to high
+ * confidence (each link's live group block names the exact hotel). Distances
+ * are approximate estimates from mapped addresses, phrased as such. `image` is
+ * null until official partner-hotel photos are supplied; the card renders a
+ * branded header placeholder in the meantime, and a photo drops straight in.
+ */
 const HOTELS = [
   {
     key: 'marriott',
     brand: 'Marriott',
-    name: 'Marriott',
-    tag: 'Official group block',
+    name: 'Fairfield by Marriott Miami Airport South',
+    tag: 'Closest to the venue',
+    neighborhood: 'Miami Airport, Grapeland Heights',
+    venue: 'Under 10 min drive',
+    mia: 'About 1 mi · free shuttle',
+    rating: '3-star',
+    tier: '$$',
+    amenities: ['Free MIA shuttle', 'Free hot breakfast', 'Outdoor pool', '24h fitness'],
+    note: 'On the airport’s doorstep and the shortest run to the stadium of the three.',
     site: 'Marriott.com',
-    blurb: 'Reserve straight from the Soccerex Miami group block on Marriott. Choose your dates and room type, and your reservation is confirmed on the spot.',
+    image: null,
     url: 'https://www.marriott.com/event-reservations/reservation-link.mi?id=1785357856119&key=GRP&app=resvlink',
   },
   {
     key: 'ihg',
     brand: 'Holiday Inn',
     name: 'Holiday Inn Miami-International Airport',
-    tag: 'Closest to the airport',
+    tag: 'By the airport',
+    neighborhood: 'Miami Springs, by MIA',
+    venue: 'About 12 to 18 min drive',
+    mia: 'About 2.7 mi · free 24h shuttle',
+    rating: '3-star',
+    tier: '$$',
+    amenities: ['Free 24h MIA shuttle', 'Outdoor pool', 'On-site restaurant', '24h fitness'],
+    note: 'A relaxed airport-area base in Miami Springs with a round-the-clock shuttle.',
     site: 'IHG.com',
-    blurb: 'Right by Miami International Airport in Miami Springs, an easy landing spot for delegates flying in, with the Soccerex group rate applied through the link.',
+    image: null,
     url: 'https://www.ihg.com/redirect?path=rates&brandCode=HI&localeCode=en&regionCode=1&hotelCode=MIAIA&checkInDate=22&checkInMonthYear=092026&checkOutDate=26&checkOutMonthYear=092026&_PMID=99801505&GPC=SMM&cn=no&adjustMonth=false&showApp=true&monthIndex=00',
   },
   {
     key: 'hilton',
     brand: 'Hilton',
-    name: 'Hilton',
-    tag: 'Most choice of hotels',
+    name: 'DoubleTree by Hilton Miami Airport',
+    tag: 'Full-service',
+    neighborhood: 'Airport West, Blue Lagoon',
+    venue: 'About 12 to 20 min drive',
+    mia: 'About 2 to 3 mi · free shuttle',
+    rating: '3-star',
+    tier: '$$',
+    amenities: ['Free MIA shuttle', 'Heated pool + hot tub', 'On-site restaurants', 'Fitness center'],
+    note: 'A full-service DoubleTree next to the Miami Airport Convention Center.',
     site: 'Hilton.com',
-    blurb: 'Browse Hilton’s dedicated Soccerex Miami page and pick from a range of properties across the city to suit your location and budget.',
+    image: null,
     url: 'https://www.hilton.com/en/attend-my-event/soccerex-miami-florida/',
   },
 ]
@@ -115,26 +143,46 @@ export default function MiamiAccommodations() {
               Book your room in <span className="miami-text-gradient">a few steps</span>
             </h2>
           </div>
-          <p className="miami-body text-center mx-auto mb-11" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 640 }}>
-            Each option books directly on the hotel’s own secure website. Pick the one that suits your trip, then reserve.
+          <p className="miami-body text-center mx-auto mb-11" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 660 }}>
+            All three sit in the Miami International Airport cluster, the closest area to Nu Stadium, and each runs a free airport shuttle. Every option books directly on the hotel’s own secure website, so pick your spot and reserve.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {HOTELS.map((h) => (
               <div key={h.key} className="flex flex-col" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.10)', boxShadow: '0 18px 44px -30px rgba(13,27,42,0.5)' }}>
-                {/* Card head */}
-                <div style={{ padding: '26px 24px 20px', borderBottom: '1px solid rgba(13,27,42,0.07)' }}>
-                  <div className="flex items-center justify-between gap-3 mb-4">
-                    <div style={{ width: 46, height: 46, background: 'rgba(0,124,145,0.08)', border: '1px solid rgba(0,124,145,0.2)', display: 'grid', placeItems: 'center' }}>
-                      <Building2 size={22} style={{ color: '#007C91' }} />
-                    </div>
-                    <span className="event-badge" style={{ fontSize: 10 }}><span className="event-badge-dot" /> {h.tag}</span>
+                {/* Image slot / branded header — real photo drops in when h.image is set */}
+                <div style={{ position: 'relative', height: 168, overflow: 'hidden', background: h.image ? '#0D1B2A' : 'linear-gradient(135deg, #0D1B2A 0%, #007C91 55%, #E91E63 125%)' }}>
+                  {h.image && <img src={h.image} alt={h.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />}
+                  <div className="absolute inset-0 miami-grid" style={{ opacity: 0.22 }} aria-hidden />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,27,42,0.10) 0%, rgba(13,27,42,0.74) 100%)' }} />
+                  <span className="event-badge" style={{ position: 'absolute', top: 12, right: 12, zIndex: 2, fontSize: 9.5 }}><span className="event-badge-dot" /> {h.tag}</span>
+                  <div style={{ position: 'absolute', left: 18, right: 18, bottom: 15, zIndex: 2 }}>
+                    <p className="miami-subhead" style={{ color: '#7FE9F5', fontSize: 9, letterSpacing: '0.22em', marginBottom: 3 }}>{h.brand}</p>
+                    <h3 className="miami-headline" style={{ color: '#fff', fontSize: '1.02rem', lineHeight: 1.14, textTransform: 'none', letterSpacing: '0.01em' }}>{h.name}</h3>
                   </div>
-                  <h3 className="miami-headline" style={{ fontSize: '1.15rem', color: '#0D1B2A', lineHeight: 1.15, textTransform: 'none', letterSpacing: '0.01em' }}>{h.name}</h3>
                 </div>
-                {/* Card body */}
-                <div className="flex flex-col flex-1" style={{ padding: '20px 24px 24px' }}>
-                  <p className="miami-body flex-1" style={{ fontSize: '0.95rem', color: '#3a4a5a', lineHeight: 1.55, marginBottom: 18 }}>{h.blurb}</p>
+                {/* Body */}
+                <div className="flex flex-col flex-1" style={{ padding: '18px 20px 22px' }}>
+                  <p className="flex items-center gap-1.5 mb-3.5" style={{ fontSize: 12, color: '#607186' }}>
+                    <MapPin size={13} style={{ color: '#E91E63', flexShrink: 0 }} /> {h.neighborhood}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div style={{ background: '#FAFBFC', border: '1px solid rgba(13,27,42,0.07)', padding: '9px 11px' }}>
+                      <p className="miami-subhead flex items-center gap-1" style={{ fontSize: 8.5, letterSpacing: '0.12em', color: '#607186', marginBottom: 3 }}><MapPin size={10} /> To venue</p>
+                      <p style={{ fontSize: 12.5, color: '#0D1B2A', fontWeight: 600, lineHeight: 1.2 }}>{h.venue}</p>
+                    </div>
+                    <div style={{ background: '#FAFBFC', border: '1px solid rgba(13,27,42,0.07)', padding: '9px 11px' }}>
+                      <p className="miami-subhead flex items-center gap-1" style={{ fontSize: 8.5, letterSpacing: '0.12em', color: '#607186', marginBottom: 3 }}><Plane size={10} /> To airport</p>
+                      <p style={{ fontSize: 12.5, color: '#0D1B2A', fontWeight: 600, lineHeight: 1.2 }}>{h.mia}</p>
+                    </div>
+                  </div>
+                  <p className="miami-subhead mb-2.5" style={{ fontSize: 11, letterSpacing: '0.08em', color: '#0D1B2A' }}>{h.rating} &middot; {h.tier}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {h.amenities.map((a) => (
+                      <span key={a} style={{ fontSize: 11, color: '#3a4a5a', background: 'rgba(0,124,145,0.06)', border: '1px solid rgba(0,124,145,0.15)', padding: '3px 8px' }}>{a}</span>
+                    ))}
+                  </div>
+                  <p className="miami-body flex-1" style={{ fontSize: 12.5, color: '#607186', lineHeight: 1.5, marginBottom: 16 }}>{h.note}</p>
                   <a href={h.url} target="_blank" rel="noopener noreferrer" aria-label={`Book your room at ${h.name}`} className="miami-pill-primary" style={{ width: '100%', justifyContent: 'center', marginBottom: 12 }}>
                     Book your room <ArrowRight size={15} />
                   </a>
@@ -148,7 +196,7 @@ export default function MiamiAccommodations() {
           </div>
 
           <p className="miami-body text-center mx-auto mt-8" style={{ fontSize: '0.9rem', color: '#607186', maxWidth: 620 }}>
-            Booking opens in a new tab on the hotel’s official website. Rates, availability, and cancellation terms are set and managed by each hotel.
+            Booking opens in a new tab on the hotel’s official website. Distances are approximate. Rates, availability, and cancellation terms are set and managed by each hotel.
           </p>
         </div>
       </section>
