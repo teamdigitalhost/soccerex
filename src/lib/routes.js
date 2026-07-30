@@ -56,6 +56,12 @@ export const eventRecap = (slug) => `/${slug}`
 // theme (Oswald + Montserrat, pink/teal palette) applies automatically.
 export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
 
+// Miami travel + accommodations page (partner-hotel booking links). Lives under
+// /miami-2026 so the Miami theme applies automatically. The misspelled variant
+// redirects to the canonical page (see App.jsx) so typo'd links still resolve.
+export const MIAMI_2026_ACCOMMODATIONS = `${MIAMI_2026}/accommodations`
+export const MIAMI_2026_ACCOMMODATIONS_MISSPELLED = `${MIAMI_2026}/accomodations`
+
 // Legacy Miami-scoped sponsor/exhibit paths. Kept only so old links redirect
 // to the evergreen pages below (see App.jsx). Do not link to these directly.
 export const MIAMI_2026_SPONSOR = `${MIAMI_2026}/sponsor`

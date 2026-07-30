@@ -7,7 +7,7 @@ import TestModeBanner from './components/TestModeBanner'
 import { trackPageView } from './lib/soccerexApi'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
-  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
+  MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, MIAMI_2026_ACCOMMODATIONS, MIAMI_2026_ACCOMMODATIONS_MISSPELLED, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
   EVENT_RECAP_PATTERN,
   INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK, AGENDA_COLLAB,
   INVITE_PATTERN,
@@ -86,6 +86,7 @@ const PastSpeakers = lazy(() => import('./pages/PastSpeakers'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
+const MiamiAccommodations = lazy(() => import('./pages/MiamiAccommodations'))
 const Sponsor = lazy(() => import('./pages/Sponsor'))
 const Exhibit = lazy(() => import('./pages/Exhibit'))
 const MiamiPricing = lazy(() => import('./pages/MiamiPricing'))
@@ -144,6 +145,8 @@ function App() {
           <Route path={MIAMI_2026_PRICING} element={<PricingChooser />} />
           <Route path={MIAMI_2026_PRICING_CATEGORY} element={<MiamiPricing />} />
           <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />
+          <Route path={MIAMI_2026_ACCOMMODATIONS} element={<MiamiAccommodations />} />
+          <Route path={MIAMI_2026_ACCOMMODATIONS_MISSPELLED} element={<Navigate to={MIAMI_2026_ACCOMMODATIONS} replace />} />
           {/* Evergreen platform-level sponsor + exhibit pages */}
           <Route path={SPONSOR} element={<Sponsor />} />
           <Route path={EXHIBIT} element={<Exhibit />} />

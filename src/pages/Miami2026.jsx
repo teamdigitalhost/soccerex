@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026_PRESS_RELEASE, SPONSOR, EXHIBIT } from '../lib/routes'
+import { HOME, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_ACCOMMODATIONS, SPONSOR, EXHIBIT } from '../lib/routes'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
@@ -140,6 +140,9 @@ export default function Miami2026() {
               >
                 <Trophy size={15} /> Apply for Rightsholder Pass
               </a>
+              <Link to={MIAMI_2026_ACCOMMODATIONS} className="miami-pill-outline">
+                <MapPin size={15} /> Travel &amp; Stay
+              </Link>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mt-5" style={{ maxWidth: 420 }}>
