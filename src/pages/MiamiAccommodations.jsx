@@ -39,7 +39,7 @@ const HOTELS = [
     amenities: ['Free MIA shuttle', 'Free hot breakfast', 'Outdoor pool', '24h fitness'],
     note: 'On the airport’s doorstep and the shortest run to the stadium of the three.',
     site: 'Marriott.com',
-    image: null,
+    image: '/hotels/fairfield.jpg',
     url: 'https://www.marriott.com/event-reservations/reservation-link.mi?id=1785357856119&key=GRP&app=resvlink',
   },
   {
@@ -55,7 +55,7 @@ const HOTELS = [
     amenities: ['Free 24h MIA shuttle', 'Outdoor pool', 'On-site restaurant', '24h fitness'],
     note: 'A relaxed airport-area base in Miami Springs with a round-the-clock shuttle.',
     site: 'IHG.com',
-    image: null,
+    image: '/hotels/holiday-inn.webp',
     url: 'https://www.ihg.com/redirect?path=rates&brandCode=HI&localeCode=en&regionCode=1&hotelCode=MIAIA&checkInDate=22&checkInMonthYear=092026&checkOutDate=26&checkOutMonthYear=092026&_PMID=99801505&GPC=SMM&cn=no&adjustMonth=false&showApp=true&monthIndex=00',
   },
   {
@@ -71,7 +71,7 @@ const HOTELS = [
     amenities: ['Free MIA shuttle', 'Heated pool + hot tub', 'On-site restaurants', 'Fitness center'],
     note: 'A full-service DoubleTree next to the Miami Airport Convention Center.',
     site: 'Hilton.com',
-    image: null,
+    image: '/hotels/doubletree.jpg',
     url: 'https://www.hilton.com/en/attend-my-event/soccerex-miami-florida/',
   },
 ]
