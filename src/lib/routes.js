@@ -62,6 +62,8 @@ export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
 // variant + the legacy Miami-scoped paths below all redirect here (see App.jsx).
 export const ACCOMMODATIONS = '/accommodations'
 export const ACCOMMODATIONS_MISSPELLED = '/accomodations'
+// Short vanity path for print/QR/email; forwards to the accommodations page.
+export const BOOK = '/book'
 // Legacy Miami-scoped paths, kept only so old links redirect to ACCOMMODATIONS.
 export const MIAMI_2026_ACCOMMODATIONS = `${MIAMI_2026}/accommodations`
 export const MIAMI_2026_ACCOMMODATIONS_MISSPELLED = `${MIAMI_2026}/accomodations`
