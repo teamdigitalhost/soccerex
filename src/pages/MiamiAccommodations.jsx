@@ -37,10 +37,26 @@ const HOTELS = [
     rating: '3-star',
     tier: '$$',
     amenities: ['Free MIA shuttle', 'Free hot breakfast', 'Outdoor pool', '24h fitness'],
-    note: 'On the airport’s doorstep and the shortest run to the stadium of the three.',
+    note: 'On the airport’s doorstep and the shortest run to the stadium of our partner hotels.',
     site: 'Marriott.com',
     image: '/hotels/fairfield.jpg',
     url: 'https://www.marriott.com/event-reservations/reservation-link.mi?id=1785357856119&key=GRP&app=resvlink',
+  },
+  {
+    key: 'moxy',
+    brand: 'Moxy by Marriott',
+    name: 'Moxy Miami Wynwood',
+    tag: 'Group rate · $114/night',
+    neighborhood: 'Wynwood Arts District',
+    venue: 'About 15 to 20 min drive',
+    mia: 'About 6 mi · rideshare',
+    rating: '4-star',
+    tier: '$$',
+    amenities: ['Rooftop pool + bar', 'Bars & restaurants on site', '24h fitness', 'Walk to galleries & murals'],
+    note: 'The city option: a special Soccerex group rate at Moxy’s playful Wynwood base, in the middle of Miami’s murals, galleries and nightlife.',
+    site: 'Marriott.com',
+    image: null,
+    url: 'https://www.marriott.com/event-reservations/reservation-link.mi?id=1785507819738&key=GRP&app=resvlink&_branch_match_id=1603047272973469168&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXTywo0MtNLCrKzC8p0UvOz9UvSi0uy0wtN7IHytiCODmZedlqmSm2huYWpqYG5haGlubGFmrZqZW27kEBanVFqWmpQO156fFJRfnlxalFts4ZRfm5qQDayio1YQAAAA%3D%3D',
   },
   {
     key: 'ihg',
@@ -144,7 +160,7 @@ export default function MiamiAccommodations() {
             </h2>
           </div>
           <p className="miami-body text-center mx-auto mb-11" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 660 }}>
-            All three sit in the Miami International Airport cluster, the closest area to Nu Stadium, and each runs a free airport shuttle. Every option books directly on the hotel’s own secure website, so pick your spot and reserve.
+            Three sit in the Miami International Airport cluster, the closest area to Nu Stadium, each with a free airport shuttle — plus a group-rate pick in Wynwood for staying in the city. Every option books directly on the hotel’s own secure website, so pick your spot and reserve.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
