@@ -105,6 +105,7 @@ const EventAgenda = lazy(() => import('./pages/EventAgenda'))
 const EventSpeakers = lazy(() => import('./pages/EventSpeakers'))
 const EventSpeakerProfile = lazy(() => import('./pages/EventSpeakerProfile'))
 const ProfileAccess = lazy(() => import('./pages/ProfileAccess'))
+const SpeakerRespond = lazy(() => import('./pages/SpeakerRespond'))
 const ProfileEditor = lazy(() => import('./pages/ProfileEditor'))
 const ProfileView = lazy(() => import('./pages/ProfileView'))
 const ProfilePreview = lazy(() => import('./pages/ProfilePreview'))
@@ -183,6 +184,10 @@ function App() {
           <Route path="/deal-network/apply" element={<DealNetworkApply />} />
           {/* External agenda-collaborator review (personal ?token= link) */}
           <Route path={AGENDA_COLLAB} element={<AgendaCollab />} />
+          {/* Speaker casting response page (personal ?token= link from invite +
+              follow-up emails). Unrouted until now: every emailed /speak link
+              fell through the catch-all to /events with the token discarded. */}
+          <Route path="/speak" element={<SpeakerRespond />} />
           {/* Profile self-service editor (passwordless via emailed link) */}
           <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />

@@ -430,13 +430,18 @@ function LinksEditor({ value, onChange }) {
 
 function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], limits = {}, largeFileGuidance, isTest, onUnauthorized, onProfileRefreshed }) {
   const [kind, setKind] = useState(kindOptions[0]?.value || 'photo')
-  const [featured, setFeatured] = useState(false)
   const featuredAllowed = featuredKinds.includes(kind)
-  /* If the user switches to a kind that does not allow featured, clear the flag
-     so we never POST featured=1 for a kind the server will reject. */
+  /* Featured defaults ON for headshots only: a speaker asked for a headshot
+     should propose the profile photo without discovering a checkbox (the
+     chase emails depend on this to complete), but a company uploading a
+     one-off logo variant or gallery photo must NOT silently propose swapping
+     the live image. Switching kinds resets to that default, and we never
+     POST featured=1 for a kind the server will reject. */
+  const featuredDefault = featuredAllowed && kind === 'headshot'
+  const [featured, setFeatured] = useState(featuredDefault)
   useEffect(() => {
-    if (!featuredAllowed && featured) setFeatured(false)
-  }, [featuredAllowed, featured])
+    setFeatured(featuredDefault)
+  }, [featuredDefault])
   const [altText, setAltText] = useState('')
   const [tagsInput, setTagsInput] = useState('')
   const [files, setFiles] = useState([])
@@ -461,7 +466,7 @@ function AssetUploader({ slug, editToken, kindOptions, featuredKinds = [], limit
   const maxDocMb = limits.max_document_mb ?? null
 
   const reset = () => {
-    setFiles([]); setAltText(''); setTagsInput(''); setFeatured(false)
+    setFiles([]); setAltText(''); setTagsInput(''); setFeatured(featuredDefault)
     if (inputRef.current) inputRef.current.value = ''
   }
 
