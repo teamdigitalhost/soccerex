@@ -4,6 +4,8 @@ import { Users, Globe, Handshake, Megaphone, ArrowRight, Mail, Newspaper } from 
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { INSIGHTS } from '../lib/routes'
+import { submitLead, isTestModeFromUrl } from '../lib/soccerexApi'
+import { Check } from 'lucide-react'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ─── Full logo inventory (228 logos from soccerex.com/global-network) ───────
@@ -332,6 +334,8 @@ function LogoMarquee({ logos, direction = 'left', duration = 80 }) {
 // ─── Main component ────────────────────────────────────────────────────────
 export default function GlobalNetwork() {
   const [showAll, setShowAll] = useState(false)
+  const [nlStatus, setNlStatus] = useState('idle')
+  const [nlError, setNlError] = useState('')
   useScrollAnimations(showAll)
   useEffect(() => { window.scrollTo(0, 0) }, [])
   const visibleGrid = showAll ? ALL_SHUFFLED : ALL_SHUFFLED.slice(0, 96)
@@ -568,12 +572,30 @@ export default function GlobalNetwork() {
               <p className="font-body leading-relaxed mb-8 fade-up" style={{ fontSize: '1rem', color: '#555' }}>
                 Subscribe to get the latest commercial details, groundbreaking interviews, and industry analysis, free, straight to your inbox.
               </p>
+              {nlStatus === 'success' ? (
+                <div className="fade-up flex items-center gap-2 font-body" style={{ fontSize: '1rem', color: '#09203e', fontWeight: 600 }}>
+                  <Check size={18} style={{ color: 'var(--color-brand-accent)' }} /> You're subscribed. Welcome to SoccerExpert.
+                </div>
+              ) : (
               <form
                 className="fade-up"
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault()
-                  const email = e.target.email.value
-                  window.location.href = `mailto:enquiries@soccerex.com?subject=SoccerExpert%20Subscribe&body=Please%20add%20${encodeURIComponent(email)}%20to%20the%20SoccerExpert%20newsletter.`
+                  const email = e.target.email.value.trim()
+                  setNlStatus('submitting'); setNlError('')
+                  try {
+                    await submitLead('newsletter', {
+                      email,
+                      list: 'soccerexpert',
+                      source: 'global-network',
+                      source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+                      marketing_opt_in: true,
+                    }, { test: isTestModeFromUrl() })
+                    setNlStatus('success')
+                  } catch (err) {
+                    setNlStatus('error')
+                    setNlError(err?.message || "We couldn't subscribe you just now. Please try again.")
+                  }
                 }}
                 style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '460px' }}
               >
@@ -585,7 +607,7 @@ export default function GlobalNetwork() {
                   autoComplete="email"
                   style={{
                     width: '100%', padding: '14px 16px',
-                    fontSize: '0.95rem', fontFamily: 'Inter, sans-serif',
+                    fontSize: '1rem', fontFamily: 'Inter, sans-serif',
                     background: '#fff',
                     border: '1px solid rgba(9,32,62,0.15)',
                     borderRadius: '8px', color: '#09203e', outline: 'none',
@@ -601,9 +623,13 @@ export default function GlobalNetwork() {
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)'; e.currentTarget.style.color = '#09203e' }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e'; e.currentTarget.style.color = '#fff' }}
                 >
-                  <Mail size={15} /> Subscribe
+                  <Mail size={15} /> {nlStatus === 'submitting' ? 'Subscribing…' : 'Subscribe'}
                 </button>
+                {nlStatus === 'error' && (
+                  <p className="font-body" style={{ fontSize: '0.85rem', color: '#b3261e', margin: 0 }}>{nlError}</p>
+                )}
               </form>
+              )}
             </div>
           </div>
         </div>

@@ -366,7 +366,7 @@
   border-radius: 8px;
   color: #0D1B2A;
   font-family: 'Montserrat', 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -914,7 +914,7 @@ textarea.prog-input { resize: vertical; min-height: 76px; font-family: 'Montserr
   border-radius: 8px;
   color: #fff;
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: normal;
   text-transform: none;

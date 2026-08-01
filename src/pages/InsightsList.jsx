@@ -195,7 +195,7 @@ export default function InsightsList() {
                     }}
                     style={{
                       width: '100%', padding: '13px 14px 13px 42px',
-                      fontSize: '0.9rem', fontFamily: 'Inter, sans-serif',
+                      fontSize: '1rem', fontFamily: 'Inter, sans-serif',
                       background: '#fff', border: '1px solid rgba(9,32,62,0.12)',
                       borderRadius: '10px', color: '#09203e', outline: 'none',
                       transition: 'border-color 0.2s',

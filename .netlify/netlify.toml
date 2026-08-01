@@ -1,6 +1,6 @@
+headersOrigin = "config"
 redirectsOrigin = "config"
 plugins = []
-headers = []
 
 [functions]
 
@@ -26,6 +26,18 @@ NODE_VERSION = "20"
 [build.processing.js]
 
 [build.services]
+
+[[headers]]
+for = "/profile-preview/*"
+
+[headers.values]
+X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+for = "/article-preview/*"
+
+[headers.values]
+X-Robots-Tag = "noindex, nofollow"
 
 [[redirects]]
 from = "/*"

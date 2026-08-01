@@ -3,6 +3,7 @@ import { ArrowRight, Download, Search, Mail, Smartphone, ShieldCheck, HelpCircle
 import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
+import { submitLead, isTestModeFromUrl } from '../lib/soccerexApi'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.teks.eventify&hl=en_US'
@@ -23,23 +24,30 @@ export default function SoccerexApp() {
 
   const [supportForm, setSupportForm] = useState({ firstName: '', lastName: '', email: '', phone: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [supportError, setSupportError] = useState('')
 
-  const handleSupport = (e) => {
+  // A real submission into lead intake (routed + acknowledged), not a mailto
+  // that silently dies on any device without a configured mail client.
+  const handleSupport = async (e) => {
     e.preventDefault()
-    const subject = encodeURIComponent(`[App Support] ${supportForm.firstName} ${supportForm.lastName}`)
-    const body = encodeURIComponent([
-      `Name: ${supportForm.firstName} ${supportForm.lastName}`,
-      `Email: ${supportForm.email}`,
-      supportForm.phone ? `Phone: ${supportForm.phone}` : '',
-      '',
-      'Message:',
-      supportForm.message,
-      '',
-      '---',
-      'Sent via soccerex.com/app support form',
-    ].filter(Boolean).join('\n'))
-    window.location.href = `mailto:enquiries@soccerex.com?subject=${subject}&body=${body}`
-    setSubmitted(true)
+    setSupportError('')
+    try {
+      await submitLead('contact', {
+        inquiry_type: 'general',
+        name: `${supportForm.firstName} ${supportForm.lastName}`.trim(),
+        first_name: supportForm.firstName,
+        last_name: supportForm.lastName,
+        email: supportForm.email,
+        phone: supportForm.phone || undefined,
+        subject: 'App support',
+        message: supportForm.message,
+        source: 'app-support',
+        source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+      }, { test: isTestModeFromUrl() })
+      setSubmitted(true)
+    } catch (err) {
+      setSupportError(err?.message || "We couldn't send that just now. Please try again, or email enquiries@soccerex.com.")
+    }
   }
 
   return (
@@ -310,6 +318,9 @@ export default function SoccerexApp() {
             >
               {submitted ? 'Sent!' : 'Submit Form'} {!submitted && <ArrowRight size={16} />}
             </button>
+              {supportError && (
+                <p className="font-body" style={{ fontSize: '0.85rem', color: '#ff8f8a', marginTop: '10px' }}>{supportError}</p>
+              )}
           </form>
         </div>
       </section>

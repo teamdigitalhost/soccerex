@@ -32,7 +32,7 @@ const ORG_TYPE_OPTIONS = [
 export const sponsorshipSchema = [
   {
     fields: [
-      { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', options: ORG_TYPE_OPTIONS, span: 'full', autoFocus: true },
+      { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', options: ORG_TYPE_OPTIONS, span: 'full', },
       { name: 'company', label: 'Organisation *', required: true, placeholder: 'Company name', span: 'full' },
     ],
   },
