@@ -4,7 +4,8 @@ import { Users, Globe, Handshake, Megaphone, ArrowRight, Mail, Newspaper } from 
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { INSIGHTS } from '../lib/routes'
-import { submitLead, isTestModeFromUrl } from '../lib/soccerexApi'
+import { submitLead } from '../lib/soccerexApi'
+import { isTestModeFromUrl } from '../lib/testMode'
 import { Check } from 'lucide-react'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 

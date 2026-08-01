@@ -3,7 +3,8 @@ import { ArrowRight, Download, Search, Mail, Smartphone, ShieldCheck, HelpCircle
 import { Link } from 'react-router-dom'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { submitLead, isTestModeFromUrl } from '../lib/soccerexApi'
+import { submitLead } from '../lib/soccerexApi'
+import { isTestModeFromUrl } from '../lib/testMode'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.teks.eventify&hl=en_US'
