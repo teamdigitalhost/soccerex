@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { ArrowRight, Loader2, Mail, CheckCircle2, AlertTriangle, Building2, User as UserIcon, Search, ChevronRight, Lock, Sparkles } from 'lucide-react'
 import {
@@ -11,6 +11,7 @@ import {
 } from '../lib/soccerexApi'
 import { INTAKE_FORMS, INTAKE_REGIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
 import { isTestModeFromUrl } from '../lib/testMode'
+import { readCampaignAttribution, clearCampaignAttribution } from '../lib/campaignAttribution'
 import { describeError } from '../lib/smartError'
 
 // company Profile type → applicant side. club/federation are rightsholders
@@ -50,6 +51,8 @@ const STEP_CONDENSED = 'condensed'
 const STEP_MATCHMAKING = 'matchmaking'
 const STEP_DONE = 'done'
 
+const EMPTY_ATTRIBUTION = { sx: '', track: '' }
+
 function normalizeApplyEmail(value) {
   return String(value || '').trim().replace(/[.,;:]+$/g, '').toLowerCase()
 }
@@ -59,10 +62,28 @@ export default function DealNetworkApply() {
   const tokenFromUrl = params.get('token') || ''
   const testMode = isTestModeFromUrl()
 
+  /* Campaign attribution from the invite CTA (?track=<cohort>&sx=<click token>), read ONCE on
+     mount and then held. Two reasons it cannot be re-read per render: this flow re-renders on
+     every keystroke of a long multi-step form, and the URL stops carrying the values the moment
+     the applicant clicks the emailed magic link (that lands on ?token=... alone). Reading once
+     and holding, with a persisted copy behind it, is what keeps a signup credited to the cohort
+     and the email that produced it. Every API call below passes it, and a successful submit
+     clears it.
+
+     Held in a ref rather than state on purpose. Clearing it is a bookkeeping act, not a visual
+     one: as state it would re-render, and the preview effect below would re-run and re-fetch
+     with a magic-link token that has since been consumed, putting an error on the finished
+     screen. A ref also keeps the value out of every dependency array in this component. */
+  const attributionRef = useRef(undefined)
+  if (attributionRef.current === undefined) attributionRef.current = readCampaignAttribution(params)
+
   // C3: optional ?track= presets the entry side so a tracked link (e.g. from a
   // "Rightsholders" or "Capital & Impact" CTA) lands the applicant on the right
   // capability grid by default. They can still change it via the side selector.
-  const trackParam = (params.get('track') || '').toLowerCase()
+  // Reading it from the held attribution also means the preset survives the
+  // magic-link hop, where the URL no longer carries ?track= at all. Frozen at mount so
+  // clearing the attribution on submit cannot retroactively change what was shown.
+  const [trackParam] = useState(() => attributionRef.current.track)
   const trackSide = (trackParam === 'rightsholder' || trackParam === 'property')
     ? 'property'
     : (trackParam === 'capital' || trackParam === 'investor' || trackParam === 'impact')
@@ -129,7 +150,7 @@ export default function DealNetworkApply() {
     if (! tokenFromUrl) return
     let cancelled = false
     setBusy(true)
-    dealNetworkApplyPreview(tokenFromUrl, { test: testMode })
+    dealNetworkApplyPreview(tokenFromUrl, { test: testMode, attribution: attributionRef.current })
       .then((res) => {
         if (cancelled) return
         setMatched(res)
@@ -149,6 +170,8 @@ export default function DealNetworkApply() {
       })
       .finally(() => !cancelled && setBusy(false))
     return () => { cancelled = true }
+    /* attributionRef is a ref, so it is deliberately not a dependency: the preview must re-run
+       for a new magic-link token, never because the attribution was cleared. */
   }, [tokenFromUrl, testMode])
 
   useEffect(() => {
@@ -164,7 +187,7 @@ export default function DealNetworkApply() {
     setEmail(normalizedEmail)
     setBusy(true); setError('')
     try {
-      const res = await dealNetworkApplyStart(normalizedEmail, { test: testMode })
+      const res = await dealNetworkApplyStart(normalizedEmail, { test: testMode, attribution: attributionRef.current })
       setSentMessage(res?.message || 'Check your inbox for a confirmation link.')
       setDebugMagicLink(res?.debug?.deal_network_apply_url || '')
       setStep(STEP_SENT)
@@ -204,7 +227,7 @@ export default function DealNetworkApply() {
         payload.company_industry = companyIndustry.trim() || undefined
       }
 
-      const res = await dealNetworkApplyClaim(payload, { test: testMode })
+      const res = await dealNetworkApplyClaim(payload, { test: testMode, attribution: attributionRef.current })
       setMatchmakingToken(res.matchmaking_token)
       setChosenPerson(res.person)
       setChosenCompany(res.company)
@@ -270,7 +293,12 @@ export default function DealNetworkApply() {
         source: 'frontend-deal-network-apply',
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
         marketing_opt_in: true,
-      }, { test: testMode })
+      }, { test: testMode, attribution: attributionRef.current })
+      /* Conversion recorded. Forget the click: this application is over, and a token left behind
+         would credit whoever uses this browser next to someone else's click. Only after a
+         SUCCESSFUL submit, so a failed attempt the applicant retries keeps its attribution. */
+      clearCampaignAttribution()
+      attributionRef.current = EMPTY_ATTRIBUTION
       setStep(STEP_DONE)
     } catch (err) {
       setError(describeError(err, 'Could not submit your application.'))

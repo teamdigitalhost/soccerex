@@ -14,6 +14,7 @@
  */
 
 import { withTestParam } from './testMode'
+import { campaignAttributionPayload } from './campaignAttribution'
 
 const DEFAULT_BASE = 'https://soccerex.digitalhost.co/api/v1'
 
@@ -183,12 +184,21 @@ export async function declineInvitation(token, opts = {}) {
   }))
 }
 
-/* ───── Deal Network unlisted apply flow ────────────────────────────────── */
+/* ───── Deal Network unlisted apply flow ──────────────────────────────────
+ * Every call carries the campaign attribution the invite CTA handed over
+ * (?track=<cohort>&sx=<per-send click token>). It is attached here rather than
+ * at each call site so no step of the multi-step flow can quietly drop it: the
+ * conversion is the final submit, and an unattributed submit is the whole
+ * reason three separately-pitched cohorts could not be told apart. Pass
+ * opts.attribution to use values already read by the page; omitted, the helper
+ * reads the URL and the persisted copy itself. An organic applicant has
+ * neither, so nothing is added and the request is unchanged.
+ */
 
 export async function dealNetworkApplyStart(email, opts = {}) {
   const payload = await request('/deal-network/apply/start', {
     method: 'POST',
-    body: { email },
+    body: { ...campaignAttributionPayload(opts.attribution), email },
     test: opts.test,
   })
   const data = unwrap(payload)
@@ -200,7 +210,7 @@ export async function dealNetworkApplyStart(email, opts = {}) {
 export async function dealNetworkApplyPreview(token, opts = {}) {
   return unwrap(await request('/deal-network/apply/preview', {
     method: 'POST',
-    body: { token },
+    body: { ...campaignAttributionPayload(opts.attribution), token },
     test: opts.test,
   }))
 }
@@ -216,7 +226,7 @@ export async function dealNetworkSearchCompanies(token, q, opts = {}) {
 export async function dealNetworkApplyClaim(payload, opts = {}) {
   return unwrap(await request('/deal-network/apply/claim', {
     method: 'POST',
-    body: payload,
+    body: { ...campaignAttributionPayload(opts.attribution), ...payload },
     test: opts.test,
   }))
 }
@@ -360,9 +370,10 @@ export async function preregisterLead(payload, opts = {}) {
  * profile-access edit_token below.
  */
 export async function submitDealNetworkIntake(payload, opts = {}) {
+  /* The submit IS the conversion, so this is the call that must be creditable. */
   return unwrap(await request('/deal-network/intakes', {
     method: 'POST',
-    body: payload,
+    body: { ...campaignAttributionPayload(opts.attribution), ...payload },
     test: opts.test,
   }))
 }
