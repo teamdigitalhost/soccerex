@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Target, Rocket, CalendarCheck, LayoutGrid, Download,
   Building2, BadgeCheck, Users, Ticket, Handshake, CalendarDays,
 } from 'lucide-react'
-import { HOME, EVENTS, SPONSOR, MIAMI_2026_PRICING, EXHIBIT } from '../lib/routes'
+import { HOME, EVENTS, SPONSOR, MIAMI_2026_PRICING, EXHIBIT, bookCallUrl } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
@@ -131,6 +131,7 @@ export default function Exhibit() {
               submitLabel="Send inquiry"
               successTitle="Inquiry received."
               successBody="An exhibitor lead will follow up by email with the pack and floor plan."
+              bookingUrl={bookCallUrl('success-exhibit-hero')}
               buttonClassName="miami-pill-primary"
             />
             {EXHIBIT_DECK && (
@@ -269,6 +270,7 @@ export default function Exhibit() {
               submitLabel="Send inquiry"
               successTitle="Inquiry received."
               successBody="An exhibitor lead will follow up by email with the pack and floor plan."
+              bookingUrl={bookCallUrl('success-exhibit-cta')}
               theme="dark"
             />
           </div>

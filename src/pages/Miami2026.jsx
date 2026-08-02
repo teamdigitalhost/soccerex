@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT } from '../lib/routes'
+import { HOME, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, bookCallUrl } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema } from '../lib/leadSchemas'
@@ -381,6 +381,7 @@ export default function Miami2026() {
                 submitLabel="Send inquiry"
                 successTitle="Inquiry received."
                 successBody="A partnerships lead will follow up by email."
+                bookingUrl={bookCallUrl('success-miami-partnership')}
                 buttonClassName="miami-pill-primary"
                 buttonStyle={{ width: '100%', justifyContent: 'center' }}
               />

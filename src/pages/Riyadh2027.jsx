@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { ArrowLeft, MapPin, Calendar, Mail, Check, Users, Trophy, Briefcase, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PixelDivider from '../components/PixelDivider'
-import { HOME } from '../lib/routes'
+import { HOME, bookCallUrl } from '../lib/routes'
 import { preregisterLead } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 import InquiryModalButton from '../components/InquiryModalButton'
@@ -314,6 +314,7 @@ export default function Riyadh2027() {
                 submitLabel="Submit application"
                 successTitle="Application received."
                 successBody="The Soccerex team will review eligibility and follow up by email."
+                bookingUrl={bookCallUrl('success-riyadh-rightsholder')}
                 buttonClassName="event-btn-primary mt-6 justify-center"
                 buttonStyle={{ width: '100%' }}
               />

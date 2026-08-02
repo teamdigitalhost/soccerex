@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Users, Trophy, Download,
   TrendingUp, BadgeCheck, Globe2, Megaphone, Mic, Star, Sparkles, Handshake, CalendarDays,
 } from 'lucide-react'
-import { HOME, EVENTS, EXHIBIT, MIAMI_2026_PRICING, SPONSOR } from '../lib/routes'
+import { HOME, EVENTS, EXHIBIT, MIAMI_2026_PRICING, SPONSOR, bookCallUrl } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
@@ -144,6 +144,7 @@ export default function Sponsor() {
               submitLabel="Send inquiry"
               successTitle="Inquiry received."
               successBody="A partnerships lead will follow up by email with the right pack for your goals."
+              bookingUrl={bookCallUrl('success-sponsor-hero')}
               buttonClassName="miami-pill-primary"
             />
             {SPONSOR_DECK && (
@@ -292,6 +293,7 @@ export default function Sponsor() {
               submitLabel="Send inquiry"
               successTitle="Inquiry received."
               successBody="A partnerships lead will follow up by email with the right pack for your goals."
+              bookingUrl={bookCallUrl('success-sponsor-cta')}
               theme="dark"
             />
           </div>

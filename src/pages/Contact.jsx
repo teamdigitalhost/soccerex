@@ -7,6 +7,7 @@ import {
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { submitLead } from '../lib/soccerexApi'
+import { bookCallUrl } from '../lib/routes'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { Loader2 } from 'lucide-react'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
@@ -434,6 +435,22 @@ export default function Contact() {
                   ? (
                     <>
                       Thanks — your message is with the Soccerex team. We'll follow up by email.
+                      <span className="block mt-2">
+                        {/* Plain anchor on purpose: the intake response's booking_url
+                            (assigned rep, once the backend returns it) may be absolute,
+                            and the fallback is an internal path; an <a> handles both. */}
+                        <a
+                          href={submitResult?.booking_url
+                            || bookCallUrl(`success-contact-${inquiry.id}`, { speaker: inquiry.id === 'speaker' })}
+                          className="font-body font-semibold inline-flex items-center gap-1"
+                          style={{ color: 'var(--color-brand-accent)', textDecoration: 'underline', fontSize: '0.82rem' }}
+                        >
+                          Book a call now <ArrowRight size={13} />
+                        </a>
+                        <span className="block mt-1" style={{ color: '#999' }}>
+                          No need to wait: grab 15 minutes with the team, or tell us when you are free.
+                        </span>
+                      </span>
                       {submitResult?.id && (
                         <span className="block font-mono uppercase mt-1" style={{ fontSize: '0.62rem', letterSpacing: '0.14em', color: '#aaa' }}>
                           Ref #{submitResult.id}

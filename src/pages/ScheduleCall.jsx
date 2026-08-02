@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import {
   CalendarCheck, CalendarClock, CheckCircle2, Clock, Globe, Loader2, MailCheck,
   AlertTriangle, ArrowRight, User,
@@ -35,6 +35,12 @@ const REQUEST_FIELDS = ['name', 'email', 'company', 'availability', 'notes']
 
 export default function ScheduleCall() {
   const { code } = useParams()
+  /* Attribution only. The links that bring people here append ?source=
+     (nurture emails via CallScheduler::withSource, lead-form success screens
+     via routes bookCallUrl); passing it back on book/request is what tells
+     the backend which surface produced the call. It is sanitized server-side. */
+  const [searchParams] = useSearchParams()
+  const source = searchParams.get('source') || ''
   const [state, setState] = useState('loading') // 'loading' | 'ready' | 'invalid' | 'error'
   const [availability, setAvailability] = useState(null)
   const [selectedDate, setSelectedDate] = useState(null) // 'YYYY-MM-DD'
@@ -119,6 +125,7 @@ export default function ScheduleCall() {
         email,
         ...(form.company.trim() ? { company: form.company.trim() } : {}),
         ...(form.notes.trim() ? { notes: form.notes.trim() } : {}),
+        ...(source ? { source } : {}),
       })
       setBooked(res)
     } catch (err) {
@@ -161,6 +168,7 @@ export default function ScheduleCall() {
         availability: when,
         ...(request.company.trim() ? { company: request.company.trim() } : {}),
         ...(request.notes.trim() ? { notes: request.notes.trim() } : {}),
+        ...(source ? { source } : {}),
       })
       setRequested({ name, email })
       // The form is taller than the confirmation, so on a phone the visitor is

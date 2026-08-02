@@ -11,7 +11,9 @@ import LeadForm from './LeadForm'
  *   label:       button text (also doubles as the modal heading by default)
  *   kind:        LeadForm kind (passed through)
  *   schema:      LeadForm schema (passed through)
- *   extraPayload, submitLabel, successTitle, successBody, theme: passed to LeadForm
+ *   extraPayload, submitLabel, successTitle, successBody, bookingUrl, theme:
+ *                passed to LeadForm (bookingUrl powers the success-state
+ *                "Book a call now" CTA; see LeadForm)
  *   buttonClassName, buttonStyle: caller controls the trigger look so the
  *                                 button inherits the host section's styling.
  *   eyebrow:     small uppercase label above the modal heading
@@ -28,6 +30,7 @@ export default function InquiryModalButton({
   submitLabel,
   successTitle,
   successBody,
+  bookingUrl,
   theme = 'light',
   buttonClassName,
   buttonStyle,
@@ -81,6 +84,7 @@ export default function InquiryModalButton({
                 submitLabel={submitLabel}
                 successTitle={successTitle}
                 successBody={successBody}
+                bookingUrl={bookingUrl}
                 theme={theme}
               />
             </div>

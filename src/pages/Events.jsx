@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Calendar, MapPin } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { EVENTS, EUROPE_2026, MIAMI_2026 } from '../lib/routes'
+import { EVENTS, EUROPE_2026, MIAMI_2026, bookCallUrl } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema } from '../lib/leadSchemas'
@@ -520,6 +520,7 @@ export default function Events() {
               submitLabel="Send inquiry"
               successTitle="Inquiry received."
               successBody="A partnerships lead will follow up by email with a tailored pack and next steps."
+              bookingUrl={bookCallUrl('success-events-partner')}
               buttonStyle={{ background: 'transparent', color: '#fff', padding: '18px 40px', fontSize: '0.85rem', border: '1px solid #c8302c', cursor: 'pointer', transition: 'all 0.3s' }}
               buttonClassName="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
             />
