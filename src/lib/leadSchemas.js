@@ -65,6 +65,35 @@ export const speakerSchema = [
   },
 ]
 
+/* Rightsholder pass application — clubs, leagues, federations, national teams,
+   competitions, and other qualifying rightsholders applying for a complimentary
+   delegate pass. Success copy must say "application under review" — never grant
+   access or show a registration link. Used on Miami2026 and Riyadh2027. */
+export const rightsholderSchema = [
+  {
+    fields: [
+      { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', span: 'full', autoFocus: true, options: [
+        { value: 'club',          label: 'Club' },
+        { value: 'league',        label: 'League' },
+        { value: 'federation',    label: 'Federation / national team' },
+        { value: 'competition',   label: 'Competition' },
+        { value: 'governing_body',label: 'Governing body' },
+        { value: 'other',         label: 'Other qualifying rightsholder' },
+      ] },
+      { name: 'company', label: 'Organisation name *', required: true, placeholder: 'Organisation name', span: 'full' },
+      { name: 'country', label: 'Country', placeholder: 'Country' },
+    ],
+  },
+  {
+    fields: [
+      { name: 'name',  label: 'Your name *', required: true, placeholder: 'Your full name', autoComplete: 'name' },
+      { name: 'role',  label: 'Your role *', required: true, placeholder: 'Your role' },
+      { name: 'email', label: 'Official organisation email *', required: true, type: 'email', placeholder: 'you@organisation.com', autoComplete: 'email', span: 'full' },
+      { name: 'message', label: 'Anything else?', type: 'textarea', rows: 3, span: 'full', placeholder: 'Tell us what you want to access or showcase.' },
+    ],
+  },
+]
+
 /* Generic newsletter, used by quick capture forms. */
 export const newsletterSchema = [
   {

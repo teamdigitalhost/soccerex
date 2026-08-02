@@ -7,7 +7,7 @@ import InquiryModalButton from '../components/InquiryModalButton'
 import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
-import { sponsorshipSchema } from '../lib/leadSchemas'
+import { sponsorshipSchema, rightsholderSchema } from '../lib/leadSchemas'
 
 const IMG = '/events/miami/2026'
 const GFX = '/events/miami/2026/graphics'
@@ -165,14 +165,28 @@ export default function Miami2026() {
               >
                 <Mail size={15} /> Register Now
               </a>
-              <a
-                href="https://soccerexmiami2026.eventify.io/t2/tickets/79DF37"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="miami-pill-outline"
+              <InquiryModalButton
+                kind="preregister"
+                label="Apply for Rightsholder Pass"
+                modalTitle="Apply for Rightsholder Pass"
+                eyebrow="Complimentary pass"
+                intro="Clubs, leagues, federations, national teams, competitions, and qualifying rightsholders may apply for a complimentary delegate pass to Soccerex Miami 2026."
+                schema={rightsholderSchema}
+                extraPayload={{
+                  event_slug: 'miami-2026',
+                  attendee_type: 'rights_holder',
+                  interest: 'Complimentary rightsholder pass',
+                  source: 'miami-2026-rightsholder-pass',
+                  marketing_opt_in: true,
+                }}
+                submitLabel="Submit application"
+                successTitle="Application received."
+                successBody="Your application is under review. The Soccerex team will follow up by email to confirm eligibility."
+                bookingUrl={bookCallUrl('success-miami-rightsholder')}
+                buttonClassName="miami-pill-outline"
               >
                 <Trophy size={15} /> Apply for Rightsholder Pass
-              </a>
+              </InquiryModalButton>
               <Link to={ACCOMMODATIONS} className="miami-pill-outline">
                 <MapPin size={15} /> Travel &amp; Stay
               </Link>
@@ -448,15 +462,29 @@ export default function Miami2026() {
               <p className="miami-body text-white/75 text-sm mb-5 leading-relaxed">
                 Clubs, leagues, federations, national teams, competitions, and qualifying rightsholders may apply for a complimentary delegate pass.
               </p>
-              <a
-                href="https://soccerexmiami2026.eventify.io/t2/tickets/79DF37"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="miami-pill-primary"
-                style={{ width: '100%', justifyContent: 'center' }}
+              <InquiryModalButton
+                kind="preregister"
+                label="Apply for Rightsholder Pass"
+                modalTitle="Apply for Rightsholder Pass"
+                eyebrow="Complimentary pass"
+                intro="Clubs, leagues, federations, national teams, competitions, and qualifying rightsholders may apply for a complimentary delegate pass to Soccerex Miami 2026."
+                schema={rightsholderSchema}
+                extraPayload={{
+                  event_slug: 'miami-2026',
+                  attendee_type: 'rights_holder',
+                  interest: 'Complimentary rightsholder pass',
+                  source: 'miami-2026-rightsholder-pass',
+                  marketing_opt_in: true,
+                }}
+                submitLabel="Submit application"
+                successTitle="Application received."
+                successBody="Your application is under review. The Soccerex team will follow up by email to confirm eligibility."
+                bookingUrl={bookCallUrl('success-miami-rightsholder')}
+                buttonClassName="miami-pill-primary"
+                buttonStyle={{ width: '100%', justifyContent: 'center' }}
               >
                 Apply for Rightsholder Pass <ArrowLeft size={15} style={{ transform: 'rotate(180deg)' }} />
-              </a>
+              </InquiryModalButton>
             </div>
           </div>
         </div>
