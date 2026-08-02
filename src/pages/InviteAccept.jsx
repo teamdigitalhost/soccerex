@@ -66,7 +66,15 @@ export default function InviteAccept() {
     try {
       const res = await acceptInvitation(token)
       if (res?.magic_link_url) {
-        window.location.href = res.magic_link_url
+        // Validate origin before redirect so a tampered API response can't send the user off-site.
+        try {
+          const target = new URL(res.magic_link_url, window.location.origin)
+          if (target.origin !== window.location.origin) throw new Error('unexpected origin')
+          window.location.href = target.href
+        } catch {
+          setErrorMsg('Accepted but the sign-in link was invalid. Contact the team.')
+          setState('error')
+        }
         return
       }
       setErrorMsg('Accepted but could not generate a sign-in link. Contact the team.')

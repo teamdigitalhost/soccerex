@@ -349,7 +349,13 @@ function renderInline(text, keyPrefix) {
     else if (m[3]) nodes.push(<em key={key}>{m[4]}</em>)
     else if (m[5]) nodes.push(<em key={key}>{m[6]}</em>)
     else if (m[7]) nodes.push(<code key={key} style={{ background: 'rgba(9,32,62,0.06)', padding: '1px 6px', borderRadius: '4px', fontSize: '0.95em' }}>{m[8]}</code>)
-    else if (m[9]) nodes.push(<a key={key} href={m[11]} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-brand-accent)', textDecoration: 'underline' }}>{m[10]}</a>)
+    else if (m[9]) {
+      const safeHref = /^https?:\/\//i.test(m[11]) ? m[11] : null
+      nodes.push(safeHref
+        ? <a key={key} href={safeHref} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-brand-accent)', textDecoration: 'underline' }}>{m[10]}</a>
+        : <span key={key}>{m[10]}</span>
+      )
+    }
     rest = rest.slice(m.index + m[0].length)
   }
   return nodes

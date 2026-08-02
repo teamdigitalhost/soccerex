@@ -836,12 +836,6 @@ function AssetThumb({ asset, onDelete, deleting, errored }) {
     || (asset.thumbnail && (asset.thumbnail.url || asset.thumbnail.href || asset.thumbnail))
     || asset.path
     || ''
-  /* Until we know which field carries the URL on the live backend, log
-     the unresolved shape to the console so we can see what's there. */
-  if (!previewUrl && typeof window !== 'undefined') {
-    // eslint-disable-next-line no-console
-    console.warn('[AssetThumb] no URL found in asset payload, keys:', Object.keys(asset), asset)
-  }
   const filename = asset.filename || asset.name || asset.original_name || ''
   const isImage = (asset.kind && ['logo', 'photo', 'headshot', 'banner', 'artwork', 'signage'].includes(asset.kind))
     || /\.(png|jpe?g|webp|gif|svg|avif)$/i.test(previewUrl || filename)
