@@ -7,6 +7,7 @@ import InquiryModalButton from '../components/InquiryModalButton'
 import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
+import AttendeeWall from '../components/AttendeeWall'
 import { sponsorshipSchema, rightsholderSchema } from '../lib/leadSchemas'
 
 const IMG = '/events/miami/2026'
@@ -349,24 +350,13 @@ export default function Miami2026() {
         </div>
       </section>
 
-      {/* ─── 87 CONFIRMED RIGHTSHOLDERS + LOGO MARQUEE ───────────────────── */}
-      <section style={{ background: '#FAFBFC', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
-        <div style={{ maxWidth: '1080px', margin: '0 auto', textAlign: 'center' }}>
-          <p className="miami-kicker miami-kicker--pink">Already confirmed</p>
-          <div className="fade-up" style={{ marginBottom: 'clamp(20px,3vw,32px)' }}>
-            <p className="miami-headline" style={{ fontSize: 'clamp(4rem, 9vw, 7.5rem)', color: '#0D1B2A', lineHeight: 1, marginBottom: 8 }}>
-              {MIAMI_2026_RIGHTSHOLDER_COUNT}
-            </p>
-            <p className="miami-subhead" style={{ fontSize: 'clamp(0.85rem, 1.4vw, 1rem)', color: '#3a4a5a', letterSpacing: '0.18em' }}>
-              CONFIRMED RIGHTSHOLDERS FOR SOCCEREX MIAMI 2026
-            </p>
-          </div>
-          <p className="miami-body fade-up mx-auto mb-12" style={{ fontSize: '1rem', color: '#3a4a5a', maxWidth: 580, lineHeight: 1.6 }}>
-            FIFA, LaLiga, UEFA, MLS, CONCACAF, CONMEBOL, the top clubs, and 81 more leagues, federations, and rightsholders are already registered. This is the network you arrive into.
-          </p>
-          <LogoMarquee logos={ATTENDEE_LOGOS} direction="left" speed={22} invert={false} height={44} />
-        </div>
-      </section>
+      {/* ─── LIVE CONFIRMED-ATTENDEE WALL ─────────────────────────────────── */}
+      <AttendeeWall
+        eventSlug="miami-2026"
+        staticCount={MIAMI_2026_RIGHTSHOLDER_COUNT}
+        staticLogos={ATTENDEE_LOGOS}
+        roleLabel="RIGHTSHOLDERS"
+      />
 
       <TestimonialsSection background="#FFFFFF" />
 

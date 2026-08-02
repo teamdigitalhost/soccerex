@@ -83,6 +83,10 @@ export async function getEvent(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}`, opts))
 }
 
+export async function getAttendeeWall(slug, opts = {}) {
+  return unwrap(await request(`/events/${encodeURIComponent(slug)}/attendee-wall`, opts))
+}
+
 export async function getAgendaConcept(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}/agenda-concept`, opts))
 }
