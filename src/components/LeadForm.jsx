@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Send, Loader2, Check, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Send, Loader2, Check, AlertCircle, ArrowRight, ArrowLeft, CalendarClock } from 'lucide-react'
 import { submitLead, ApiError } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 
@@ -22,6 +23,12 @@ import { isTestModeFromUrl } from '../lib/testMode'
  *   submitLabel:    override the submit button label.
  *   successTitle:   override the success-state heading.
  *   successBody:    override the success-state body copy.
+ *   bookingUrl:     fallback "Book a call now" target for the success state
+ *                   (see lib/routes bookCallUrl). If the submit response
+ *                   carries a booking_url (the assigned rep's link, once the
+ *                   backend returns it), that wins over this fallback.
+ *   children:       extra success-state content rendered under the CTA
+ *                   (e.g. a deck download once assets exist).
  *   theme:          'dark' | 'light' — selects input/button styling.
  *
  * The backend accepts US-spelled aliases (organization vs organisation,
@@ -35,6 +42,8 @@ export default function LeadForm({
   submitLabel,
   successTitle,
   successBody,
+  bookingUrl,
+  children,
   theme = 'light',
 }) {
   const steps = Array.isArray(schema) ? schema : []
@@ -43,6 +52,10 @@ export default function LeadForm({
   const [status, setStatus] = useState('idle')
   const [errors, setErrors] = useState({})
   const [topError, setTopError] = useState('')
+  /* The assigned rep's booking link, when the intake response provides one.
+     Not returned by the backend yet — wired so the success CTA upgrades from
+     the generic fallback to the assigned rep the day lead assignment ships. */
+  const [assignedBookingUrl, setAssignedBookingUrl] = useState(null)
 
   const totalSteps = steps.length
   const isLastStep = stepIndex === totalSteps - 1
@@ -83,12 +96,15 @@ export default function LeadForm({
          produced it, instead of recording an anonymous inbound lead. */
       let sx
       try { sx = localStorage.getItem('sx_click_token') || undefined } catch { /* ignore */ }
-      await submitLead(kind, {
+      const res = await submitLead(kind, {
         ...extraPayload,
         ...values,
         sx,
         source_url: typeof window !== 'undefined' ? window.location.href : undefined,
       }, { test: isTestModeFromUrl() })
+      if (typeof res?.booking_url === 'string' && res.booking_url) {
+        setAssignedBookingUrl(res.booking_url)
+      }
       setStatus('success')
     } catch (err) {
       if (err instanceof ApiError && err.status === 422 && err.body?.errors) {
@@ -103,7 +119,10 @@ export default function LeadForm({
 
   if (status === 'success') {
     return (
-      <SuccessState theme={theme} title={successTitle} body={successBody} />
+      <SuccessState theme={theme} title={successTitle} body={successBody}
+        bookingUrl={assignedBookingUrl || bookingUrl}>
+        {children}
+      </SuccessState>
     )
   }
 
@@ -216,7 +235,7 @@ function StepIndicator({ current, total, theme }) {
   )
 }
 
-function SuccessState({ theme, title, body }) {
+function SuccessState({ theme, title, body, bookingUrl, children }) {
   return (
     <div className="flex flex-col items-center text-center" style={{ padding: '24px 8px' }}>
       <div style={{
@@ -233,6 +252,25 @@ function SuccessState({ theme, title, body }) {
       <p className="font-body leading-relaxed" style={{ fontSize: 13.5, color: theme === 'dark' ? 'rgba(255,255,255,0.65)' : '#3a4a5a', maxWidth: 480 }}>
         {body || "Your message is on its way to the Soccerex team. We'll follow up by email."}
       </p>
+      {bookingUrl && (
+        <div className="flex flex-col items-center gap-2" style={{ marginTop: 18 }}>
+          <BookingLink to={bookingUrl} className="event-btn-primary" style={{ padding: '12px 22px', fontSize: 12, textDecoration: 'none' }}>
+            <CalendarClock size={13} /> Book a call now
+          </BookingLink>
+          <span className="font-body" style={{ fontSize: 12, color: theme === 'dark' ? 'rgba(255,255,255,0.55)' : '#607186', maxWidth: 380 }}>
+            No need to wait for the email: grab 15 minutes with the team now. If nothing is open, tell us when you are free and we will come back with times.
+          </span>
+        </div>
+      )}
+      {children ? <div style={{ marginTop: 14 }}>{children}</div> : null}
     </div>
   )
+}
+
+/* Internal paths go through the router; a backend-provided booking_url may be
+   absolute, so fall back to a plain anchor for anything that is not a path. */
+function BookingLink({ to, children, ...rest }) {
+  return String(to).startsWith('/')
+    ? <Link to={to} {...rest}>{children}</Link>
+    : <a href={to} {...rest}>{children}</a>
 }

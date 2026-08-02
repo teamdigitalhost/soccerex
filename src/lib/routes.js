@@ -41,6 +41,18 @@ export const buildInviteUrl  = (token) => `/invite/${encodeURIComponent(token)}`
 // link (/schedule/{code}); not linked from site navigation.
 export const SCHEDULE_CALL_PATTERN = '/schedule/:code'
 export const scheduleCall    = (code) => `/schedule/${encodeURIComponent(code)}`
+// Fallback booking links for the lead-form success screens ("Book a call now").
+// When the lead-intake response starts returning the assigned rep's
+// booking_url, LeadForm prefers that automatically; these codes are the static
+// fallback so the CTA never dead-ends. They are live per-rep scheduler codes,
+// public by design (the same links circulate in outbound email), and the
+// booking page degrades to an availability-request form when nothing is open.
+// `source` is attribution the booking page passes back on book/request.
+const BOOK_CALL_TEAM_CODE    = 'mvmdunvoek1up72zso3v' // commercial + general inquiries
+const BOOK_CALL_SPEAKER_CODE = 'sibi7xdal3iikr7smnt7' // speaker inquiries
+export const bookCallUrl = (source, { speaker = false } = {}) =>
+  scheduleCall(speaker ? BOOK_CALL_SPEAKER_CODE : BOOK_CALL_TEAM_CODE)
+  + (source ? `?source=${encodeURIComponent(source)}` : '')
 
 /* ─── Event landing pages ──────────────────────────────────────────────── */
 export const MIAMI_2026      = '/miami-2026'

@@ -4,7 +4,9 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ThemePicker from './components/ThemePicker'
 import TestModeBanner from './components/TestModeBanner'
+import CookieBanner from './components/CookieBanner'
 import { trackPageView } from './lib/soccerexApi'
+import { getConsent, loadAnalytics } from './lib/analytics'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, MIAMI_2026_ACCOMMODATIONS, MIAMI_2026_ACCOMMODATIONS_MISSPELLED, ACCOMMODATIONS, ACCOMMODATIONS_MISSPELLED, BOOK, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
@@ -122,9 +124,14 @@ const ScheduleCall = lazy(() => import('./pages/ScheduleCall'))
 // no longer routed until announced. Restore routes in App.jsx when launching.
 
 function App() {
+  useEffect(() => {
+    if (getConsent() === 'accepted') loadAnalytics()
+  }, [])
+
   return (
     <BrowserRouter>
       <TestModeBanner />
+      <CookieBanner />
       <PageViewTracker />
       <AppShell>
       <Navbar />
