@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Calendar, MapPin } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { EUROPE_2026, MIAMI_2026 } from '../lib/routes'
+import { EVENTS, EUROPE_2026, MIAMI_2026 } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
@@ -268,6 +269,11 @@ export default function Events() {
 
   return (
     <div style={{ background: '#050d1a' }}>
+      <PageMeta
+        title="Events | Soccerex — Miami 2026 and Beyond"
+        description="Upcoming Soccerex events: Miami 2026 at Nu Stadium (23-25 September) and Europe. The global stage for the football industry — investment, partnerships, innovation, and impact."
+        path={EVENTS}
+      />
 
       {/* ═══ HERO (with floating orbs) ═══════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center">

@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT } from '../lib/routes'
+import { HOME, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
@@ -51,11 +52,19 @@ const THEMES = [
   { title: 'Innovation, Impact & Future Growth', desc: 'Technology, startups, brand activation, purpose-driven investment, community impact, and the next wave of football opportunity.' },
 ]
 
+const MIAMI_OG_IMG = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg'
+
 export default function Miami2026() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
+      <PageMeta
+        title="Soccerex Miami 2026 | Nu Stadium, 23-25 September"
+        description="The global football business event returns to the Americas. Soccerex Miami 2026 at Nu Stadium brings together clubs, leagues, investors, brands, and innovators — 23-25 September 2026."
+        image={MIAMI_OG_IMG}
+        path={MIAMI_2026}
+      />
 
       {/* ─── HERO ─────────────────────────────────────────────────────── */}
       <section className="miami-hero relative overflow-hidden">

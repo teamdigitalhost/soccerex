@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Calendar, Tag } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { INSIGHTS, insightArticle } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
 import { getArticle } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 
@@ -61,8 +62,19 @@ export default function InsightArticle() {
    which supplies its own article and an empty related list — so a draft renders
    EXACTLY as it will look once published. */
 export function ArticleLayout({ article, related = [] }) {
+  const articleDesc = article.excerpt
+    ? article.excerpt.replace(/<[^>]+>/g, '').slice(0, 200)
+    : 'Read the latest insights from Soccerex on the business of football.'
+
   return (
     <div style={{ background: '#050d1a' }}>
+      <PageMeta
+        title={`${article.title} | Soccerex Insights`}
+        description={articleDesc}
+        image={article.featuredImage || undefined}
+        path={insightArticle(article.slug)}
+        type="article"
+      />
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ minHeight: article.featuredImage ? '55vh' : '40vh' }}>

@@ -4,7 +4,8 @@ import {
   ArrowLeft, ArrowRight, Target, Rocket, CalendarCheck, LayoutGrid, Download,
   Building2, BadgeCheck, Users, Ticket, Handshake, CalendarDays,
 } from 'lucide-react'
-import { HOME, EVENTS, SPONSOR, MIAMI_2026_PRICING } from '../lib/routes'
+import { HOME, EVENTS, SPONSOR, MIAMI_2026_PRICING, EXHIBIT } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
 import { sponsorshipSchema } from '../lib/leadSchemas'
@@ -76,13 +77,16 @@ const GALLERY = [
 ]
 
 export default function Exhibit() {
-  useEffect(() => {
-    window.scrollTo(0, 0)
-    document.title = 'Exhibit at Soccerex | Reach Football’s Buyers'
-  }, [])
+  useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
+      <PageMeta
+        title="Exhibit at Soccerex Miami 2026 | Reach Football's Buyers"
+        description="Showcase your product or service to 1,500+ football industry professionals. Floor stands, stands packages, and branded spaces at Nu Stadium, Miami — 23-25 September 2026."
+        image={HERO_IMG}
+        path={EXHIBIT}
+      />
 
       {/* ─── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', minHeight: 'min(88vh, 760px)', display: 'flex', alignItems: 'flex-end' }}>

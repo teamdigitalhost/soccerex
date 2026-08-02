@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Private / authenticated routes — no crawl value
+Disallow: /profile-access/
+Disallow: /profile-preview/
+Disallow: /article-preview/
+Disallow: /invite/
+Disallow: /schedule/
+Disallow: /agenda-collab
+Disallow: /speak
+Disallow: /deal-network/apply
+
+Sitemap: https://soccerex.com/sitemap.xml

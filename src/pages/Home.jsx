@@ -6,7 +6,8 @@ import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
-import { EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, GALLERY, eventSpeakers, pressRelease, PAST_SPEAKERS } from '../lib/routes'
+import { HOME, EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, GALLERY, eventSpeakers, pressRelease, PAST_SPEAKERS } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
 import { FEATURED_SPEAKERS as HOME_SPEAKERS } from '../data/speakers'
 import ImageGrid from '../components/ImageGrid'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
@@ -1660,6 +1661,11 @@ export default function Home() {
 
   return (
     <>
+      <PageMeta
+        title="Soccerex — 30 Years at the Center of the Business of Football"
+        description="Soccerex connects the people who drive the global game forward — clubs, leagues, brands, investors, and innovators — across events in Miami, Europe, and the Middle East. Est. 1996."
+        path={HOME}
+      />
       <HeroSlideshow />
       {/* No wave divider here. A photographic slideshow ends in arbitrary
           pixel content — any wave/edge effect inevitably reveals a seam.

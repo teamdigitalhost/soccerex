@@ -8,7 +8,8 @@ import {
 } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { Loader2, Check } from 'lucide-react'
-import { insightArticle } from '../lib/routes'
+import { insightArticle, INSIGHTS } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 const PAGE_SIZE = 15
@@ -109,6 +110,11 @@ export default function InsightsList() {
 
   return (
     <div style={{ background: '#050d1a' }}>
+      <PageMeta
+        title="Insights | Soccerex — The Business of Football"
+        description="Analysis, opinion, and industry intelligence from the world of football business. Covering investment, media, technology, women's football, and the global game."
+        path={INSIGHTS}
+      />
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center" style={{ minHeight: 'clamp(360px, 50dvh, 500px)' }}>

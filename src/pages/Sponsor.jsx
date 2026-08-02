@@ -4,7 +4,8 @@ import {
   ArrowLeft, ArrowRight, Users, Trophy, Download,
   TrendingUp, BadgeCheck, Globe2, Megaphone, Mic, Star, Sparkles, Handshake, CalendarDays,
 } from 'lucide-react'
-import { HOME, EVENTS, EXHIBIT, MIAMI_2026_PRICING } from '../lib/routes'
+import { HOME, EVENTS, EXHIBIT, MIAMI_2026_PRICING, SPONSOR } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
 import { sponsorshipSchema } from '../lib/leadSchemas'
@@ -88,13 +89,16 @@ const GALLERY = [
 ]
 
 export default function Sponsor() {
-  useEffect(() => {
-    window.scrollTo(0, 0)
-    document.title = 'Sponsor Soccerex | Partnership Opportunities'
-  }, [])
+  useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
+      <PageMeta
+        title="Sponsor Soccerex Miami 2026 | Partnership Opportunities"
+        description="Put your brand in front of football's decision-makers. Soccerex Miami 2026, Nu Stadium, 23-25 September. Headline sponsorships and bespoke partnership packages available."
+        image={HERO_IMG}
+        path={SPONSOR}
+      />
 
       {/* ─── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', minHeight: 'min(88vh, 760px)', display: 'flex', alignItems: 'flex-end' }}>

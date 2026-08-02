@@ -5,6 +5,25 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# Netlify Prerendering: serve pre-rendered HTML to crawlers and social bots.
+# Enable via Netlify dashboard → Site configuration → Build & deploy → Prerendering.
+# When active, Netlify intercepts requests from known crawler User-Agents and returns
+# a headless-rendered snapshot so search engines and link-unfurlers see full content.
+# No code change needed when toggling; this comment documents the intent.
+#
+# Explicit pass-throughs for static SEO files — Netlify serves files from dist/
+# before evaluating redirect rules, so robots.txt and sitemap.xml are already safe,
+# but declaring them as direct 200 routes makes the intent unambiguous.
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots.txt"
+  status = 200
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap.xml"
+  status = 200
+
 # Admin-minted signed preview pages: keep them out of search indexes at the HTTP
 # layer (the pages also inject a robots meta client-side, but headers are authoritative).
 [[headers]]
