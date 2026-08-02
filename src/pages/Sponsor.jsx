@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Users, Trophy, Download,
   TrendingUp, BadgeCheck, Globe2, Megaphone, Mic, Star, Sparkles, Handshake, CalendarDays,
 } from 'lucide-react'
-import { HOME, EVENTS, EXHIBIT } from '../lib/routes'
+import { HOME, EVENTS, EXHIBIT, MIAMI_2026_PRICING } from '../lib/routes'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
 import { sponsorshipSchema } from '../lib/leadSchemas'
@@ -12,11 +12,10 @@ import { sponsorshipSchema } from '../lib/leadSchemas'
 const HERO_IMG = '/hero/177-NEW6-miami-packed-diverse-audience.jpg'
 const ICN = '/events/miami/2026/icons'
 
-/* Lead intake shared across every CTA. `inquiry_type: 'partner'` is the value
-   the backend LeadController maps to KIND_SPONSORSHIP_INQUIRY; `source` keeps
-   each placement attributable. No event_slug — this page is platform-level, so
-   sales qualifies which event(s) the brand wants after the inquiry. */
-const SPONSOR_PAYLOAD = { inquiry_type: 'partner' }
+/* Lead intake shared across every CTA. `inquiry_type: 'partner'` maps to
+   KIND_SPONSORSHIP_INQUIRY; `event_slug` surfaces in the CRM so sales knows
+   this inquiry is Miami 2026 without a qualification round-trip. */
+const SPONSOR_PAYLOAD = { inquiry_type: 'partner', event_slug: 'miami-2026' }
 
 /* Downloadable sponsorship deck. Set to the public path once the file is added
    (e.g. '/decks/soccerex-sponsorship-deck.pdf'); the download CTA renders only
@@ -76,6 +75,10 @@ const STATS = [
   { num: '5K+', label: 'Brands' },
 ]
 
+const PAST_BRANDS = [
+  'FIFA', 'LaLiga', 'Mastercard', 'Adidas', 'Telemundo', 'Avanade',
+]
+
 const GALLERY = [
   { src: '/hero/25-NEW-packed-keynote-miami.jpg', caption: 'A packed keynote' },
   { src: '/hero/170-NEW6-miami-two-speakers-soccerex-branding.jpg', caption: 'Your brand on the stage' },
@@ -103,10 +106,16 @@ export default function Sponsor() {
             <ArrowLeft size={14} /> Back to Soccerex
           </Link>
 
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-4">
             <span className="miami-subhead" style={{ fontSize: 12, letterSpacing: '0.24em', color: '#fff' }}>SOCCEREX</span>
             <span style={{ width: 7, height: 7, background: '#E91E63' }} />
             <span className="miami-subhead" style={{ fontSize: 12, letterSpacing: '0.24em', color: '#00C6D7' }}>THE GLOBAL FOOTBALL BUSINESS PLATFORM</span>
+          </div>
+
+          <div className="flex items-center gap-4 mb-6">
+            <span className="miami-subhead" style={{ fontSize: 12, letterSpacing: '0.22em', color: 'rgba(255,255,255,0.75)' }}>23-25 SEPTEMBER 2026</span>
+            <span style={{ width: 5, height: 5, background: '#E91E63' }} />
+            <span className="miami-subhead" style={{ fontSize: 12, letterSpacing: '0.22em', color: 'rgba(255,255,255,0.75)' }}>NU STADIUM · MIAMI</span>
           </div>
 
           <p className="miami-kicker" style={{ color: '#00C6D7' }}>Sponsorship &amp; Partnership</p>
@@ -138,9 +147,17 @@ export default function Sponsor() {
                 <Download size={15} /> Download the deck
               </a>
             )}
+            <Link to={MIAMI_2026_PRICING} className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
+              See delegate pricing <ArrowRight size={15} />
+            </Link>
             <a href="#partner" className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
               See how brands partner <ArrowRight size={15} />
             </a>
+          </div>
+
+          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2" style={{ background: 'rgba(233,30,99,0.15)', border: '1px solid rgba(233,30,99,0.4)' }}>
+            <span style={{ width: 6, height: 6, background: '#E91E63', borderRadius: '50%', display: 'inline-block' }} />
+            <span className="miami-subhead" style={{ fontSize: 11, letterSpacing: '0.14em', color: '#ff6fa0' }}>HEADLINE PARTNER POSITIONS CLOSE 15 AUGUST 2026</span>
           </div>
 
           {/* Trust strip — evergreen platform stats */}
@@ -277,8 +294,24 @@ export default function Sponsor() {
         </div>
       </section>
 
+      {/* ─── PAST BRAND PROOF ────────────────────────────────────────────── */}
+      <section style={{ background: '#0D1B2A', padding: 'clamp(40px,5vw,60px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: '1080px', margin: '0 auto', textAlign: 'center' }}>
+          <p className="miami-subhead mb-6" style={{ fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.4)' }}>
+            BRANDS THAT HAVE ACTIVATED WITH SOCCEREX
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+            {PAST_BRANDS.map((name) => (
+              <span key={name} className="miami-subhead" style={{ fontSize: '1rem', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.55)', fontWeight: 700 }}>
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Footer nav strip */}
-      <div style={{ background: '#0D1B2A', padding: '18px 24px', textAlign: 'center' }}>
+      <div style={{ background: '#0D1B2A', borderTop: '1px solid rgba(255,255,255,0.07)', padding: '18px 24px', textAlign: 'center' }}>
         <Link to={HOME} className="font-mono uppercase" style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, letterSpacing: '0.2em', textDecoration: 'none' }}>
           Soccerex &middot; 30 years of connecting the game
         </Link>
