@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { HOME, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, bookCallUrl } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
+import DeadlineBanner from '../components/DeadlineBanner'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
 const IMG = '/events/miami/2026'
@@ -162,6 +163,10 @@ export default function Miami2026() {
               <Link to={EXHIBIT} className="miami-cta-box">Exhibit</Link>
               {/* Speaker CTA removed per GN revisions doc — Miami hero now
                   surfaces Sponsor + Exhibit only. */}
+            </div>
+
+            <div className="mt-5">
+              <DeadlineBanner variant="general" />
             </div>
           </div>
 

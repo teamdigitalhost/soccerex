@@ -8,6 +8,7 @@ import { HOME, EVENTS, SPONSOR, MIAMI_2026_PRICING, EXHIBIT, bookCallUrl } from 
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
+import DeadlineBanner from '../components/DeadlineBanner'
 import { sponsorshipSchema } from '../lib/leadSchemas'
 
 const HERO_IMG = '/hero/266-NEW9-miami-exhibition-floor-wide.jpg'
@@ -147,9 +148,8 @@ export default function Exhibit() {
             </a>
           </div>
 
-          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2" style={{ background: 'rgba(233,30,99,0.15)', border: '1px solid rgba(233,30,99,0.4)' }}>
-            <span style={{ width: 6, height: 6, background: '#E91E63', borderRadius: '50%', display: 'inline-block' }} />
-            <span className="miami-subhead" style={{ fontSize: 11, letterSpacing: '0.14em', color: '#ff6fa0' }}>FLOOR STAND EARLY RATE CLOSES 31 AUGUST 2026</span>
+          <div className="mt-6">
+            <DeadlineBanner variant="exhibit" />
           </div>
 
           {/* Trust strip — evergreen platform stats */}
