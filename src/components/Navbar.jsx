@@ -4,16 +4,12 @@ import { Menu, X } from 'lucide-react'
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, INSIGHTS,
   MIAMI_2026, EUROPE_2026, RIYADH_2027, DEAL_NETWORK,
-  SPONSOR, EXHIBIT, MIAMI_2026_PRICING,
 } from '../lib/routes'
 
 const navLinks = [
   { label: 'About',          to: ABOUT },
   { label: 'Events',         to: EVENTS },
   { label: 'Miami 2026',     to: MIAMI_2026 },
-  { label: 'Sponsor',        to: SPONSOR },
-  { label: 'Exhibit',        to: EXHIBIT },
-  { label: 'Tickets',        to: MIAMI_2026_PRICING },
   { label: 'Global Platform', to: GLOBAL_NETWORK },
   { label: 'Deal Network',   to: DEAL_NETWORK },
   { label: 'Insights',       to: INSIGHTS },
