@@ -11,7 +11,7 @@ import LeadForm from '../components/LeadForm'
 import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
-import { sponsorshipSchema } from '../lib/leadSchemas'
+import { sponsorshipSchema, packRequestSchema } from '../lib/leadSchemas'
 
 const HERO_IMG = '/hero/266-NEW9-miami-exhibition-floor-wide.jpg'
 
@@ -23,7 +23,6 @@ const EXHIBIT_PAYLOAD = { inquiry_type: 'exhibit', event_slug: 'miami-2026' }
 /* Downloadable exhibitor pack. Set to the public path once the file is added
    (e.g. '/decks/soccerex-exhibitor-pack.pdf'); the download CTA renders only
    when this is set, so nothing ships as a broken link. */
-const EXHIBIT_DECK = null
 
 /* Value-led reasons to take a stand: traffic quality, global reach, pre-booked
    meetings, and standing out. */
@@ -157,11 +156,26 @@ export default function Exhibit() {
               bookingUrl={bookCallUrl('success-exhibit-hero')}
               buttonClassName="miami-pill-primary"
             />
-            {EXHIBIT_DECK && (
-              <a href={EXHIBIT_DECK} download className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
-                <Download size={15} /> Download the pack
-              </a>
-            )}
+            <InquiryModalButton
+              kind="pack-request"
+              label="Get the exhibitor pack (PDF)"
+              modalTitle="Get the exhibitor pack (PDF)"
+              eyebrow="Pricing inside"
+              intro="Tell us who you are and the pack is yours: packages, pricing, floor options and what each tier includes."
+              schema={packRequestSchema}
+              extraPayload={{
+                pack: 'exhibitor',
+                event_slug: 'miami-2026',
+                interest: 'Exhibitor pack download',
+                source: 'miami-2026-exhibitor-pack',
+              }}
+              submitLabel="Get the pack"
+              successTitle="Here it comes."
+              successBody="If the download did not start, use the button below. The team also has your details and will follow up with anything the pack does not answer."
+              buttonClassName="miami-pill-outline"
+            >
+              <Download size={15} /> Get the exhibitor pack (PDF)
+            </InquiryModalButton>
             <a href="https://soccerexmiami2026.eventify.io/t2/tickets/" target="_blank" rel="noopener" className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
               See delegate pricing <ArrowRight size={15} />
             </a>
@@ -291,11 +305,26 @@ export default function Exhibit() {
             <p className="miami-body mb-6" style={{ color: 'rgba(255,255,255,0.72)', fontSize: '1.05rem', lineHeight: 1.6, maxWidth: 460 }}>
               Tell us what you sell and who you need to meet. An exhibitor lead will come back with the pack, the floor plan, and the options that fit your goals and the events that suit you.
             </p>
-            {EXHIBIT_DECK && (
-              <a href={EXHIBIT_DECK} download className="miami-pill-outline mb-6" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
-                <Download size={15} /> Download the exhibitor pack
-              </a>
-            )}
+            <InquiryModalButton
+              kind="pack-request"
+              label="Get the exhibitor pack (PDF)"
+              modalTitle="Get the exhibitor pack (PDF)"
+              eyebrow="Pricing inside"
+              intro="Tell us who you are and the pack is yours: packages, pricing, floor options and what each tier includes."
+              schema={packRequestSchema}
+              extraPayload={{
+                pack: 'exhibitor',
+                event_slug: 'miami-2026',
+                interest: 'Exhibitor pack download',
+                source: 'miami-2026-exhibitor-pack',
+              }}
+              submitLabel="Get the pack"
+              successTitle="Here it comes."
+              successBody="If the download did not start, use the button below. The team also has your details and will follow up with anything the pack does not answer."
+              buttonClassName="miami-pill-outline mb-6"
+            >
+              <Download size={15} /> Get the exhibitor pack (PDF)
+            </InquiryModalButton>
             <p className="miami-body mb-3" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.9rem' }}>
               <Handshake size={15} className="inline mr-2" style={{ color: 'var(--event-primary-light, #ff6fa0)' }} />
               Looking for brand-wide visibility instead? <Link to={SPONSOR} style={{ color: '#00C6D7', textDecoration: 'underline' }}>Sponsor Soccerex</Link>.

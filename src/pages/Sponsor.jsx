@@ -11,7 +11,7 @@ import LeadForm from '../components/LeadForm'
 import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
-import { sponsorshipSchema } from '../lib/leadSchemas'
+import { sponsorshipSchema, packRequestSchema } from '../lib/leadSchemas'
 
 const HERO_IMG = '/hero/177-NEW6-miami-packed-diverse-audience.jpg'
 const ICN = '/events/miami/2026/icons'
@@ -24,7 +24,6 @@ const SPONSOR_PAYLOAD = { inquiry_type: 'partner', event_slug: 'miami-2026' }
 /* Downloadable sponsorship deck. Set to the public path once the file is added
    (e.g. '/decks/soccerex-sponsorship-deck.pdf'); the download CTA renders only
    when this is set, so nothing ships as a broken link. */
-const SPONSOR_DECK = null
 
 /* Value-led reasons a brand partners with the platform: reach, credibility,
    pipeline, and global footprint. */
@@ -172,11 +171,26 @@ export default function Sponsor() {
               bookingUrl={bookCallUrl('success-sponsor-hero')}
               buttonClassName="miami-pill-primary"
             />
-            {SPONSOR_DECK && (
-              <a href={SPONSOR_DECK} download className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
-                <Download size={15} /> Download the deck
-              </a>
-            )}
+            <InquiryModalButton
+              kind="pack-request"
+              label="Get the sponsor pack (PDF)"
+              modalTitle="Get the sponsor pack (PDF)"
+              eyebrow="Pricing inside"
+              intro="Tell us who you are and the pack is yours: packages, pricing, floor options and what each tier includes."
+              schema={packRequestSchema}
+              extraPayload={{
+                pack: 'sponsor',
+                event_slug: 'miami-2026',
+                interest: 'Sponsor pack download',
+                source: 'miami-2026-sponsor-pack',
+              }}
+              submitLabel="Get the pack"
+              successTitle="Here it comes."
+              successBody="If the download did not start, use the button below. The team also has your details and will follow up with anything the pack does not answer."
+              buttonClassName="miami-pill-outline"
+            >
+              <Download size={15} /> Get the sponsor pack (PDF)
+            </InquiryModalButton>
             <a href="https://soccerexmiami2026.eventify.io/t2/tickets/" target="_blank" rel="noopener" className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
               See delegate pricing <ArrowRight size={15} />
             </a>
@@ -316,11 +330,26 @@ export default function Sponsor() {
             <p className="miami-body mb-6" style={{ color: 'rgba(255,255,255,0.72)', fontSize: '1.05rem', lineHeight: 1.6, maxWidth: 460 }}>
               Share a little about your brand and what a win looks like for you. A partnerships lead will come back with the right pack, tailored to your goals and the events that fit.
             </p>
-            {SPONSOR_DECK && (
-              <a href={SPONSOR_DECK} download className="miami-pill-outline mb-6" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
-                <Download size={15} /> Download the sponsorship deck
-              </a>
-            )}
+            <InquiryModalButton
+              kind="pack-request"
+              label="Get the sponsorship deck (PDF)"
+              modalTitle="Get the sponsorship deck (PDF)"
+              eyebrow="Pricing inside"
+              intro="Tell us who you are and the pack is yours: packages, pricing, floor options and what each tier includes."
+              schema={packRequestSchema}
+              extraPayload={{
+                pack: 'sponsor',
+                event_slug: 'miami-2026',
+                interest: 'Sponsor pack download',
+                source: 'miami-2026-sponsor-pack',
+              }}
+              submitLabel="Get the pack"
+              successTitle="Here it comes."
+              successBody="If the download did not start, use the button below. The team also has your details and will follow up with anything the pack does not answer."
+              buttonClassName="miami-pill-outline mb-6"
+            >
+              <Download size={15} /> Get the sponsorship deck (PDF)
+            </InquiryModalButton>
             <p className="miami-body mb-3" style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.9rem' }}>
               <Handshake size={15} className="inline mr-2" style={{ color: 'var(--event-primary-light, #ff6fa0)' }} />
               Looking to take a stand instead? <Link to={EXHIBIT} style={{ color: '#00C6D7', textDecoration: 'underline' }}>Exhibit at Soccerex</Link>.

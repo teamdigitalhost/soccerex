@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Send, Loader2, Check, AlertCircle, ArrowRight, ArrowLeft, CalendarClock } from 'lucide-react'
+import { Send, Loader2, Check, AlertCircle, ArrowRight, ArrowLeft, CalendarClock, Download } from 'lucide-react'
 import { submitLead, ApiError } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 
@@ -56,6 +56,7 @@ export default function LeadForm({
      Not returned by the backend yet — wired so the success CTA upgrades from
      the generic fallback to the assigned rep the day lead assignment ships. */
   const [assignedBookingUrl, setAssignedBookingUrl] = useState(null)
+  const [packDownloadUrl, setPackDownloadUrl] = useState(null)
 
   const totalSteps = steps.length
   const isLastStep = stepIndex === totalSteps - 1
@@ -105,6 +106,12 @@ export default function LeadForm({
       if (typeof res?.booking_url === 'string' && res.booking_url) {
         setAssignedBookingUrl(res.booking_url)
       }
+      if (typeof res?.download_url === 'string' && res.download_url) {
+        /* Gated pack flow: start the download at once (the link is signed and
+           short-lived) and keep a button on the success screen as the retry. */
+        setPackDownloadUrl(res.download_url)
+        try { window.location.href = res.download_url } catch { /* button remains */ }
+      }
       setStatus('success')
     } catch (err) {
       if (err instanceof ApiError && err.status === 422 && err.body?.errors) {
@@ -120,7 +127,7 @@ export default function LeadForm({
   if (status === 'success') {
     return (
       <SuccessState theme={theme} title={successTitle} body={successBody}
-        bookingUrl={assignedBookingUrl || bookingUrl}>
+        bookingUrl={assignedBookingUrl || bookingUrl} downloadUrl={packDownloadUrl}>
         {children}
       </SuccessState>
     )
@@ -235,7 +242,7 @@ function StepIndicator({ current, total, theme }) {
   )
 }
 
-function SuccessState({ theme, title, body, bookingUrl, children }) {
+function SuccessState({ theme, title, body, bookingUrl, downloadUrl, children }) {
   return (
     <div className="flex flex-col items-center text-center" style={{ padding: '24px 8px' }}>
       <div style={{
@@ -252,6 +259,11 @@ function SuccessState({ theme, title, body, bookingUrl, children }) {
       <p className="font-body leading-relaxed" style={{ fontSize: 13.5, color: theme === 'dark' ? 'rgba(255,255,255,0.65)' : '#3a4a5a', maxWidth: 480 }}>
         {body || "Your message is on its way to the Soccerex team. We'll follow up by email."}
       </p>
+      {downloadUrl && (
+        <a href={downloadUrl} className="event-btn-primary" style={{ marginTop: 16, padding: '12px 22px', fontSize: 12, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <Download size={13} /> Download the pack (PDF)
+        </a>
+      )}
       {bookingUrl && (
         <div className="flex flex-col items-center gap-2" style={{ marginTop: 18 }}>
           <BookingLink to={bookingUrl} className="event-btn-primary" style={{ padding: '12px 22px', fontSize: 12, textDecoration: 'none' }}>

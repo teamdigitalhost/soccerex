@@ -88,8 +88,33 @@ export const rightsholderSchema = [
     fields: [
       { name: 'name',  label: 'Your name *', required: true, placeholder: 'Your full name', autoComplete: 'name' },
       { name: 'role',  label: 'Your role *', required: true, placeholder: 'Your role' },
-      { name: 'email', label: 'Official organisation email *', required: true, type: 'email', placeholder: 'you@organisation.com', autoComplete: 'email', span: 'full' },
+      { name: 'email', label: 'Official organisation email *', required: true, type: 'email', placeholder: 'you@organisation.com', autoComplete: 'email', span: 'full',
+        hint: 'Eligibility is verified against your organisation, so personal addresses (Gmail, Hotmail, AOL and similar) do not qualify.',
+        validate: (v) => {
+          const domain = String(v || '').toLowerCase().split('@')[1] || ''
+          // First-line check only; the API enforces the full list server-side.
+          const freemail = ['gmail.com', 'googlemail.com', 'hotmail.com', 'outlook.com', 'live.com', 'msn.com',
+            'yahoo.com', 'ymail.com', 'aol.com', 'icloud.com', 'me.com', 'protonmail.com', 'proton.me', 'gmx.com', 'mail.com']
+          return freemail.includes(domain)
+            ? 'Please use your official organisation email; personal addresses do not qualify for the free pass.'
+            : undefined
+        } },
       { name: 'message', label: 'Anything else?', type: 'textarea', rows: 3, span: 'full', placeholder: 'Tell us what you want to access or showcase.' },
+    ],
+  },
+]
+
+/* Sponsor/exhibitor pack request: the gated, tracked pricing download.
+   Pricing lives inside the PDF, not on the landing page (Joel, 2026-08-03).
+   The response may carry a signed download_url; LeadForm starts it and keeps
+   a retry button on the success screen. */
+export const packRequestSchema = [
+  {
+    fields: [
+      { name: 'name',    label: 'Your name *', required: true, placeholder: 'Your full name', autoComplete: 'name', autoFocus: true },
+      { name: 'role',    label: 'Role', placeholder: 'Your role' },
+      { name: 'email',   label: 'Work email *', required: true, type: 'email', placeholder: 'you@company.com', autoComplete: 'email', span: 'full' },
+      { name: 'company', label: 'Company *', required: true, placeholder: 'Company / organisation', span: 'full' },
     ],
   },
 ]
