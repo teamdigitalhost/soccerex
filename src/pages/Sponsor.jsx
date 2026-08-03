@@ -160,16 +160,16 @@ export default function Sponsor() {
             <InquiryModalButton
               kind="sponsorship-inquiry"
               schema={sponsorshipSchema}
-              label="Request the sponsorship pack"
+              label="Talk to a partnerships lead"
               modalTitle="Sponsor Soccerex"
               eyebrow="Sponsorship inquiry"
-              intro="Tell us about your brand and what you want to achieve. We will send the right sponsorship pack and follow up personally."
+              intro="Tell us about your brand and what you want to achieve. A partnerships lead will come back with options built around your goals. The pack itself is one click away on this page."
               extraPayload={{ ...SPONSOR_PAYLOAD, source: 'sponsor-hero' }}
               submitLabel="Send inquiry"
               successTitle="Inquiry received."
-              successBody="A partnerships lead will follow up by email with the right pack for your goals."
+              successBody="A partnerships lead will follow up by email with options for your goals."
               bookingUrl={bookCallUrl('success-sponsor-hero')}
-              buttonClassName="miami-pill-primary"
+              buttonClassName="miami-pill-outline"
             />
             <InquiryModalButton
               kind="pack-request"
@@ -187,7 +187,7 @@ export default function Sponsor() {
               submitLabel="Get the pack"
               successTitle="Here it comes."
               successBody="If the download did not start, use the button below. The team also has your details and will follow up with anything the pack does not answer."
-              buttonClassName="miami-pill-outline"
+              buttonClassName="miami-pill-primary"
             >
               <Download size={15} /> Get the sponsor pack (PDF)
             </InquiryModalButton>

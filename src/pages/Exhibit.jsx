@@ -145,16 +145,16 @@ export default function Exhibit() {
             <InquiryModalButton
               kind="sponsorship-inquiry"
               schema={sponsorshipSchema}
-              label="Request the exhibitor pack"
+              label="Talk to the exhibitions team"
               modalTitle="Exhibit at Soccerex"
               eyebrow="Exhibitor inquiry"
-              intro="Tell us about your stand needs and what you sell. We will send the exhibitor pack and floor plan, and follow up personally."
+              intro="Tell us about your stand needs and what you sell, and the team will follow up personally with floor options. The pack itself is one click away on this page."
               extraPayload={{ ...EXHIBIT_PAYLOAD, source: 'exhibit-hero' }}
               submitLabel="Send inquiry"
               successTitle="Inquiry received."
-              successBody="An exhibitor lead will follow up by email with the pack and floor plan."
+              successBody="The exhibitions team will follow up by email with floor options for your stand."
               bookingUrl={bookCallUrl('success-exhibit-hero')}
-              buttonClassName="miami-pill-primary"
+              buttonClassName="miami-pill-outline"
             />
             <InquiryModalButton
               kind="pack-request"
@@ -172,7 +172,7 @@ export default function Exhibit() {
               submitLabel="Get the pack"
               successTitle="Here it comes."
               successBody="If the download did not start, use the button below. The team also has your details and will follow up with anything the pack does not answer."
-              buttonClassName="miami-pill-outline"
+              buttonClassName="miami-pill-primary"
             >
               <Download size={15} /> Get the exhibitor pack (PDF)
             </InquiryModalButton>
