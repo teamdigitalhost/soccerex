@@ -114,7 +114,11 @@ export default function MiamiPricing() {
     setBusy(true); setError('')
     try {
       lsSet(EMAIL_KEY, email.trim())
-      await pricingAccessStart(email.trim(), { category })
+      await pricingAccessStart(email.trim(), {
+        category,
+        name: name.trim() || undefined,
+        company: company.trim() || undefined,
+      })
       setPhase('sent')
     } catch (err) {
       setError(err?.message || 'Could not send your access link. Please try again.')
@@ -227,6 +231,10 @@ export default function MiamiPricing() {
               <p className="font-body" style={{ fontSize: '0.95rem', color: '#586778', lineHeight: 1.6 }}>
                 We sent an access link to <strong>{email}</strong>. Click it to view the {meta.label}. The link expires in 30 minutes.
               </p>
+              <button type="button" onClick={() => { setPhase('gate'); setError('') }} className="font-body"
+                style={{ marginTop: 16, background: 'none', border: 'none', color: '#7a8694', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline' }}>
+                Didn&apos;t get the email? Send again
+              </button>
             </div>
           )}
 

@@ -287,10 +287,10 @@ export async function pricingCategories({ test } = {}) {
 }
 
 // Step 1: send the magic link for a category. Returns { ok, message }.
-export async function pricingAccessStart(email, { eventSlug, returnPath, category, test } = {}) {
+export async function pricingAccessStart(email, { eventSlug, returnPath, category, name, company, test } = {}) {
   return unwrap(await request('/pricing/access/start', {
     method: 'POST',
-    body: { email, event_slug: eventSlug, return_path: returnPath, category },
+    body: { email, event_slug: eventSlug, return_path: returnPath, category, name, company },
     test,
   }))
 }
