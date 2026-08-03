@@ -93,25 +93,7 @@ const GALLERY = [
 
 // 87 verified confirmed rightsholders for Miami 2026 as of 2026-08-01.
 // Update when the rep team provides a new count.
-const MIAMI_2026_RIGHTSHOLDER_COUNT = 87
 
-const ATTENDEE_LOGOS = [
-  { src: '/images/global-network/FIFA_logo_without_slogan_svg_1.png', alt: 'FIFA' },
-  { src: '/images/global-network/La_liga_new_logo_1.png', alt: 'LaLiga' },
-  { src: '/images/global-network/UEFA_logo_1.png', alt: 'UEFA' },
-  { src: '/images/global-network/mls_logo_png_transparent_1.png', alt: 'MLS' },
-  { src: '/images/global-network/Concacaf_1.png', alt: 'CONCACAF' },
-  { src: '/images/global-network/commebol.png', alt: 'CONMEBOL' },
-  { src: '/images/global-network/NWSL.png', alt: 'NWSL' },
-  { src: '/images/global-network/inter_miami_cf_logo_3D46B8A7DE_seeklogo_com_1.png', alt: 'Inter Miami CF' },
-  { src: '/images/global-network/Fox_SportsLogo_1.png', alt: 'Fox Sports' },
-  { src: '/images/global-network/CBS_1.png', alt: 'CBS Sports' },
-  { src: '/images/global-network/Bein_mediagroup_logo_1.png', alt: 'beIN Media' },
-  { src: '/images/global-network/FC_Barcelona_crest_svg_1.png', alt: 'FC Barcelona' },
-  { src: '/images/global-network/Manchester_City_FC_badge_svg_1.png', alt: 'Manchester City' },
-  { src: '/images/global-network/Real_Madrid2.png', alt: 'Real Madrid' },
-  { src: '/images/global-network/2026_FIFA_World_Cup_emblem_svg_1.png', alt: 'FIFA World Cup 2026' },
-]
 
 export default function Sponsor() {
   // Without this observer every fade-up block on the page stays at opacity 0
@@ -276,24 +258,10 @@ export default function Sponsor() {
         </div>
       </section>
 
-      {/* ─── 87 CONFIRMED RIGHTSHOLDERS + LOGO MARQUEE ───────────────────── */}
-      <section style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
-        <div style={{ maxWidth: '1080px', margin: '0 auto', textAlign: 'center' }}>
-          <p className="miami-kicker miami-kicker--pink">Proof, not promises</p>
-          <div className="fade-up" style={{ marginBottom: 'clamp(20px,3vw,32px)' }}>
-            <p className="miami-headline" style={{ fontSize: 'clamp(4rem, 9vw, 7.5rem)', color: '#0D1B2A', lineHeight: 1, marginBottom: 8 }}>
-              {MIAMI_2026_RIGHTSHOLDER_COUNT}
-            </p>
-            <p className="miami-subhead" style={{ fontSize: 'clamp(0.85rem, 1.4vw, 1rem)', color: '#3a4a5a', letterSpacing: '0.18em' }}>
-              CONFIRMED RIGHTSHOLDERS FOR SOCCEREX MIAMI 2026
-            </p>
-          </div>
-          <p className="miami-body fade-up mx-auto mb-12" style={{ fontSize: '1rem', color: '#3a4a5a', maxWidth: 580, lineHeight: 1.6 }}>
-            FIFA, LaLiga, UEFA, MLS, CONCACAF, CONMEBOL, and 81 more leagues, federations, and clubs have already confirmed attendance. This is the room your brand needs to be in.
-          </p>
-          <LogoMarquee logos={ATTENDEE_LOGOS} direction="left" speed={22} invert={false} height={44} />
-        </div>
-      </section>
+      {/* The 87-confirmed-rightsholders proof section is withdrawn (Joel,
+          2026-08-03): naming and picturing the organizations needs their
+          permission first, same as the attendee wall. Restore only after
+          the logo permissions on Joel's plate are collected. */}
 
       <TestimonialsSection />
 

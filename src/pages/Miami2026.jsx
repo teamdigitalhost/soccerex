@@ -7,7 +7,6 @@ import InquiryModalButton from '../components/InquiryModalButton'
 import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
-import AttendeeWall from '../components/AttendeeWall'
 import { sponsorshipSchema, rightsholderSchema } from '../lib/leadSchemas'
 
 const IMG = '/events/miami/2026'
@@ -59,25 +58,7 @@ const THEMES = [
 const MIAMI_OG_IMG = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg'
 
 // 87 verified confirmed rightsholders for Miami 2026 as of 2026-08-01.
-const MIAMI_2026_RIGHTSHOLDER_COUNT = 87
 
-const ATTENDEE_LOGOS = [
-  { src: '/images/global-network/FIFA_logo_without_slogan_svg_1.png', alt: 'FIFA' },
-  { src: '/images/global-network/La_liga_new_logo_1.png', alt: 'LaLiga' },
-  { src: '/images/global-network/UEFA_logo_1.png', alt: 'UEFA' },
-  { src: '/images/global-network/mls_logo_png_transparent_1.png', alt: 'MLS' },
-  { src: '/images/global-network/Concacaf_1.png', alt: 'CONCACAF' },
-  { src: '/images/global-network/commebol.png', alt: 'CONMEBOL' },
-  { src: '/images/global-network/NWSL.png', alt: 'NWSL' },
-  { src: '/images/global-network/inter_miami_cf_logo_3D46B8A7DE_seeklogo_com_1.png', alt: 'Inter Miami CF' },
-  { src: '/images/global-network/Fox_SportsLogo_1.png', alt: 'Fox Sports' },
-  { src: '/images/global-network/CBS_1.png', alt: 'CBS Sports' },
-  { src: '/images/global-network/Bein_mediagroup_logo_1.png', alt: 'beIN Media' },
-  { src: '/images/global-network/FC_Barcelona_crest_svg_1.png', alt: 'FC Barcelona' },
-  { src: '/images/global-network/Manchester_City_FC_badge_svg_1.png', alt: 'Manchester City' },
-  { src: '/images/global-network/Real_Madrid2.png', alt: 'Real Madrid' },
-  { src: '/images/global-network/2026_FIFA_World_Cup_emblem_svg_1.png', alt: 'FIFA World Cup 2026' },
-]
 
 export default function Miami2026() {
   useEffect(() => { window.scrollTo(0, 0) }, [])
