@@ -4,7 +4,7 @@ import {
   ArrowLeft, ArrowRight, Target, Rocket, CalendarCheck, LayoutGrid, Download,
   Building2, BadgeCheck, Users, Ticket, Handshake, CalendarDays,
 } from 'lucide-react'
-import { HOME, EVENTS, SPONSOR, MIAMI_2026_PRICING, EXHIBIT, bookCallUrl } from '../lib/routes'
+import { HOME, EVENTS, SPONSOR, EXHIBIT, bookCallUrl } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
@@ -162,9 +162,9 @@ export default function Exhibit() {
                 <Download size={15} /> Download the pack
               </a>
             )}
-            <Link to={MIAMI_2026_PRICING} className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
+            <a href="https://soccerexmiami2026.eventify.io/t2/tickets/" target="_blank" rel="noopener" className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
               See delegate pricing <ArrowRight size={15} />
-            </Link>
+            </a>
             <a href="#floor" className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>
               See the floor <ArrowRight size={15} />
             </a>

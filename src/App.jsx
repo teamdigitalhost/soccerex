@@ -91,8 +91,6 @@ const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
 const MiamiAccommodations = lazy(() => import('./pages/MiamiAccommodations'))
 const Sponsor = lazy(() => import('./pages/Sponsor'))
 const Exhibit = lazy(() => import('./pages/Exhibit'))
-const MiamiPricing = lazy(() => import('./pages/MiamiPricing'))
-const PricingChooser = lazy(() => import('./pages/PricingChooser'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
 const SoccerexApp = lazy(() => import('./pages/SoccerexApp'))
 const InsightsList = lazy(() => import('./pages/InsightsList'))
@@ -150,8 +148,12 @@ function App() {
           <Route path={PAST_SPEAKERS} element={<PastSpeakers />} />
           <Route path={EUROPE_2026} element={<Europe2026 />} />
           <Route path={MIAMI_2026} element={<Miami2026 />} />
-          <Route path={MIAMI_2026_PRICING} element={<PricingChooser />} />
-          <Route path={MIAMI_2026_PRICING_CATEGORY} element={<MiamiPricing />} />
+          {/* Prices page removed entirely (Joel, 2026-08-03). Old links redirect:
+              campaign emails carried magic links into the pricing gate, so these
+              paths must land somewhere real, not 404. Delegate prices live on
+              Eventify; the Miami page carries every remaining CTA. */}
+          <Route path={MIAMI_2026_PRICING} element={<Navigate to={MIAMI_2026} replace />} />
+          <Route path={MIAMI_2026_PRICING_CATEGORY} element={<Navigate to={MIAMI_2026} replace />} />
           <Route path={MIAMI_2026_PRESS_RELEASE} element={<MiamiPressRelease />} />
           <Route path={ACCOMMODATIONS} element={<MiamiAccommodations />} />
           <Route path={ACCOMMODATIONS_MISSPELLED} element={<Navigate to={ACCOMMODATIONS} replace />} />
