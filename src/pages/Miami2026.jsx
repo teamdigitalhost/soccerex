@@ -350,13 +350,10 @@ export default function Miami2026() {
         </div>
       </section>
 
-      {/* ─── LIVE CONFIRMED-ATTENDEE WALL ─────────────────────────────────── */}
-      <AttendeeWall
-        eventSlug="miami-2026"
-        staticCount={MIAMI_2026_RIGHTSHOLDER_COUNT}
-        staticLogos={ATTENDEE_LOGOS}
-        roleLabel="RIGHTSHOLDERS"
-      />
+      {/* Confirmed-attendee wall: taken down 2026-08-03 pending logo permissions
+          from the listed organizations and a rendering fix. Re-enable by
+          restoring the AttendeeWall block; consent lives in the admin
+          per-event-role wall opt-in toggle. */}
 
       <TestimonialsSection background="#FFFFFF" />
 
