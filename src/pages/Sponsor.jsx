@@ -12,6 +12,7 @@ import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
 import { sponsorshipSchema, packRequestSchema } from '../lib/leadSchemas'
+import useScrollAnimations from '../lib/useScrollAnimations'
 
 const HERO_IMG = '/hero/177-NEW6-miami-packed-diverse-audience.jpg'
 const ICN = '/events/miami/2026/icons'
@@ -113,6 +114,10 @@ const ATTENDEE_LOGOS = [
 ]
 
 export default function Sponsor() {
+  // Without this observer every fade-up block on the page stays at opacity 0
+  // and renders as a void (the whitespace Joel screenshotted on Aug 3).
+  useScrollAnimations()
+
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
