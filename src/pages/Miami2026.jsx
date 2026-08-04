@@ -8,6 +8,7 @@ import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
 import { sponsorshipSchema, rightsholderSchema } from '../lib/leadSchemas'
+import useScrollAnimations from '../lib/useScrollAnimations'
 
 const IMG = '/events/miami/2026'
 const GFX = '/events/miami/2026/graphics'
@@ -61,6 +62,9 @@ const MIAMI_OG_IMG = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.
 
 
 export default function Miami2026() {
+  // TestimonialsSection renders fade-up blocks; without this observer they sit
+  // at opacity 0 and the section is a giant void (Joel's Aug 4 screenshot).
+  useScrollAnimations()
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
