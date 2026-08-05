@@ -43,7 +43,7 @@ const FEATURED = {
   rating: '5-star',
   tier: '$$$$',
   amenities: ['Oceanfront pool + beach access', 'Full-service spa', 'Steps from Lincoln Road', 'Fine dining on site'],
-  note: 'The flagship stay for Soccerex Miami: an oceanfront Ritz-Carlton in the heart of South Beach. It is the longest ride to the stadium of our picks, and for delegates who want the full Miami experience it is worth every minute. Rooms in the Soccerex block are limited.',
+  note: 'The flagship stay for Soccerex Miami: an oceanfront Ritz-Carlton in the heart of South Beach, steps from Lincoln Road. Beach mornings, five-star evenings, and an easy ride to the stadium when it is time for business. Rooms in the Soccerex block are limited.',
   site: 'Book.Passkey.com',
   // Official lobby photo from the hotel's own gallery on ritzcarlton.com
   // (cache.marriott.com rendition miasb-lobby-3150).
@@ -122,13 +122,13 @@ const TRUST = [
   { icon: BadgeCheck, title: 'Lined up for delegates', body: 'Rooms and rates set up for Soccerex Miami, booked straight from the event’s own hotel links.' },
   { icon: Lock, title: 'Secure booking, direct', body: 'Every link goes to the hotel’s own website. Your details and payment stay with the hotel.' },
   { icon: MapPin, title: 'Beach to venue options', body: 'Choices across Miami, from the South Beach oceanfront to hotels right by the airport corridor near Miami Freedom Park.' },
-  { icon: ShieldCheck, title: 'No middlemen', body: 'No third-party booking sites and no booking-site markups. Just you and the hotel.' },
+  { icon: ShieldCheck, title: 'Direct with the hotel', body: 'Your reservation goes straight to the hotel at the hotel’s own rate. Just you and the property, start to finish.' },
 ]
 
 const GETTING_AROUND = [
   { icon: Plane, title: 'Fly into MIA', body: 'Miami International Airport is the main gateway and sits close to Miami Freedom Park. Fort Lauderdale (FLL) is a second option for some routes.' },
   { icon: Car, title: 'Airport transfers', body: 'Rideshare and taxis run around the clock at MIA. Many partner hotels are a short hop from the terminals.' },
-  { icon: MapPin, title: 'Getting to the venue', body: 'Nu Stadium at Miami Freedom Park is near the airport corridor, so a hotel in that area keeps your daily commute short.' },
+  { icon: MapPin, title: 'Getting to the venue', body: 'Nu Stadium at Miami Freedom Park sits near the airport corridor. Every partner hotel is an easy ride away, from the airport cluster to the South Beach oceanfront.' },
 ]
 
 export default function MiamiAccommodations() {
