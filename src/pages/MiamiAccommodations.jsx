@@ -38,7 +38,7 @@ const FEATURED = {
   name: 'The Ritz-Carlton South Beach',
   tag: 'Our #1 pick',
   neighborhood: 'South Beach, oceanfront at 1 Lincoln Road',
-  venue: 'About 25 to 35 min drive',
+  venue: 'About 20 to 25 min drive',
   mia: 'About 11 mi · rideshare',
   rating: '5-star',
   tier: '$$$$',
