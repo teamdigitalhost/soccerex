@@ -25,6 +25,30 @@ const SKYLINE_IMG = '/events/miami/2026/sections/miami-skyline.jpg'
  * null until official partner-hotel photos are supplied; the card renders a
  * branded header placeholder in the meantime, and a photo drops straight in.
  */
+/*
+ * The flagship pick, rendered as the large hero card above the grid. A big
+ * share of our delegates chooses the hotel flag first and the commute second,
+ * so this stays on top even though the airport-cluster hotels are closer to
+ * the venue. Booking runs through the official Soccerex room block on
+ * Passkey, the group-reservation system the hotel itself uses.
+ */
+const FEATURED = {
+  key: 'ritz',
+  brand: 'The Ritz-Carlton',
+  name: 'The Ritz-Carlton South Beach',
+  tag: 'Our #1 pick',
+  neighborhood: 'South Beach, oceanfront at 1 Lincoln Road',
+  venue: 'About 25 to 35 min drive',
+  mia: 'About 11 mi · rideshare',
+  rating: '5-star',
+  tier: '$$$$',
+  amenities: ['Oceanfront pool + beach access', 'Full-service spa', 'Steps from Lincoln Road', 'Fine dining on site'],
+  note: 'The flagship stay for Soccerex Miami: an oceanfront Ritz-Carlton in the heart of South Beach. It is the longest ride to the stadium of our picks, and for delegates who want the full Miami experience it is worth every minute. Rooms in the Soccerex block are limited.',
+  site: 'Book.Passkey.com',
+  image: null,
+  url: 'https://book.passkey.com/e/51313268',
+}
+
 const HOTELS = [
   {
     key: 'marriott',
@@ -95,7 +119,7 @@ const HOTELS = [
 const TRUST = [
   { icon: BadgeCheck, title: 'Lined up for delegates', body: 'Rooms and rates set up for Soccerex Miami, booked straight from the event’s own hotel links.' },
   { icon: Lock, title: 'Secure booking, direct', body: 'Every link goes to the hotel’s own website. Your details and payment stay with the hotel.' },
-  { icon: MapPin, title: 'Airport-corridor options', body: 'Choices across Miami, including hotels right by the airport corridor near Miami Freedom Park.' },
+  { icon: MapPin, title: 'Beach to venue options', body: 'Choices across Miami, from the South Beach oceanfront to hotels right by the airport corridor near Miami Freedom Park.' },
   { icon: ShieldCheck, title: 'No middlemen', body: 'No third-party booking sites and no booking-site markups. Just you and the hotel.' },
 ]
 
@@ -160,8 +184,51 @@ export default function MiamiAccommodations() {
             </h2>
           </div>
           <p className="miami-body text-center mx-auto mb-11" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 660 }}>
-            Three sit in the Miami International Airport cluster, the closest area to Nu Stadium, each with a free airport shuttle — plus a group-rate pick in Wynwood for staying in the city. Every option books directly on the hotel’s own secure website, so pick your spot and reserve.
+            Our flagship pick sits oceanfront on South Beach. Three more sit in the Miami International Airport cluster, the closest area to Nu Stadium, each with a free airport shuttle, plus a group-rate pick in Wynwood for staying in the city. Every option books through the hotel&rsquo;s own secure system, so pick your spot and reserve.
           </p>
+
+          {/* Flagship card: always first, full width, visually senior to the grid below */}
+          <div className="grid grid-cols-1 md:grid-cols-2 mb-8" style={{ background: '#FFFFFF', border: '1px solid rgba(198,161,91,0.6)', boxShadow: '0 30px 70px -34px rgba(13,27,42,0.62)' }}>
+            <div style={{ position: 'relative', minHeight: 300, overflow: 'hidden', background: FEATURED.image ? '#0D1B2A' : 'linear-gradient(135deg, #0D1B2A 0%, #1E3350 58%, #C6A15B 140%)' }}>
+              {FEATURED.image && <img src={FEATURED.image} alt={FEATURED.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />}
+              <div className="absolute inset-0 miami-grid" style={{ opacity: 0.18 }} aria-hidden />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,27,42,0.08) 0%, rgba(13,27,42,0.76) 100%)' }} />
+              <span className="miami-subhead" style={{ position: 'absolute', top: 16, left: 18, zIndex: 2, background: '#C6A15B', color: '#0D1B2A', fontSize: 10, letterSpacing: '0.18em', fontWeight: 700, padding: '6px 12px' }}>{FEATURED.tag}</span>
+              <div style={{ position: 'absolute', left: 22, right: 22, bottom: 20, zIndex: 2 }}>
+                <p className="miami-subhead" style={{ color: '#E8CFA0', fontSize: 10, letterSpacing: '0.24em', marginBottom: 5 }}>{FEATURED.brand}</p>
+                <h3 className="miami-headline" style={{ color: '#fff', fontSize: 'clamp(1.35rem, 2.6vw, 1.9rem)', lineHeight: 1.1, textTransform: 'none', letterSpacing: '0.01em' }}>{FEATURED.name}</h3>
+              </div>
+            </div>
+            <div className="flex flex-col" style={{ padding: 'clamp(22px, 3vw, 32px)' }}>
+              <p className="flex items-center gap-1.5 mb-4" style={{ fontSize: 13, color: '#607186' }}>
+                <MapPin size={14} style={{ color: '#C6A15B', flexShrink: 0 }} /> {FEATURED.neighborhood}
+              </p>
+              <div className="grid grid-cols-2 gap-2.5 mb-4">
+                <div style={{ background: '#FAFBFC', border: '1px solid rgba(13,27,42,0.07)', padding: '10px 12px' }}>
+                  <p className="miami-subhead flex items-center gap-1" style={{ fontSize: 8.5, letterSpacing: '0.12em', color: '#607186', marginBottom: 3 }}><MapPin size={10} /> To venue</p>
+                  <p style={{ fontSize: 13, color: '#0D1B2A', fontWeight: 600, lineHeight: 1.2 }}>{FEATURED.venue}</p>
+                </div>
+                <div style={{ background: '#FAFBFC', border: '1px solid rgba(13,27,42,0.07)', padding: '10px 12px' }}>
+                  <p className="miami-subhead flex items-center gap-1" style={{ fontSize: 8.5, letterSpacing: '0.12em', color: '#607186', marginBottom: 3 }}><Plane size={10} /> To airport</p>
+                  <p style={{ fontSize: 13, color: '#0D1B2A', fontWeight: 600, lineHeight: 1.2 }}>{FEATURED.mia}</p>
+                </div>
+              </div>
+              <p className="miami-subhead mb-3" style={{ fontSize: 11.5, letterSpacing: '0.08em', color: '#0D1B2A' }}>{FEATURED.rating} &middot; {FEATURED.tier}</p>
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {FEATURED.amenities.map((a) => (
+                  <span key={a} style={{ fontSize: 11.5, color: '#3a4a5a', background: 'rgba(198,161,91,0.10)', border: '1px solid rgba(198,161,91,0.35)', padding: '3px 9px' }}>{a}</span>
+                ))}
+              </div>
+              <p className="miami-body flex-1" style={{ fontSize: 13.5, color: '#4a5a6a', lineHeight: 1.55, marginBottom: 18 }}>{FEATURED.note}</p>
+              <a href={FEATURED.url} target="_blank" rel="noopener noreferrer" aria-label={`Book your room at ${FEATURED.name}`} className="miami-pill-primary" style={{ width: '100%', justifyContent: 'center', marginBottom: 12 }}>
+                Book the Soccerex room block <ArrowRight size={15} />
+              </a>
+              <p className="miami-subhead flex items-center justify-center gap-1.5" style={{ fontSize: 10, color: '#607186', letterSpacing: '0.12em' }}>
+                <Lock size={11} /> Secure booking on {FEATURED.site}
+                <ExternalLink size={10} style={{ opacity: 0.6 }} />
+              </p>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {HOTELS.map((h) => (
@@ -308,7 +375,7 @@ export default function MiamiAccommodations() {
             Lock in your stay for Soccerex Miami now, while the group rates and best locations are still open. Book directly with any of our partner hotels.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {HOTELS.map((h) => (
+            {[FEATURED, ...HOTELS].map((h) => (
               <a key={h.key} href={h.url} target="_blank" rel="noopener noreferrer" aria-label={`Book your room at ${h.name}`} className="miami-pill-primary">
                 <BedDouble size={15} /> {h.brand}
               </a>

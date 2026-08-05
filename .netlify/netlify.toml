@@ -40,6 +40,18 @@ for = "/article-preview/*"
 X-Robots-Tag = "noindex, nofollow"
 
 [[redirects]]
+from = "/version.json"
+to = "/version.json"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
 from = "/robots.txt"
 to = "/robots.txt"
 status = 200.0
