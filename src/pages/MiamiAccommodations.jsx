@@ -45,7 +45,9 @@ const FEATURED = {
   amenities: ['Oceanfront pool + beach access', 'Full-service spa', 'Steps from Lincoln Road', 'Fine dining on site'],
   note: 'The flagship stay for Soccerex Miami: an oceanfront Ritz-Carlton in the heart of South Beach. It is the longest ride to the stadium of our picks, and for delegates who want the full Miami experience it is worth every minute. Rooms in the Soccerex block are limited.',
   site: 'Book.Passkey.com',
-  image: null,
+  // Official lobby photo from the hotel's own gallery on ritzcarlton.com
+  // (cache.marriott.com rendition miasb-lobby-3150).
+  image: '/hotels/ritz-south-beach-lobby.jpg',
   url: 'https://book.passkey.com/e/51313268',
 }
 
