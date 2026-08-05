@@ -201,6 +201,7 @@ function App() {
           {/* Profile self-service editor (passwordless via emailed link) */}
           <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
           <Route path={PROFILE_SHORTCUT} element={<ProfileShortcut />} />
+          <Route path={`${PROFILE_SHORTCUT}/:slug`} element={<ProfileShortcut />} />
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />
           <Route path={ROUTE_PATTERNS.profileView} element={<ProfileView />} />
           <Route path={ROUTE_PATTERNS.profilePreview} element={<ProfilePreview />} />

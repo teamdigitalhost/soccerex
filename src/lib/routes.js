@@ -131,6 +131,7 @@ export const PROFILE_ACCESS  = '/profile-access'
 /* Memorable entry point: /profile. Signed-out -> request form; one profile ->
    straight into its portal; several -> the chooser on /profile-access. */
 export const PROFILE_SHORTCUT = '/profile'
+export const profileShortcut = (slug) => `${PROFILE_SHORTCUT}/${encodeURIComponent(slug)}`
 export const PROFILE_EXPIRED = `${PROFILE_ACCESS}?expired=1`
 export const profileEditor   = (slug) => `${PROFILE_ACCESS}/edit/${encodeURIComponent(slug)}`
 /* Read-only profile card — what the profile looks like, without edit chrome. */
