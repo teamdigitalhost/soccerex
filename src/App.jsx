@@ -11,7 +11,7 @@ import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, MIAMI_2026_ACCOMMODATIONS, MIAMI_2026_ACCOMMODATIONS_MISSPELLED, ACCOMMODATIONS, ACCOMMODATIONS_MISSPELLED, BOOK, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
   EVENT_RECAP_PATTERN,
-  INSIGHTS, PROFILE_ACCESS, DEAL_NETWORK, AGENDA_COLLAB,
+  INSIGHTS, PROFILE_ACCESS, PROFILE_SHORTCUT, DEAL_NETWORK, AGENDA_COLLAB,
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
@@ -105,6 +105,7 @@ const EventAgenda = lazy(() => import('./pages/EventAgenda'))
 const EventSpeakers = lazy(() => import('./pages/EventSpeakers'))
 const EventSpeakerProfile = lazy(() => import('./pages/EventSpeakerProfile'))
 const ProfileAccess = lazy(() => import('./pages/ProfileAccess'))
+const ProfileShortcut = lazy(() => import('./pages/ProfileShortcut'))
 const SpeakerRespond = lazy(() => import('./pages/SpeakerRespond'))
 const ProfileEditor = lazy(() => import('./pages/ProfileEditor'))
 const ProfileView = lazy(() => import('./pages/ProfileView'))
@@ -199,6 +200,7 @@ function App() {
           <Route path="/speak" element={<SpeakerRespond />} />
           {/* Profile self-service editor (passwordless via emailed link) */}
           <Route path={PROFILE_ACCESS} element={<ProfileAccess />} />
+          <Route path={PROFILE_SHORTCUT} element={<ProfileShortcut />} />
           <Route path={ROUTE_PATTERNS.profileEditor} element={<ProfileEditor />} />
           <Route path={ROUTE_PATTERNS.profileView} element={<ProfileView />} />
           <Route path={ROUTE_PATTERNS.profilePreview} element={<ProfilePreview />} />

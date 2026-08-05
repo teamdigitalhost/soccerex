@@ -383,9 +383,7 @@ function MatchesCard({ matches }) {
 
 function MatchRow({ match }) {
   const name = match.counterpart_name || match.counterpart?.display_name || match.title || 'Introduction'
-  const score = match.fit_score
-  const reason = match.match_reason || match.rationale
-  const angle = match.intro_angle
+  const brief = match.curated_brief
   const status = prettyStatus(match.status)
   return (
     <div style={subcardStyle}>
@@ -400,27 +398,13 @@ function MatchRow({ match }) {
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap">
             <p className="miami-headline" style={{ fontSize: '1rem', color: '#0D1B2A' }}>{name}</p>
-            {typeof score === 'number' && score > 0 && (
-              <span style={{
-                background: 'rgba(191,164,111,0.16)',
-                color: 'var(--event-secondary, #8a6f3a)',
-                fontSize: 10, fontFamily: 'IBM Plex Mono, monospace',
-                letterSpacing: '0.1em',
-                padding: '3px 8px', borderRadius: 999, fontWeight: 600,
-              }}>FIT {score}</span>
-            )}
             {status && (
               <span style={{ fontSize: 10, color: '#607186', letterSpacing: '0.15em', fontFamily: 'IBM Plex Mono, monospace' }}>
                 · {status.toUpperCase()}
               </span>
             )}
           </div>
-          {reason && <p className="miami-body mt-2" style={{ fontSize: 13, color: '#3a4a5a', lineHeight: 1.55 }}>{reason}</p>}
-          {angle && (
-            <p className="miami-body mt-2" style={{ fontSize: 12.5, color: '#586778', fontStyle: 'italic' }}>
-              Intro angle: {angle}
-            </p>
-          )}
+          {brief && <p className="miami-body mt-2" style={{ fontSize: 13, color: '#3a4a5a', lineHeight: 1.55 }}>{brief}</p>}
         </div>
       </div>
     </div>
@@ -613,6 +597,9 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
     primary_geography: intake?.primary_geography || '',
     budget_range: intake?.budget_range || '',
     decision_timeline: intake?.decision_timeline || '',
+    organization_type: intake?.organization_type || '',
+    decision_maker_attendance: intake?.decision_maker_attendance || '',
+    additional_context: intake?.additional_context || '',
     meeting_format_preference: intake?.meeting_format_preference || '',
     specific_people_to_meet: intake?.specific_people_to_meet || '',
     named_targets: Array.isArray(intake?.named_targets) ? intake.named_targets.join('\n') : '',
@@ -639,6 +626,9 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
       primary_geography: form.primary_geography || undefined,
       budget_range: form.budget_range || undefined,
       decision_timeline: form.decision_timeline.trim() || undefined,
+      organization_type: form.organization_type.trim() || undefined,
+      decision_maker_attendance: form.decision_maker_attendance || undefined,
+      additional_context: form.additional_context.trim() || undefined,
       meeting_format_preference: form.meeting_format_preference || undefined,
       specific_people_to_meet: form.specific_people_to_meet.trim() || undefined,
       named_targets: form.named_targets
@@ -686,6 +676,17 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
             <X size={14} />
           </button>
         </div>
+
+        {isEditing && intake?.revision_notice && (
+          <div style={{
+            marginBottom: 16, padding: '11px 14px', borderRadius: 8,
+            background: 'rgba(191,164,111,0.12)',
+            border: '1px solid rgba(191,164,111,0.45)',
+            fontSize: '0.85rem', lineHeight: 1.5, color: '#09203e',
+          }}>
+            {intake.revision_notice}
+          </div>
+        )}
 
         <Field label="Which side of the table?" required>
           <select value={form.side} onChange={(e) => update('side', e.target.value)} style={selectStyle}>
@@ -748,6 +749,22 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
               {MEETING_FORMAT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </Field>
+          <Field label="Organization type">
+            <input
+              value={form.organization_type}
+              onChange={(e) => update('organization_type', e.target.value)}
+              placeholder="e.g. Club, league, agency, brand, fund"
+              style={inputStyle}
+            />
+          </Field>
+          <Field label="Will a decision maker attend?">
+            <select value={form.decision_maker_attendance} onChange={(e) => update('decision_maker_attendance', e.target.value)} style={selectStyle}>
+              <option value="">Not sure yet</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+              <option value="tbc">To be confirmed</option>
+            </select>
+          </Field>
         </div>
 
         <Field label="Specific people or roles you want to meet">
@@ -776,6 +793,16 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
             value={form.deal_description}
             onChange={(e) => update('deal_description', e.target.value)}
             placeholder="Longer explanation, history, scope, what 'good' looks like."
+            style={textareaStyle}
+          />
+        </Field>
+
+        <Field label="Anything else we should know? (optional)">
+          <textarea
+            rows={2}
+            value={form.additional_context}
+            onChange={(e) => update('additional_context', e.target.value)}
+            placeholder="Constraints, sensitivities, or context that helps us curate well."
             style={textareaStyle}
           />
         </Field>
