@@ -13,15 +13,15 @@ This repo has **two working copies on each fleet Mac** — same GitHub repo, fix
 
 **Bottom line:** work in the primary by default; either copy can build + deploy after a `git pull`. Both hold the Netlify site link (`.netlify/state.json` → `siteId ec5f6ba1-c4a5-428b-bc1e-6319dc02f871`). Each copy has a local, gitignored `WORKSPACE_ROLE.md`.
 
-## DEPLOY — auto-deploy from GitHub main (since 2026-08-08)
+## DEPLOY — manual Netlify, by decision (builds stopped on the site)
 
-**Push to `main` → Netlify builds and publishes to https://soccerex.com automatically** (about 1 minute). Site `soccerex1` is linked to `github.com/teamdigitalhost/soccerex` via the Netlify GitHub App; build settings come from `netlify.toml` (`npm run build` → `dist`, Node 20) and `VITE_SOCCEREX_API_BASE_URL` is set in Netlify's build env. A merged PR IS a deploy, so never push unfinished work to `main`; use a branch, and PRs get a Netlify Deploy Preview URL automatically.
+**Netlify charges for builds/deploys, so deploys are MANUAL — Joel's standing decision (reaffirmed 2026-08-08).** Git push is for source history + code review, not shipping. The site is linked to `github.com/teamdigitalhost/soccerex` via the Netlify GitHub App, but **"Stopped builds" is set on `soccerex1`**: pushes and PRs trigger nothing. Do NOT re-enable builds without Joel's explicit say-so.
 
-Notes on the change:
-- The old rule "Netlify charges per deploy, keep auto-deploy off" is retired: the Digital Host account is Pro, other DH sites (draft.jettsports.com etc.) already auto-build on it, and manual deploys caused real drift (one copy was deploying 47 commits behind main).
-- Clean installs (`npm ci`, Netlify CI, cloud sandboxes) need the committed `.npmrc` (`legacy-peer-deps=true`; react-simple-maps@3 peers cap at React 18). Do not delete it.
+- **ALWAYS `git pull` before building** — a manual deploy once shipped from a copy 47 commits behind main. Prefer `~/deploy-soccerex.sh` on fleet Macs: it pulls first and sources auth from the fleet vault internally.
+- Clean installs (`npm ci`, CI, cloud sandboxes) need the committed `.npmrc` (`legacy-peer-deps=true`; react-simple-maps@3 peers cap at React 18, project is on React 19). Do not delete it.
+- `VITE_SOCCEREX_API_BASE_URL` is set in Netlify's build env AND defaulted in code; local `.env` carries it for dev.
 
-**Manual fallback** (Netlify CI down, or shipping an emergency local build) — prefer `~/deploy-soccerex.sh` on fleet Macs (auth handled internally via the fleet vault). By hand, from either copy after a `git pull`:
+By hand, from either copy:
 
 ```bash
 cd ~/projects/soccerex          # or ~/iCloud/Sites/Soccerex-front
@@ -33,7 +33,7 @@ netlify deploy --prod --dir=dist   # ships to soccerex1.netlify.app (https://soc
 
 - **Netlify account, once and for all:** there is ONE Netlify account for every DH/Jett site: **Digital Host** (slug `digitalhost`, Pro plan, joel@digitalhost.co). The Jett sites only lived on a separate Netlify temporarily; that account is gone. The account-wide PAT lives in the fleet vault at **`personal/netlify/deploy-token`** (canonical; `jett/netlify/deploy-token` holds the same value at a historical path — rotate both together). `netlify login` (interactive) also works. See `fleet-secret get personal/netlify/README`.
 - **Site link:** `soccerex1` / `siteId ec5f6ba1-c4a5-428b-bc1e-6319dc02f871` (also in `.netlify/state.json` on both copies).
-- A manual deploy is overwritten by the next push to `main` — land the fix in git promptly.
+- To preview a build without publishing: `netlify deploy` (no `--prod`) returns a draft URL. Weigh it against the per-deploy cost.
 
 ## Notes
 
