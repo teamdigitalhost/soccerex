@@ -9,7 +9,7 @@ import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.teks.eventify&hl=en_US'
 const APP_STORE = 'https://apps.apple.com/us/app/soccerex-events/id6737689519'
-const WEB_PORTAL = 'https://soccerexmena2025.eventify.io'
+const WEB_PORTAL = 'https://soccerexmiami2026.eventify.io'
 
 const STEPS = [
   { icon: Download, title: 'Download the App', desc: 'Locate and download the app from the App Store or Google Play Store.' },
@@ -164,7 +164,7 @@ export default function SoccerexApp() {
             <p className="font-body fade-up" style={{ fontSize: '0.9rem', color: '#666' }}>
               Or, visit the web portal at{' '}
               <a href={WEB_PORTAL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-brand-accent)', textDecoration: 'underline', fontWeight: 600 }}>
-                soccerexmena2025.eventify.io
+                soccerexmiami2026.eventify.io
               </a>
             </p>
           </div>
