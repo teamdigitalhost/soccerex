@@ -132,15 +132,28 @@ export default function Miami2026() {
               </div>
             </div>
 
-            <Link
-              to={MIAMI_2026_PRESS_RELEASE}
-              className="inline-flex items-center gap-2 mb-4"
-              style={{ textDecoration: 'none', background: '#0D1B2A', color: '#fff', padding: '14px 26px', fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 14 }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#E91E63' }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = '#0D1B2A' }}
-            >
-              <FileText size={16} /> Read the Announcement <ArrowRight size={16} />
-            </Link>
+            <div className="flex flex-wrap gap-3 mb-4">
+              <Link
+                to={MIAMI_2026_PRESS_RELEASE}
+                className="inline-flex items-center gap-2"
+                style={{ textDecoration: 'none', background: '#0D1B2A', color: '#fff', padding: '14px 26px', fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 14 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#E91E63' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#0D1B2A' }}
+              >
+                <FileText size={16} /> Read the Announcement <ArrowRight size={16} />
+              </Link>
+              <a
+                href="/events/miami/2026/selection-of-attendees.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2"
+                style={{ textDecoration: 'none', background: '#fff', color: '#0D1B2A', border: '1px solid #0D1B2A', padding: '13px 26px', fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 14 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#0D1B2A'; e.currentTarget.style.color = '#fff' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#0D1B2A' }}
+              >
+                <Users size={16} /> Selection of Attendees (PDF)
+              </a>
+            </div>
 
             <div className="flex flex-wrap gap-3 items-center">
               <a
