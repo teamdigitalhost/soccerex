@@ -29,6 +29,14 @@
   to = "/sitemap.xml"
   status = 200
 
+# /portal forwards to the Eventify event portal for the current event (Miami 2026).
+# 302 on purpose: the target changes each event cycle, keep browsers/crawlers re-checking.
+[[redirects]]
+  from = "/portal"
+  to = "https://soccerexmiami2026.eventify.io/"
+  status = 302
+  force = true
+
 # Admin-minted signed preview pages: keep them out of search indexes at the HTTP
 # layer (the pages also inject a robots meta client-side, but headers are authoritative).
 [[headers]]
