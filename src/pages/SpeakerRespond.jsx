@@ -108,7 +108,7 @@ export default function SpeakerRespond() {
               </div>
             )}
             <p style={{ fontSize: 14, color: '#7a8694', margin: '0 0 4px' }}>
-              {ctx.name ? `${ctx.name}, ` : ''}your name has been put forward {ctx.is_series ? 'as a featured guest on our video series' : ctx.is_media ? 'for our broadcast' : 'for the programme'}{ctx.topic ? ':' : ` at ${ctx.event?.name || 'Soccerex'}.`}
+              {ctx.name ? `${ctx.name}, ` : ''}your name has been put forward {ctx.is_series ? 'as a featured guest on The Network, our series hosted by Diego Arrioja' : ctx.is_media ? 'for our broadcast' : 'for the programme'}{ctx.topic ? ':' : ` at ${ctx.event?.name || 'Soccerex'}.`}
             </p>
             {ctx.topic && (
               <p style={{ fontSize: 19, fontWeight: 600, color: NAVY, margin: '0 0 8px', lineHeight: 1.25 }}>{ctx.topic.title}</p>
@@ -119,7 +119,7 @@ export default function SpeakerRespond() {
             </div>
             <p style={{ fontSize: 13, color: '#7a8694', margin: '0 0 18px', lineHeight: 1.55 }}>
               {ctx.is_series
-                ? 'A relaxed, remote conversation of about twenty-five minutes with our host, recorded at a time that suits you. You keep the episode and clips for your own channels. If you would be open to taking part, let us know below.'
+                ? 'A relaxed, remote conversation of about twenty-five minutes with Diego, recorded at a time that suits you. You keep the episode and clips for your own channels. If you would be open to taking part, let us know below.'
                 : ctx.is_media
                 ? 'Our studio line-up is kept deliberately small. If you would be open to taking part, let us know below and we will be in touch.'
                 : 'Each session is kept to a small, carefully chosen group. If you would be open to taking part, let us know below and we will be in touch.'}
