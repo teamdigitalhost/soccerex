@@ -9,6 +9,7 @@ import {
   submitDealNetworkIntake,
   ApiError,
 } from '../lib/soccerexApi'
+import { RITZ_DRAWING } from '../lib/routes'
 import { INTAKE_FORMS, INTAKE_REGIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { readCampaignAttribution, clearCampaignAttribution } from '../lib/campaignAttribution'
@@ -369,6 +370,12 @@ export default function DealNetworkApply() {
             />
           )}
           {step === STEP_DONE && <DoneStep person={chosenPerson} email={email || matched?.email} testMode={testMode} />}
+
+          <p className="text-center font-body mt-5" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>
+            The first 100 completed applications are entered into the drawing for a Soccerex-covered stay at
+            The Ritz-Carlton, South Beach.{' '}
+            <a href={RITZ_DRAWING} style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline' }}>Official terms</a>
+          </p>
         </div>
       </section>
     </div>
