@@ -132,30 +132,9 @@ export default function Miami2026() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3 mb-4">
-              <Link
-                to={MIAMI_2026_PRESS_RELEASE}
-                className="inline-flex items-center gap-2"
-                style={{ textDecoration: 'none', background: '#0D1B2A', color: '#fff', padding: '14px 26px', fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 14 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#E91E63' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#0D1B2A' }}
-              >
-                <FileText size={16} /> Read the Announcement <ArrowRight size={16} />
-              </Link>
-              <a
-                href="/events/miami/2026/selection-of-attendees.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2"
-                style={{ textDecoration: 'none', background: '#fff', color: '#0D1B2A', border: '1px solid #0D1B2A', padding: '13px 26px', fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 14 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#0D1B2A'; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#0D1B2A' }}
-              >
-                <Users size={16} /> Selection of Attendees (PDF)
-              </a>
-            </div>
-
-            <div className="flex flex-wrap gap-3 items-center">
+            {/* One primary action; everything else holds equal, quiet weight.
+                Row 1: the decisions. Row 2: a uniform utility grid. */}
+            <div className="flex flex-wrap gap-3 items-center mb-4">
               <a
                 href="https://soccerexmiami2026.eventify.io/t2/tickets/"
                 target="_blank"
@@ -186,20 +165,29 @@ export default function Miami2026() {
               >
                 <Trophy size={15} /> Apply for Rightsholder Pass
               </InquiryModalButton>
-              <Link to={ACCOMMODATIONS} className="miami-pill-outline">
-                <MapPin size={15} /> Travel &amp; Stay
-              </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 mt-5" style={{ maxWidth: 420 }}>
-              {/* Hero Sponsor/Exhibit now route to the dedicated landing pages
-                  (each carries its own value copy, floor imagery, and lead
-                  form) rather than opening an inline modal. */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3" style={{ maxWidth: 640 }}>
+              <a
+                href="/events/miami/2026/selection-of-attendees.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miami-cta-box"
+              >
+                Attendees (PDF)
+              </a>
+              <Link to={ACCOMMODATIONS} className="miami-cta-box">Travel &amp; Stay</Link>
               <Link to={SPONSOR} className="miami-cta-box">Sponsor</Link>
               <Link to={EXHIBIT} className="miami-cta-box">Exhibit</Link>
-              {/* Speaker CTA removed per GN revisions doc — Miami hero now
-                  surfaces Sponsor + Exhibit only. */}
             </div>
+
+            <Link
+              to={MIAMI_2026_PRESS_RELEASE}
+              className="inline-flex items-center gap-1.5 mt-4 miami-subhead"
+              style={{ color: '#0D1B2A', fontSize: 12, letterSpacing: '0.12em', textDecoration: 'none', borderBottom: '2px solid #E91E63', paddingBottom: 2 }}
+            >
+              Read the announcement <ArrowRight size={13} />
+            </Link>
 
             <div className="mt-5">
               <DeadlineBanner variant="general" />

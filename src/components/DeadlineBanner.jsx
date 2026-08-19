@@ -21,8 +21,8 @@ function formatDeadlineDate(isoDate) {
 
 function urgencyText(days, label, isoDate) {
   if (days <= 0) return `TODAY: ${label}`
-  if (days === 1) return `1 DAY LEFT — ${label}`
-  return `${days} DAYS LEFT — ${label} ${formatDeadlineDate(isoDate)}`
+  if (days === 1) return `1 DAY LEFT: ${label}`
+  return `${days} DAYS LEFT: ${label} ${formatDeadlineDate(isoDate)}`
 }
 
 // variant: 'sponsor' shows the headline-partner deadline,
