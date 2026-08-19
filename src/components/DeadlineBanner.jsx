@@ -1,11 +1,11 @@
 import { Clock } from 'lucide-react'
 
-// Real Miami 2026 commercial deadlines, established in W1-W6 nav-pricing work.
-// Update dates only if Joel or sales changes the actual commercial offer.
-const MIAMI_DEADLINES = [
-  { label: 'Headline partner positions close', date: '2026-08-15' },
-  { label: 'Floor stand early rate closes', date: '2026-08-31' },
-]
+// Commercial deadlines. EMPTY on purpose (Joel, 2026-08-19): the previous
+// entries did not reflect the actual commercial offer, and a countdown that
+// is not true poisons every real one that follows. Only add a deadline here
+// when Joel or sales confirms it as actual policy; the banner disappears
+// everywhere while this list is empty.
+const MIAMI_DEADLINES = []
 
 function daysUntil(isoDate) {
   const now = new Date()
