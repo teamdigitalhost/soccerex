@@ -11,7 +11,7 @@ import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, MIAMI_2026_ACCOMMODATIONS, MIAMI_2026_ACCOMMODATIONS_MISSPELLED, ACCOMMODATIONS, ACCOMMODATIONS_MISSPELLED, BOOK, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
   EVENT_RECAP_PATTERN,
-  INSIGHTS, PROFILE_ACCESS, PROFILE_SHORTCUT, DEAL_NETWORK, RITZ_DRAWING, AGENDA_COLLAB,
+  INSIGHTS, PROFILE_ACCESS, PROFILE_SHORTCUT, DEAL_NETWORK, RITZ_DRAWING, CTA_PATTERN, AGENDA_COLLAB,
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
@@ -117,6 +117,7 @@ const DealNetworkPage = lazy(() => import('./pages/DealNetwork'))
 const InviteAccept = lazy(() => import('./pages/InviteAccept'))
 const DealNetworkApply = lazy(() => import('./pages/DealNetworkApply'))
 const RitzDrawingTerms = lazy(() => import('./pages/RitzDrawingTerms'))
+const CtaLanding = lazy(() => import('./pages/CtaLanding'))
 const AgendaCollab = lazy(() => import('./pages/AgendaCollab'))
 const ScheduleCall = lazy(() => import('./pages/ScheduleCall'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
@@ -195,6 +196,8 @@ function App() {
           <Route path="/deal-network/apply" element={<DealNetworkApply />} />
           {/* Official terms for the Ritz-Carlton drawing (invite-email incentive) */}
           <Route path={RITZ_DRAWING} element={<RitzDrawingTerms />} />
+          {/* CTA landing pages: the URL email buttons link to (popup-as-a-page) */}
+          <Route path={CTA_PATTERN} element={<CtaLanding />} />
           {/* External agenda-collaborator review (personal ?token= link) */}
           <Route path={AGENDA_COLLAB} element={<AgendaCollab />} />
           {/* Speaker casting response page (personal ?token= link from invite +

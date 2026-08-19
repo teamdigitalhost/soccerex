@@ -5,6 +5,7 @@ import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { INSIGHTS, insightArticle } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
+import { CtaButton } from '../components/CtaAction'
 import { getArticle } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 
@@ -144,7 +145,7 @@ export function ArticleLayout({ article, related = [] }) {
           {/* Body: rich blocks (headings, lists, quotes) for CMS articles;
               plain paragraphs for the legacy static manifest. */}
           {article.blocks && article.blocks.length
-            ? article.blocks.map((b, i) => renderBlock(b, i))
+            ? article.blocks.map((b, i) => renderBlock(b, i, article.ctas))
             : article.paragraphs.map((p, i) => (
                 <p key={i} className="font-body leading-[1.8] mb-5" style={{ fontSize: '1.05rem', color: '#333' }}>
                   {p}
@@ -240,6 +241,7 @@ export function normalizeCmsArticleDetail(a) {
     blocks: parseBlocks(a.body),
     inlineImages: [],
     cta: normalizeCta(a.cta),
+    ctas: a.ctas || {},
   }
 }
 
@@ -284,6 +286,8 @@ function bodyToParagraphs(body) {
     .map((p) => p.trim())
     .filter(Boolean)
     .filter((p) => !isPlaceholderParagraph(p))
+    // The legacy plain-paragraph path cannot render CTA tokens; never print them raw.
+    .filter((p) => !/^\[cta:[a-z0-9\-]+(?:\|[^\]]+)?\]$/i.test(p))
 }
 
 /* Parse a CMS body into typed blocks. Supports the light Markdown the Articles
@@ -299,6 +303,9 @@ function parseBlocks(body) {
 
   return raw.map((b) => {
     const lines = b.split('\n').map((l) => l.trim()).filter(Boolean)
+    // A placed CTA from the admin CTA section: [cta:slug] or [cta:slug|Button label].
+    const cta = b.match(/^\[cta:([a-z0-9\-]+)(?:\|([^\]]+))?\]$/i)
+    if (cta) return { type: 'cta', slug: cta[1].toLowerCase(), label: (cta[2] || '').trim() }
     const img = b.match(/^!\[(.*?)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)$/)
     if (img) return { type: 'image', alt: img[1], src: img[2], credit: img[3] || '' }
     if (/^###\s+/.test(b)) return { type: 'h3', text: b.replace(/^###\s+/, '') }
@@ -361,8 +368,17 @@ function renderInline(text, keyPrefix) {
   return nodes
 }
 
-function renderBlock(b, i) {
+function renderBlock(b, i, ctas) {
   const key = `blk-${i}`
+  if (b.type === 'cta') {
+    const cta = (ctas || {})[b.slug]
+    if (!cta) return null // token for a CTA that is off or gone: render nothing
+    return (
+      <div key={key} style={{ margin: '2.2rem 0', textAlign: 'center' }}>
+        <CtaButton cta={cta} label={b.label} />
+      </div>
+    )
+  }
   if (b.type === 'image') {
     const caption = (b.alt || '').trim()
     const credit = (b.credit || '').trim()

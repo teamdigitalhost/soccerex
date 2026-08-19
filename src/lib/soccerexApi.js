@@ -162,6 +162,23 @@ export async function getArticle(slug, opts = {}) {
   return unwrap(await request(`/articles/${encodeURIComponent(slug)}`, opts))
 }
 
+/* ───── CTAs ─────────────────────────────────────────────────────────────────
+ * A CTA defined in the admin CTA section: a link button or a popup form with an
+ * optional gated download. Articles carry placed CTAs in their payload already;
+ * these two power the /cta/{slug} landing page (the URL emails link to) and the
+ * form submission from both surfaces. */
+export async function getCta(slug, opts = {}) {
+  return unwrap(await request(`/ctas/${encodeURIComponent(slug)}`, opts))
+}
+
+export async function submitCta(slug, payload, opts = {}) {
+  return unwrap(await request(`/ctas/${encodeURIComponent(slug)}/submit`, {
+    method: 'POST',
+    body: payload,
+    test: opts.test,
+  }))
+}
+
 /* ───── Invitation accept flow ──────────────────────────────────────────────
  * Backend issues an invite_token via email. The recipient lands on
  * /invite/:token on the React frontend, which previews via GET and accepts

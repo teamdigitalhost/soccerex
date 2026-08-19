@@ -31,6 +31,9 @@ export const DEAL_NETWORK_APPLY = '/deal-network/apply'
 // Official terms for the Ritz-Carlton stay drawing (first 100 completed
 // Deal Network applications). Linked from the invite emails + apply page.
 export const RITZ_DRAWING    = '/deal-network/ritz-drawing'
+// A CTA's public landing page: what an email button links to (emails cannot
+// host the popup, so this page renders the same form/offer standalone).
+export const CTA_PATTERN     = '/cta/:slug'
 // Preset the apply flow's entry side via ?track= (rightsholder | company |
 // capital). The apply page reads it to pre-select the right capability grid.
 export const dealNetworkApplyWithTrack = (track) =>
