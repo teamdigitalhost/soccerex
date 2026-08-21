@@ -119,6 +119,8 @@ export default function DealNetworkApply() {
   // Company search
   const [companyQuery, setCompanyQuery] = useState('')
   const [companyResults, setCompanyResults] = useState([])
+  /** idle | short | searching | found | empty | error — drives what the picker says. */
+  const [companySearch, setCompanySearch] = useState('idle')
 
   // Matchmaking — tailored per-side intake (2026-06 intake forms doc)
   const [matchmakingToken, setMatchmakingToken] = useState('')
@@ -199,16 +201,40 @@ export default function DealNetworkApply() {
     }
   }
 
+  /**
+   * Company lookup for the picker.
+   *
+   * Reports the OUTCOME, not just the results. Swallowing the failure made a
+   * dead search, a search that found nothing, and a search that errored all look
+   * identical: a box that does nothing when you type in it.
+   */
   async function searchCompanies(q) {
     setCompanyQuery(q)
-    if (! token || q.trim().length < 2) {
+    const term = q.trim()
+
+    if (term.length < 2) {
       setCompanyResults([])
+      setCompanySearch(term === '' ? 'idle' : 'short')
+
       return
     }
+    if (! token) {
+      setCompanyResults([])
+      setCompanySearch('error')
+
+      return
+    }
+
+    setCompanySearch('searching')
     try {
-      const res = await dealNetworkSearchCompanies(token, q.trim(), { test: testMode })
-      setCompanyResults(Array.isArray(res) ? res : [])
-    } catch { /* ignore */ }
+      const res = await dealNetworkSearchCompanies(token, term, { test: testMode })
+      const list = Array.isArray(res) ? res : []
+      setCompanyResults(list)
+      setCompanySearch(list.length > 0 ? 'found' : 'empty')
+    } catch {
+      setCompanyResults([])
+      setCompanySearch('error')
+    }
   }
 
   async function handleClaim() {
@@ -357,6 +383,7 @@ export default function DealNetworkApply() {
               companyCountry={companyCountry} setCompanyCountry={setCompanyCountry}
               companyIndustry={companyIndustry} setCompanyIndustry={setCompanyIndustry}
               companyQuery={companyQuery} companyResults={companyResults} searchCompanies={searchCompanies}
+              companySearch={companySearch}
               pickCompany={(c) => { setChosenCompany(c); setCompanyName('') }}
               busy={busy}
               onContinue={handleClaim}
@@ -367,17 +394,6 @@ export default function DealNetworkApply() {
               person={chosenPerson} company={chosenCompany}
               mm={mm} setMm={setMm}
               busy={busy} onSubmit={handleMatchmakingSubmit}
-              onChangeIdentity={() => {
-                // CondensedStep only renders the name and company fields when there
-                // is NO match, so clearing the match is what makes them editable.
-                // Seed them first, so correcting a name is an edit, not a retype.
-                setPersonName(chosenPerson?.display_name || personName)
-                setCompanyName(chosenCompany?.display_name || companyName)
-                setChosenPerson(null)
-                setChosenCompany(null)
-                setError('')
-                setStep(STEP_CONDENSED)
-              }}
             />
           )}
           {step === STEP_DONE && <DoneStep person={chosenPerson} email={email || matched?.email} testMode={testMode} />}
@@ -583,13 +599,31 @@ function MatchCard({ icon: Icon, label, value, subtitle, matched, onReject, reje
   )
 }
 
+/**
+ * The details we still need before the intake: who you are, and which company.
+ *
+ * The company half is a search FIRST, and only a form if the search comes up
+ * empty. Showing both at once asked the same question twice and made the search
+ * look decorative, so people typed a name that already existed and we grew a
+ * second copy of a company we were already tracking.
+ */
 function CondensedStep(props) {
-  const { chosenPerson, chosenCompany, personName, setPersonName, personTitle, setPersonTitle, companyName, setCompanyName, companyWebsite, setCompanyWebsite, companyCountry, setCompanyCountry, companyIndustry, setCompanyIndustry, companyQuery, companyResults, searchCompanies, pickCompany, busy, onContinue } = props
+  const {
+    chosenPerson, chosenCompany, personName, setPersonName, personTitle, setPersonTitle,
+    companyName, setCompanyName, companyWebsite, setCompanyWebsite, companyCountry, setCompanyCountry,
+    companyIndustry, setCompanyIndustry, companyQuery, companyResults, searchCompanies,
+    companySearch, pickCompany, busy, onContinue,
+  } = props
 
   const needsPerson = ! chosenPerson
   const needsCompany = ! chosenCompany
 
-  const canContinue = (! needsPerson || personName.trim() !== '') && (! needsCompany || companyName.trim() !== '')
+  // Only reached by saying the search did not find you, so the form and the
+  // search are never on screen together.
+  const [addingNew, setAddingNew] = useState(false)
+
+  const canContinue = (! needsPerson || personName.trim() !== '')
+    && (! needsCompany || (addingNew && companyName.trim() !== ''))
 
   return (
     <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
@@ -609,46 +643,87 @@ function CondensedStep(props) {
         <div className="mb-4">
           <div className="font-mono uppercase tracking-[0.16em] mb-3" style={{ fontSize: '1.054rem', color: PURPLE, fontWeight: 700 }}>Your company</div>
 
-          {/* Search first — dedup helper */}
-          <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.122rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
-            Is your company already on Soccerex?
-          </label>
-          <div style={{ position: 'relative', marginBottom: 8 }}>
-            <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9aa6b3' }} />
-            <input
-              type="text"
-              value={companyQuery}
-              onChange={(e) => searchCompanies(e.target.value)}
-              placeholder="Search by company name…"
-              style={{ width: '100%', padding: '10px 12px 10px 34px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }}
-            />
-          </div>
-          {companyResults.length > 0 && (
-            <div style={{ background: '#fafaf7', border: '1px solid rgba(9,32,62,0.08)', borderRadius: 8, maxHeight: 200, overflowY: 'auto', marginBottom: 12 }}>
-              {companyResults.map((c) => (
+          {! addingNew ? (
+            <>
+              <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.122rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
+                Is your company already on Soccerex?
+              </label>
+              <div style={{ position: 'relative', marginBottom: 8 }}>
+                <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9aa6b3' }} />
+                <input
+                  type="text"
+                  value={companyQuery}
+                  onChange={(e) => searchCompanies(e.target.value)}
+                  placeholder="Start typing your company name…"
+                  autoComplete="off"
+                  style={{ width: '100%', padding: '10px 12px 10px 38px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }}
+                />
+              </div>
+
+              {companySearch === 'found' && (
+                <div style={{ background: '#fafaf7', border: '1px solid rgba(9,32,62,0.08)', borderRadius: 8, maxHeight: 260, overflowY: 'auto', marginBottom: 12 }}>
+                  {companyResults.map((c) => (
+                    <button
+                      key={c.id} type="button"
+                      onClick={() => pickCompany(c)}
+                      style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 14px', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(9,32,62,0.06)', cursor: 'pointer' }}
+                    >
+                      <div className="font-body" style={{ fontSize: '1.53rem', color: NAVY, fontWeight: 500 }}>{c.display_name}</div>
+                      {c.headline && <div className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896' }}>{c.headline}</div>}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Every other outcome says so out loud. A silent box is why this
+                  read as a search that did not work. */}
+              {companySearch === 'searching' && (
+                <p className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896', marginBottom: 12 }}>Searching…</p>
+              )}
+              {companySearch === 'short' && (
+                <p className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896', marginBottom: 12 }}>Keep typing, at least two letters.</p>
+              )}
+              {companySearch === 'error' && (
+                <p className="font-body" style={{ fontSize: '1.275rem', color: '#b3261e', marginBottom: 12 }}>
+                  We could not run that search. You can still add your company below.
+                </p>
+              )}
+              {companySearch === 'empty' && (
+                <p className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896', marginBottom: 12 }}>
+                  Nothing on Soccerex matches “{companyQuery}”.
+                </p>
+              )}
+
+              <button
+                type="button" onClick={() => setAddingNew(true)} disabled={busy}
+                className="w-full font-body font-semibold"
+                style={{ background: 'transparent', color: PURPLE, border: '1px solid rgba(107,58,168,0.35)', borderRadius: 6, padding: '12px 16px', fontSize: '1.326rem', cursor: busy ? 'wait' : 'pointer' }}
+              >
+                {companySearch === 'empty' || companySearch === 'error'
+                  ? 'Add it as a new company'
+                  : 'My company is not on Soccerex'}
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+                <span className="font-body" style={{ fontSize: '1.326rem', color: '#586778' }}>Adding a new company</span>
                 <button
-                  key={c.id} type="button"
-                  onClick={() => pickCompany(c)}
-                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 14px', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(9,32,62,0.06)', cursor: 'pointer' }}
+                  type="button" onClick={() => setAddingNew(false)} disabled={busy}
+                  className="font-body underline"
+                  style={{ background: 'transparent', border: 0, color: PURPLE, fontSize: '1.19rem', cursor: busy ? 'wait' : 'pointer', padding: 0 }}
                 >
-                  <div className="font-body" style={{ fontSize: '1.53rem', color: NAVY, fontWeight: 500 }}>{c.display_name}</div>
-                  {c.headline && <div className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896' }}>{c.headline}</div>}
+                  Back to search
                 </button>
-              ))}
-            </div>
+              </div>
+              <Field label="Company name" value={companyName} onChange={setCompanyName} placeholder="ACME Marketing Group" required disabled={busy} />
+              <Field label="Website" value={companyWebsite} onChange={setCompanyWebsite} placeholder="https://acme.com" type="url" disabled={busy} />
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Country" value={companyCountry} onChange={setCompanyCountry} placeholder="United Kingdom" disabled={busy} />
+                <Field label="Industry" value={companyIndustry} onChange={setCompanyIndustry} placeholder="Sports marketing" disabled={busy} />
+              </div>
+            </>
           )}
-
-          <div className="text-center my-3" style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 1, background: 'rgba(9,32,62,0.08)' }} />
-            <span style={{ position: 'relative', background: '#fff', padding: '0 12px', fontSize: '1.224rem', color: '#9aa6b3' }}>Or add new</span>
-          </div>
-
-          <Field label="Company name" value={companyName} onChange={setCompanyName} placeholder="ACME Marketing Group" required disabled={busy} />
-          <Field label="Website" value={companyWebsite} onChange={setCompanyWebsite} placeholder="https://acme.com" type="url" disabled={busy} />
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Country" value={companyCountry} onChange={setCompanyCountry} placeholder="United Kingdom" disabled={busy} />
-            <Field label="Industry" value={companyIndustry} onChange={setCompanyIndustry} placeholder="Sports marketing" disabled={busy} />
-          </div>
         </div>
       )}
 
@@ -729,7 +804,7 @@ function MatchmakingProgress({ index }) {
   )
 }
 
-function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit, onChangeIdentity }) {
+function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
   const toggle = (key, v) => setMm({ ...mm, [key]: mm[key].includes(v) ? mm[key].filter((x) => x !== v) : [...mm[key], v] })
   const set = (key) => (v) => setMm({ ...mm, [key]: v })
 
@@ -779,21 +854,15 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit, onChangeI
 
   return (
     <div ref={topRef} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)', scrollMarginTop: 96 }}>
-      {/* Who we think you are was a dead end: matched wrongly, or matched to a
-          test company, and there was no way back. It is the first thing on the
-          screen, so it needs the correction next to it. */}
+      {/* Correcting who you are applying as needs a backend route: the magic-link
+          token is consumed by the claim that got you here, so re-claiming from
+          this screen always fails with invalid_or_expired. The control is out
+          until switching is supported properly. */}
       <div className="flex items-center gap-2 mb-4 p-3 rounded-lg flex-wrap" style={{ background: 'rgba(107,58,168,0.08)', border: '1px solid rgba(107,58,168,0.2)' }}>
         <Sparkles size={16} color={PURPLE} />
         <span className="font-body" style={{ fontSize: '1.445rem', color: NAVY }}>
           Applying as <strong>{person?.display_name}</strong> at <strong>{company?.display_name}</strong>
         </span>
-        <button
-          type="button" onClick={onChangeIdentity} disabled={busy}
-          className="font-body underline"
-          style={{ marginLeft: 'auto', background: 'transparent', border: 0, color: PURPLE, fontSize: '1.19rem', cursor: busy ? 'wait' : 'pointer', padding: 0 }}
-        >
-          Not you? Change
-        </button>
       </div>
 
       <h2 className="font-heading font-bold mb-2" style={{ fontSize: '2.04rem', color: NAVY }}>Deal Network intake</h2>
