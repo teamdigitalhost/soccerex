@@ -652,12 +652,98 @@ function CondensedStep(props) {
   )
 }
 
+/**
+ * The intake, asked five screens at a time instead of all at once.
+ *
+ * Everything here was previously one column roughly two thousand pixels tall.
+ * Nobody could see how much was left, so the honest reaction to opening it was
+ * to close it. The questions and the payload are unchanged; only how much of it
+ * you face at once, and whether you can tell how far along you are.
+ *
+ * Answers live in the parent's `mm`, so moving back and forth never loses one,
+ * and switching side still prunes the signals the new side does not ask about.
+ */
+const MM_STEPS = [
+  { key: 'you', title: 'You', blurb: 'Who is applying, and how we reach you.' },
+  { key: 'org', title: 'Organisation', blurb: 'What kind of organisation you are, and where you operate.' },
+  { key: 'bring', title: 'What you bring', blurb: 'What you are taking to market, and what you need.' },
+  { key: 'deal', title: 'The deal', blurb: 'Who you want on the other side of the table, and on what terms.' },
+  { key: 'extra', title: 'Anything else', blurb: 'Whatever did not fit above.' },
+]
+
+function MatchmakingProgress({ index }) {
+  const pct = Math.round(((index + 1) / MM_STEPS.length) * 100)
+
+  return (
+    <div className="mb-6">
+      <div className="flex items-baseline justify-between mb-2">
+        <span className="font-heading font-semibold" style={{ fontSize: '0.95rem', color: NAVY }}>
+          {MM_STEPS[index].title}
+        </span>
+        <span className="font-mono uppercase tracking-[0.1em]" style={{ fontSize: '0.66rem', color: '#7a8896' }}>
+          Step {index + 1} of {MM_STEPS.length}
+        </span>
+      </div>
+
+      {/* One bar, plus a tick per step. The bar answers "how much is left" at a
+          glance; the ticks let you see which parts you have already been through. */}
+      <div
+        role="progressbar"
+        aria-valuenow={index + 1}
+        aria-valuemin={1}
+        aria-valuemax={MM_STEPS.length}
+        aria-label={`Step ${index + 1} of ${MM_STEPS.length}: ${MM_STEPS[index].title}`}
+        style={{ height: 6, borderRadius: 999, background: 'rgba(9,32,62,0.10)', overflow: 'hidden' }}
+      >
+        <div style={{ width: `${pct}%`, height: '100%', background: 'var(--color-brand-accent)', transition: 'width .25s ease' }} />
+      </div>
+
+      <div className="flex gap-1.5 mt-2" aria-hidden="true">
+        {MM_STEPS.map((s, i) => (
+          <span
+            key={s.key}
+            className="font-body"
+            style={{
+              flex: 1,
+              fontSize: '0.6rem',
+              lineHeight: 1.3,
+              color: i === index ? NAVY : '#9aa6b2',
+              fontWeight: i === index ? 700 : 500,
+              borderTop: '2px solid ' + (i <= index ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.12)'),
+              paddingTop: 4,
+            }}
+          >
+            {s.title}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
   const toggle = (key, v) => setMm({ ...mm, [key]: mm[key].includes(v) ? mm[key].filter((x) => x !== v) : [...mm[key], v] })
   const set = (key) => (v) => setMm({ ...mm, [key]: v })
 
   const form = INTAKE_FORMS[mm.side]
   const isCapital = mm.side === 'capital'
+
+  const [index, setIndex] = useState(0)
+  const topRef = useRef(null)
+  const last = MM_STEPS.length - 1
+
+  // Land on the new question, not halfway down it. Without this a long screen
+  // followed by a short one leaves you scrolled past the top of the short one.
+  // scrollMarginTop on the card clears the 73px fixed nav, which would otherwise
+  // sit over the step heading you just scrolled to.
+  function go(next) {
+    setIndex(next)
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => {
+        topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    }
+  }
 
   // Switching side prunes any ticked signal that the new side's form does not
   // render, so the chips and the eventual payload stay consistent.
@@ -684,7 +770,7 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
     || key
 
   return (
-    <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
+    <div ref={topRef} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)', scrollMarginTop: 96 }}>
       <div className="flex items-center gap-2 mb-4 p-3 rounded-lg" style={{ background: 'rgba(107,58,168,0.08)', border: '1px solid rgba(107,58,168,0.2)' }}>
         <Sparkles size={16} color={PURPLE} />
         <span className="font-body" style={{ fontSize: '0.85rem', color: NAVY }}>
@@ -694,164 +780,192 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
 
       <h2 className="font-heading font-bold mb-2" style={{ fontSize: '1.2rem', color: NAVY }}>Deal Network intake</h2>
       <p className="font-body mb-5" style={{ fontSize: '0.9rem', color: '#586778', lineHeight: 1.55 }}>
-        A tailored intake for your side of the marketplace. Help us put you in the right rooms.
+        {MM_STEPS[index].blurb}
       </p>
 
-      {/* Side selector — drives which tailored form renders below. */}
-      <div className="mb-6">
-        <Label>Which best describes you?</Label>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {[
-            { id: 'property', title: 'Rightsholder', sub: 'Club, federation, league, venue, agency', accent: NAVY, tintBg: 'rgba(9,32,62,0.07)' },
-            { id: 'brand', title: 'Commercial Partner', sub: 'Brand, sponsor, technology, media, agency', accent: PURPLE, tintBg: 'rgba(107,58,168,0.08)' },
-            { id: 'capital', title: 'Capital Partner / Nonprofit', sub: 'Investor, fund, family office, foundation', accent: GOLD, tintBg: 'rgba(143,129,54,0.12)' },
-          ].map((opt) => {
-            const active = mm.side === opt.id
-            return (
-              <button
-                key={opt.id} type="button" onClick={() => setSide(opt.id)}
-                style={{ textAlign: 'left', background: active ? opt.tintBg : '#f8f7f4', border: '1.5px solid ' + (active ? opt.accent : 'rgba(9,32,62,0.12)'), borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
-              >
-                <div className="font-heading font-semibold" style={{ fontSize: '0.95rem', color: active ? opt.accent : NAVY }}>{opt.title}</div>
-                <div className="font-body" style={{ fontSize: '0.72rem', color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{opt.sub}</div>
-              </button>
-            )
-          })}
-        </div>
-      </div>
+      <MatchmakingProgress index={index} />
 
-      {/* ── COMPANY INFORMATION ─────────────────────────────────────────── */}
-      <SectionHeading>Company information</SectionHeading>
-      <div className="grid grid-cols-2 gap-3">
-        <Field label="Website" value={mm.website} onChange={set('website')} placeholder="https://yourcompany.com" type="url" disabled={busy} />
-        <Field label="Phone / WhatsApp" value={mm.phone} onChange={set('phone')} placeholder="+1 305 555 0100" disabled={busy} />
-      </div>
-      <div className="mb-4">
-        <Label>Will the decision-maker attend Miami?</Label>
-        <ChipGroup options={['Yes', 'No', 'TBC']} value={mm.attendance ? [mm.attendance === 'tbc' ? 'TBC' : mm.attendance === 'yes' ? 'Yes' : 'No'] : []}
-          onToggle={(label) => {
-            const v = label.toLowerCase()
-            setMm({ ...mm, attendance: mm.attendance === v ? '' : v })
-          }} />
-      </div>
-
-      {/* ── ABOUT YOUR ORGANIZATION ─────────────────────────────────────── */}
-      <SectionHeading>About your organization</SectionHeading>
-      <SelectField
-        label={form.orgTypeLabel}
-        value={mm.organization_type}
-        onChange={set('organization_type')}
-        options={[...form.orgTypes, 'Other']}
-        disabled={busy}
-      />
-      {mm.organization_type === 'Other' && (
-        <Field label={`${form.orgTypeLabel} (other)`} value={mm.organization_type_other} onChange={set('organization_type_other')} placeholder="Type it in" disabled={busy} />
-      )}
-      {mm.side === 'property' && (
-        <SelectField label="League / competition level" value={mm.league_level} onChange={set('league_level')} options={form.leagueLevels} disabled={busy} />
-      )}
-      {mm.side === 'brand' && (
-        <SelectField label="Industry / sector" value={mm.industry_sector} onChange={set('industry_sector')} options={form.industries} disabled={busy} />
-      )}
-      {isCapital && (
-        <SelectField label="Assets under management / capital deployed (ballpark)" value={mm.aum_range} onChange={set('aum_range')} options={form.aumRanges} disabled={busy} />
-      )}
-      <SelectField label="Primary geography / market" value={mm.primary_geography} onChange={set('primary_geography')} options={[...INTAKE_REGIONS, 'Other']} disabled={busy} />
-      {mm.primary_geography === 'Other' && (
-        <Field label="Primary geography (other)" value={mm.primary_geography_other} onChange={set('primary_geography_other')} placeholder="Type it in" disabled={busy} />
-      )}
-
-      {/* ── YOUR DEAL / YOUR MANDATE ────────────────────────────────────── */}
-      <SectionHeading>{isCapital ? 'Your mandate' : 'Your deal'}</SectionHeading>
-      <Field label={form.pitchLabel} value={mm.pitch} onChange={set('pitch')} placeholder={form.pitchPlaceholder} disabled={busy} textarea />
-
-      <div className="mb-4">
-        <Label>{form.lookingForLabel || 'What are you looking for? (select all that apply)'}</Label>
-        <KeyedChips options={form.lookingFor} value={mm.looking_for} onToggle={(k) => toggle('looking_for', k)} />
-        <OtherInline value={mm.looking_other} onChange={set('looking_other')} disabled={busy} />
-      </div>
-
-      {form.canProvide && (
-        <div className="mb-4">
-          <Label>What can you provide? (select all that apply)</Label>
-          <KeyedChips options={form.canProvide} value={mm.can_offer} onToggle={(k) => toggle('can_offer', k)} />
-          <OtherInline value={mm.offer_other} onChange={set('offer_other')} disabled={busy} />
-        </div>
-      )}
-
-      <div className="mb-2">
-        <Label>What problems are you trying to solve? (select all that apply)</Label>
-        <KeyedChips options={[...form.pains.map((k) => [k, painLabel(k)]), ['other', 'Other']]} value={mm.pain_points} onToggle={(k) => toggle('pain_points', k)} />
-      </div>
-      {mm.pain_points.length > 0 && (
-        <Field label="Anything to add on those? (optional)" value={mm.pain_point_detail} onChange={set('pain_point_detail')} placeholder="A sentence or two of context helps the concierge." disabled={busy} textarea />
-      )}
-
-      <div className="mb-4">
-        <Label>{form.dealTypesLabel || 'Deal types you are open to (select all that apply)'}</Label>
-        <ChipGroup options={form.dealTypes} value={mm.deal_types} onToggle={(v) => toggle('deal_types', v)} />
-        <OtherInline value={mm.deal_types_other} onChange={set('deal_types_other')} disabled={busy} />
-      </div>
-
-      {form.dealStructures && (
-        <div className="mb-4">
-          <Label>Deal structure preference (select all that apply)</Label>
-          <ChipGroup options={form.dealStructures} value={mm.deal_structures} onToggle={(v) => toggle('deal_structures', v)} />
-          <OtherInline value={mm.deal_structures_other} onChange={set('deal_structures_other')} disabled={busy} />
-        </div>
-      )}
-
-      {/* ── COUNTERPART & DEAL PARAMETERS ───────────────────────────────── */}
-      <SectionHeading>Counterpart &amp; deal parameters</SectionHeading>
-      <Field label={form.counterpartLabel} value={mm.ideal_counterpart} onChange={set('ideal_counterpart')} placeholder={form.counterpartPlaceholder} disabled={busy} textarea />
-      <Field label="Named targets (optional — specific clubs, leagues, federations, or companies, one per line)" value={mm.named_targets} onChange={set('named_targets')} placeholder={'Atlanta United\nLA Galaxy\nFC Cincinnati'} disabled={busy} textarea />
-
-      <div className="grid grid-cols-2 gap-3">
-        <SelectField label={form.budgetLabel} value={mm.budget_range} onChange={set('budget_range')} options={[...form.budgets, 'Other']} disabled={busy} />
-        <Field label="Decision timeline (optional)" value={mm.decision_timeline} onChange={set('decision_timeline')} placeholder="Q3 2026, before Miami, etc." disabled={busy} />
-      </div>
-      {mm.budget_range === 'Other' && (
-        <Field label={`${form.budgetLabel} (other)`} value={mm.budget_other} onChange={set('budget_other')} placeholder="Type it in" disabled={busy} />
-      )}
-
-      {isCapital && (
+      {index === 0 && (
         <>
-          <SelectField label="Primary geography of investment interest" value={mm.investment_geography} onChange={set('investment_geography')} options={INTAKE_REGIONS} disabled={busy} />
-          <Field label="Leagues or competitions of interest (optional)" value={mm.leagues_interest} onChange={set('leagues_interest')} placeholder="e.g., MLS, Liga MX, Championship, Brasileirão" disabled={busy} />
+          {/* Side selector — drives which tailored form renders on every screen below. */}
+          <div className="mb-6">
+            <Label>Which best describes you?</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { id: 'property', title: 'Rightsholder', sub: 'Club, federation, league, venue, agency', accent: NAVY, tintBg: 'rgba(9,32,62,0.07)' },
+                { id: 'brand', title: 'Commercial Partner', sub: 'Brand, sponsor, technology, media, agency', accent: PURPLE, tintBg: 'rgba(107,58,168,0.08)' },
+                { id: 'capital', title: 'Capital Partner / Nonprofit', sub: 'Investor, fund, family office, foundation', accent: GOLD, tintBg: 'rgba(143,129,54,0.12)' },
+              ].map((opt) => {
+                const active = mm.side === opt.id
+                return (
+                  <button
+                    key={opt.id} type="button" onClick={() => setSide(opt.id)}
+                    style={{ textAlign: 'left', background: active ? opt.tintBg : '#f8f7f4', border: '1.5px solid ' + (active ? opt.accent : 'rgba(9,32,62,0.12)'), borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
+                  >
+                    <div className="font-heading font-semibold" style={{ fontSize: '0.95rem', color: active ? opt.accent : NAVY }}>{opt.title}</div>
+                    <div className="font-body" style={{ fontSize: '0.72rem', color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{opt.sub}</div>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Website" value={mm.website} onChange={set('website')} placeholder="https://yourcompany.com" type="url" disabled={busy} />
+            <Field label="Phone / WhatsApp" value={mm.phone} onChange={set('phone')} placeholder="+1 305 555 0100" disabled={busy} />
+          </div>
+          <div className="mb-4">
+            <Label>Will the decision-maker attend Miami?</Label>
+            <ChipGroup options={['Yes', 'No', 'TBC']} value={mm.attendance ? [mm.attendance === 'tbc' ? 'TBC' : mm.attendance === 'yes' ? 'Yes' : 'No'] : []}
+              onToggle={(label) => {
+                const v = label.toLowerCase()
+                setMm({ ...mm, attendance: mm.attendance === v ? '' : v })
+              }} />
+          </div>
         </>
       )}
 
-      {/* ── ADDITIONAL CONTEXT ──────────────────────────────────────────── */}
-      <SectionHeading>Additional context</SectionHeading>
-      <Field
-        label="Anything else we should know? (optional)"
-        value={mm.additional_context} onChange={set('additional_context')}
-        placeholder={isCapital
-          ? "Context that doesn't fit above — prior deal attempts, specific constraints, ESG mandates, fund cycle timing, etc."
-          : "Context that doesn't fit above — prior deal attempts, specific constraints, preferences, etc."}
-        disabled={busy} textarea
-      />
+      {index === 1 && (
+        <>
+          <SelectField
+            label={form.orgTypeLabel}
+            value={mm.organization_type}
+            onChange={set('organization_type')}
+            options={[...form.orgTypes, 'Other']}
+            disabled={busy}
+          />
+          {mm.organization_type === 'Other' && (
+            <Field label={`${form.orgTypeLabel} (other)`} value={mm.organization_type_other} onChange={set('organization_type_other')} placeholder="Type it in" disabled={busy} />
+          )}
+          {mm.side === 'property' && (
+            <SelectField label="League / competition level" value={mm.league_level} onChange={set('league_level')} options={form.leagueLevels} disabled={busy} />
+          )}
+          {mm.side === 'brand' && (
+            <SelectField label="Industry / sector" value={mm.industry_sector} onChange={set('industry_sector')} options={form.industries} disabled={busy} />
+          )}
+          {isCapital && (
+            <SelectField label="Assets under management / capital deployed (ballpark)" value={mm.aum_range} onChange={set('aum_range')} options={form.aumRanges} disabled={busy} />
+          )}
+          <SelectField label="Primary geography / market" value={mm.primary_geography} onChange={set('primary_geography')} options={[...INTAKE_REGIONS, 'Other']} disabled={busy} />
+          {mm.primary_geography === 'Other' && (
+            <Field label="Primary geography (other)" value={mm.primary_geography_other} onChange={set('primary_geography_other')} placeholder="Type it in" disabled={busy} />
+          )}
+        </>
+      )}
 
-      <button
-        type="button" onClick={onSubmit} disabled={busy}
-        className="w-full mt-4 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '0.82rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
-      >
-        {busy ? <><Loader2 size={16} className="animate-spin" /> Submitting</> : <>Submit application <ArrowRight size={16} /></>}
-      </button>
+      {index === 2 && (
+        <>
+          <Field label={form.pitchLabel} value={mm.pitch} onChange={set('pitch')} placeholder={form.pitchPlaceholder} disabled={busy} textarea />
+
+          <div className="mb-4">
+            <Label>{form.lookingForLabel || 'What are you looking for? (select all that apply)'}</Label>
+            <KeyedChips options={form.lookingFor} value={mm.looking_for} onToggle={(k) => toggle('looking_for', k)} />
+            <OtherInline value={mm.looking_other} onChange={set('looking_other')} disabled={busy} />
+          </div>
+
+          {form.canProvide && (
+            <div className="mb-4">
+              <Label>What can you provide? (select all that apply)</Label>
+              <KeyedChips options={form.canProvide} value={mm.can_offer} onToggle={(k) => toggle('can_offer', k)} />
+              <OtherInline value={mm.offer_other} onChange={set('offer_other')} disabled={busy} />
+            </div>
+          )}
+
+          <div className="mb-2">
+            <Label>What problems are you trying to solve? (select all that apply)</Label>
+            <KeyedChips options={[...form.pains.map((k) => [k, painLabel(k)]), ['other', 'Other']]} value={mm.pain_points} onToggle={(k) => toggle('pain_points', k)} />
+          </div>
+          {mm.pain_points.length > 0 && (
+            <Field label="Anything to add on those? (optional)" value={mm.pain_point_detail} onChange={set('pain_point_detail')} placeholder="A sentence or two of context helps the concierge." disabled={busy} textarea />
+          )}
+        </>
+      )}
+
+      {index === 3 && (
+        <>
+          <div className="mb-4">
+            <Label>{form.dealTypesLabel || 'Deal types you are open to (select all that apply)'}</Label>
+            <ChipGroup options={form.dealTypes} value={mm.deal_types} onToggle={(v) => toggle('deal_types', v)} />
+            <OtherInline value={mm.deal_types_other} onChange={set('deal_types_other')} disabled={busy} />
+          </div>
+
+          {form.dealStructures && (
+            <div className="mb-4">
+              <Label>Deal structure preference (select all that apply)</Label>
+              <ChipGroup options={form.dealStructures} value={mm.deal_structures} onToggle={(v) => toggle('deal_structures', v)} />
+              <OtherInline value={mm.deal_structures_other} onChange={set('deal_structures_other')} disabled={busy} />
+            </div>
+          )}
+
+          <Field label={form.counterpartLabel} value={mm.ideal_counterpart} onChange={set('ideal_counterpart')} placeholder={form.counterpartPlaceholder} disabled={busy} textarea />
+          <Field label="Named targets (optional — specific clubs, leagues, federations, or companies, one per line)" value={mm.named_targets} onChange={set('named_targets')} placeholder={'Atlanta United\nLA Galaxy\nFC Cincinnati'} disabled={busy} textarea />
+
+          <div className="grid grid-cols-2 gap-3">
+            <SelectField label={form.budgetLabel} value={mm.budget_range} onChange={set('budget_range')} options={[...form.budgets, 'Other']} disabled={busy} />
+            <Field label="Decision timeline (optional)" value={mm.decision_timeline} onChange={set('decision_timeline')} placeholder="Q3 2026, before Miami, etc." disabled={busy} />
+          </div>
+          {mm.budget_range === 'Other' && (
+            <Field label={`${form.budgetLabel} (other)`} value={mm.budget_other} onChange={set('budget_other')} placeholder="Type it in" disabled={busy} />
+          )}
+
+          {isCapital && (
+            <>
+              <SelectField label="Primary geography of investment interest" value={mm.investment_geography} onChange={set('investment_geography')} options={INTAKE_REGIONS} disabled={busy} />
+              <Field label="Leagues or competitions of interest (optional)" value={mm.leagues_interest} onChange={set('leagues_interest')} placeholder="e.g., MLS, Liga MX, Championship, Brasileirão" disabled={busy} />
+            </>
+          )}
+        </>
+      )}
+
+      {index === 4 && (
+        <Field
+          label="Anything else we should know? (optional)"
+          value={mm.additional_context} onChange={set('additional_context')}
+          placeholder={isCapital
+            ? "Context that doesn't fit above — prior deal attempts, specific constraints, ESG mandates, fund cycle timing, etc."
+            : "Context that doesn't fit above — prior deal attempts, specific constraints, preferences, etc."}
+          disabled={busy} textarea
+        />
+      )}
+
+      {/* Back sits beside Next rather than under it, so the primary action keeps
+          the same place on every screen and never moves under your thumb. */}
+      <div className="flex items-center gap-3 mt-6">
+        {index > 0 && (
+          <button
+            type="button" onClick={() => go(index - 1)} disabled={busy}
+            className="font-body font-semibold uppercase tracking-[0.15em]"
+            style={{ background: 'transparent', color: NAVY, padding: '15px 20px', fontSize: '0.78rem', border: '1px solid rgba(9,32,62,0.18)', borderRadius: 4, cursor: busy ? 'wait' : 'pointer' }}
+          >
+            Back
+          </button>
+        )}
+
+        {index < last ? (
+          <button
+            type="button" onClick={() => go(index + 1)} disabled={busy}
+            className="flex-1 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '0.82rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
+          >
+            Continue <ArrowRight size={16} />
+          </button>
+        ) : (
+          <button
+            type="button" onClick={onSubmit} disabled={busy}
+            className="flex-1 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
+            style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '0.82rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
+          >
+            {busy ? <><Loader2 size={16} className="animate-spin" /> Submitting</> : <>Submit application <ArrowRight size={16} /></>}
+          </button>
+        )}
+      </div>
+
+      <p className="font-body mt-3" style={{ fontSize: '0.7rem', color: '#7a8896', lineHeight: 1.5 }}>
+        Every question is optional except the ones marked. You can go back at any point without losing an answer.
+      </p>
     </div>
   )
 }
-
-function SectionHeading({ children }) {
-  return (
-    <div className="font-mono uppercase tracking-[0.18em]" style={{
-      fontSize: '0.64rem', color: 'var(--color-brand-accent)', fontWeight: 700,
-      borderTop: '1px solid rgba(9,32,62,0.08)', paddingTop: 18, marginTop: 22, marginBottom: 14,
-    }}>{children}</div>
-  )
-}
-
 function SelectField({ label, value, onChange, options, disabled }) {
   return (
     <div style={{ marginBottom: 14 }}>
