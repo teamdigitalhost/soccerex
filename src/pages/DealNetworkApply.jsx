@@ -318,7 +318,7 @@ export default function DealNetworkApply() {
           <div className="flex justify-center mb-7">
             <img src="/brand/crests/crest-main-white.svg" alt="Soccerex" style={{ height: 56 }} />
           </div>
-          <p className="font-mono uppercase tracking-[0.18em] text-center mb-2" style={{ fontSize: '0.65rem', color: 'var(--color-brand-accent)', fontWeight: 700 }}>
+          <p className="font-mono uppercase tracking-[0.18em] text-center mb-2" style={{ fontSize: '1.105rem', color: 'var(--color-brand-accent)', fontWeight: 700 }}>
             Soccerex Deal Network
           </p>
           <h1 className="font-heading font-bold text-white text-center mb-6" style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', lineHeight: 1.2 }}>
@@ -367,11 +367,22 @@ export default function DealNetworkApply() {
               person={chosenPerson} company={chosenCompany}
               mm={mm} setMm={setMm}
               busy={busy} onSubmit={handleMatchmakingSubmit}
+              onChangeIdentity={() => {
+                // CondensedStep only renders the name and company fields when there
+                // is NO match, so clearing the match is what makes them editable.
+                // Seed them first, so correcting a name is an edit, not a retype.
+                setPersonName(chosenPerson?.display_name || personName)
+                setCompanyName(chosenCompany?.display_name || companyName)
+                setChosenPerson(null)
+                setChosenCompany(null)
+                setError('')
+                setStep(STEP_CONDENSED)
+              }}
             />
           )}
           {step === STEP_DONE && <DoneStep person={chosenPerson} email={email || matched?.email} testMode={testMode} />}
 
-          <p className="text-center font-body mt-5" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>
+          <p className="text-center font-body mt-5" style={{ fontSize: '1.275rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>
             The first 100 completed applications are entered into the drawing for a Soccerex-covered stay at
             The Ritz-Carlton, South Beach.{' '}
             <a href={RITZ_DRAWING} style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline' }}>Official terms</a>
@@ -416,10 +427,10 @@ function SmartErrorBanner({ error }) {
 function EmailStep({ email, setEmail, busy, onSubmit }) {
   return (
     <form noValidate onSubmit={onSubmit} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
-      <p className="font-body" style={{ fontSize: '1rem', color: '#586778', marginBottom: 22, lineHeight: 1.6 }}>
+      <p className="font-body" style={{ fontSize: '1.7rem', color: '#586778', marginBottom: 22, lineHeight: 1.6 }}>
         Start with your work email. We'll check our database and let you confirm your details. Most existing contacts can join in under 60 seconds.
       </p>
-      <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '0.68rem', color: NAVY, fontWeight: 600, marginBottom: 8 }}>
+      <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.156rem', color: NAVY, fontWeight: 600, marginBottom: 8 }}>
         Work email
       </label>
       <div style={{ position: 'relative', marginBottom: 18 }}>
@@ -430,14 +441,14 @@ function EmailStep({ email, setEmail, busy, onSubmit }) {
           onBlur={(e) => setEmail(normalizeApplyEmail(e.target.value))}
           placeholder="you@company.com"
           disabled={busy}
-          style={{ width: '100%', padding: '14px 14px 14px 40px', fontSize: '0.95rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 8, color: NAVY, outline: 'none' }}
+          style={{ width: '100%', padding: '14px 14px 14px 40px', fontSize: '1.615rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 8, color: NAVY, outline: 'none' }}
         />
       </div>
       <button type="submit" disabled={busy} className="w-full inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '0.82rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}>
+        style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}>
         {busy ? <><Loader2 size={16} className="animate-spin" /> Sending</> : <>Send confirmation link <ArrowRight size={16} /></>}
       </button>
-      <p className="text-center font-body mt-4" style={{ fontSize: '0.75rem', color: '#9aa6b3', lineHeight: 1.5 }}>
+      <p className="text-center font-body mt-4" style={{ fontSize: '1.275rem', color: '#9aa6b3', lineHeight: 1.5 }}>
         <Lock size={12} className="inline-block mr-1" style={{ marginTop: -2 }} />
         We'll email you a link. Nothing happens until you click it.
       </p>
@@ -451,18 +462,18 @@ function SentStep({ message, email, debugMagicLink }) {
       <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#d4f1e1', color: '#166534', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
         <CheckCircle2 size={28} />
       </div>
-      <h2 className="font-heading font-bold" style={{ fontSize: '1.3rem', color: NAVY, marginBottom: 10 }}>Check your email</h2>
-      <p className="font-body" style={{ fontSize: '0.95rem', color: '#586778', lineHeight: 1.6 }}>
+      <h2 className="font-heading font-bold" style={{ fontSize: '2.21rem', color: NAVY, marginBottom: 10 }}>Check your email</h2>
+      <p className="font-body" style={{ fontSize: '1.615rem', color: '#586778', lineHeight: 1.6 }}>
         {message}
       </p>
-      <p className="font-body mt-3" style={{ fontSize: '0.85rem', color: '#9aa6b3' }}>
+      <p className="font-body mt-3" style={{ fontSize: '1.445rem', color: '#9aa6b3' }}>
         Sent to <span className="font-mono">{email}</span>
       </p>
       {debugMagicLink && (
         <a
           href={debugMagicLink}
           className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] mt-5"
-          style={{ background: NAVY, color: '#fff', padding: '12px 18px', fontSize: '0.72rem', borderRadius: 4, textDecoration: 'none' }}
+          style={{ background: NAVY, color: '#fff', padding: '12px 18px', fontSize: '1.224rem', borderRadius: 4, textDecoration: 'none' }}
         >
           Open test magic link <ArrowRight size={14} />
         </a>
@@ -477,7 +488,7 @@ function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, se
 
   return (
     <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
-      <p className="font-body" style={{ fontSize: '0.95rem', color: '#586778', lineHeight: 1.6, marginBottom: 20 }}>
+      <p className="font-body" style={{ fontSize: '1.615rem', color: '#586778', lineHeight: 1.6, marginBottom: 20 }}>
         Welcome back. Confirm these are still right and we'll skip straight to the deal-network questions.
       </p>
 
@@ -503,7 +514,7 @@ function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, se
 
       {! chosenCompany && (
         <div style={{ marginTop: 16 }}>
-          <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '0.68rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
+          <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.156rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
             Find your company
           </label>
           <div style={{ position: 'relative', marginBottom: 8 }}>
@@ -513,7 +524,7 @@ function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, se
               value={companyQuery}
               onChange={(e) => searchCompanies(e.target.value)}
               placeholder="Type at least 2 letters…"
-              style={{ width: '100%', padding: '10px 12px 10px 34px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }}
+              style={{ width: '100%', padding: '10px 12px 10px 34px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }}
             />
           </div>
           {companyResults.length > 0 && (
@@ -524,8 +535,8 @@ function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, se
                   onClick={() => setChosenCompany(c)}
                   style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 14px', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(9,32,62,0.06)', cursor: 'pointer' }}
                 >
-                  <div className="font-body" style={{ fontSize: '0.9rem', color: NAVY, fontWeight: 500 }}>{c.display_name}</div>
-                  {c.headline && <div className="font-body" style={{ fontSize: '0.75rem', color: '#7a8896' }}>{c.headline}</div>}
+                  <div className="font-body" style={{ fontSize: '1.53rem', color: NAVY, fontWeight: 500 }}>{c.display_name}</div>
+                  {c.headline && <div className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896' }}>{c.headline}</div>}
                 </button>
               ))}
             </div>
@@ -533,9 +544,9 @@ function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, se
           <button
             type="button" onClick={onNeedCondensed}
             className="inline-flex items-center gap-1 mt-2 font-mono uppercase tracking-[0.15em]"
-            style={{ fontSize: '0.7rem', color: PURPLE, background: 'transparent', border: 'none', cursor: 'pointer' }}
+            style={{ fontSize: '1.19rem', color: PURPLE, background: 'transparent', border: 'none', cursor: 'pointer' }}
           >
-            None of these — create new <ChevronRight size={12} />
+            None of these, create new <ChevronRight size={12} />
           </button>
         </div>
       )}
@@ -543,7 +554,7 @@ function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, se
       <button
         type="button" onClick={onContinue} disabled={busy || ! chosenPerson || ! chosenCompany}
         className="w-full mt-6 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ background: chosenPerson && chosenCompany ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)', color: NAVY, padding: '15px 24px', fontSize: '0.82rem', border: 'none', cursor: chosenPerson && chosenCompany && ! busy ? 'pointer' : 'not-allowed', borderRadius: 4 }}
+        style={{ background: chosenPerson && chosenCompany ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: chosenPerson && chosenCompany && ! busy ? 'pointer' : 'not-allowed', borderRadius: 4 }}
       >
         {busy ? <><Loader2 size={16} className="animate-spin" /> Saving</> : <>Continue to deal-network questions <ArrowRight size={16} /></>}
       </button>
@@ -560,11 +571,11 @@ function MatchCard({ icon: Icon, label, value, subtitle, matched, onReject, reje
           <Icon size={16} color={matched ? '#166534' : NAVY} strokeWidth={2.2} />
         </span>
         <div className="flex-1 min-w-0">
-          <div className="font-mono uppercase tracking-[0.16em]" style={{ fontSize: '0.62rem', color: '#7a8896', fontWeight: 600 }}>{label}</div>
-          <div className="font-heading font-semibold" style={{ fontSize: '1rem', color: NAVY, marginTop: 2 }}>{value}</div>
-          {subtitle && <div className="font-body" style={{ fontSize: '0.82rem', color: '#7a8896', marginTop: 2 }}>{subtitle}</div>}
+          <div className="font-mono uppercase tracking-[0.16em]" style={{ fontSize: '1.054rem', color: '#7a8896', fontWeight: 600 }}>{label}</div>
+          <div className="font-heading font-semibold" style={{ fontSize: '1.7rem', color: NAVY, marginTop: 2 }}>{value}</div>
+          {subtitle && <div className="font-body" style={{ fontSize: '1.394rem', color: '#7a8896', marginTop: 2 }}>{subtitle}</div>}
         </div>
-        <button type="button" onClick={onReject} className="font-mono uppercase tracking-[0.14em]" style={{ fontSize: '0.62rem', color: '#9aa6b3', background: 'transparent', border: 'none', cursor: 'pointer', flexShrink: 0, marginTop: 6 }}>
+        <button type="button" onClick={onReject} className="font-mono uppercase tracking-[0.14em]" style={{ fontSize: '1.054rem', color: '#9aa6b3', background: 'transparent', border: 'none', cursor: 'pointer', flexShrink: 0, marginTop: 6 }}>
           {rejectLabel}
         </button>
       </div>
@@ -582,13 +593,13 @@ function CondensedStep(props) {
 
   return (
     <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
-      <p className="font-body" style={{ fontSize: '0.95rem', color: '#586778', lineHeight: 1.6, marginBottom: 20 }}>
-        Tell us the basics. You can fill in the full profile later — this just gets you into the deal-network questions.
+      <p className="font-body" style={{ fontSize: '1.615rem', color: '#586778', lineHeight: 1.6, marginBottom: 20 }}>
+        Tell us the basics. You can fill in the full profile later. This just gets you into the deal-network questions.
       </p>
 
       {needsPerson && (
         <div className="mb-4">
-          <div className="font-mono uppercase tracking-[0.16em] mb-3" style={{ fontSize: '0.62rem', color: PURPLE, fontWeight: 700 }}>Your details</div>
+          <div className="font-mono uppercase tracking-[0.16em] mb-3" style={{ fontSize: '1.054rem', color: PURPLE, fontWeight: 700 }}>Your details</div>
           <Field label="Your name" value={personName} onChange={setPersonName} placeholder="Jane Doe" required disabled={busy} />
           <Field label="Title / role" value={personTitle} onChange={setPersonTitle} placeholder="Head of Partnerships" disabled={busy} />
         </div>
@@ -596,10 +607,10 @@ function CondensedStep(props) {
 
       {needsCompany && (
         <div className="mb-4">
-          <div className="font-mono uppercase tracking-[0.16em] mb-3" style={{ fontSize: '0.62rem', color: PURPLE, fontWeight: 700 }}>Your company</div>
+          <div className="font-mono uppercase tracking-[0.16em] mb-3" style={{ fontSize: '1.054rem', color: PURPLE, fontWeight: 700 }}>Your company</div>
 
           {/* Search first — dedup helper */}
-          <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '0.66rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
+          <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.122rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
             Is your company already on Soccerex?
           </label>
           <div style={{ position: 'relative', marginBottom: 8 }}>
@@ -609,7 +620,7 @@ function CondensedStep(props) {
               value={companyQuery}
               onChange={(e) => searchCompanies(e.target.value)}
               placeholder="Search by company name…"
-              style={{ width: '100%', padding: '10px 12px 10px 34px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }}
+              style={{ width: '100%', padding: '10px 12px 10px 34px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }}
             />
           </div>
           {companyResults.length > 0 && (
@@ -620,8 +631,8 @@ function CondensedStep(props) {
                   onClick={() => pickCompany(c)}
                   style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 14px', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(9,32,62,0.06)', cursor: 'pointer' }}
                 >
-                  <div className="font-body" style={{ fontSize: '0.9rem', color: NAVY, fontWeight: 500 }}>{c.display_name}</div>
-                  {c.headline && <div className="font-body" style={{ fontSize: '0.75rem', color: '#7a8896' }}>{c.headline}</div>}
+                  <div className="font-body" style={{ fontSize: '1.53rem', color: NAVY, fontWeight: 500 }}>{c.display_name}</div>
+                  {c.headline && <div className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896' }}>{c.headline}</div>}
                 </button>
               ))}
             </div>
@@ -629,7 +640,7 @@ function CondensedStep(props) {
 
           <div className="text-center my-3" style={{ position: 'relative' }}>
             <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 1, background: 'rgba(9,32,62,0.08)' }} />
-            <span style={{ position: 'relative', background: '#fff', padding: '0 12px', fontSize: '0.72rem', color: '#9aa6b3' }}>Or add new</span>
+            <span style={{ position: 'relative', background: '#fff', padding: '0 12px', fontSize: '1.224rem', color: '#9aa6b3' }}>Or add new</span>
           </div>
 
           <Field label="Company name" value={companyName} onChange={setCompanyName} placeholder="ACME Marketing Group" required disabled={busy} />
@@ -644,7 +655,7 @@ function CondensedStep(props) {
       <button
         type="button" onClick={onContinue} disabled={busy || ! canContinue}
         className="w-full mt-2 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ background: canContinue ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)', color: NAVY, padding: '15px 24px', fontSize: '0.82rem', border: 'none', cursor: canContinue && ! busy ? 'pointer' : 'not-allowed', borderRadius: 4 }}
+        style={{ background: canContinue ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: canContinue && ! busy ? 'pointer' : 'not-allowed', borderRadius: 4 }}
       >
         {busy ? <><Loader2 size={16} className="animate-spin" /> Saving</> : <>Continue <ArrowRight size={16} /></>}
       </button>
@@ -677,10 +688,10 @@ function MatchmakingProgress({ index }) {
   return (
     <div className="mb-6">
       <div className="flex items-baseline justify-between mb-2">
-        <span className="font-heading font-semibold" style={{ fontSize: '0.95rem', color: NAVY }}>
+        <span className="font-heading font-semibold" style={{ fontSize: '1.615rem', color: NAVY }}>
           {MM_STEPS[index].title}
         </span>
-        <span className="font-mono uppercase tracking-[0.1em]" style={{ fontSize: '0.66rem', color: '#7a8896' }}>
+        <span className="font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.122rem', color: '#7a8896' }}>
           Step {index + 1} of {MM_STEPS.length}
         </span>
       </div>
@@ -698,30 +709,27 @@ function MatchmakingProgress({ index }) {
         <div style={{ width: `${pct}%`, height: '100%', background: 'var(--color-brand-accent)', transition: 'width .25s ease' }} />
       </div>
 
+      {/* Position only. Spelling all five names out under the bar wrapped them onto
+          two lines at this type size, and the step you are on is already named in
+          full, larger, directly above. */}
       <div className="flex gap-1.5 mt-2" aria-hidden="true">
         {MM_STEPS.map((s, i) => (
           <span
             key={s.key}
-            className="font-body"
             style={{
               flex: 1,
-              fontSize: '0.6rem',
-              lineHeight: 1.3,
-              color: i === index ? NAVY : '#9aa6b2',
-              fontWeight: i === index ? 700 : 500,
-              borderTop: '2px solid ' + (i <= index ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.12)'),
-              paddingTop: 4,
+              height: 3,
+              borderRadius: 999,
+              background: i <= index ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.12)',
             }}
-          >
-            {s.title}
-          </span>
+          />
         ))}
       </div>
     </div>
   )
 }
 
-function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
+function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit, onChangeIdentity }) {
   const toggle = (key, v) => setMm({ ...mm, [key]: mm[key].includes(v) ? mm[key].filter((x) => x !== v) : [...mm[key], v] })
   const set = (key) => (v) => setMm({ ...mm, [key]: v })
 
@@ -771,15 +779,25 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
 
   return (
     <div ref={topRef} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)', scrollMarginTop: 96 }}>
-      <div className="flex items-center gap-2 mb-4 p-3 rounded-lg" style={{ background: 'rgba(107,58,168,0.08)', border: '1px solid rgba(107,58,168,0.2)' }}>
+      {/* Who we think you are was a dead end: matched wrongly, or matched to a
+          test company, and there was no way back. It is the first thing on the
+          screen, so it needs the correction next to it. */}
+      <div className="flex items-center gap-2 mb-4 p-3 rounded-lg flex-wrap" style={{ background: 'rgba(107,58,168,0.08)', border: '1px solid rgba(107,58,168,0.2)' }}>
         <Sparkles size={16} color={PURPLE} />
-        <span className="font-body" style={{ fontSize: '0.85rem', color: NAVY }}>
+        <span className="font-body" style={{ fontSize: '1.445rem', color: NAVY }}>
           Applying as <strong>{person?.display_name}</strong> at <strong>{company?.display_name}</strong>
         </span>
+        <button
+          type="button" onClick={onChangeIdentity} disabled={busy}
+          className="font-body underline"
+          style={{ marginLeft: 'auto', background: 'transparent', border: 0, color: PURPLE, fontSize: '1.19rem', cursor: busy ? 'wait' : 'pointer', padding: 0 }}
+        >
+          Not you? Change
+        </button>
       </div>
 
-      <h2 className="font-heading font-bold mb-2" style={{ fontSize: '1.2rem', color: NAVY }}>Deal Network intake</h2>
-      <p className="font-body mb-5" style={{ fontSize: '0.9rem', color: '#586778', lineHeight: 1.55 }}>
+      <h2 className="font-heading font-bold mb-2" style={{ fontSize: '2.04rem', color: NAVY }}>Deal Network intake</h2>
+      <p className="font-body mb-5" style={{ fontSize: '1.53rem', color: '#586778', lineHeight: 1.55 }}>
         {MM_STEPS[index].blurb}
       </p>
 
@@ -802,8 +820,8 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
                     key={opt.id} type="button" onClick={() => setSide(opt.id)}
                     style={{ textAlign: 'left', background: active ? opt.tintBg : '#f8f7f4', border: '1.5px solid ' + (active ? opt.accent : 'rgba(9,32,62,0.12)'), borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
                   >
-                    <div className="font-heading font-semibold" style={{ fontSize: '0.95rem', color: active ? opt.accent : NAVY }}>{opt.title}</div>
-                    <div className="font-body" style={{ fontSize: '0.72rem', color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{opt.sub}</div>
+                    <div className="font-heading font-semibold" style={{ fontSize: '1.615rem', color: active ? opt.accent : NAVY }}>{opt.title}</div>
+                    <div className="font-body" style={{ fontSize: '1.224rem', color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{opt.sub}</div>
                   </button>
                 )
               })}
@@ -898,7 +916,7 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           )}
 
           <Field label={form.counterpartLabel} value={mm.ideal_counterpart} onChange={set('ideal_counterpart')} placeholder={form.counterpartPlaceholder} disabled={busy} textarea />
-          <Field label="Named targets (optional — specific clubs, leagues, federations, or companies, one per line)" value={mm.named_targets} onChange={set('named_targets')} placeholder={'Atlanta United\nLA Galaxy\nFC Cincinnati'} disabled={busy} textarea />
+          <Field label="Named targets (optional: specific clubs, leagues, federations, or companies, one per line)" value={mm.named_targets} onChange={set('named_targets')} placeholder={'Atlanta United\nLA Galaxy\nFC Cincinnati'} disabled={busy} textarea />
 
           <div className="grid grid-cols-2 gap-3">
             <SelectField label={form.budgetLabel} value={mm.budget_range} onChange={set('budget_range')} options={[...form.budgets, 'Other']} disabled={busy} />
@@ -922,8 +940,8 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           label="Anything else we should know? (optional)"
           value={mm.additional_context} onChange={set('additional_context')}
           placeholder={isCapital
-            ? "Context that doesn't fit above — prior deal attempts, specific constraints, ESG mandates, fund cycle timing, etc."
-            : "Context that doesn't fit above — prior deal attempts, specific constraints, preferences, etc."}
+            ? "Context that doesn't fit above: prior deal attempts, specific constraints, ESG mandates, fund cycle timing, etc."
+            : "Context that doesn't fit above: prior deal attempts, specific constraints, preferences, etc."}
           disabled={busy} textarea
         />
       )}
@@ -935,7 +953,7 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           <button
             type="button" onClick={() => go(index - 1)} disabled={busy}
             className="font-body font-semibold uppercase tracking-[0.15em]"
-            style={{ background: 'transparent', color: NAVY, padding: '15px 20px', fontSize: '0.78rem', border: '1px solid rgba(9,32,62,0.18)', borderRadius: 4, cursor: busy ? 'wait' : 'pointer' }}
+            style={{ background: 'transparent', color: NAVY, padding: '15px 20px', fontSize: '1.326rem', border: '1px solid rgba(9,32,62,0.18)', borderRadius: 4, cursor: busy ? 'wait' : 'pointer' }}
           >
             Back
           </button>
@@ -945,7 +963,7 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           <button
             type="button" onClick={() => go(index + 1)} disabled={busy}
             className="flex-1 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-            style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '0.82rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
+            style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
           >
             Continue <ArrowRight size={16} />
           </button>
@@ -953,14 +971,14 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           <button
             type="button" onClick={onSubmit} disabled={busy}
             className="flex-1 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-            style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '0.82rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
+            style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
           >
             {busy ? <><Loader2 size={16} className="animate-spin" /> Submitting</> : <>Submit application <ArrowRight size={16} /></>}
           </button>
         )}
       </div>
 
-      <p className="font-body mt-3" style={{ fontSize: '0.7rem', color: '#7a8896', lineHeight: 1.5 }}>
+      <p className="font-body mt-3" style={{ fontSize: '1.19rem', color: '#7a8896', lineHeight: 1.5 }}>
         Every question is optional except the ones marked. You can go back at any point without losing an answer.
       </p>
     </div>
@@ -971,7 +989,7 @@ function SelectField({ label, value, onChange, options, disabled }) {
     <div style={{ marginBottom: 14 }}>
       <Label>{label}</Label>
       <select value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}
-        style={{ width: '100%', padding: '10px 12px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY }}>
+        style={{ width: '100%', padding: '10px 12px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY }}>
         <option value="">Choose one</option>
         {options.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
@@ -987,7 +1005,7 @@ function KeyedChips({ options, value, onToggle }) {
         const active = value.includes(key)
         return (
           <button key={key} type="button" onClick={() => onToggle(key)}
-            style={{ background: active ? NAVY : '#f8f7f4', color: active ? '#fff' : NAVY, border: '1px solid ' + (active ? NAVY : 'rgba(9,32,62,0.12)'), borderRadius: 999, padding: '6px 12px', fontSize: '0.78rem', cursor: 'pointer' }}>
+            style={{ background: active ? NAVY : '#f8f7f4', color: active ? '#fff' : NAVY, border: '1px solid ' + (active ? NAVY : 'rgba(9,32,62,0.12)'), borderRadius: 999, padding: '6px 12px', fontSize: '1.326rem', cursor: 'pointer' }}>
             {label}
           </button>
         )
@@ -1003,7 +1021,7 @@ function OtherInline({ value, onChange, disabled }) {
       type="text" value={value} disabled={disabled}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Other (type in)"
-      style={{ width: '100%', marginTop: 8, padding: '8px 12px', fontSize: '0.85rem', background: '#fcfbf9', border: '1px dashed rgba(9,32,62,0.18)', borderRadius: 6, color: NAVY, outline: 'none' }}
+      style={{ width: '100%', marginTop: 8, padding: '8px 12px', fontSize: '1.445rem', background: '#fcfbf9', border: '1px dashed rgba(9,32,62,0.18)', borderRadius: 6, color: NAVY, outline: 'none' }}
     />
   )
 }
@@ -1029,29 +1047,29 @@ function DoneStep({ person, email, testMode }) {
       <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)', display: 'grid', placeItems: 'center', margin: '0 auto 20px', boxShadow: '0 20px 60px rgba(191,177,112,0.45)' }}>
         <CheckCircle2 size={36} color={NAVY} />
       </div>
-      <h2 className="font-heading font-bold mb-3" style={{ fontSize: '1.6rem', color: NAVY }}>You're in</h2>
-      <p className="font-body mb-2" style={{ fontSize: '1rem', color: '#586778', lineHeight: 1.6 }}>
+      <h2 className="font-heading font-bold mb-3" style={{ fontSize: '2.72rem', color: NAVY }}>You're in</h2>
+      <p className="font-body mb-2" style={{ fontSize: '1.7rem', color: '#586778', lineHeight: 1.6 }}>
         Thanks <strong>{person?.display_name}</strong>. The Soccerex team will review your application and reach out with proposed introductions.
       </p>
-      <p className="font-body" style={{ fontSize: '0.85rem', color: '#9aa6b3' }}>
+      <p className="font-body" style={{ fontSize: '1.445rem', color: '#9aa6b3' }}>
         Expect to hear back within two business days.
       </p>
 
       {/* Profile continuity: the application lives on their Soccerex profile —
           hand them the door to it instead of a dead end. */}
       <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(9,32,62,0.08)', textAlign: 'left' }}>
-        <p className="font-mono uppercase tracking-[0.16em]" style={{ fontSize: '0.62rem', color: PURPLE, fontWeight: 700, marginBottom: 6 }}>Your Soccerex profile</p>
-        <p className="font-body" style={{ fontSize: '0.9rem', color: '#586778', lineHeight: 1.6, marginBottom: 12 }}>
-          This application is saved to <strong>{person?.display_name}</strong>'s Soccerex profile. Your portal keeps everything in one place — Deal Network requests and meetings, event access, speaking, and your profile details.
+        <p className="font-mono uppercase tracking-[0.16em]" style={{ fontSize: '1.054rem', color: PURPLE, fontWeight: 700, marginBottom: 6 }}>Your Soccerex profile</p>
+        <p className="font-body" style={{ fontSize: '1.53rem', color: '#586778', lineHeight: 1.6, marginBottom: 12 }}>
+          This application is saved to <strong>{person?.display_name}</strong>'s Soccerex profile. Your portal keeps everything in one place: Deal Network requests and meetings, event access, speaking, and your profile details.
         </p>
         {portalRequested ? (
-          <p className="font-body" style={{ fontSize: '0.88rem', color: '#166534' }}>
-            ✓ Check your inbox — we emailed you a secure link to your Soccerex portal.
+          <p className="font-body" style={{ fontSize: '1.496rem', color: '#166534' }}>
+            ✓ Check your inbox. We emailed you a secure link to your Soccerex portal.
           </p>
         ) : (
           <button type="button" onClick={requestPortalLink} disabled={portalBusy}
             className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.12em]"
-            style={{ background: NAVY, color: '#fff', padding: '11px 18px', fontSize: '0.72rem', border: 'none', borderRadius: 6, cursor: portalBusy ? 'wait' : 'pointer' }}>
+            style={{ background: NAVY, color: '#fff', padding: '11px 18px', fontSize: '1.224rem', border: 'none', borderRadius: 6, cursor: portalBusy ? 'wait' : 'pointer' }}>
             {portalBusy ? <><Loader2 size={14} className="animate-spin" /> Sending</> : <>Open my Soccerex portal <ArrowRight size={14} /></>}
           </button>
         )}
@@ -1063,15 +1081,15 @@ function DoneStep({ person, email, testMode }) {
 function Field({ label, value, onChange, placeholder, type = 'text', required, textarea, disabled }) {
   return (
     <div style={{ marginBottom: 14 }}>
-      <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '0.66rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
+      <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.122rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
         {label}{required && <span style={{ color: 'var(--color-brand-accent)', marginLeft: 4 }}>*</span>}
       </label>
       {textarea ? (
         <textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} disabled={disabled} rows={3}
-          style={{ width: '100%', padding: '10px 12px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none', resize: 'vertical' }} />
+          style={{ width: '100%', padding: '10px 12px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none', resize: 'vertical' }} />
       ) : (
         <input type={type} required={required} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} disabled={disabled}
-          style={{ width: '100%', padding: '10px 12px', fontSize: '0.9rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }} />
+          style={{ width: '100%', padding: '10px 12px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }} />
       )}
     </div>
   )
@@ -1079,7 +1097,7 @@ function Field({ label, value, onChange, placeholder, type = 'text', required, t
 
 function Label({ children }) {
   return (
-    <label className="block font-mono uppercase tracking-[0.1em] mb-2" style={{ fontSize: '0.66rem', color: NAVY, fontWeight: 600 }}>{children}</label>
+    <label className="block font-mono uppercase tracking-[0.1em] mb-2" style={{ fontSize: '1.122rem', color: NAVY, fontWeight: 600 }}>{children}</label>
   )
 }
 
@@ -1090,7 +1108,7 @@ function ChipGroup({ options, value, onToggle }) {
         const active = value.includes(o)
         return (
           <button key={o} type="button" onClick={() => onToggle(o)}
-            style={{ background: active ? NAVY : '#f8f7f4', color: active ? '#fff' : NAVY, border: '1px solid ' + (active ? NAVY : 'rgba(9,32,62,0.12)'), borderRadius: 999, padding: '6px 12px', fontSize: '0.78rem', cursor: 'pointer' }}>
+            style={{ background: active ? NAVY : '#f8f7f4', color: active ? '#fff' : NAVY, border: '1px solid ' + (active ? NAVY : 'rgba(9,32,62,0.12)'), borderRadius: 999, padding: '6px 12px', fontSize: '1.326rem', cursor: 'pointer' }}>
             {o}
           </button>
         )
