@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;700&family=Playfair+Display:wght@900&family=DM+Serif+Display&family=Roboto+Slab:wght@900&family=Cormorant+Garamond:wght@700&family=Libre+Baskerville:wght@700&family=Lora:wght@700&family=Newsreader:opsz,wght@6..72,800&family=Oswald:wght@500;600;700&family=Montserrat:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
     <title>Soccerex — 30 Years at the Center of the Business of Football</title>
+
+    <!-- Static social-card defaults. Link scrapers (iMessage, WhatsApp, Slack, X,
+         Facebook) do not execute JS, so the per-route react-helmet tags in
+         PageMeta.jsx never reach them unless Netlify prerendering intercepts the
+         crawler. These defaults guarantee every shared soccerex.com link unfurls
+         with the brand card instead of whatever image the scraper guesses. -->
+    <meta name="description" content="Soccerex connects the people who drive the global game forward: clubs, leagues, brands, investors, and innovators, across events in Miami, Europe, and the Middle East." />
+    <meta property="og:site_name" content="Soccerex" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Soccerex: 30 Years at the Center of the Business of Football" />
+    <meta property="og:description" content="Soccerex connects the people who drive the global game forward: clubs, leagues, brands, investors, and innovators, across events in Miami, Europe, and the Middle East." />
+    <meta property="og:image" content="https://soccerex.com/images/soccerex-og-default.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://soccerex.com/images/soccerex-og-default.jpg" />
   </head>
   <body>
     <div id="root"></div>

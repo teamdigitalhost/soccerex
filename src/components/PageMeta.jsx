@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async'
 
 const SITE_NAME   = 'Soccerex'
 const SITE_URL    = 'https://soccerex.com'
-const DEFAULT_IMG = `${SITE_URL}/brand/soccerex-og-default.jpg`
+const DEFAULT_IMG = `${SITE_URL}/images/soccerex-og-default.jpg`
 
 /**
  * Per-route <head> metadata for social sharing and SEO.
