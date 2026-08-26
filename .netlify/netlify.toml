@@ -76,6 +76,18 @@ force = false
 [redirects.headers]
 
 [[redirects]]
+from = "/portal"
+to = "https://soccerexmiami2026.eventify.io/"
+status = 302.0
+force = true
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200.0

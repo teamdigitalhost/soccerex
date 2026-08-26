@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Calendar, Clock, MapPin, List, LayoutGrid, Star, Video } from 'lucide-react'
 import { getEvent, getAgenda } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
+import { withPreviewSearch } from '../lib/previewMode'
 import { eventSpeaker } from '../lib/routes'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
@@ -246,7 +247,7 @@ function SpeakerChip({ speaker, eventSlug }) {
      the speaker profile URL. */
   const rawHref = speaker.profile_path
     || (eventSlug && speaker.slug ? eventSpeaker(eventSlug, speaker.slug) : null)
-  const href = rawHref ? withTestSearch(rawHref) : null
+  const href = rawHref ? withPreviewSearch(withTestSearch(rawHref)) : null
 
   const inner = (
     <>

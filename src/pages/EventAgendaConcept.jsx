@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Calendar, MapPin, Users, Megaphone, Layers, AlertCircle, Loader2 } from 'lucide-react'
 import { getEvent, getAgendaConcept, clapConcept } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
+import { isPreviewFromUrl, withPreviewSearch } from '../lib/previewMode'
 import { eventThemeClass } from '../lib/eventTheme'
 import ProgrammingSubmissionForm from '../components/ProgrammingSubmissionForm'
 import { HOME, eventAgendaConcept, eventAgenda, eventSpeakers } from '../lib/routes'
@@ -297,6 +298,17 @@ export function EventHeader({ event, slug, active, loading }) {
       {/* Spacer clears the fixed 72px global navbar so this sub-nav (and its
           Program themes / Schedule / Speakers tabs) is never hidden behind it. */}
       <div aria-hidden="true" style={{ height: 72 }} />
+      {/* A preview shows unpublished work. Say so on every page of it, so a
+          screenshot of a draft can never be mistaken for the live site. */}
+      {isPreviewFromUrl() && (
+        <div role="status" style={{
+          background: '#7A1FA2', color: '#FFFFFF', textAlign: 'center',
+          padding: '8px 16px', fontFamily: 'monospace', fontSize: 12,
+          letterSpacing: '0.12em', textTransform: 'uppercase',
+        }}>
+          Draft preview, not published. Includes unconfirmed speakers and unpublished sessions.
+        </div>
+      )}
     <header style={{
       borderBottom: '1px solid rgba(13,27,42,0.08)',
       background: '#FFFFFF',
@@ -331,9 +343,9 @@ export function EventHeader({ event, slug, active, loading }) {
         </div>
 
         <nav className="flex gap-1 flex-wrap" aria-label="Programming sections">
-          <NavTab to={withTestSearch(eventAgendaConcept(slug))} active={active === 'agenda-concept'}>Program themes</NavTab>
-          <NavTab to={withTestSearch(eventAgenda(slug))} active={active === 'agenda'}>Schedule</NavTab>
-          <NavTab to={withTestSearch(eventSpeakers(slug))} active={active === 'speakers'}>Speakers</NavTab>
+          <NavTab to={withPreviewSearch(withTestSearch(eventAgendaConcept(slug)))} active={active === 'agenda-concept'}>Program themes</NavTab>
+          <NavTab to={withPreviewSearch(withTestSearch(eventAgenda(slug)))} active={active === 'agenda'}>Schedule</NavTab>
+          <NavTab to={withPreviewSearch(withTestSearch(eventSpeakers(slug)))} active={active === 'speakers'}>Speakers</NavTab>
         </nav>
       </div>
     </header>

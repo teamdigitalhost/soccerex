@@ -14,6 +14,7 @@
  */
 
 import { withTestParam } from './testMode'
+import { withPreviewParam } from './previewMode'
 import { campaignAttributionPayload } from './campaignAttribution'
 
 const DEFAULT_BASE = 'https://soccerex.digitalhost.co/api/v1'
@@ -30,8 +31,10 @@ class ApiError extends Error {
   }
 }
 
-async function request(path, { method = 'GET', body, signal, test } = {}) {
-  const url = withTestParam(`${API_BASE_URL}${path}`, { test })
+async function request(path, { method = 'GET', body, signal, test, preview } = {}) {
+  /* A preview token on the page URL rides along on every API call, so the three
+     draft views keep working as the team navigates between them. */
+  const url = withPreviewParam(withTestParam(`${API_BASE_URL}${path}`, { test }), { preview })
   const headers = { Accept: 'application/json' }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
   const apiTestSecret = getApiTestSecret(url)

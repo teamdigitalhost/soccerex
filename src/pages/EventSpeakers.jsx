@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { ExternalLink, Search, Globe2, Building2 } from 'lucide-react'
 import { getEvent, getEventSpeakers } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
+import { withPreviewSearch } from '../lib/previewMode'
 import { eventSpeaker } from '../lib/routes'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
@@ -152,7 +153,7 @@ function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
     || (eventSlug && speaker.slug ? eventSpeaker(eventSlug, speaker.slug) : null)
   /* Preserve ?test=1 across navigation so the test-mode banner stays
      pinned and the next page's API calls keep their test-data scope. */
-  const profileHref = rawProfileHref ? withTestSearch(rawProfileHref) : null
+  const profileHref = rawProfileHref ? withPreviewSearch(withTestSearch(rawProfileHref)) : null
 
   const cardStyle = {
     background: '#FFFFFF',

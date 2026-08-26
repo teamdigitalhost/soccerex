@@ -77,8 +77,11 @@ export function ArticleLayout({ article, related = [] }) {
         type="article"
       />
 
-      {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ minHeight: article.featuredImage ? '55vh' : '40vh' }}>
+      {/* ═══ HERO ═══════════════════════════════════════════════════════════
+          A compact title band, not a viewport-filling image. Height comes from
+          the content plus padding, so the first paragraph of the article lands
+          above the fold instead of a wall of background photo. */}
+      <section className="relative overflow-hidden">
         {article.featuredImage && (
           <>
             <div className="absolute inset-0" style={{
@@ -98,9 +101,9 @@ export function ArticleLayout({ article, related = [] }) {
         )}
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.12} />
 
-        <div className="relative z-10 flex flex-col items-center justify-end" style={{ minHeight: article.featuredImage ? '50vh' : '40vh', padding: 'clamp(130px,12vw,170px) clamp(24px,5vw,80px) clamp(50px,6vw,80px)' }}>
+        <div className="relative z-10 flex flex-col items-center" style={{ padding: 'clamp(104px,10vw,128px) clamp(24px,5vw,80px) clamp(34px,4vw,48px)' }}>
           <div style={{ maxWidth: '860px', textAlign: 'center' }}>
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
               {article.categories.filter((c) => c !== 'Uncategorized').map((cat) => (
                 <span key={cat} className="font-mono uppercase tracking-[0.15em]" style={{
                   fontSize: '0.65rem', color: 'var(--color-brand-accent)', fontWeight: 600,
@@ -121,13 +124,13 @@ export function ArticleLayout({ article, related = [] }) {
         </div>
       </section>
 
-      <PixelDivider color="#f4f3f0" layers={4} height={90} speed={0.5} />
+      <PixelDivider color="#f4f3f0" layers={4} height={56} speed={0.5} />
 
       {/* ═══ ARTICLE BODY ═══════════════════════════════════════════════════ */}
-      <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(60px,8vw,100px) clamp(24px,5vw,80px) clamp(100px,12vw,160px)' }}>
+      <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(30px,4vw,44px) clamp(24px,5vw,80px) clamp(100px,12vw,160px)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
           {/* Back link */}
-          <Link to={INSIGHTS} className="inline-flex items-center gap-2 mb-10 font-mono uppercase tracking-[0.15em]"
+          <Link to={INSIGHTS} className="inline-flex items-center gap-2 mb-6 font-mono uppercase tracking-[0.15em]"
             style={{ fontSize: '0.72rem', color: '#09203e', textDecoration: 'none', transition: 'color 0.2s' }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
             onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
