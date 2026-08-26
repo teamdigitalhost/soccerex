@@ -335,6 +335,18 @@ function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
           </div>
         )}
 
+        {/* The team's own tracker note: which panel they were pencilled against
+            and where the chase stands. Draft only, so it never reaches the site. */}
+        {speaker.chase_note && (
+          <p className="miami-body mt-2" style={{
+            fontSize: 11, color: '#5b4b7a', lineHeight: 1.45,
+            background: 'rgba(122,31,162,0.06)', border: '1px solid rgba(122,31,162,0.16)',
+            borderRadius: 6, padding: '6px 8px',
+          }}>
+            {speaker.chase_note}
+          </p>
+        )}
+
         {profileHref && (
           <span className="miami-subhead mt-3 inline-flex items-center gap-1.5"
             style={{ fontSize: 11, color: 'var(--event-primary)', letterSpacing: '0.14em' }}>
