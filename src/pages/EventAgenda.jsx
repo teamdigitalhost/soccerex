@@ -159,6 +159,12 @@ function ListView({ group }) {
   )
 }
 
+/** Same name give or take case, punctuation and spacing. */
+function sameName(a, b) {
+  const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+  return norm(a) !== '' && norm(a) === norm(b)
+}
+
 function SessionCard({ session, compact }) {
   const featured = !!session.is_featured
   return (
@@ -218,12 +224,26 @@ function SessionCard({ session, compact }) {
         </p>
       )}
 
-      {session.topic && (
-        <p className="miami-body" style={{ fontSize: 11, color: '#607186' }}>
-          Topic: <span style={{ color: '#0D1B2A' }}>{session.topic.title}</span>
-          {session.topic.theme && <span style={{ color: '#607186' }}> · {session.topic.theme}</span>}
-        </p>
-      )}
+      {/* A panel usually shares its name with the concept behind it, so printing
+          "Topic: <the title you just read>" is noise on nearly every row. The
+          THEME is the part that says something the title doesn't, so keep that
+          and drop the echo; show the topic name only when it genuinely differs. */}
+      {session.topic && (() => {
+        const echoesTitle = sameName(session.topic.title, session.title)
+        if (echoesTitle && !session.topic.theme) return null
+        return (
+          <p className="miami-body" style={{ fontSize: 11, color: '#607186' }}>
+            {echoesTitle ? (
+              <span style={{ color: '#0D1B2A' }}>{session.topic.theme}</span>
+            ) : (
+              <>
+                Topic: <span style={{ color: '#0D1B2A' }}>{session.topic.title}</span>
+                {session.topic.theme && <span style={{ color: '#607186' }}> · {session.topic.theme}</span>}
+              </>
+            )}
+          </p>
+        )
+      })()}
 
       {session.speakers?.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-1">

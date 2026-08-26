@@ -224,8 +224,16 @@ function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
           </div>
         )}
 
+        {/* Bios arrive at whatever length the speaker sent: some are three lines,
+            one is 2,500 characters. Unclamped, a single long bio stretched its
+            whole grid row to four times the height of its neighbours and left
+            them mostly white space. Clamp to a few lines here; the card already
+            links to the full profile, which is where the rest belongs. */}
         {speaker.bio && (
-          <p className="miami-body mt-2" style={{ fontSize: 12, color: '#3a4a5a', lineHeight: 1.55 }}>
+          <p className="miami-body mt-2" style={{
+            fontSize: 12, color: '#3a4a5a', lineHeight: 1.55,
+            display: '-webkit-box', WebkitLineClamp: 6, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+          }}>
             {speaker.bio}
           </p>
         )}
