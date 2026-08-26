@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { ExternalLink, Search, Globe2, Building2 } from 'lucide-react'
 import { getEvent, getEventSpeakers } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
-import { withPreviewSearch } from '../lib/previewMode'
+import { isPreviewFromUrl, withPreviewSearch } from '../lib/previewMode'
 import { eventSpeaker } from '../lib/routes'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
@@ -74,6 +74,16 @@ export default function EventSpeakers() {
     )
   }, [speakers, query])
 
+  /* Draft view only: split by whether a speaker has a slot on the running order. */
+  const draft = isPreviewFromUrl()
+  const hasSlot = (s) => Array.isArray(s.sessions) && s.sessions.length > 0
+  const placementSplit = useMemo(() => ({
+    placed: (speakers || []).filter(hasSlot),
+    unplaced: (speakers || []).filter((s) => !hasSlot(s)),
+  }), [speakers])
+  const placed = useMemo(() => filteredSpeakers.filter(hasSlot), [filteredSpeakers])
+  const unplaced = useMemo(() => filteredSpeakers.filter((s) => !hasSlot(s)), [filteredSpeakers])
+
   return (
     <div className={`event-page ${eventThemeClass(slug)}`} style={{ background: '#FFFFFF', minHeight: '100vh' }}>
       <EventHeader event={event} slug={slug} active="speakers" loading={!event && !error} />
@@ -125,11 +135,32 @@ export default function EventSpeakers() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {filteredSpeakers.map((s) => (
-                  <SpeakerCard key={s.slug} speaker={s} archived={isPast} highlighted={highlightSlug === s.slug} eventSlug={slug} />
-                ))}
-              </div>
+              {/* On the published site everyone sits in one grid. In a draft, the
+                  useful split is the one the programming team is working: who has
+                  a slot, and who is still to be placed. Unplaced comes first,
+                  because that is the list with decisions left in it. */}
+              {draft ? (
+                <>
+                  <DraftGroup
+                    title="Still to be placed"
+                    hint="No slot on the running order yet. Decide where each one goes, then seat them on a panel."
+                    speakers={unplaced} total={placementSplit.unplaced.length}
+                    isPast={isPast} highlightSlug={highlightSlug} slug={slug} tone="open"
+                  />
+                  <DraftGroup
+                    title="On the running order"
+                    hint="Seated on at least one panel."
+                    speakers={placed} total={placementSplit.placed.length}
+                    isPast={isPast} highlightSlug={highlightSlug} slug={slug} tone="done"
+                  />
+                </>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {filteredSpeakers.map((s) => (
+                    <SpeakerCard key={s.slug} speaker={s} archived={isPast} highlighted={highlightSlug === s.slug} eventSlug={slug} />
+                  ))}
+                </div>
+              )}
 
               {filteredSpeakers.length === 0 && (
                 <p className="text-center miami-body py-12" style={{ color: '#607186' }}>
@@ -141,6 +172,51 @@ export default function EventSpeakers() {
         </div>
       </section>
     </div>
+  )
+}
+
+/**
+ * A titled band of speaker cards, used only in the draft view to separate the
+ * people who still need a slot from the people who have one. The count is the
+ * whole group, not the filtered subset, so searching never makes it look like
+ * the backlog shrank.
+ */
+/** A small amber flag for an asset we still need before this person can be announced. */
+function MissingChip({ label }) {
+  return (
+    <span className="miami-subhead" style={{
+      fontSize: 10, letterSpacing: '0.12em', padding: '2px 7px', borderRadius: 4,
+      color: '#8a5a00', background: 'rgba(217,164,6,0.14)', border: '1px solid rgba(217,164,6,0.30)',
+    }}>{label}</span>
+  )
+}
+
+function DraftGroup({ title, hint, speakers, total, isPast, highlightSlug, slug, tone }) {
+  if (total === 0) return null
+  const open = tone === 'open'
+  return (
+    <section className="mb-12">
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
+        <h2 className="miami-headline" style={{ fontSize: '1.35rem', color: '#0D1B2A' }}>{title}</h2>
+        <span className="miami-subhead" style={{
+          fontSize: 11, letterSpacing: '0.16em', padding: '3px 9px', borderRadius: 999,
+          color: open ? '#7A1FA2' : '#0f7a52',
+          background: open ? 'rgba(122,31,162,0.10)' : 'rgba(15,122,82,0.10)',
+        }}>
+          {total}
+        </span>
+      </div>
+      <p className="miami-body mb-5" style={{ fontSize: 13, color: '#607186', maxWidth: 680 }}>{hint}</p>
+      {speakers.length === 0 ? (
+        <p className="miami-body" style={{ fontSize: 13, color: '#607186' }}>Nobody in this group matches the search.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {speakers.map((s) => (
+            <SpeakerCard key={s.slug} speaker={s} archived={isPast} highlighted={highlightSlug === s.slug} eventSlug={slug} />
+          ))}
+        </div>
+      )}
+    </section>
   )
 }
 
@@ -236,6 +312,27 @@ function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
           }}>
             {speaker.bio}
           </p>
+        )}
+
+        {/* Where they are on the running order. Shown on the published page as
+            "catch them here", and in a draft as the thing that is missing. */}
+        {speaker.sessions?.length > 0 && (
+          <div className="flex flex-col gap-1 mt-2">
+            {speaker.sessions.map((s, i) => (
+              <span key={i} className="miami-body" style={{ fontSize: 11, color: '#0f7a52' }}>
+                {s.panel ? `${s.panel} · ` : ''}{s.title}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Draft-only readiness flags, so the preview also answers "what is
+            stopping us announcing this person". Absent on the published page. */}
+        {(speaker.needs_photo || speaker.needs_bio) && (
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {speaker.needs_photo && <MissingChip label="No headshot" />}
+            {speaker.needs_bio && <MissingChip label="No bio" />}
+          </div>
         )}
 
         {profileHref && (

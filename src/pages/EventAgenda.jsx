@@ -218,8 +218,14 @@ function SessionCard({ session, compact }) {
         {session.title}
       </h3>
 
-      {!compact && session.abstract && (
-        <p className="miami-body" style={{ fontSize: 13, color: '#3a4a5a', lineHeight: 1.55 }}>
+      {/* The description is the reason to attend a panel, so the running order
+          shows it too, not only the list view. Clamped in the compact timeline
+          so the day stays scannable; the list view prints it in full. */}
+      {session.abstract && (
+        <p className="miami-body" style={compact ? {
+          fontSize: 12, color: '#3a4a5a', lineHeight: 1.5,
+          display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+        } : { fontSize: 13, color: '#3a4a5a', lineHeight: 1.55 }}>
           {session.abstract}
         </p>
       )}
