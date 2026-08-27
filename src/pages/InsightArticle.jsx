@@ -54,7 +54,7 @@ export default function InsightArticle() {
         if (cancelled || !data) return
         if (data.locked) {
           setArticle(null)
-          setLocked({ slug: data.slug, title: data.title })
+          setLocked({ slug: data.slug })
           return
         }
         const cmsArticle = normalizeCmsArticleDetail(data)
@@ -72,7 +72,6 @@ export default function InsightArticle() {
   if (locked) {
     return (
       <ArticleLock
-        title={locked.title}
         slug={locked.slug}
         onUnlocked={(data, token) => {
           writeGate(locked.slug, token)
@@ -98,7 +97,7 @@ export default function InsightArticle() {
 /* The page someone sees when an article is published but held behind a shared
    password for early access. It shows the headline, so a recipient knows the
    link worked and they are in the right place, and nothing else. */
-function ArticleLock({ title, slug, onUnlocked }) {
+function ArticleLock({ slug, onUnlocked }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -122,8 +121,8 @@ function ArticleLock({ title, slug, onUnlocked }) {
   return (
     <div style={{ background: '#050d1a', minHeight: '100vh' }}>
       <PageMeta
-        title={`${title} | Soccerex`}
-        description="This page is available to invited readers ahead of its announcement."
+        title="Soccerex"
+        description="This page is available to invited readers."
         path={insightArticle(slug)}
         noindex
       />
@@ -136,16 +135,12 @@ function ArticleLock({ title, slug, onUnlocked }) {
         <div className="relative z-10 flex flex-col items-center justify-center"
           style={{ minHeight: '100vh', padding: 'clamp(88px,10vw,128px) clamp(24px,5vw,80px)' }}>
           <div style={{ maxWidth: '560px', width: '100%', textAlign: 'center' }}>
-            <div className="flex items-center justify-center gap-2 mb-5 font-mono uppercase tracking-[0.18em]"
-              style={{ fontSize: '0.65rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
-              <Lock size={12} /> Early access
-            </div>
-            <h1 className="font-heading font-bold text-white leading-tight text-glow mb-4"
-              style={{ fontSize: 'clamp(1.6rem, 4vw, 2.6rem)' }}>
-              {title}
-            </h1>
-            <p className="font-body mb-8" style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6 }}>
-              This one is not public yet. Enter the password you were given to read it.
+            {/* No headline here. On a piece held back before its announcement the
+                headline IS the announcement, so the page asks for the password and
+                says nothing else. */}
+            <p className="font-body mb-6 flex items-center justify-center gap-2"
+               style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>
+              <Lock size={14} /> Enter password to continue.
             </p>
 
             {/* Enter is what people actually press on a one-field form. Implicit
