@@ -170,6 +170,14 @@ export async function getArticle(slug, opts = {}) {
   return unwrap(await request(`/articles/${encodeURIComponent(slug)}${suffix}`, rest))
 }
 
+/* The article as a press release PDF, straight from the API so the browser gets
+   the file with its Content-Disposition name. Behind the same gate as the body,
+   so a held-back announcement cannot be read by downloading it instead. */
+export function articlePdfUrl(slug, gate = '') {
+  const suffix = gate ? `?gate=${encodeURIComponent(gate)}` : ''
+  return `${API_BASE_URL}/articles/${encodeURIComponent(slug)}/pdf${suffix}`
+}
+
 /* Returns { data, gate }: the article, and the token to hold on to. Throws an
    ApiError with status 422 when the password is wrong, 429 when the visitor has
    been guessing. */

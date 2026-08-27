@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Calendar, Lock, Tag } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Calendar, Download, Lock, Tag } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { INSIGHTS, insightArticle } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import { CtaButton } from '../components/CtaAction'
-import { getArticle, unlockArticle } from '../lib/soccerexApi'
+import { articlePdfUrl, getArticle, unlockArticle } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 
 /* Where an unlocked article's token lives. Session, not local: closing the tab
@@ -91,7 +91,7 @@ export default function InsightArticle() {
     .filter((a) => a.slug !== slug && a.categories.some((c) => article.categories.includes(c)))
     .slice(0, 3)
 
-  return <ArticleLayout article={article} related={related} />
+  return <ArticleLayout article={article} related={related} pdfHref={articlePdfUrl(slug, readGate(slug))} />
 }
 
 /* The page someone sees when an article is published but held behind a shared
@@ -199,7 +199,7 @@ function ArticleLock({ slug, onUnlocked }) {
 /* The full article page, shared with the admin draft preview (ArticlePreview),
    which supplies its own article and an empty related list — so a draft renders
    EXACTLY as it will look once published. */
-export function ArticleLayout({ article, related = [] }) {
+export function ArticleLayout({ article, related = [], pdfHref = null }) {
   const articleDesc = article.excerpt
     ? article.excerpt.replace(/<[^>]+>/g, '').slice(0, 200)
     : 'Read the latest insights from Soccerex on the business of football.'
@@ -274,6 +274,27 @@ export function ArticleLayout({ article, related = [] }) {
           >
             <ArrowLeft size={14} /> Back to Insights
           </Link>
+
+          {/* The release as a file, for anyone who has to forward or file it.
+              The link carries the gate token, so a held-back announcement cannot
+              be read by downloading it instead of answering the password. The
+              admin draft preview passes no href and so shows no button: it has
+              no token, and a dead button is worse than none. */}
+          {pdfHref && article.kind === 'press_release' && (
+            <a
+              href={pdfHref}
+              className="inline-flex items-center gap-2 mb-6 font-mono uppercase tracking-[0.13em]"
+              style={{
+                fontSize: '0.7rem', fontWeight: 700, color: '#ffffff', background: '#09203e',
+                padding: '11px 18px', borderRadius: '8px', textDecoration: 'none',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e' }}
+            >
+              <Download size={14} /> Download PDF
+            </a>
+          )}
 
           {/* Excerpt as lede */}
           {article.excerpt && (
@@ -374,6 +395,9 @@ export function normalizeCmsArticleDetail(a) {
     slug,
     title,
     excerpt: a.excerpt || '',
+    // Carried through so the page can offer the PDF on a press release and not
+    // on an ordinary insight.
+    kind: a.kind || 'article',
     categories: categories.length ? categories : ['Insight'],
     date: formatCmsDate(a.published_at),
     featuredImage: a.hero_image_url || a.og_image_url || '',
