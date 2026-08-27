@@ -266,35 +266,44 @@ export function ArticleLayout({ article, related = [], pdfHref = null }) {
       {/* ═══ ARTICLE BODY ═══════════════════════════════════════════════════ */}
       <section style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', padding: 'clamp(30px,4vw,44px) clamp(24px,5vw,80px) clamp(100px,12vw,160px)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          {/* Back link */}
-          <Link to={INSIGHTS} className="inline-flex items-center gap-2 mb-6 font-mono uppercase tracking-[0.15em]"
-            style={{ fontSize: '0.72rem', color: '#09203e', textDecoration: 'none', transition: 'color 0.2s' }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
+          {/* One row, one bottom margin. A plain text link and a padded pill are
+              different heights, so they are centred against each other rather
+              than sat on a shared baseline, and the gap lives on the row: two
+              adjacent inline-flex elements have nothing between them and were
+              running straight into each other. */}
+          <div
+            className="flex flex-wrap items-center mb-8"
+            style={{ columnGap: '26px', rowGap: '12px' }}
           >
-            <ArrowLeft size={14} /> Back to Insights
-          </Link>
-
-          {/* The release as a file, for anyone who has to forward or file it.
-              The link carries the gate token, so a held-back announcement cannot
-              be read by downloading it instead of answering the password. The
-              admin draft preview passes no href and so shows no button: it has
-              no token, and a dead button is worse than none. */}
-          {pdfHref && article.kind === 'press_release' && (
-            <a
-              href={pdfHref}
-              className="inline-flex items-center gap-2 mb-6 font-mono uppercase tracking-[0.13em]"
-              style={{
-                fontSize: '0.7rem', fontWeight: 700, color: '#ffffff', background: '#09203e',
-                padding: '11px 18px', borderRadius: '8px', textDecoration: 'none',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e' }}
+            <Link to={INSIGHTS} className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.15em]"
+              style={{ fontSize: '0.72rem', color: '#09203e', textDecoration: 'none', transition: 'color 0.2s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
             >
-              <Download size={14} /> Download PDF
-            </a>
-          )}
+              <ArrowLeft size={14} /> Back to Insights
+            </Link>
+
+            {/* The release as a file, for anyone who has to forward or file it.
+                The link carries the gate token, so a held-back announcement
+                cannot be read by downloading it instead of answering the
+                password. The admin draft preview passes no href and so shows no
+                button: it has no token, and a dead button is worse than none. */}
+            {pdfHref && article.kind === 'press_release' && (
+              <a
+                href={pdfHref}
+                className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.13em]"
+                style={{
+                  fontSize: '0.7rem', fontWeight: 700, color: '#ffffff', background: '#09203e',
+                  padding: '11px 18px', borderRadius: '8px', textDecoration: 'none',
+                  transition: 'background 0.2s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#09203e' }}
+              >
+                <Download size={14} /> Download PDF
+              </a>
+            )}
+          </div>
 
           {/* Excerpt as lede */}
           {article.excerpt && (
