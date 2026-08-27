@@ -148,6 +148,8 @@ function ArticleLock({ title, slug, onUnlocked }) {
               This one is not public yet. Enter the password you were given to read it.
             </p>
 
+            {/* Enter is what people actually press on a one-field form. Implicit
+                submission covers it already; the input's onKeyDown makes it certain. */}
             <form onSubmit={submit} className="flex flex-col items-center gap-3">
               <input
                 type="password"
@@ -157,6 +159,7 @@ function ArticleLock({ title, slug, onUnlocked }) {
                 aria-label="Password"
                 placeholder="Password"
                 onChange={(e) => { setPassword(e.target.value); setError('') }}
+                onKeyDown={(e) => { if (e.key === 'Enter') submit(e) }}
                 style={{
                   width: '100%', maxWidth: '340px', padding: '14px 18px',
                   background: 'rgba(255,255,255,0.06)', color: '#ffffff',
