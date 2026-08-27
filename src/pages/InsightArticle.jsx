@@ -1,18 +1,32 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Calendar, Tag } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Calendar, Lock, Tag } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { INSIGHTS, insightArticle } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import { CtaButton } from '../components/CtaAction'
-import { getArticle } from '../lib/soccerexApi'
+import { getArticle, unlockArticle } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
+
+/* Where an unlocked article's token lives. Session, not local: closing the tab
+   forgets it, which is the right lifetime for a shared word given out for early
+   access. */
+const gateKey = (slug) => `sx-article-gate:${slug}`
+
+function readGate(slug) {
+  try { return window.sessionStorage.getItem(gateKey(slug)) || '' } catch { return '' }
+}
+
+function writeGate(slug, token) {
+  try { window.sessionStorage.setItem(gateKey(slug), token) } catch { /* private mode: ask again */ }
+}
 
 export default function InsightArticle() {
   const { slug } = useParams()
   const [article, setArticle] = useState(null)
   const [allArticles, setAllArticles] = useState([])
+  const [locked, setLocked] = useState(null)
 
   useEffect(() => { window.scrollTo(0, 0) }, [slug])
 
@@ -22,6 +36,7 @@ export default function InsightArticle() {
 
     setArticle(null)
     setAllArticles([])
+    setLocked(null)
 
     fetch('/insights-manifest.json')
       .then((r) => r.json())
@@ -29,12 +44,19 @@ export default function InsightArticle() {
         if (cancelled) return
         setAllArticles(data)
         const found = data.find((a) => a.slug === slug)
-        setArticle(found || null)
+        // Never let the legacy static copy stand in for a page the CMS is
+        // holding back: that would render the body the gate exists to withhold.
+        setArticle((current) => (current === null ? found || null : current))
       })
 
-    getArticle(slug, { test })
+    getArticle(slug, { test, gate: readGate(slug) })
       .then((data) => {
         if (cancelled || !data) return
+        if (data.locked) {
+          setArticle(null)
+          setLocked({ slug: data.slug, title: data.title })
+          return
+        }
         const cmsArticle = normalizeCmsArticleDetail(data)
         setArticle(cmsArticle)
         setAllArticles((current) => {
@@ -47,6 +69,20 @@ export default function InsightArticle() {
     return () => { cancelled = true }
   }, [slug])
 
+  if (locked) {
+    return (
+      <ArticleLock
+        title={locked.title}
+        slug={locked.slug}
+        onUnlocked={(data, token) => {
+          writeGate(locked.slug, token)
+          setLocked(null)
+          setArticle(normalizeCmsArticleDetail(data))
+        }}
+      />
+    )
+  }
+
   if (!article) {
     return <div style={{ minHeight: '100vh', background: '#050d1a' }} />
   }
@@ -57,6 +93,109 @@ export default function InsightArticle() {
     .slice(0, 3)
 
   return <ArticleLayout article={article} related={related} />
+}
+
+/* The page someone sees when an article is published but held behind a shared
+   password for early access. It shows the headline, so a recipient knows the
+   link worked and they are in the right place, and nothing else. */
+function ArticleLock({ title, slug, onUnlocked }) {
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  async function submit(e) {
+    e.preventDefault()
+    if (busy || !password.trim()) return
+    setBusy(true)
+    setError('')
+    try {
+      const res = await unlockArticle(slug, password)
+      onUnlocked(res.data, res.gate)
+    } catch (err) {
+      setError(err && err.status === 429
+        ? 'Too many tries. Wait a minute and try again.'
+        : 'That is not the password.')
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div style={{ background: '#050d1a', minHeight: '100vh' }}>
+      <PageMeta
+        title={`${title} | Soccerex`}
+        description="This page is available to invited readers ahead of its announcement."
+        path={insightArticle(slug)}
+        noindex
+      />
+      <section className="relative overflow-hidden" style={{ minHeight: '100vh' }}>
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
+        }} />
+        <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={25} opacity={0.12} />
+
+        <div className="relative z-10 flex flex-col items-center justify-center"
+          style={{ minHeight: '100vh', padding: 'clamp(88px,10vw,128px) clamp(24px,5vw,80px)' }}>
+          <div style={{ maxWidth: '560px', width: '100%', textAlign: 'center' }}>
+            <div className="flex items-center justify-center gap-2 mb-5 font-mono uppercase tracking-[0.18em]"
+              style={{ fontSize: '0.65rem', color: 'var(--color-brand-accent)', fontWeight: 600 }}>
+              <Lock size={12} /> Early access
+            </div>
+            <h1 className="font-heading font-bold text-white leading-tight text-glow mb-4"
+              style={{ fontSize: 'clamp(1.6rem, 4vw, 2.6rem)' }}>
+              {title}
+            </h1>
+            <p className="font-body mb-8" style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.6 }}>
+              This one is not public yet. Enter the password you were given to read it.
+            </p>
+
+            <form onSubmit={submit} className="flex flex-col items-center gap-3">
+              <input
+                type="password"
+                value={password}
+                autoFocus
+                autoComplete="off"
+                aria-label="Password"
+                placeholder="Password"
+                onChange={(e) => { setPassword(e.target.value); setError('') }}
+                style={{
+                  width: '100%', maxWidth: '340px', padding: '14px 18px',
+                  background: 'rgba(255,255,255,0.06)', color: '#ffffff',
+                  border: `1px solid ${error ? 'rgba(248,113,113,0.7)' : 'rgba(255,255,255,0.18)'}`,
+                  borderRadius: '8px', fontSize: '1rem', outline: 'none',
+                  textAlign: 'center', letterSpacing: '0.08em',
+                }}
+              />
+              <button
+                type="submit"
+                disabled={busy || !password.trim()}
+                className="font-mono uppercase tracking-[0.15em]"
+                style={{
+                  width: '100%', maxWidth: '340px', padding: '14px 18px',
+                  background: busy || !password.trim() ? 'rgba(255,255,255,0.14)' : 'var(--color-brand-accent)',
+                  color: busy || !password.trim() ? 'rgba(255,255,255,0.5)' : '#050d1a',
+                  border: 'none', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 700,
+                  cursor: busy || !password.trim() ? 'default' : 'pointer', transition: 'background 0.2s',
+                }}
+              >
+                {busy ? 'Checking' : 'Read it'}
+              </button>
+              <p aria-live="polite" style={{
+                minHeight: '1.2rem', fontSize: '0.85rem',
+                color: error ? '#fca5a5' : 'transparent',
+              }}>
+                {error || '.'}
+              </p>
+            </form>
+
+            <Link to={INSIGHTS} className="inline-flex items-center gap-2 mt-4 font-mono uppercase tracking-[0.15em]"
+              style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>
+              <ArrowLeft size={13} /> Back to Insights
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
 }
 
 /* The full article page, shared with the admin draft preview (ArticlePreview),

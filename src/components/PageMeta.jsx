@@ -23,6 +23,7 @@ export default function PageMeta({
   image       = DEFAULT_IMG,
   path        = '',
   type        = 'website',
+  noindex     = false,
 }) {
   const canonical = `${SITE_URL}${path}`
   // Resolve relative image paths to absolute URLs for OG/Twitter cards
@@ -33,6 +34,9 @@ export default function PageMeta({
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={canonical} />
+      {/* A page held back before its announcement must not turn up in a search
+          result, which would defeat the point of holding it back. */}
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
 
       {/* Open Graph */}
       <meta property="og:site_name"   content={SITE_NAME} />

@@ -161,8 +161,24 @@ export async function getArticlesByPillar(slug, opts = {}) {
   return getArticles({ label: slug }, opts)
 }
 
+/* An article may sit behind a shared password before it is announced. The API
+   answers such a page with { locked: true } and the headline only; a `gate`
+   token from a previous unlock gets the real thing without asking again. */
 export async function getArticle(slug, opts = {}) {
-  return unwrap(await request(`/articles/${encodeURIComponent(slug)}`, opts))
+  const { gate, ...rest } = opts
+  const suffix = gate ? `?gate=${encodeURIComponent(gate)}` : ''
+  return unwrap(await request(`/articles/${encodeURIComponent(slug)}${suffix}`, rest))
+}
+
+/* Returns { data, gate }: the article, and the token to hold on to. Throws an
+   ApiError with status 422 when the password is wrong, 429 when the visitor has
+   been guessing. */
+export async function unlockArticle(slug, password, opts = {}) {
+  return request(`/articles/${encodeURIComponent(slug)}/unlock`, {
+    method: 'POST',
+    body: { password },
+    ...opts,
+  })
 }
 
 /* ───── CTAs ─────────────────────────────────────────────────────────────────
