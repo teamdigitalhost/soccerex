@@ -97,7 +97,7 @@ export default function SoccerexApp() {
               onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-brand-accent)' }}
               onMouseLeave={e => { e.currentTarget.style.background = '#fff' }}
             >
-              <img src="/images/app/apple-icon.png" alt="App Store" style={{ height: '22px', width: 'auto' }} />
+              <img src="/images/app/apple-icon-dark.png" alt="App Store" style={{ height: '22px', width: 'auto' }} />
               App Store
             </a>
           </div>
@@ -157,7 +157,7 @@ export default function SoccerexApp() {
                 onMouseEnter={e => { e.currentTarget.style.background = '#f0eeeb' }}
                 onMouseLeave={e => { e.currentTarget.style.background = '#fff' }}
               >
-                <img src="/images/app/apple-icon.png" alt="" style={{ height: '20px', width: 'auto' }} />
+                <img src="/images/app/apple-icon-dark.png" alt="" style={{ height: '20px', width: 'auto' }} />
                 <span>Available on <strong>Appstore</strong></span>
               </a>
             </div>
