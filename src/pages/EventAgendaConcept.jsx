@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Calendar, MapPin, Users, Megaphone, Layers, AlertCircle, Loader2 } from 'lucide-react'
 import { getEvent, getAgendaConcept, clapConcept } from '../lib/soccerexApi'
@@ -6,6 +6,7 @@ import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { isPreviewFromUrl, withPreviewSearch } from '../lib/previewMode'
 import { eventThemeClass } from '../lib/eventTheme'
 import ProgrammingSubmissionForm from '../components/ProgrammingSubmissionForm'
+import ClapButton from '../components/ClapButton'
 import { HOME, eventAgendaConcept, eventAgenda, eventSpeakers } from '../lib/routes'
 
 const STATUS_LABEL = {
@@ -205,60 +206,16 @@ function TopicCard({ topic, slug }) {
       </dl>
 
       <div className="flex items-center justify-end gap-3 mt-2 pt-4" style={{ borderTop: '1px solid rgba(13,27,42,0.08)' }}>
-        <ClapButton topic={topic} slug={slug} />
+        <ClapButton
+          initial={topic.claps || 0}
+          onFlush={(n) => clapConcept(slug, topic.slug, n)}
+          ariaLabel="Clap for this concept"
+        />
       </div>
     </article>
   )
 }
 
-function ClapButton({ topic, slug }) {
-  const [claps, setClaps] = useState(topic.claps || 0)
-  const [bump, setBump] = useState(false)
-  const pending = useRef(0)
-  const timer = useRef(null)
-
-  const flush = () => {
-    const n = pending.current
-    pending.current = 0
-    if (n > 0) {
-      clapConcept(slug, topic.slug, n)
-        .then((r) => { if (r && typeof r.claps === 'number') setClaps(r.claps) })
-        .catch(() => {})
-    }
-  }
-
-  // Don't lose un-sent claps if they navigate away mid-applause.
-  useEffect(() => () => {
-    if (timer.current) clearTimeout(timer.current)
-    if (pending.current > 0) clapConcept(slug, topic.slug, pending.current).catch(() => {})
-  }, [slug, topic.slug])
-
-  const clap = () => {
-    setClaps((c) => c + 1)
-    pending.current += 1
-    setBump(true)
-    setTimeout(() => setBump(false), 160)
-    if (timer.current) clearTimeout(timer.current)
-    timer.current = setTimeout(flush, 700)
-  }
-
-  return (
-    <button type="button" onClick={clap} aria-label="Clap for this concept"
-      style={{
-        display: 'inline-flex', alignItems: 'center', gap: 7,
-        padding: '6px 13px', borderRadius: 999, cursor: 'pointer',
-        border: '1px solid rgba(13,27,42,0.12)', background: '#fff',
-        fontFamily: 'Montserrat, sans-serif', fontSize: 12.5, fontWeight: 600, color: '#3a4a5a',
-        transition: 'border-color .15s, box-shadow .15s',
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--event-primary)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(13,27,42,0.08)' }}
-      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(13,27,42,0.12)'; e.currentTarget.style.boxShadow = 'none' }}
-    >
-      <span style={{ fontSize: 15, display: 'inline-block', transform: bump ? 'scale(1.35) rotate(-8deg)' : 'scale(1)', transition: 'transform .16s' }}>👏</span>
-      {claps > 0 ? <span style={{ fontVariantNumeric: 'tabular-nums' }}>{claps.toLocaleString()}</span> : <span>Clap for this</span>}
-    </button>
-  )
-}
 
 function Meta({ icon: Icon, label, children }) {
   return (

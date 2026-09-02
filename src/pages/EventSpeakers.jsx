@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { ExternalLink, Search, Globe2, Building2 } from 'lucide-react'
-import { getEvent, getEventSpeakers } from '../lib/soccerexApi'
+import { getEvent, getEventSpeakers, clapSpeaker } from '../lib/soccerexApi'
+import ClapButton from '../components/ClapButton'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { isPreviewFromUrl, withPreviewSearch } from '../lib/previewMode'
 import { eventSpeaker } from '../lib/routes'
@@ -347,12 +348,22 @@ function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
           </p>
         )}
 
-        {profileHref && (
-          <span className="miami-subhead mt-3 inline-flex items-center gap-1.5"
-            style={{ fontSize: 11, color: 'var(--event-primary)', letterSpacing: '0.14em' }}>
-            View profile <ExternalLink size={11} />
-          </span>
-        )}
+        <div className="flex items-center justify-between gap-3 mt-3">
+          {profileHref ? (
+            <span className="miami-subhead inline-flex items-center gap-1.5"
+              style={{ fontSize: 11, color: 'var(--event-primary)', letterSpacing: '0.14em' }}>
+              View profile <ExternalLink size={11} />
+            </span>
+          ) : <span />}
+          {!archived && (
+            <ClapButton
+              initial={speaker.claps || 0}
+              onFlush={(n) => clapSpeaker(eventSlug, speaker.slug, n)}
+              ariaLabel={`Clap for ${speaker.display_name}`}
+              idleLabel="Clap"
+            />
+          )}
+        </div>
       </div>
     </>
   )

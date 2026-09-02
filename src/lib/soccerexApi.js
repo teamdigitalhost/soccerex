@@ -110,6 +110,14 @@ export async function getEventSpeakers(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}/speakers`, opts))
 }
 
+/** Public applause on a speaker. Unlimited; batches several claps per call. Returns { claps }. */
+export async function clapSpeaker(eventSlug, speakerSlug, count = 1) {
+  return request(`/events/${encodeURIComponent(eventSlug)}/speakers/${encodeURIComponent(speakerSlug)}/clap`, {
+    method: 'POST',
+    body: { count },
+  })
+}
+
 export async function getEventSpeaker(eventSlug, speakerSlug, opts = {}) {
   return unwrap(await request(
     `/events/${encodeURIComponent(eventSlug)}/speakers/${encodeURIComponent(speakerSlug)}`,
