@@ -3,7 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeft, ExternalLink, Building2, Globe2, Calendar, Clock, MapPin, Globe,
 } from 'lucide-react'
-import { getEventSpeaker } from '../lib/soccerexApi'
+import { getEventSpeaker, clapSpeaker } from '../lib/soccerexApi'
+import ClapButton from '../components/ClapButton'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState } from './EventAgendaConcept'
@@ -79,6 +80,7 @@ function ProfileBody({ speaker, eventSlug }) {
   const initials = (speaker.display_name || '?')
     .split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()
   const roleStatus = ROLE_STATUS_LABEL[speaker.role_status] || speaker.role_status
+  const isPastEvent = speaker.event?.ends_on ? new Date(speaker.event.ends_on) < new Date() : false
 
   return (
     <>
@@ -145,12 +147,20 @@ function ProfileBody({ speaker, eventSlug }) {
               {speaker.headline}
             </p>
           )}
-          <div className="flex flex-wrap gap-x-4 gap-y-2" style={{ fontSize: 13, color: '#607186' }}>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2" style={{ fontSize: 13, color: '#607186' }}>
             {speaker.company && (
               <span className="flex items-center gap-1.5"><Building2 size={13} /> {speaker.company}</span>
             )}
             {speaker.country && (
               <span className="flex items-center gap-1.5"><Globe2 size={13} /> {speaker.country}</span>
+            )}
+            {!isPastEvent && (
+              <ClapButton
+                initial={speaker.claps || 0}
+                onFlush={(n) => clapSpeaker(eventSlug, speaker.slug, n)}
+                ariaLabel={`Clap for ${speaker.display_name}`}
+                idleLabel="Clap"
+              />
             )}
           </div>
 
