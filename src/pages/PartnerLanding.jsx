@@ -42,7 +42,7 @@ const EVENT_IMAGERY = {
   'soccerex-miami-2026': {
     hero: '/partners/miami-2026/hero.jpg',
     gallery: [
-      { src: '/partners/miami-2026/networking.jpg', alt: 'Delegates networking at a Soccerex evening reception' },
+      { src: '/partners/miami-2026/networking.jpg', alt: 'Delegates in conversation at a Soccerex evening reception' },
       { src: '/partners/miami-2026/stage.jpg', alt: 'A fireside chat on the Soccerex stage' },
       { src: '/partners/miami-2026/venue.jpg', alt: 'The exterior of Nu Stadium at Miami Freedom Park' },
     ],
