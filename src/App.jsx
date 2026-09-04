@@ -11,7 +11,7 @@ import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, MIAMI_2026_ACCOMMODATIONS, MIAMI_2026_ACCOMMODATIONS_MISSPELLED, ACCOMMODATIONS, ACCOMMODATIONS_MISSPELLED, BOOK, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
   EVENT_RECAP_PATTERN,
-  INSIGHTS, PROFILE_ACCESS, PROFILE_SHORTCUT, DEAL_NETWORK, RITZ_DRAWING, CTA_PATTERN, AGENDA_COLLAB,
+  INSIGHTS, PROFILE_ACCESS, PROFILE_SHORTCUT, DEAL_NETWORK, RITZ_DRAWING, CTA_PATTERN, AGENDA_COLLAB, PARTNERS,
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
@@ -119,6 +119,17 @@ const DealNetworkApply = lazy(() => import('./pages/DealNetworkApply'))
 const RitzDrawingTerms = lazy(() => import('./pages/RitzDrawingTerms'))
 const CtaLanding = lazy(() => import('./pages/CtaLanding'))
 const AgendaCollab = lazy(() => import('./pages/AgendaCollab'))
+const PartnerLanding = lazy(() => import('./pages/PartnerLanding'))
+
+/**
+ * Site chrome is suppressed on the co-branded partner capture pages. A landing
+ * page built to convert carries exactly one action; a full nav and footer are
+ * eleven ways to leave it. Those pages render their own minimal footer.
+ */
+function SiteChrome({ children }) {
+  const { pathname } = useLocation()
+  return pathname.startsWith(`${PARTNERS}/`) ? null : children
+}
 const ScheduleCall = lazy(() => import('./pages/ScheduleCall'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
 // Unreleased verticals (HerSoccerex, The Pitch) kept on disk but
@@ -135,7 +146,7 @@ function App() {
       <CookieBanner />
       <PageViewTracker />
       <AppShell>
-      <Navbar />
+      <SiteChrome><Navbar /></SiteChrome>
       <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050d1a' }} />}>
         <Routes>
           <Route path={HOME} element={<Home />} />
@@ -178,6 +189,7 @@ function App() {
               event details (venue, dates) are confirmed. Page kept on disk. */}
           <Route path={RIYADH_2027} element={<Navigate to={EVENTS} replace />} />
           <Route path={ROUTE_PATTERNS.pressRelease} element={<PressRelease />} />
+          <Route path={ROUTE_PATTERNS.partnerLanding} element={<PartnerLanding />} />
           <Route path={PRIVACY_POLICY} element={<PrivacyPolicy />} />
           <Route path={TERMS} element={<TermsConditions />} />
           <Route path={COOKIE_POLICY} element={<CookiePolicy />} />
@@ -221,7 +233,7 @@ function App() {
           <Route path="*" element={<Navigate to={EVENTS} replace />} />
         </Routes>
       </Suspense>
-      <Footer />
+      <SiteChrome><Footer /></SiteChrome>
       </AppShell>
       <ThemePicker />
     </BrowserRouter>

@@ -110,6 +110,19 @@ export async function getEventSpeakers(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}/speakers`, opts))
 }
 
+/** Co-branded referral page config: partner brand + the linked event's details. */
+export async function getReferralPartner(slug, opts = {}) {
+  return unwrap(await request(`/referral-partners/${encodeURIComponent(slug)}`, opts))
+}
+
+/** Capture a partner referral. Returns { redirect_url, promo_code } to forward the member to. */
+export async function captureReferral(slug, body) {
+  return unwrap(await request(`/referral-partners/${encodeURIComponent(slug)}/capture`, {
+    method: 'POST',
+    body,
+  }))
+}
+
 /** Public applause on a speaker. Unlimited; batches several claps per call. Returns { claps }. */
 export async function clapSpeaker(eventSlug, speakerSlug, count = 1) {
   return request(`/events/${encodeURIComponent(eventSlug)}/speakers/${encodeURIComponent(speakerSlug)}/clap`, {

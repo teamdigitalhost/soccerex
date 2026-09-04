@@ -126,6 +126,9 @@ export const eventSpeaker       = (slug, speakerSlug) =>
 
 /* ─── Press ────────────────────────────────────────────────────────────── */
 export const PRESS           = '/press'
+/* Co-branded partner referral capture pages: /partners/women-in-soccer, etc. */
+export const PARTNERS        = '/partners'
+export const partnerLanding  = (slug) => `${PARTNERS}/${encodeURIComponent(slug)}`
 export const pressRelease    = (slug) => `${PRESS}/${encodeURIComponent(slug)}`
 
 /* ─── Insights / content hub ───────────────────────────────────────────── */
@@ -170,6 +173,7 @@ export const ROUTE_PATTERNS = {
   companyPortal:       `${PROFILE_ACCESS}/portal/:slug`,
   personalPortal:      `${PROFILE_ACCESS}/me/:slug`,
   pressRelease:        `${PRESS}/:slug`,
+  partnerLanding:      `${PARTNERS}/:slug`,
   eventAgendaConcept:  `${EVENTS}/:slug/agenda-concept`,
   eventTopics:         `${EVENTS}/:slug/topics`,
   eventAgenda:         `${EVENTS}/:slug/agenda`,
