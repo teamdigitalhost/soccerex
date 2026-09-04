@@ -7,9 +7,11 @@ import InquiryModalButton from '../components/InquiryModalButton'
 import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
+import SelectedSpeakers from '../components/SelectedSpeakers'
 import { sponsorshipSchema, rightsholderSchema } from '../lib/leadSchemas'
 import useScrollAnimations from '../lib/useScrollAnimations'
 
+const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
 const IMG = '/events/miami/2026'
 const GFX = '/events/miami/2026/graphics'
 const ICN = '/events/miami/2026/icons'
@@ -116,7 +118,7 @@ export default function Miami2026() {
             {/* Tagline removed per GN revisions doc. Hero now goes straight
                 from the brand lockup into the headline. */}
             <h1 className="miami-headline mt-7 mb-8" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', color: '#0D1B2A', lineHeight: 1.15, letterSpacing: '0.01em', maxWidth: '640px' }}>
-              The World Comes for the World Cup.<br />
+              The World Came for the World Cup.<br />
               <span style={{ color: '#E91E63' }}>The Industry Builds at Soccerex.</span>
             </h1>
 
@@ -361,6 +363,12 @@ export default function Miami2026() {
           from the listed organizations and a rendering fix. Re-enable by
           restoring the AttendeeWall block; consent lives in the admin
           per-event-role wall opt-in toggle. */}
+
+      {/* ─── SELECTED SPEAKERS ───────────────────────────────────────────
+          Answers "who is actually going to be there" right after the case for
+          attending. Ranked by the events desk's running order, so the section
+          re-orders itself as the lineup firms up. */}
+      <SelectedSpeakers slug={MIAMI_EVENT_SLUG} limit={8} />
 
       <TestimonialsSection background="#FFFFFF" />
 
