@@ -74,6 +74,18 @@ function readableOn(hex) {
   return (1.05 / (L + 0.05)) >= ((L + 0.05) / 0.05) ? '#ffffff' : '#111111'
 }
 
+/** Relative luminance 0..1, used to decide how hard the hero overlay has to work. */
+function luminance(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec((hex || '').trim())
+  if (!m) return 0
+  const int = parseInt(m[1], 16)
+  const ch = (c) => {
+    const s = c / 255
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4
+  }
+  return 0.2126 * ch((int >> 16) & 255) + 0.7152 * ch((int >> 8) & 255) + 0.0722 * ch(int & 255)
+}
+
 /** "September 23-25, 2026" from two ISO dates, collapsing a same-month range. */
 function formatRange(startsOn, endsOn) {
   if (!startsOn) return null
@@ -117,6 +129,11 @@ export default function PartnerLanding() {
   const onAccent = readableOn(accent)
   const event = partner?.event || null
   const imagery = EVENT_IMAGERY[event?.slug] || DEFAULT_IMAGERY
+  // A near-black brand color (TPN is #1A1A1A) swallows a photograph at the same
+  // overlay a mid-tone one (WIS charcoal) needs. Ease off as the color darkens.
+  const veryDark = luminance(primary) < 0.045
+  const photoOpacity = veryDark ? 0.5 : 0.34
+  const farStop = veryDark ? '99' : 'B3'
   const dates = useMemo(() => formatRange(event?.starts_on, event?.ends_on), [event])
 
   const set = (key) => (e) => {
@@ -200,13 +217,13 @@ export default function PartnerLanding() {
               position: 'absolute', inset: 0,
               backgroundImage: `url(${imagery.hero})`,
               backgroundSize: 'cover', backgroundPosition: 'center 35%',
-              opacity: 0.28,
+              opacity: photoOpacity,
             }} />
             {/* Keeps the partner's color dominant and the copy readable over
                 whatever happens to be in the photograph. */}
             <div aria-hidden="true" style={{
               position: 'absolute', inset: 0,
-              background: `linear-gradient(105deg, ${primary} 0%, ${primary}F2 42%, ${primary}B8 100%)`,
+              background: `linear-gradient(105deg, ${primary} 0%, ${primary}F0 44%, ${primary}${farStop} 100%)`,
             }} />
           </>
         )}
