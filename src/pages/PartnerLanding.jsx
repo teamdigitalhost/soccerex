@@ -33,6 +33,23 @@ const FIELDS = [
 
 const EMPTY = { name: '', email: '', phone: '', company: '', position: '', referrer: '' }
 
+/*
+ * Event photography, keyed by event slug so a partner page picks up the right
+ * imagery from whichever event it is bound to. Adding an event is one entry
+ * here; a partner row never carries images of its own.
+ */
+const EVENT_IMAGERY = {
+  'soccerex-miami-2026': {
+    hero: '/partners/miami-2026/hero.jpg',
+    gallery: [
+      { src: '/partners/miami-2026/networking.jpg', alt: 'Delegates networking at a Soccerex evening reception' },
+      { src: '/partners/miami-2026/stage.jpg', alt: 'A fireside chat on the Soccerex stage' },
+      { src: '/partners/miami-2026/venue.jpg', alt: 'The exterior of Nu Stadium at Miami Freedom Park' },
+    ],
+  },
+}
+const DEFAULT_IMAGERY = { hero: null, gallery: [] }
+
 /**
  * Text color that stays legible on an arbitrary partner color.
  *
@@ -99,6 +116,7 @@ export default function PartnerLanding() {
   const onPrimary = readableOn(primary)
   const onAccent = readableOn(accent)
   const event = partner?.event || null
+  const imagery = EVENT_IMAGERY[event?.slug] || DEFAULT_IMAGERY
   const dates = useMemo(() => formatRange(event?.starts_on, event?.ends_on), [event])
 
   const set = (key) => (e) => {
@@ -172,8 +190,27 @@ export default function PartnerLanding() {
       />
 
       {/* ABOVE THE FOLD: pitch on the left, the form on the right. */}
-      <section style={{ background: primary, color: onPrimary, padding: 'clamp(28px,4vw,44px) clamp(20px,5vw,64px) clamp(48px,7vw,80px)' }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+      <section style={{
+        position: 'relative', background: primary, color: onPrimary,
+        padding: 'clamp(28px,4vw,44px) clamp(20px,5vw,64px) clamp(48px,7vw,80px)',
+      }}>
+        {imagery.hero && (
+          <>
+            <div aria-hidden="true" style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: `url(${imagery.hero})`,
+              backgroundSize: 'cover', backgroundPosition: 'center 35%',
+              opacity: 0.28,
+            }} />
+            {/* Keeps the partner's color dominant and the copy readable over
+                whatever happens to be in the photograph. */}
+            <div aria-hidden="true" style={{
+              position: 'absolute', inset: 0,
+              background: `linear-gradient(105deg, ${primary} 0%, ${primary}F2 42%, ${primary}B8 100%)`,
+            }} />
+          </>
+        )}
+        <div style={{ position: 'relative', maxWidth: 1180, margin: '0 auto' }}>
 
           {/* Co-brand lockup. Both marks sit at equal weight: this is a
               partnership, not a sponsorship. */}
@@ -398,10 +435,28 @@ export default function PartnerLanding() {
             <div style={{ maxWidth: 1080, margin: '0 auto' }}>
               <h2 style={{
                 fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 700,
-                fontSize: 'clamp(1.4rem, 2.6vw, 2rem)', color: NAVY, lineHeight: 1.2, marginBottom: 32,
+                fontSize: 'clamp(1.4rem, 2.6vw, 2rem)', color: NAVY, lineHeight: 1.2, marginBottom: 24,
               }}>
                 What your pass includes
               </h2>
+
+              {imagery.gallery.length > 0 && (
+                <div className="partner-gallery" style={{ marginBottom: 34 }}>
+                  {imagery.gallery.map((img) => (
+                    <img
+                      key={img.src}
+                      src={img.src}
+                      alt={img.alt}
+                      loading="lazy"
+                      style={{
+                        width: '100%', height: '100%', objectFit: 'cover',
+                        display: 'block', borderRadius: 10,
+                        boxShadow: '0 16px 34px -22px rgba(13,27,42,0.5)',
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
               <div className="partner-benefits">
                 {[
                   ['Three days of conference content', 'Executive programming across the business of football, from federations and clubs to media, capital and technology.'],
@@ -473,10 +528,13 @@ export default function PartnerLanding() {
         @media (min-width: 520px) { .partner-form-grid { grid-template-columns: 1fr 1fr; gap: 13px 14px; } }
         .partner-facts { display: grid; gap: 22px; grid-template-columns: 1fr; }
         .partner-benefits { display: grid; gap: 26px; grid-template-columns: 1fr; }
+        .partner-gallery { display: grid; gap: 12px; grid-template-columns: 1fr; }
+        .partner-gallery img { aspect-ratio: 3 / 2; }
         .partner-footer { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
         @media (min-width: 720px) {
           .partner-facts { grid-template-columns: repeat(3, 1fr); }
           .partner-benefits { grid-template-columns: repeat(2, 1fr); gap: 30px 40px; }
+          .partner-gallery { grid-template-columns: repeat(3, 1fr); gap: 14px; }
           .partner-footer { flex-direction: row; justify-content: space-between; text-align: left; }
         }
         @media (min-width: 1000px) {
