@@ -131,6 +131,10 @@ export default function PartnerLanding() {
   const discount = partner?.discount || partner?.offer_label || 'your member rate'
   // The number appears twice on the page: once big in the headline, once small
   // beside the form. Everywhere else talks about what the member gets.
+  // A partner-supplied gallery REPLACES the stock event strip. Two blocks of
+  // photography below one form is a page that has stopped selling and started
+  // browsing.
+  const gallery = partner?.gallery?.length ? partner.gallery : null
   const offerNote = partner?.offer_note || `${discount} applied automatically at checkout`
   const imagery = EVENT_IMAGERY[event?.slug] || DEFAULT_IMAGERY
   // A near-black brand color (TPN is #1A1A1A) swallows a photograph at the same
@@ -456,7 +460,38 @@ export default function PartnerLanding() {
                 What your pass includes
               </h2>
 
-              {imagery.gallery.length > 0 && (
+              {gallery ? (
+                <figure style={{ margin: '0 0 34px' }}>
+                  <img
+                    src={gallery[0].src}
+                    alt={gallery[0].alt}
+                    loading="lazy"
+                    style={{
+                      width: '100%', height: 'auto', display: 'block', borderRadius: 10,
+                      boxShadow: '0 16px 34px -22px rgba(13,27,42,0.5)',
+                    }}
+                  />
+                  {gallery.length > 1 && (
+                    <div className="partner-gallery is-portrait" style={{ marginTop: 12 }}>
+                      {gallery.slice(1, 4).map((img) => (
+                        <img
+                          key={img.src}
+                          src={img.src}
+                          alt={img.alt}
+                          loading="lazy"
+                          style={{
+                            width: '100%', height: '100%', objectFit: 'cover',
+                            display: 'block', borderRadius: 10,
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  <figcaption style={{ fontSize: 12.5, color: '#8a97a4', marginTop: 12 }}>
+                    {partner.name} at Soccerex Miami
+                  </figcaption>
+                </figure>
+              ) : imagery.gallery.length > 0 && (
                 <div className="partner-gallery" style={{ marginBottom: 34 }}>
                   {imagery.gallery.map((img) => (
                     <img
@@ -546,6 +581,7 @@ export default function PartnerLanding() {
         .partner-benefits { display: grid; gap: 26px; grid-template-columns: 1fr; }
         .partner-gallery { display: grid; gap: 12px; grid-template-columns: 1fr; }
         .partner-gallery img { aspect-ratio: 3 / 2; }
+        .partner-gallery.is-portrait img { aspect-ratio: 4 / 5; }
         .partner-footer { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
         @media (min-width: 720px) {
           .partner-facts { grid-template-columns: repeat(3, 1fr); }
