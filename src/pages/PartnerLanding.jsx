@@ -128,6 +128,7 @@ export default function PartnerLanding() {
   const onPrimary = readableOn(primary)
   const onAccent = readableOn(accent)
   const event = partner?.event || null
+  const discount = partner?.discount || partner?.offer_label || 'your partner rate'
   const imagery = EVENT_IMAGERY[event?.slug] || DEFAULT_IMAGERY
   // A near-black brand color (TPN is #1A1A1A) swallows a photograph at the same
   // overlay a mid-tone one (WIS charcoal) needs. Ease off as the color darkens.
@@ -277,14 +278,14 @@ export default function PartnerLanding() {
                 </div>
               )}
 
-              {partner.offer_label && (
+              {discount && (
                 <div className="inline-flex items-center" style={{
                   gap: 10, padding: '10px 16px', borderRadius: 6,
                   background: accent, color: onAccent,
                   fontFamily: "'Oswald', sans-serif", fontWeight: 600,
                   letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: 13,
                 }}>
-                  <Check size={16} /> {partner.offer_label}
+                  <Check size={16} /> {discount} your ticket
                 </div>
               )}
             </div>
@@ -307,7 +308,7 @@ export default function PartnerLanding() {
                       You are on the list
                     </h2>
                     <p style={{ fontSize: 14, color: '#607186', lineHeight: 1.6, marginBottom: 18 }}>
-                      Taking you to checkout with your {partner.name} rate applied.
+                      Taking you to checkout with your {discount} applied.
                     </p>
                     {done.promo_code && (
                       <p style={{ fontSize: 13, color: INK, marginBottom: 18 }}>
@@ -336,10 +337,10 @@ export default function PartnerLanding() {
                       fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 700,
                       fontSize: '1.4rem', color: NAVY, lineHeight: 1.2, marginBottom: 6,
                     }}>
-                      Claim your rate
+                      Get {discount}
                     </h2>
                     <p style={{ fontSize: 13.5, color: '#607186', lineHeight: 1.5, marginBottom: 18 }}>
-                      Verified as a {partner.audience_label}. Takes about a minute.
+                      For every {partner.audience_label}. Takes about a minute.
                     </p>
 
                     <div className="partner-form-grid">
@@ -399,7 +400,7 @@ export default function PartnerLanding() {
                     >
                       {submitting
                         ? <><Loader2 size={17} className="animate-spin" /> Sending</>
-                        : <>Get my discount <ArrowRight size={17} /></>}
+                        : <>Get my {discount} <ArrowRight size={17} /></>}
                     </button>
 
                     <p className="flex items-start" style={{ gap: 7, fontSize: 11.5, color: '#8a97a4', marginTop: 14, lineHeight: 1.5 }}>
@@ -499,10 +500,10 @@ export default function PartnerLanding() {
                 fontFamily: "'Oswald', 'Space Grotesk', sans-serif", fontWeight: 700,
                 fontSize: 'clamp(1.4rem, 2.8vw, 2.1rem)', lineHeight: 1.15, marginBottom: 14,
               }}>
-                {partner.offer_label || 'Your partner rate'} is waiting
+                Your {discount} is waiting
               </h2>
               <p style={{ fontSize: 15, lineHeight: 1.6, color: onPrimary, opacity: 0.85, marginBottom: 26 }}>
-                Confirm your details and we will take you straight to checkout with the code applied.
+                One short form and we take you straight to checkout with {discount} already applied.
               </p>
               <button
                 type="button"
@@ -518,7 +519,7 @@ export default function PartnerLanding() {
                   letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 14.5,
                 }}
               >
-                Get my discount <ArrowRight size={17} />
+                Get my {discount} <ArrowRight size={17} />
               </button>
             </div>
           </section>
