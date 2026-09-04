@@ -28,7 +28,7 @@ const FIELDS = [
   { name: 'phone', label: 'Phone', type: 'tel', autoComplete: 'tel', required: false },
   { name: 'company', label: 'Company', type: 'text', autoComplete: 'organization', required: true },
   { name: 'position', label: 'Position', type: 'text', autoComplete: 'organization-title', required: true },
-  { name: 'referrer', label: 'Referred by', type: 'text', autoComplete: 'off', required: false, hint: 'Who told you about this' },
+  { name: 'referrer', label: 'Referred by', type: 'text', autoComplete: 'off', required: true, hint: 'Who told you about this' },
 ]
 
 const EMPTY = { name: '', email: '', phone: '', company: '', position: '', referrer: '' }
