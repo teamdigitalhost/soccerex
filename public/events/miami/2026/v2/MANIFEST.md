@@ -27,7 +27,7 @@ quality 82, except logos which stay PNG or SVG for transparency.
 | roc-nation-master.png (2715x3620), -white, -black | Roc Nation's own site. Real marks. |
 | gmcvb-corp-logo-blue.png (350x65) | GMCVB corporate lockup. Small; request larger from GMCVB. |
 | concacaf, mls, mls-next-pro, fc-barcelona, special-olympics, catapult, telemundo, fox-sports (SVG) | Wikimedia. LAYOUT ONLY, clear before production. |
-| miami-freedom-park.jpg | Development photo |
+|
 
 NOT collected, deliberately: Inter Miami, Bundesliga, NWSL, Club America, AFA,
 Atlanta United, Brighton. All trademarked and marked non-free. Request from each
