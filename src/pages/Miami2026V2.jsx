@@ -27,6 +27,17 @@ const GFX = '/events/miami/2026/graphics'
 const ICN = '/events/miami/2026/icons'
 const V2  = '/events/miami/2026/v2'
 
+// Designations are what the record actually supports, not what reads best.
+// Concacaf and Greater Miami are announced official partners. Roc Nation is a
+// confirmed exhibitor with a session of its own. Barcelona has a session and no
+// event role, so it is billed as what it is: on the stage.
+const PARTNER_LINK = {
+  concacaf:  'https://www.concacaf.com',
+  gmcvb:     'https://www.miamiandbeaches.com',
+  rocnation: 'https://www.rocnation.com',
+  barcelona: 'https://www.fcbarcelona.com',
+}
+
 const ECOSYSTEM_BRAND = [
   { label: 'Clubs', icon: 'clubs' },
   { label: 'Leagues', icon: 'leagues' },
@@ -448,12 +459,18 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="lg:col-span-5">
-            <img src={`${V2}/partners/concacaf.svg`} alt="Concacaf" style={{ height: 82, objectFit: 'contain' }} />
+            <a href={PARTNER_LINK.concacaf} target="_blank" rel="noopener noreferrer" className="inline-block" aria-label="Concacaf, opens in a new tab">
+              <img src={`${V2}/partners/concacaf.svg`} alt="Concacaf" style={{ height: 'clamp(120px,14vw,175px)', objectFit: 'contain' }} />
+            </a>
             <p className="miami-kicker miami-kicker--pink mt-6">OFFICIAL PARTNER</p>
+            <a href={PARTNER_LINK.concacaf} target="_blank" rel="noopener noreferrer"
+              className="miami-subhead inline-flex items-center gap-1.5 mt-3" style={{ color: '#007C91', fontSize: '11px' }}>
+              concacaf.com <ArrowRight size={12} />
+            </a>
           </div>
           <div className="lg:col-span-7">
-            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A' }}>
-              THE CONFEDERATION IS <span style={{ color: '#E91E63' }}>HEADQUARTERED HERE</span>
+            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A', textWrap: 'balance' }}>
+              THE CONFEDERATION THAT GOVERNS THIS REGION IS <span style={{ color: '#E91E63' }}>BASED IN MIAMI</span>
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
               Concacaf governs the game across North and Central America and the Caribbean, and its home is Miami. That is why this partnership goes well past a logo: executive participation, thought leadership, and a flagship presence on the exhibition floor.
@@ -477,8 +494,8 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="lg:col-span-7 lg:order-2">
-            <p className="miami-kicker mb-3" style={{ color: '#00C6D7' }}>ON STAGE, DAY ONE</p>
-            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#FFFFFF' }}>
+            <p className="miami-kicker mb-3" style={{ color: '#00C6D7' }}>EXHIBITOR &amp; SPEAKER</p>
+            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#FFFFFF', textWrap: 'balance' }}>
               WHERE FOOTBALL MEETS <span style={{ color: '#E91E63' }}>CULTURE</span>
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.80)' }}>
@@ -489,9 +506,14 @@ export default function Miami2026V2() {
             </p>
           </div>
           <div className="lg:col-span-5 lg:order-1">
-            <div style={{ background: '#FFFFFF', padding: 'clamp(28px,4vw,44px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <a href={PARTNER_LINK.rocnation} target="_blank" rel="noopener noreferrer" aria-label="Roc Nation, opens in a new tab"
+              style={{ background: '#FFFFFF', padding: 'clamp(28px,4vw,44px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={`${V2}/partners/roc-nation-wordmark-black.png`} alt="Roc Nation Sports" style={{ width: '100%', maxWidth: 300, objectFit: 'contain' }} />
-            </div>
+            </a>
+            <a href={PARTNER_LINK.rocnation} target="_blank" rel="noopener noreferrer"
+              className="miami-subhead inline-flex items-center gap-1.5 mt-3" style={{ color: '#00C6D7', fontSize: '11px' }}>
+              rocnation.com <ArrowRight size={12} />
+            </a>
           </div>
         </div>
       </section>
@@ -500,11 +522,17 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="lg:col-span-5">
-            <img src={`${V2}/partners/gmcvb-corp-logo-blue.png`} alt="Greater Miami Convention &amp; Visitors Bureau" style={{ width: '100%', maxWidth: 320, objectFit: 'contain' }} />
+            <a href={PARTNER_LINK.gmcvb} target="_blank" rel="noopener noreferrer" className="inline-block" aria-label="Greater Miami and Miami Beach, opens in a new tab">
+              <img src={`${V2}/partners/gmcvb-corp-logo-blue.png`} alt="Greater Miami Convention &amp; Visitors Bureau" style={{ width: '100%', maxWidth: 320, objectFit: 'contain' }} />
+            </a>
             <p className="miami-kicker miami-kicker--pink mt-6">OFFICIAL PARTNER</p>
+            <a href={PARTNER_LINK.gmcvb} target="_blank" rel="noopener noreferrer"
+              className="miami-subhead inline-flex items-center gap-1.5 mt-3" style={{ color: '#007C91', fontSize: '11px' }}>
+              miamiandbeaches.com <ArrowRight size={12} />
+            </a>
           </div>
           <div className="lg:col-span-7">
-            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A' }}>
+            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A', textWrap: 'balance' }}>
               THE CITY ITSELF IS <span style={{ color: '#E91E63' }}>PART OF THE PROGRAM</span>
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
@@ -521,8 +549,8 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="lg:col-span-7 lg:order-2">
-            <p className="miami-kicker miami-kicker--pink mb-3">ON STAGE, DAY TWO</p>
-            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A' }}>
+            <p className="miami-kicker miami-kicker--pink mb-3">ON THE MIAMI STAGE, DAY TWO</p>
+            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A', textWrap: 'balance' }}>
               ONE HUNDRED AND TWENTY SEVEN YEARS OF <span style={{ color: '#E91E63' }}>FC BARCELONA</span>
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
@@ -532,8 +560,14 @@ export default function Miami2026V2() {
               They join the Miami stage on day two, alongside Club America, AFA, Bundesliga, MLS and Inter Miami.
             </p>
           </div>
-          <div className="lg:col-span-5 lg:order-1 flex justify-center">
-            <img src={`${V2}/partners/fc-barcelona.svg`} alt="FC Barcelona" style={{ width: '100%', maxWidth: 190, objectFit: 'contain' }} />
+          <div className="lg:col-span-5 lg:order-1 flex flex-col items-center">
+            <a href={PARTNER_LINK.barcelona} target="_blank" rel="noopener noreferrer" aria-label="FC Barcelona, opens in a new tab">
+              <img src={`${V2}/partners/fc-barcelona.svg`} alt="FC Barcelona" style={{ width: '100%', maxWidth: 240, objectFit: 'contain' }} />
+            </a>
+            <a href={PARTNER_LINK.barcelona} target="_blank" rel="noopener noreferrer"
+              className="miami-subhead inline-flex items-center gap-1.5 mt-4" style={{ color: '#007C91', fontSize: '11px' }}>
+              fcbarcelona.com <ArrowRight size={12} />
+            </a>
           </div>
         </div>
       </section>
