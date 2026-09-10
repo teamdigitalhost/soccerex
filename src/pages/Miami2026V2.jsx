@@ -336,12 +336,11 @@ export default function Miami2026V2() {
       {/* ─── THE VENUE, AT SCALE ─────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
-          <p className="miami-kicker miami-kicker--pink mb-3">NU STADIUM, MIAMI FREEDOM PARK</p>
-          <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', maxWidth: 900 }}>
-            A STADIUM THAT OPENED THIS YEAR, INSIDE <span style={{ color: '#00C6D7' }}>131 ACRES</span> OF NEW MIAMI
+          <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', maxWidth: 900, textWrap: 'balance' }}>
+            LAND AT MIAMI INTERNATIONAL. BE IN THE ROOM <span style={{ color: '#00C6D7' }}>TWENTY MINUTES LATER</span>
           </h2>
           <p className="miami-body leading-relaxed mb-10" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', maxWidth: 760 }}>
-            Inter Miami CF opened Nu Stadium on April 4, 2026 to a packed house. It sits at the heart of Miami Freedom Park, the largest active development in the city, two minutes from Miami International and steps from the Intermodal Center. Delegates land and arrive without ever needing a car.
+            Nu Stadium sits two minutes from the airport and a short walk from the Intermodal Center, so you arrive without hiring a car or crossing the city. For three days everyone you came to meet is inside one building at Miami Freedom Park, and the building is worth the trip on its own.
           </p>
 
           {/* Our own photography, already cleared and in production on the live page.
@@ -470,13 +469,13 @@ export default function Miami2026V2() {
           </div>
           <div className="lg:col-span-7">
             <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A', textWrap: 'balance' }}>
-              THE CONFEDERATION THAT GOVERNS THIS REGION IS <span style={{ color: '#E91E63' }}>BASED IN MIAMI</span>
+              MEET THE CONFEDERATION, AND THE <span style={{ color: '#E91E63' }}>41 FEDERATIONS</span> BEHIND IT
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              Concacaf governs the game across North and Central America and the Caribbean, and its home is Miami. That is why this partnership goes well past a logo: executive participation, thought leadership, and a flagship presence on the exhibition floor.
+              Concacaf brings its executives, its thinking and a flagship stand to Miami for all three days. If your business needs a way into North America, Central America or the Caribbean, this is the shortest one you will find this year.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              General Secretary Philippe Moggio takes the stage, and 41 member associations sit behind the conversation.
+              General Secretary Philippe Moggio takes the stage, and the 41 member associations behind him are the market you are trying to reach.
             </p>
             <div className="flex flex-wrap gap-x-10 gap-y-4 mt-8">
               {[['41', 'MEMBER ASSOCIATIONS'], ['1', 'FLAGSHIP EXHIBITION'], ['MIAMI', 'HEADQUARTERS']].map(([n, l]) => (
@@ -494,15 +493,14 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="lg:col-span-7 lg:order-2">
-            <p className="miami-kicker mb-3" style={{ color: '#00C6D7' }}>EXHIBITOR &amp; SPEAKER</p>
             <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#FFFFFF', textWrap: 'balance' }}>
-              WHERE FOOTBALL MEETS <span style={{ color: '#E91E63' }}>CULTURE</span>
+              TAKE YOUR BRAND WHERE FOOTBALL AND <span style={{ color: '#E91E63' }}>CULTURE</span> ALREADY MEET
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.80)' }}>
-              Roc Nation Sports built its business at the intersection of sport, business and culture: talent representation, commercial opportunity, and the athlete brands that carry a club far beyond its own supporters.
+              Roc Nation Sports represents the athletes and builds the partnerships that carry a club past its own supporters. Their team is on stage on day one and on the exhibition floor for all three days.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.80)' }}>
-              That perspective comes to Miami with a session of its own, in the city where football and culture already share an audience.
+              Bring them the brand, the rights or the roster you are trying to move, in the city where football and culture already share an audience.
             </p>
           </div>
           <div className="lg:col-span-5 lg:order-1">
@@ -510,6 +508,7 @@ export default function Miami2026V2() {
               style={{ background: '#FFFFFF', padding: 'clamp(28px,4vw,44px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={`${V2}/partners/roc-nation-wordmark-black.png`} alt="Roc Nation Sports" style={{ width: '100%', maxWidth: 300, objectFit: 'contain' }} />
             </a>
+            <p className="miami-kicker mt-6" style={{ color: '#00C6D7' }}>EXHIBITOR &amp; SPEAKER</p>
             <a href={PARTNER_LINK.rocnation} target="_blank" rel="noopener noreferrer"
               className="miami-subhead inline-flex items-center gap-1.5 mt-3" style={{ color: '#00C6D7', fontSize: '11px' }}>
               rocnation.com <ArrowRight size={12} />
@@ -533,13 +532,13 @@ export default function Miami2026V2() {
           </div>
           <div className="lg:col-span-7">
             <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A', textWrap: 'balance' }}>
-              THE CITY ITSELF IS <span style={{ color: '#E91E63' }}>PART OF THE PROGRAM</span>
+              THE WHOLE CITY IS <span style={{ color: '#E91E63' }}>PART OF YOUR THREE DAYS</span>
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              The Greater Miami Convention &amp; Visitors Bureau joins us as an official partner, opening the energy, culture and business of Greater Miami and Miami Beach to the global football industry.
+              With the Greater Miami Convention &amp; Visitors Bureau as an official partner, the destination works for you as hard as the agenda does: where to stay, where to take a meeting, and where the industry ends up once the sessions finish.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              Three days at Nu Stadium, in a city that has spent a decade becoming one of the most important crossroads in the world game.
+              Miami has spent a decade becoming one of the most important crossroads in the world game. For three days in September it is the room you want to be in.
             </p>
           </div>
         </div>
@@ -549,23 +548,23 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <div className="lg:col-span-7 lg:order-2">
-            <p className="miami-kicker miami-kicker--pink mb-3">ON THE MIAMI STAGE, DAY TWO</p>
             <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A', textWrap: 'balance' }}>
-              ONE HUNDRED AND TWENTY SEVEN YEARS OF <span style={{ color: '#E91E63' }}>FC BARCELONA</span>
+              HEAR HOW <span style={{ color: '#E91E63' }}>BARCELONA</span> BUILDS A GLOBAL BUSINESS
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              Founded in 1899 and owned by its members ever since, Barcelona is one of the few clubs whose commercial decisions are studied by the entire industry.
+              Barcelona's commercial decisions get studied by every club that wants to grow beyond its own market. On day two they explain how they make them.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              They join the Miami stage on day two, alongside Club America, AFA, Bundesliga, MLS and Inter Miami.
+              They share the day with Club America, AFA, Bundesliga, MLS and Inter Miami, so you can compare five approaches to the same problem in a single afternoon.
             </p>
           </div>
           <div className="lg:col-span-5 lg:order-1 flex flex-col items-center">
             <a href={PARTNER_LINK.barcelona} target="_blank" rel="noopener noreferrer" aria-label="FC Barcelona, opens in a new tab">
               <img src={`${V2}/partners/fc-barcelona.svg`} alt="FC Barcelona" style={{ width: '100%', maxWidth: 240, objectFit: 'contain' }} />
             </a>
+            <p className="miami-kicker miami-kicker--pink mt-6">ON STAGE, DAY TWO</p>
             <a href={PARTNER_LINK.barcelona} target="_blank" rel="noopener noreferrer"
-              className="miami-subhead inline-flex items-center gap-1.5 mt-4" style={{ color: '#007C91', fontSize: '11px' }}>
+              className="miami-subhead inline-flex items-center gap-1.5 mt-3" style={{ color: '#007C91', fontSize: '11px' }}>
               fcbarcelona.com <ArrowRight size={12} />
             </a>
           </div>
@@ -650,7 +649,7 @@ export default function Miami2026V2() {
                 label="Explore Partnership Opportunities"
                 modalTitle="Partner with Soccerex Miami"
                 eyebrow="Sponsorship & partnership"
-                intro="Tell us a little about your organisation and what you'd like to achieve. We'll send the right partnership pack."
+                intro="Tell us a little about your organization and what you'd like to achieve. We'll send the right partnership pack."
                 schema={sponsorshipSchema}
                 extraPayload={{ event_slug: 'soccerex-miami-2026', source: 'miami-registration-partnership' }}
                 submitLabel="Send inquiry"
