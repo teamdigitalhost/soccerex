@@ -83,7 +83,7 @@ const ANNOUNCED = [
 ]
 
 const WHY_ATTEND = [
-  { title: 'Everyone You Need, In One Building', desc: 'Three days at Nu Stadium with the clubs, leagues, federations, investors and brands you have spent the year trying to get an hour with. No travel between venues and nowhere else for them to be.' },
+  { title: 'Everyone You Need, In One Place', desc: 'Two full days of sessions inside Nu Stadium with the clubs, leagues, federations, investors and brands you have spent the year trying to get an hour with, opening the night before at the VIP reception.' },
   { title: 'The World Cup Just Happened Here', desc: 'Miami hosted seven matches this summer, a quarterfinal and the bronze final among them. The commercial questions the tournament opened are still open, and this is where the industry works through them.' },
   { title: 'Meetings Booked Before You Land', desc: 'Soccerex Deal Network puts you in front of counterparties chosen for what you are actually trying to do, so your first day starts with a diary rather than a floor plan.' },
   { title: 'Capital In The Room', desc: 'Investors, funds and family offices come to Miami looking for football exposure. If you are raising, or selling, or building something that needs backing, they are here for three days.' },
@@ -305,7 +305,7 @@ export default function Miami2026V2() {
                 WHAT IS <span style={{ color: '#E91E63' }}>SOCCEREX MIAMI?</span>
               </h2>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-                Soccerex Miami is where the business of football in the Americas gets done. Three days at Nu Stadium with the people who run the clubs, hold the rights, write the checks and build the technology the game now depends on.
+                Soccerex Miami is where the business of football in the Americas gets done. Three days with the people who run the clubs, hold the rights, write the checks and build the technology the game now depends on, with the conference itself inside Nu Stadium.
               </p>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
                 It lands ten weeks after the World Cup, in the market the tournament just left. The people who ran it are on stage, the money that follows it is in the room, and Deal Network puts you in front of the ones you came for.
@@ -339,7 +339,7 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', maxWidth: 900, textWrap: 'balance' }}>
-            THREE DAYS INSIDE THE <span style={{ color: '#00C6D7' }}>NEWEST STADIUM IN MAJOR LEAGUE SOCCER</span>
+            THE INDUSTRY MEETS INSIDE THE <span style={{ color: '#00C6D7' }}>NEWEST STADIUM IN MLS</span>
           </h2>
           <p className="miami-body leading-relaxed mb-10" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', maxWidth: 760 }}>
             Nu Stadium opened this April as the home of Inter Miami CF, and most of the industry has still not been through the doors. Miami spent the summer hosting seven World Cup matches, a quarterfinal and the bronze final among them, and the city has not come down since. September puts you inside the newest building in the game while the attention is still here.
@@ -474,7 +474,7 @@ export default function Miami2026V2() {
               MEET THE CONFEDERATION, AND THE <span style={{ color: '#E91E63' }}>41 FEDERATIONS</span> BEHIND IT
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              Concacaf brings its executives, its thinking and a flagship stand to Miami for all three days. If your business needs a way into North America, Central America or the Caribbean, this is the shortest one you will find this year.
+              Concacaf brings its executives, its thinking and a flagship stand to Miami for the full run of the event. If your business needs a way into North America, Central America or the Caribbean, this is the shortest one you will find this year.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
               General Secretary Philippe Moggio takes the stage, and the 41 member associations behind him are the market you are trying to reach.
@@ -499,7 +499,7 @@ export default function Miami2026V2() {
               TAKE YOUR BRAND WHERE FOOTBALL AND <span style={{ color: '#E91E63' }}>CULTURE</span> ALREADY MEET
             </h2>
             <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.80)' }}>
-              Roc Nation Sports represents the athletes and builds the partnerships that carry a club past its own supporters. Their team is on stage on day one and on the exhibition floor for all three days.
+              Roc Nation Sports represents the athletes and builds the partnerships that carry a club past its own supporters. Their team is on stage on day one and on the exhibition floor alongside it.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.80)' }}>
               Bring them the brand, the rights or the roster you are trying to move, in the city where football and culture already share an audience.
@@ -626,7 +626,7 @@ export default function Miami2026V2() {
                 <Mail size={18} style={{ color: 'var(--event-primary-light)' }} /> Delegate Registration
               </h3>
               <p className="miami-body text-white/65 text-sm mb-6">
-                Full access to all three days: every session, the exhibition floor, the networking, and Deal Network matching if you want meetings arranged before you arrive.
+                Full conference access: every session, the exhibition floor, the networking, and Deal Network matching if you want meetings arranged before you arrive.
               </p>
               <a
                 href="https://soccerexmiami2026.eventify.io/t2/tickets/"
