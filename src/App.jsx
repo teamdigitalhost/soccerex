@@ -15,8 +15,7 @@ import {
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
-  ROUTE_PATTERNS,
-} from './lib/routes'
+  ROUTE_PATTERNS, MIAMI_2026_V2 } from './lib/routes'
 
 /* Map pathname to a theme class. Applied at app root so the navbar
    and footer (which sit outside the page component) pick up the
@@ -87,6 +86,7 @@ const Gallery = lazy(() => import('./pages/Gallery'))
 const PastSpeakers = lazy(() => import('./pages/PastSpeakers'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
+const Miami2026V2 = lazy(() => import('./pages/Miami2026V2'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
 const MiamiAccommodations = lazy(() => import('./pages/MiamiAccommodations'))
 const Sponsor = lazy(() => import('./pages/Sponsor'))
@@ -149,6 +149,7 @@ function App() {
       <SiteChrome><Navbar /></SiteChrome>
       <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050d1a' }} />}>
         <Routes>
+          <Route path={MIAMI_2026_V2} element={<Miami2026V2 />} />
           <Route path={HOME} element={<Home />} />
           <Route path={ABOUT} element={<About />} />
           <Route path={GLOBAL_NETWORK} element={<GlobalNetwork />} />

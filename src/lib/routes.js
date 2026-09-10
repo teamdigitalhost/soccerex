@@ -73,6 +73,9 @@ export const eventRecap = (slug) => `/${slug}`
 // Bespoke Miami press release page. Lives under /miami-2026 so the Miami
 // theme (Oswald + Montserrat, pink/teal palette) applies automatically.
 export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
+// Unlisted second version of the Miami page, for team review. Linked from nowhere,
+// excluded from the sitemap, served noindex. Delete this line to retire it.
+export const MIAMI_2026_V2   = `${MIAMI_2026}/v2`
 
 // Evergreen, top-level travel + accommodations page (partner-hotel booking
 // links). One live event at a time, so this holds the current event's hotels
