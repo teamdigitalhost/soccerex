@@ -337,10 +337,10 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', maxWidth: 900, textWrap: 'balance' }}>
-            LAND AT MIAMI INTERNATIONAL. BE IN THE ROOM <span style={{ color: '#00C6D7' }}>TWENTY MINUTES LATER</span>
+            THE NEWEST STADIUM IN MAJOR LEAGUE SOCCER. <span style={{ color: '#00C6D7' }}>THREE DAYS INSIDE IT.</span>
           </h2>
           <p className="miami-body leading-relaxed mb-10" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', maxWidth: 760 }}>
-            Nu Stadium sits two minutes from the airport and a short walk from the Intermodal Center, so you arrive without hiring a car or crossing the city. For three days everyone you came to meet is inside one building at Miami Freedom Park, and the building is worth the trip on its own.
+            Nu Stadium opened this April as the home of Inter Miami CF, and most of the industry has still not been through the doors. Miami spent the summer hosting seven World Cup matches, a quarterfinal and the bronze final among them, and the city has not come down since. September puts you inside the newest building in the game while the attention is still here.
           </p>
 
           {/* Our own photography, already cleared and in production on the live page.
