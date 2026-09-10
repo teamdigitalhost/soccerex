@@ -83,22 +83,24 @@ const ANNOUNCED = [
 ]
 
 const WHY_ATTEND = [
-  { title: 'The Soccerex Platform in One Market', desc: 'Miami brings the football business ecosystem together at a defining moment, connecting clubs, leagues, federations, rightsholders, brands, investors, technology leaders, innovators, and impact-driven organizations.' },
-  { title: 'Where Momentum Becomes Opportunity', desc: 'Set in the wake of the 2026 FIFA World Cup, Soccerex Miami turns global attention into partnerships, investment conversations, commercial growth, innovation, and measurable impact across the Americas.' },
-  { title: 'Deal Network Access', desc: 'Through Soccerex Deal Network, attendees gain curated access to qualified counterparties, including decision-makers, capital partners, strategic investors, family offices, funds, sponsors, and commercial partners focused on real outcomes.' },
-  { title: 'Capital, Innovation & Impact', desc: 'Soccerex Miami brings capital closer to football, helping fund growth, support women’s football, accelerate innovation, expand commercial opportunity, and create lasting impact across the game.' },
+  { title: 'Everyone You Need, In One Building', desc: 'Three days at Nu Stadium with the clubs, leagues, federations, investors and brands you have spent the year trying to get an hour with. No travel between venues and nowhere else for them to be.' },
+  { title: 'The World Cup Just Happened Here', desc: 'Miami hosted seven matches this summer, a quarterfinal and the bronze final among them. The commercial questions the tournament opened are still open, and this is where the industry works through them.' },
+  { title: 'Meetings Booked Before You Land', desc: 'Soccerex Deal Network puts you in front of counterparties chosen for what you are actually trying to do, so your first day starts with a diary rather than a floor plan.' },
+  { title: 'Capital In The Room', desc: 'Investors, funds and family offices come to Miami looking for football exposure. If you are raising, or selling, or building something that needs backing, they are here for three days.' },
 ]
 
+
 const THEMES = [
-  { title: 'The Global Football Economy', desc: 'Clubs, leagues, federations, brands, investors, rightsholders, and the business models shaping football’s future.' },
-  { title: 'Capital, Investment & Club Ownership', desc: 'Private equity, family offices, funds, strategic investors, M&A, multi-club ownership, and the financial future of football.' },
-  { title: 'Soccerex Deal Network', desc: 'Curated introductions, qualified counterparties, strategic partnerships, and commercial opportunities designed to move from access to outcomes.' },
-  { title: 'World Cup 2026 & Beyond', desc: 'The commercial, cultural, infrastructure, tourism, and legacy opportunities created by football’s biggest global moment.' },
-  { title: 'Media, Content & Digital Revenue', desc: 'Broadcast, streaming, fan engagement, digital platforms, data, content, and new models for monetizing the global game.' },
-  { title: 'Stadiums, Venues & Host Cities', desc: 'Venue development, matchday experience, infrastructure, destination strategy, and host city growth.' },
-  { title: 'HerSoccerex', desc: 'Women’s football commercialization, investment, leadership, sponsorship, media, and long-term ecosystem growth.' },
-  { title: 'Innovation, Impact & Future Growth', desc: 'Technology, startups, brand activation, purpose-driven investment, community impact, and the next wave of football opportunity.' },
+  { title: 'The Global Football Economy', desc: 'Where the money is moving in the game right now, who is moving it, and what that means for your next deal.' },
+  { title: 'Capital, Investment & Club Ownership', desc: 'What clubs are selling for, how multi club groups get put together, and who is buying next.' },
+  { title: 'Soccerex Deal Network', desc: 'Meetings with counterparties who can actually transact, matched to what you are trying to do and set up before you land.' },
+  { title: 'World Cup 2026 & Beyond', desc: 'What the tournament left behind in this region, and how to build a business on top of it.' },
+  { title: 'Media, Content & Digital Revenue', desc: 'How rights are being sold now, what streaming has changed, and where the next revenue is coming from.' },
+  { title: 'Stadiums, Venues & Host Cities', desc: 'What it costs to build one, what it gives back, and how a venue reshapes the city around it.' },
+  { title: 'HerSoccerex', desc: 'Where the money is going in women\u2019s football, what it is buying, and who is getting there first.' },
+  { title: 'Innovation, Impact & Future Growth', desc: 'The technology changing how clubs operate, and the community work that keeps them welcome in their own city.' },
 ]
+
 
 const MIAMI_OG_IMG = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg'
 
@@ -303,10 +305,10 @@ export default function Miami2026V2() {
                 WHAT IS <span style={{ color: '#E91E63' }}>SOCCEREX MIAMI?</span>
               </h2>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-                Soccerex Miami is the Americas anchor event of the Soccerex platform, bringing together clubs, leagues, federations, investors, brands, rightsholders, solution providers, innovators, and financial leaders at a defining moment for the global game.
+                Soccerex Miami is where the business of football in the Americas gets done. Three days at Nu Stadium with the people who run the clubs, hold the rights, write the checks and build the technology the game now depends on.
               </p>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-                Set in the wake of the 2026 FIFA World Cup, Soccerex Miami creates the environment where access turns into partnerships, investment, innovation, impact, and commercial opportunity. Through world-class content, curated executive networking, brand activation, market insight, and Soccerex Deal Network, Miami connects the football business ecosystem with the people and capital shaping what comes next.
+                It lands ten weeks after the World Cup, in the market the tournament just left. The people who ran it are on stage, the money that follows it is in the room, and Deal Network puts you in front of the ones you came for.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
                 This is where football’s next chapter in the Americas is built, funded, and accelerated.
@@ -316,7 +318,7 @@ export default function Miami2026V2() {
 
           <h3 className="miami-headline mb-3" style={{ fontSize: 'clamp(1.2rem, 2vw, 1.5rem)', color: '#0D1B2A' }}>Three Days Where Football Business Moves Forward</h3>
           <p className="miami-body leading-relaxed mb-6" style={{ fontSize: '1rem', color: '#3a4a5a', maxWidth: 760 }}>
-            Soccerex Miami brings the global football ecosystem together around the conversations, capital, partnerships, and opportunities shaping the next decade of the game.
+            Eighteen published topics, three days, and one question behind all of them: where does the money in this game go next.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {THEMES.map((theme) => (
@@ -337,7 +339,7 @@ export default function Miami2026V2() {
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
           <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', maxWidth: 900, textWrap: 'balance' }}>
-            THE NEWEST STADIUM IN MAJOR LEAGUE SOCCER. <span style={{ color: '#00C6D7' }}>THREE DAYS INSIDE IT.</span>
+            THREE DAYS INSIDE THE <span style={{ color: '#00C6D7' }}>NEWEST STADIUM IN MAJOR LEAGUE SOCCER</span>
           </h2>
           <p className="miami-body leading-relaxed mb-10" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', maxWidth: 760 }}>
             Nu Stadium opened this April as the home of Inter Miami CF, and most of the industry has still not been through the doors. Miami spent the summer hosting seven World Cup matches, a quarterfinal and the bronze final among them, and the city has not come down since. September puts you inside the newest building in the game while the attention is still here.
@@ -624,7 +626,7 @@ export default function Miami2026V2() {
                 <Mail size={18} style={{ color: 'var(--event-primary-light)' }} /> Delegate Registration
               </h3>
               <p className="miami-body text-white/65 text-sm mb-6">
-                For brands, agencies, investors, technology providers, service providers, commercial partners, and football business professionals looking to access the Soccerex Miami platform.
+                Full access to all three days: every session, the exhibition floor, the networking, and Deal Network matching if you want meetings arranged before you arrive.
               </p>
               <a
                 href="https://soccerexmiami2026.eventify.io/t2/tickets/"
