@@ -1,296 +1,588 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { MapPin, Calendar, ArrowRight, Plane, Train } from 'lucide-react'
-import { MIAMI_2026, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, eventSpeakers } from '../lib/routes'
-import PageMeta from '../components/PageMeta'
-import SelectedSpeakers from '../components/SelectedSpeakers'
-import { getAgenda } from '../lib/soccerexApi'
-
 /*
- * Miami 2026, second version. Unlisted: linked from nowhere, kept out of the
- * sitemap, and served with noindex so it can be shared for review without
- * being found. The live page at /miami-2026 is untouched.
+ * Miami 2026, second version, unlisted at /miami-2026/v2.
  *
- * The argument the page makes, in order: the venue is enormous, the room is
- * full of people you would want to meet, the programme is already written, and
- * the World Cup happened here ten weeks ago. Everything on it is public and
- * verifiable today.
+ * The live page's design system, marketing and structure, kept intact. What is
+ * added is everything that has become true since it was written: the district and
+ * its scale, the partners announced publicly, twelve speakers instead of eight,
+ * and the campaign line Nu Stadium published with us.
  *
- * Speakers come from the API rather than a hardcoded list, because the roster is
- * still moving: four names were announced on LinkedIn after this page was
- * planned. SelectedSpeakers already handles ranking, skipping anyone without a
- * headshot, and showing the real total on the button.
+ * Linked from nowhere, out of the sitemap, served noindex.
  */
+import { useEffect } from 'react'
+import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { HOME, MIAMI_2026, MIAMI_2026_V2, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, bookCallUrl, eventAgendaConcept } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import InquiryModalButton from '../components/InquiryModalButton'
+import DeadlineBanner from '../components/DeadlineBanner'
+import LogoMarquee from '../components/LogoMarquee'
+import TestimonialsSection from '../components/TestimonialsSection'
+import SelectedSpeakers from '../components/SelectedSpeakers'
+import { sponsorshipSchema, rightsholderSchema } from '../lib/leadSchemas'
+import useScrollAnimations from '../lib/useScrollAnimations'
 
-const V2 = '/events/miami/2026/v2'
-const SLUG = 'soccerex-miami-2026'
+const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
+const IMG = '/events/miami/2026'
+const GFX = '/events/miami/2026/graphics'
+const ICN = '/events/miami/2026/icons'
+const V2  = '/events/miami/2026/v2'
 
-const NAVY = '#0b1f3a'
-const PINK = '#e6236e'
-const CYAN = '#22c9d6'
-const SAND = '#f6f4f0'
-
-// Counted, never claimed. Each of these is verifiable from a public source.
-const PROOF = [
-  { n: '26,700', l: 'Seat stadium' },
-  { n: '131', l: 'Acre district' },
-  { n: '70+', l: 'Speakers' },
-  { n: '32', l: 'Sessions' },
-  { n: '41', l: 'Concacaf members' },
-  { n: '30', l: 'Years of Soccerex' },
+const ECOSYSTEM_BRAND = [
+  { label: 'Clubs', icon: 'clubs' },
+  { label: 'Leagues', icon: 'leagues' },
+  { label: 'Federations', icon: 'federations' },
+  { label: 'Confederations', icon: 'federations' },
+  { label: 'Investors', icon: 'investors' },
+  { label: 'Governments', icon: 'governments' },
+  { label: "Women's Football", icon: 'womens-football' },
+  { label: 'Stadiums', icon: 'stadiums' },
+  { label: 'Agencies', icon: 'agencies' },
+  { label: 'Academies', icon: 'academies' },
+  // Impact chip added per GN revisions doc: covers non-profits, foundations,
+  // and impact-driven orgs working at the intersection of football + community.
+  { label: 'Impact', icon: 'impact' },
 ]
 
+const PILLARS_BRAND = [
+  { label: 'Insight', icon: 'insight' },
+  { label: 'Network', icon: 'network' },
+  { label: 'Deals', icon: 'deals' },
+  { label: 'Growth', icon: 'growth' },
+  { label: 'Impact', icon: 'impact' },
+]
+
+// Every figure verifiable from a public source: the venue's press material and
+// the Miami Freedom Park development site.
 const DISTRICT = [
-  ['131 acres', 'The Miami Freedom Park site'],
-  ['500,000 sq ft', 'Retail, hospitality and entertainment'],
-  ['1,000,000 sq ft', 'Office, at full build'],
-  ['58 acres', 'Jorge Mas Canosa Park, with a one mile loop'],
-  ['26,700', 'Seats, opened April 4, 2026'],
-  ['Largest in MLS', 'The Inter Miami team store'],
+  ['131', 'acre district'],
+  ['26,700', 'seats, opened April 2026'],
+  ['500K', 'sq ft retail & hospitality'],
+  ['1M', 'sq ft office at full build'],
+  ['58', 'acre public park'],
+  ['2', 'minutes from MIA'],
 ]
 
-// Announced publicly. Concacaf leads because it is a strategic partnership with
-// programming attached, not a logo placement.
-const PARTNERS = [
-  { name: 'Concacaf', file: 'concacaf.svg', note: 'Official partner. 41 member associations, headquartered in Miami. Flagship exhibition presence and its own session.' },
-  { name: 'GMCVB', file: 'gmcvb-corp-logo-blue.png', note: 'Official partner. Greater Miami and Miami Beach, connecting the industry to the host destination.' },
-  { name: 'Roc Nation Sports', file: 'roc-nation-wordmark-black.png', note: 'Talent representation, commercial opportunities and athlete brands. Programmed session on day one.' },
-  { name: 'FC Barcelona', file: 'fc-barcelona.svg', note: 'Founded 1899. Session on day two.' },
+// Announced publicly. Concacaf first: a strategic partnership with programming
+// attached, not a logo placement.
+const ANNOUNCED = [
+  { name: 'Concacaf', file: 'concacaf.svg', note: 'Official partner. 41 member associations, headquartered here in Miami, with a flagship exhibition presence.' },
+  { name: 'Greater Miami & Miami Beach', file: 'gmcvb-corp-logo-blue.png', note: 'Official partner, opening the city itself to the global football industry.' },
+  { name: 'Roc Nation Sports', file: 'roc-nation-wordmark-black.png', note: 'Where sport, business and culture meet. On stage on day one.' },
+  { name: 'FC Barcelona', file: 'fc-barcelona.svg', note: 'Founded 1899. On stage on day two.' },
 ]
 
-const ACTIVATIONS = [
-  ['Freestyle show', 'Day one. The most watchable thing on the floor.'],
-  ['HerSoccerex', "The commercial power of women's football, and the road to Brazil 2027."],
-  ['Football with Purpose', 'Two sessions across both days on inclusion, community and impact.'],
-  ['Deal Network', 'Curated introductions to counterparties who can actually transact.'],
+const WHY_ATTEND = [
+  { title: 'The Soccerex Platform in One Market', desc: 'Miami brings the football business ecosystem together at a defining moment, connecting clubs, leagues, federations, rightsholders, brands, investors, technology leaders, innovators, and impact-driven organizations.' },
+  { title: 'Where Momentum Becomes Opportunity', desc: 'Set in the wake of the 2026 FIFA World Cup, Soccerex Miami turns global attention into partnerships, investment conversations, commercial growth, innovation, and measurable impact across the Americas.' },
+  { title: 'Deal Network Access', desc: 'Through Soccerex Deal Network, attendees gain curated access to qualified counterparties, including decision-makers, capital partners, strategic investors, family offices, funds, sponsors, and commercial partners focused on real outcomes.' },
+  { title: 'Capital, Innovation & Impact', desc: 'Soccerex Miami brings capital closer to football, helping fund growth, support women’s football, accelerate innovation, expand commercial opportunity, and create lasting impact across the game.' },
 ]
 
-function Stat({ n, l }) {
-  return (
-    <div style={{ textAlign: 'center', padding: '0 clamp(8px,2vw,20px)' }}>
-      <div style={{ fontSize: 'clamp(1.5rem,3.4vw,2.4rem)', fontWeight: 800, color: NAVY, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums' }}>{n}</div>
-      <div style={{ fontSize: 'clamp(0.6rem,1vw,0.72rem)', letterSpacing: '0.13em', textTransform: 'uppercase', color: '#6b7480', marginTop: 6 }}>{l}</div>
-    </div>
-  )
-}
+const THEMES = [
+  { title: 'The Global Football Economy', desc: 'Clubs, leagues, federations, brands, investors, rightsholders, and the business models shaping football’s future.' },
+  { title: 'Capital, Investment & Club Ownership', desc: 'Private equity, family offices, funds, strategic investors, M&A, multi-club ownership, and the financial future of football.' },
+  { title: 'Soccerex Deal Network', desc: 'Curated introductions, qualified counterparties, strategic partnerships, and commercial opportunities designed to move from access to outcomes.' },
+  { title: 'World Cup 2026 & Beyond', desc: 'The commercial, cultural, infrastructure, tourism, and legacy opportunities created by football’s biggest global moment.' },
+  { title: 'Media, Content & Digital Revenue', desc: 'Broadcast, streaming, fan engagement, digital platforms, data, content, and new models for monetizing the global game.' },
+  { title: 'Stadiums, Venues & Host Cities', desc: 'Venue development, matchday experience, infrastructure, destination strategy, and host city growth.' },
+  { title: 'HerSoccerex', desc: 'Women’s football commercialization, investment, leadership, sponsorship, media, and long-term ecosystem growth.' },
+  { title: 'Innovation, Impact & Future Growth', desc: 'Technology, startups, brand activation, purpose-driven investment, community impact, and the next wave of football opportunity.' },
+]
 
-function Section({ children, bg = '#fff', pad = 'clamp(56px,7vw,96px)' }) {
-  return (
-    <section style={{ background: bg, padding: `${pad} clamp(20px,5vw,64px)` }}>
-      <div style={{ maxWidth: 1180, margin: '0 auto' }}>{children}</div>
-    </section>
-  )
-}
+const MIAMI_OG_IMG = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg'
 
-function H2({ children, light = false }) {
-  return (
-    <h2 style={{ fontSize: 'clamp(1.55rem,3.2vw,2.5rem)', fontWeight: 800, lineHeight: 1.12, color: light ? '#fff' : NAVY, margin: '0 0 clamp(14px,2vw,22px)', textWrap: 'balance' }}>{children}</h2>
-  )
-}
+// 87 verified confirmed rightsholders for Miami 2026 as of 2026-08-01.
 
-function Lede({ children, light = false }) {
-  return (
-    <p style={{ fontSize: 'clamp(1rem,1.5vw,1.15rem)', lineHeight: 1.65, color: light ? 'rgba(255,255,255,0.82)' : '#3d4a58', maxWidth: '62ch', margin: '0 0 clamp(20px,3vw,34px)' }}>{children}</p>
-  )
-}
 
 export default function Miami2026V2() {
-  const [agenda, setAgenda] = useState(null)
-
-  useEffect(() => {
-    let alive = true
-    getAgenda(SLUG)
-      .then((r) => { if (alive) setAgenda(r) })
-      .catch(() => { if (alive) setAgenda([]) })
-    return () => { alive = false }
-  }, [])
-
-  // The API shape varies by endpoint version, so normalize defensively rather
-  // than letting a missing key blank the section.
-  const sessions = Array.isArray(agenda) ? agenda : (agenda?.data || agenda?.sessions || [])
-  const byDay = sessions.reduce((acc, s) => {
-    const when = s.starts_at || s.startsAt || ''
-    const day = String(when).slice(0, 10)
-    if (!day) return acc
-    ;(acc[day] = acc[day] || []).push(s)
-    return acc
-  }, {})
-  const days = Object.keys(byDay).sort()
+  // TestimonialsSection renders fade-up blocks; without this observer they sit
+  // at opacity 0 and the section is a giant void (Joel's Aug 4 screenshot).
+  useScrollAnimations()
+  useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
-    <>
+    <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
       <PageMeta
         title="Soccerex Miami 2026 | Nu Stadium, 23-25 September"
-        description="The global football industry reconvenes at Nu Stadium, Miami, 23 to 25 September 2026."
+        description="The global football business event returns to the Americas. Soccerex Miami 2026 at Nu Stadium brings together clubs, leagues, investors, brands, and innovators. 23-25 September 2026."
+        image={MIAMI_OG_IMG}
+        path={MIAMI_2026_V2}
         noindex
       />
 
-      {/* HERO. The district render carries the scale argument before a word is read. */}
-      <section style={{ position: 'relative', minHeight: 'clamp(520px,78vh,760px)', display: 'flex', alignItems: 'flex-end', background: NAVY, overflow: 'hidden' }}>
-        <img
-          src={`${V2}/venue/mfp-aerial-render.jpg`}
-          alt="Nu Stadium and the Miami Freedom Park district, with the Miami skyline behind"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.62 }}
-        />
-        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, rgba(11,31,58,0.30) 0%, rgba(11,31,58,0.62) 55%, rgba(11,31,58,0.94) 100%)` }} />
-        <div style={{ position: 'relative', maxWidth: 1180, margin: '0 auto', padding: 'clamp(28px,5vw,64px) clamp(20px,5vw,64px)', width: '100%' }}>
-          <div style={{ display: 'flex', gap: 'clamp(10px,2vw,20px)', flexWrap: 'wrap', marginBottom: 18, fontSize: 'clamp(0.72rem,1.1vw,0.84rem)', letterSpacing: '0.1em', textTransform: 'uppercase', color: CYAN, fontWeight: 700 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><MapPin size={14} /> Nu Stadium, Miami</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><Calendar size={14} /> September 23 to 25, 2026</span>
-          </div>
-          <h1 style={{ fontSize: 'clamp(2.1rem,6vw,4.4rem)', lineHeight: 1.02, fontWeight: 900, color: '#fff', margin: '0 0 16px', maxWidth: '17ch', textWrap: 'balance' }}>
-            The world came for the World Cup.
-            <span style={{ color: PINK }}> The industry stays for Soccerex.</span>
-          </h1>
-          <p style={{ fontSize: 'clamp(1rem,1.7vw,1.25rem)', lineHeight: 1.6, color: 'rgba(255,255,255,0.85)', maxWidth: '54ch', margin: '0 0 28px' }}>
-            Three days inside a stadium that opened this year, in the city that hosted the tournament, with the people who ran it.
-          </p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <a href="https://soccerexmiami2026.eventify.io/t2/tickets/" target="_blank" rel="noopener noreferrer"
-              style={{ background: PINK, color: '#fff', padding: '15px 30px', borderRadius: 4, fontWeight: 800, textDecoration: 'none', fontSize: '0.95rem', letterSpacing: '0.04em' }}>
-              Register to attend
-            </a>
-            <Link to={eventSpeakers(SLUG)}
-              style={{ border: '1.5px solid rgba(255,255,255,0.55)', color: '#fff', padding: '15px 30px', borderRadius: 4, fontWeight: 700, textDecoration: 'none', fontSize: '0.95rem' }}>
-              See who is speaking
+      {/* ─── HERO ─────────────────────────────────────────────────────── */}
+      <section className="miami-hero relative overflow-hidden">
+        {/* Soft retro grid */}
+        <div className="absolute inset-0 pointer-events-none miami-hero-grid" />
+
+        {/* Sun behind the skyline */}
+        <img src={`${GFX}/sun.svg`} alt="" aria-hidden className="miami-hero-sun" />
+
+        {/* City skyline silhouette across the bottom */}
+        <img src={`${GFX}/skyline.png`} alt="" aria-hidden className="miami-hero-skyline" />
+
+        {/* Single palm on the right, so the left side stays clean and the logo reads */}
+        <img src={`${GFX}/tree3.svg`} alt="" aria-hidden className="miami-hero-palm-right" />
+
+        {/* Cyan brush stroke filling the empty top-right corner. Using
+            the tapered Asset 44 stroke (soft brushy edges all round) so it
+            can simply overflow off-screen at top + right without needing
+            a hard clip mask. */}
+        <img src={`${GFX}/brush-stroke-cyan.svg`} alt="" aria-hidden className="miami-hero-brush" />
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-10 items-center" style={{ maxWidth: '1360px', margin: '0 auto', padding: 'clamp(28px,4vw,56px) clamp(24px,5vw,72px) clamp(140px,15vw,220px)' }}>
+          {/* Left: brand lockup + meta */}
+          <div className="lg:col-span-7">
+            <Link to={HOME} className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest mb-8" style={{ color: '#0D1B2A', opacity: 0.6, textDecoration: 'none' }}>
+              <ArrowLeft size={14} /> Back to Home
             </Link>
+
+            {/* Date strip */}
+            <div className="flex items-center gap-4 mb-7" style={{ color: '#0D1B2A' }}>
+              <span className="miami-subhead" style={{ fontSize: '12px', letterSpacing: '0.24em', color: '#0D1B2A' }}>23-25 SEPTEMBER 2026</span>
+              <span style={{ width: 7, height: 7, background: '#E91E63' }} />
+              <span className="miami-subhead" style={{ fontSize: '12px', letterSpacing: '0.24em', color: '#007C91' }}>MIAMI, USA</span>
+            </div>
+
+            {/* Primary brand lockup */}
+            <img src={`${GFX}/logo-primary.svg`} alt="Soccerex Miami 2026" className="miami-hero-logo" />
+
+            {/* Tagline removed per GN revisions doc. Hero now goes straight
+                from the brand lockup into the headline. */}
+            <h1 className="miami-headline mt-7 mb-8" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)', color: '#0D1B2A', lineHeight: 1.15, letterSpacing: '0.01em', maxWidth: '640px' }}>
+              The World Came for the World Cup.<br />
+              <span style={{ color: '#E91E63' }}>The Industry Stays for Soccerex.</span>
+            </h1>
+
+            <div className="flex items-center gap-6 lg:gap-8 mb-8 flex-wrap">
+              <div>
+                <p className="miami-subhead mb-1" style={{ color: '#607186', fontSize: '10px' }}><MapPin size={12} className="inline mr-1" /> Venue</p>
+                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.05rem', letterSpacing: '0.04em', textTransform: 'none' }}>Nu Stadium</p>
+              </div>
+              <div style={{ width: 7, height: 7, background: '#E91E63' }} />
+              <div>
+                <p className="miami-subhead mb-1" style={{ color: '#607186', fontSize: '10px' }}><Calendar size={12} className="inline mr-1" /> Date</p>
+                <p className="miami-headline" style={{ color: '#0D1B2A', fontSize: '1.05rem', letterSpacing: '0.04em' }}>23-25 September 2026</p>
+              </div>
+            </div>
+
+            {/* One primary action; everything else holds equal, quiet weight.
+                Row 1: the decisions. Row 2: a uniform utility grid. */}
+            <div className="flex flex-wrap gap-3 items-center mb-4">
+              <a
+                href="https://soccerexmiami2026.eventify.io/t2/tickets/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miami-pill-primary"
+              >
+                <Mail size={15} /> Register Now
+              </a>
+              <InquiryModalButton
+                kind="preregister"
+                label="Apply for Rightsholder Pass"
+                modalTitle="Apply for Rightsholder Pass"
+                eyebrow="Complimentary pass"
+                intro="Clubs, leagues, federations, national teams, competitions, and qualifying rightsholders may apply for a complimentary delegate pass to Soccerex Miami 2026."
+                schema={rightsholderSchema}
+                extraPayload={{
+                  event_slug: 'miami-2026',
+                  attendee_type: 'rights_holder',
+                  interest: 'Complimentary rightsholder pass',
+                  source: 'miami-2026-rightsholder-pass',
+                  marketing_opt_in: true,
+                }}
+                submitLabel="Submit application"
+                successTitle="Application received."
+                successBody="Your application is under review. The Soccerex team will follow up by email to confirm eligibility."
+                bookingUrl={bookCallUrl('success-miami-rightsholder')}
+                buttonClassName="miami-pill-outline"
+              >
+                <Trophy size={15} /> Apply for Rightsholder Pass
+              </InquiryModalButton>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3" style={{ maxWidth: 640 }}>
+              <a
+                href="/events/miami/2026/selection-of-attendees.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miami-cta-box"
+              >
+                Attendees (PDF)
+              </a>
+              <Link to={ACCOMMODATIONS} className="miami-cta-box">Travel &amp; Stay</Link>
+              <Link to={SPONSOR} className="miami-cta-box">Sponsor</Link>
+              <Link to={EXHIBIT} className="miami-cta-box">Exhibit</Link>
+            </div>
+
+            <Link
+              to={MIAMI_2026_PRESS_RELEASE}
+              className="inline-flex items-center gap-1.5 mt-4 miami-subhead"
+              style={{ color: '#0D1B2A', fontSize: 12, letterSpacing: '0.12em', textDecoration: 'none', borderBottom: '2px solid #E91E63', paddingBottom: 2 }}
+            >
+              Read the announcement <ArrowRight size={13} />
+            </Link>
+
+            <div className="mt-5">
+              <DeadlineBanner variant="general" />
+            </div>
+          </div>
+
+          {/* Right: anniversary + speaker card */}
+          <div className="lg:col-span-5 lg:pl-4">
+            {/* 30 YEARS anniversary block */}
+            <div className="miami-anniv mb-6">
+              <div className="flex items-end gap-4">
+                <span className="miami-headline" style={{ fontSize: 'clamp(72px, 8vw, 110px)', lineHeight: 0.85, color: '#E91E63' }}>30</span>
+                <div style={{ marginBottom: 10 }}>
+                  <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '12px', letterSpacing: '0.22em', lineHeight: 1.3 }}>YEARS</p>
+                  <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '12px', letterSpacing: '0.22em', lineHeight: 1.3 }}>OF BUILDING</p>
+                  <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '12px', letterSpacing: '0.22em', lineHeight: 1.3 }}>THE GLOBAL GAME</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 mt-4" style={{ color: '#0D1B2A' }}>
+                <span className="miami-subhead" style={{ fontSize: '11px', color: '#607186' }}>1996</span>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#007C91', flexShrink: 0 }} />
+                <span style={{ flex: 1, height: 2, background: 'linear-gradient(90deg, #007C91, #E91E63)' }} />
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#E91E63', flexShrink: 0 }} />
+                <span className="miami-subhead" style={{ fontSize: '11px', color: '#E91E63' }}>2026</span>
+              </div>
+            </div>
+
+            {/* Trust strip */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { num: '3', label: 'Days' },
+                { num: '100+', label: 'Speakers' },
+                { num: '50+', label: 'Countries' },
+              ].map((s) => (
+                <div key={s.label} className="text-center px-3 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)', boxShadow: '0 4px 14px -8px rgba(13,27,42,0.18)' }}>
+                  <p className="miami-headline" style={{ fontSize: '1.4rem', color: '#0D1B2A', lineHeight: 1 }}>{s.num}</p>
+                  <p className="miami-subhead mt-1" style={{ fontSize: '10px', color: '#607186', letterSpacing: '0.18em' }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Pillars strip, using the real brand icons */}
+            <div className="miami-pillar-strip mt-5">
+              {PILLARS_BRAND.map((p) => (
+                <div key={p.label} className="miami-pillar-mini">
+                  <img src={`${ICN}/${p.icon}.svg`} alt="" aria-hidden />
+                  <span className="miami-subhead">{p.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* PROOF STRIP */}
-      <div style={{ background: SAND, borderBottom: '1px solid #e6e2db', padding: 'clamp(22px,3vw,34px) clamp(16px,4vw,48px)' }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 'clamp(12px,2vw,20px)' }}>
-          {PROOF.map((p) => <Stat key={p.l} {...p} />)}
-        </div>
-      </div>
-
-      {/* SPEAKERS. Reused component: ranked from the API, real total on the button. */}
-      <SelectedSpeakers slug={SLUG} limit={12} />
-
-      {/* THE WORLD CUP BRIDGE */}
-      <Section bg={NAVY}>
-        <H2 light>The tournament happened here. The consequences have not been worked out yet.</H2>
-        <Lede light>
-          The Chief Tournament Officers who delivered the World Cup in the United States, Canada
-          and Mexico are all speaking, alongside the executives who ran Qatar 2022. No other
-          gathering this year puts that group in one room, ten weeks after the final.
-        </Lede>
-      </Section>
-
-      {/* THE VENUE AT SCALE */}
-      <Section>
-        <H2>A stadium inside a 131 acre district</H2>
-        <Lede>
-          Nu Stadium opened on April 4, 2026 and is the home of Inter Miami CF. It sits inside
-          Miami Freedom Park, the largest active real estate development in the city.
-        </Lede>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 'clamp(14px,2vw,22px)', marginBottom: 'clamp(24px,3vw,36px)' }}>
-          {DISTRICT.map(([n, l]) => (
-            <div key={l} style={{ borderLeft: `3px solid ${CYAN}`, paddingLeft: 16 }}>
-              <div style={{ fontSize: 'clamp(1.15rem,2vw,1.5rem)', fontWeight: 800, color: NAVY, fontVariantNumeric: 'tabular-nums' }}>{n}</div>
-              <div style={{ fontSize: '0.88rem', color: '#5b6672', lineHeight: 1.5, marginTop: 3 }}>{l}</div>
+      {/* ─── WHAT IS SOCCEREX MIAMI ─────────────────────────────────────── */}
+      <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+        {/* Faded Miami script watermark behind the section */}
+        <div className="miami-script-watermark" style={{ top: '8%', right: '-6%', width: 'min(120%, 1400px)', height: '60%' }} />
+        <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-start mb-16">
+            <div className="relative">
+              <img src={`${IMG}/sections/nu-stadium-exterior.jpg`} alt="NU Stadium at Miami Freedom Park, future home of Inter Miami CF" style={{ width: '100%', objectFit: 'cover', aspectRatio: '16/10', boxShadow: '0 24px 60px -28px rgba(13,27,42,0.45)' }} />
+              <div className="absolute" style={{ left: -14, top: -14, width: 64, height: 64, background: 'var(--miami-sunset)', zIndex: -1, opacity: 0.9 }} />
+              <div className="absolute" style={{ right: -14, bottom: -14, width: 96, height: 96, border: '2px solid #007C91', zIndex: -1 }} />
             </div>
-          ))}
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 12 }}>
-          {['mfp-district-view.jpg', 'nu-stadium-grand-staircase.jpg', 'nu-stadium-entrance.jpg'].map((f) => (
-            <img key={f} src={`${V2}/venue/${f}`} alt="" loading="lazy"
-              style={{ width: '100%', height: 220, objectFit: 'cover', borderRadius: 6, display: 'block' }} />
-          ))}
-        </div>
-        <div style={{ display: 'flex', gap: 'clamp(16px,3vw,40px)', flexWrap: 'wrap', marginTop: 'clamp(22px,3vw,32px)', color: '#3d4a58', fontSize: '0.95rem' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 9 }}><Plane size={17} color={PINK} /> Adjacent to Miami International Airport</span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 9 }}><Train size={17} color={PINK} /> Steps from the Miami Intermodal Center</span>
-        </div>
-      </Section>
-
-      {/* PARTNERS */}
-      <Section bg={SAND}>
-        <H2>Who is behind it</H2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 'clamp(14px,2vw,20px)' }}>
-          {PARTNERS.map((p) => (
-            <div key={p.name} style={{ background: '#fff', border: '1px solid #e6e2db', borderRadius: 8, padding: 'clamp(18px,2.4vw,26px)' }}>
-              <div style={{ height: 46, display: 'flex', alignItems: 'center', marginBottom: 14 }}>
-                <img src={`${V2}/partners/${p.file}`} alt={p.name} loading="lazy"
-                  style={{ maxHeight: 42, maxWidth: 168, objectFit: 'contain' }} />
-              </div>
-              <div style={{ fontWeight: 800, color: NAVY, marginBottom: 6, fontSize: '1rem' }}>{p.name}</div>
-              <p style={{ fontSize: '0.86rem', lineHeight: 1.55, color: '#5b6672', margin: 0 }}>{p.note}</p>
+            <div>
+              <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
+                WHAT IS <span style={{ color: '#E91E63' }}>SOCCEREX MIAMI?</span>
+              </h2>
+              <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+                Soccerex Miami is the Americas anchor event of the Soccerex platform, bringing together clubs, leagues, federations, investors, brands, rightsholders, solution providers, innovators, and financial leaders at a defining moment for the global game.
+              </p>
+              <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+                Set in the wake of the 2026 FIFA World Cup, Soccerex Miami creates the environment where access turns into partnerships, investment, innovation, impact, and commercial opportunity. Through world-class content, curated executive networking, brand activation, market insight, and Soccerex Deal Network, Miami connects the football business ecosystem with the people and capital shaping what comes next.
+              </p>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+                This is where football’s next chapter in the Americas is built, funded, and accelerated.
+              </p>
             </div>
-          ))}
-        </div>
-      </Section>
+          </div>
 
-      {/* PROGRAMME, straight from the schedule API.
-          Renders only once sessions are published: the public agenda endpoint hides
-          drafts, and all 32 Miami sessions are still draft. Nothing to fix here, the
-          section appears by itself the day the events desk publishes them. */}
-      {days.length > 0 && (
-        <Section>
-          <H2>{sessions.length} sessions, already scheduled</H2>
-          <Lede>The programme is written. These are the conversations, by day.</Lede>
-          <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit,minmax(300px,1fr))`, gap: 'clamp(18px,3vw,32px)' }}>
-            {days.map((d) => (
-              <div key={d}>
-                <div style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: PINK, fontWeight: 800, marginBottom: 12 }}>
-                  {new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+          <h3 className="miami-headline mb-3" style={{ fontSize: 'clamp(1.2rem, 2vw, 1.5rem)', color: '#0D1B2A' }}>Three Days Where Football Business Moves Forward</h3>
+          <p className="miami-body leading-relaxed mb-6" style={{ fontSize: '1rem', color: '#3a4a5a', maxWidth: 760 }}>
+            Soccerex Miami brings the global football ecosystem together around the conversations, capital, partnerships, and opportunities shaping the next decade of the game.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {THEMES.map((theme) => (
+              <div key={theme.title} className="flex items-start gap-4 px-5 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)' }}>
+                <div style={{ width: 8, height: 8, background: 'var(--miami-sunset)', flexShrink: 0 }} />
+                <div>
+                  <h4 className="miami-subhead mb-1" style={{ color: '#0D1B2A', fontSize: '0.82rem', letterSpacing: '0.09em' }}>{theme.title}</h4>
+                  <p className="miami-body" style={{ fontSize: '0.9rem', color: '#3a4a5a', lineHeight: 1.45 }}>{theme.desc}</p>
                 </div>
-                <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-                  {byDay[d]
-                    .slice()
-                    .sort((a, b) => String(a.starts_at || '').localeCompare(String(b.starts_at || '')))
-                    .map((s, i) => (
-                      <li key={i} style={{ padding: '10px 0', borderBottom: '1px solid #eceae5', color: NAVY, fontSize: '0.95rem', lineHeight: 1.45 }}>
-                        {s.title}
-                      </li>
-                    ))}
-                </ul>
               </div>
             ))}
           </div>
-        </Section>
-      )}
-
-      {/* ACTIVATIONS */}
-      <Section bg={NAVY}>
-        <H2 light>Not only panels</H2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))', gap: 'clamp(16px,2.4vw,26px)' }}>
-          {ACTIVATIONS.map(([t, d]) => (
-            <div key={t} style={{ borderTop: `2px solid ${CYAN}`, paddingTop: 14 }}>
-              <div style={{ fontWeight: 800, color: '#fff', marginBottom: 7, fontSize: '1.02rem' }}>{t}</div>
-              <p style={{ fontSize: '0.88rem', lineHeight: 1.55, color: 'rgba(255,255,255,0.72)', margin: 0 }}>{d}</p>
-            </div>
-          ))}
         </div>
-      </Section>
+      </section>
 
-      {/* CLOSE */}
-      <Section bg={SAND}>
-        <div style={{ textAlign: 'center', maxWidth: '58ch', margin: '0 auto' }}>
-          <H2>September 23 to 25, 2026</H2>
-          <Lede>
-            <span style={{ display: 'block', textAlign: 'center', margin: '0 auto' }}>
-              Nu Stadium, Miami Freedom Park. Three days with the people who decide what
-              happens next in the game.
-            </span>
-          </Lede>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="https://soccerexmiami2026.eventify.io/t2/tickets/" target="_blank" rel="noopener noreferrer"
-              style={{ background: PINK, color: '#fff', padding: '15px 32px', borderRadius: 4, fontWeight: 800, textDecoration: 'none' }}>
-              Register to attend
-            </a>
-            <Link to={ACCOMMODATIONS} style={{ border: `1.5px solid ${NAVY}`, color: NAVY, padding: '15px 32px', borderRadius: 4, fontWeight: 700, textDecoration: 'none' }}>
-              Where to stay
-            </Link>
-          </div>
-          <p style={{ marginTop: 26, fontSize: '0.82rem', color: '#7a838d' }}>
-            <Link to={MIAMI_2026} style={{ color: '#7a838d' }}>Current page</Link>
-            {'  ·  '}
-            <Link to={MIAMI_2026_PRESS_RELEASE} style={{ color: '#7a838d' }}>Press release</Link>
+
+      {/* ─── THE VENUE, AT SCALE ─────────────────────────────────────────── */}
+      <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+        <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <p className="miami-kicker miami-kicker--pink mb-3">NU STADIUM, MIAMI FREEDOM PARK</p>
+          <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', maxWidth: 900 }}>
+            A STADIUM THAT OPENED THIS YEAR, INSIDE <span style={{ color: '#00C6D7' }}>131 ACRES</span> OF NEW MIAMI
+          </h2>
+          <p className="miami-body leading-relaxed mb-10" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', maxWidth: 760 }}>
+            Inter Miami CF opened Nu Stadium on April 4, 2026 to a packed house. It sits at the heart of Miami Freedom Park, the largest active development in the city, two minutes from Miami International and steps from the Intermodal Center. Delegates land and arrive without ever needing a car.
           </p>
+
+          <img src={`${V2}/venue/mfp-aerial-render.jpg`} alt="Nu Stadium and the Miami Freedom Park district, with the Miami skyline beyond"
+            style={{ width: '100%', objectFit: 'cover', aspectRatio: '16/9', boxShadow: '0 30px 80px -30px rgba(0,0,0,0.7)', marginBottom: 'clamp(28px,4vw,48px)' }} />
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-8 gap-x-4">
+            {DISTRICT.map(([n, l]) => (
+              <div key={l}>
+                <div className="event-stat-number" style={{ color: '#FFFFFF', fontSize: 'clamp(1.5rem,3vw,2.2rem)', lineHeight: 1 }}>{n}</div>
+                <p className="miami-subhead mt-2" style={{ color: 'rgba(255,255,255,0.62)', fontSize: '10px', letterSpacing: '0.16em', lineHeight: 1.4 }}>{l.toUpperCase()}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-12">
+            {['nu-stadium-grand-staircase.jpg', 'mfp-district-view.jpg', 'nu-stadium-entrance.jpg'].map((f) => (
+              <img key={f} src={`${V2}/venue/${f}`} alt="" aria-hidden loading="lazy"
+                style={{ width: '100%', height: 200, objectFit: 'cover', opacity: 0.92 }} />
+            ))}
+          </div>
         </div>
-      </Section>
-    </>
+      </section>
+
+      {/* ─── AGENDA CONCEPT (navy panel) ────────────────────────────────── */}
+      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0D1B2A 0%, #102538 100%)', padding: 'clamp(64px,8vw,104px) clamp(24px,5vw,80px)' }}>
+        <div className="absolute inset-0 miami-grid" style={{ opacity: 0.3 }} />
+        <div className="relative z-10 text-center" style={{ maxWidth: '880px', margin: '0 auto' }}>
+          <h2 className="miami-headline text-white mb-4" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)' }}>
+            THE 2026 <span className="miami-text-gradient">AGENDA CONCEPT</span>
+          </h2>
+          <p className="miami-body text-white/70 mx-auto mb-9" style={{ maxWidth: '660px' }}>
+            Eighteen published topics shaping the Miami conversations, from Inter Miami&rsquo;s partnership model and the next decade of MLS to the road to Brazil 2027. Explore them online, or take the full concept with you.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link to={eventAgendaConcept('soccerex-miami-2026')} className="miami-pill-primary">
+              Explore the Agenda Concept <ArrowRight size={15} />
+            </Link>
+            <a href="/downloads/soccerex-miami-2026-agenda-concept.pdf" download className="miami-pill-outline">
+              <FileText size={15} /> Download the PDF
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Brand divider */}
+      <hr className="miami-divider" aria-hidden style={{ margin: '0 auto' }} />
+
+      {/* ─── ECOSYSTEM (crisp white) ────────────────────────────────────── */}
+      <section className="relative overflow-hidden" style={{ background: '#FAFBFC', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div className="text-center mb-12 flex flex-col items-center">
+            <p className="miami-kicker">BUILT FOR THE FOOTBALL BUSINESS ECOSYSTEM</p>
+            <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
+              The <span className="miami-text-gradient">Soccerex Ecosystem</span>
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {ECOSYSTEM_BRAND.map(({ label, icon }) => (
+              <div key={label} className="miami-cell-light">
+                <img src={`${ICN}/${icon}.svg`} alt="" aria-hidden style={{ width: 40, height: 40, margin: '0 auto 12px', display: 'block' }} />
+                <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '11px' }}>{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Brand divider */}
+      <hr className="miami-divider" aria-hidden style={{ margin: '0 auto' }} />
+
+      {/* ─── WHY ATTEND (white) ──────────────────────────────────────────── */}
+      <section style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+          <p className="miami-kicker miami-kicker--pink">BUILT FOR THE FOOTBALL BUSINESS ECOSYSTEM</p>
+          <h2 className="miami-headline mb-10" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>Why Attend Soccerex Miami?</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {WHY_ATTEND.map((item, i) => {
+              const Icons = [Users, Trophy, Briefcase, Star]
+              const Icon = Icons[i]
+              return (
+                <div key={item.title} className="miami-card-light">
+                  <div style={{ width: 44, height: 44, background: 'rgba(0,124,145,0.08)', border: '1px solid rgba(0,124,145,0.2)', display: 'grid', placeItems: 'center', marginBottom: 16 }}>
+                    <Icon size={22} style={{ color: '#007C91' }} />
+                  </div>
+                  <h3 className="miami-subhead mb-3" style={{ fontSize: '1rem', color: '#0D1B2A', letterSpacing: '0.1em' }}>{item.title}</h3>
+                  <p className="miami-body leading-relaxed" style={{ fontSize: '0.95rem', color: '#3a4a5a' }}>{item.desc}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Confirmed-attendee wall: taken down 2026-08-03 pending logo permissions
+          from the listed organizations and a rendering fix. Re-enable by
+          restoring the AttendeeWall block; consent lives in the admin
+          per-event-role wall opt-in toggle. */}
+
+
+      {/* ─── ALREADY ON BOARD ────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden" style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+        <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <p className="miami-kicker miami-kicker--pink mb-3">CONFIRMED FOR MIAMI</p>
+          <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A', maxWidth: 860 }}>
+            THE GAME&rsquo;S DECISION MAKERS ARE <span style={{ color: '#E91E63' }}>ALREADY IN THE ROOM</span>
+          </h2>
+          <p className="miami-body leading-relaxed mb-10" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 760 }}>
+            A confederation, a host city, a culture business and one of the biggest clubs in the world. Every one of them announced, and every one of them on the floor in September.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {ANNOUNCED.map((p) => (
+              <div key={p.name} className="miami-card-light flex flex-col" style={{ padding: 'clamp(20px,2.4vw,28px)' }}>
+                <div className="flex items-center" style={{ height: 52, marginBottom: 16 }}>
+                  <img src={`${V2}/partners/${p.file}`} alt={p.name} loading="lazy"
+                    style={{ maxHeight: 40, maxWidth: 172, objectFit: 'contain' }} />
+                </div>
+                <p className="miami-headline mb-2" style={{ fontSize: '0.95rem', color: '#0D1B2A', letterSpacing: '0.03em', textTransform: 'none' }}>{p.name}</p>
+                <p className="miami-body" style={{ fontSize: '0.88rem', lineHeight: 1.55, color: '#5b6672', margin: 0 }}>{p.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SELECTED SPEAKERS ───────────────────────────────────────────
+          Answers "who is actually going to be there" right after the case for
+          attending. Ranked by the events desk's running order, so the section
+          re-orders itself as the lineup firms up. */}
+      <SelectedSpeakers slug={MIAMI_EVENT_SLUG} limit={12} />
+
+      <TestimonialsSection background="#FFFFFF" />
+
+      <hr className="miami-divider" aria-hidden style={{ margin: '0 auto' }} />
+
+      {/* ─── TAGLINE STRIP (sunset, the one vibrant moment) ─────────────── */}
+      <section className="relative overflow-hidden" style={{ background: 'var(--miami-sunset)', padding: 'clamp(70px,9vw,120px) clamp(24px,5vw,80px)' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)',
+          backgroundSize: '64px 64px',
+        }} />
+        <div className="relative z-10 text-center" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <h2 className="miami-headline" style={{ fontSize: 'clamp(1.6rem, 3.6vw, 2.8rem)', color: '#fff', textShadow: '0 4px 24px rgba(13,27,42,0.4)', lineHeight: 1.15 }}>
+            From Conventions, to Platforms.<br />
+            From Conversations, to <span style={{ color: '#0D1B2A' }}>Outcomes</span>.
+          </h2>
+          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 mt-10">
+            {PILLARS_BRAND.map(({ label, icon }) => (
+              <div key={label} className="miami-pillar">
+                <img src={`${ICN}/${icon}.svg`} alt="" aria-hidden
+                  style={{ width: 48, height: 48, filter: 'brightness(0) invert(1)' }} />
+                <span className="miami-subhead" style={{ color: '#fff', fontSize: '12px', letterSpacing: '0.18em' }}>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── REGISTRATION + PARTNERSHIP + RIGHTS HOLDERS ──────────────── */}
+      <section id="tickets" className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0D1B2A 0%, #102538 100%)', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
+        <div className="absolute inset-0 miami-grid" style={{ opacity: 0.3 }} />
+        <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div className="flex justify-center mb-3">
+            <span className="event-badge"><span className="event-badge-dot" /> Registration now open</span>
+          </div>
+          <h2 className="miami-headline text-center text-white mb-3" style={{ fontSize: 'clamp(1.8rem, 3.6vw, 2.6rem)' }}>
+            Secure Your Place at <span className="miami-text-gradient">Soccerex Miami</span>
+          </h2>
+          <p className="miami-body text-center text-white/70 mx-auto mb-10" style={{ maxWidth: '640px' }}>
+            Join the Americas anchor point of the Soccerex platform, where football’s leaders, rightsholders, capital, brands, innovators, and strategic partners come together to turn access into opportunity.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--event-primary-border)', padding: 'clamp(24px, 3vw, 36px)' }}>
+              <h3 className="miami-subhead text-white mb-2 flex items-center gap-2" style={{ fontSize: '1.05rem', letterSpacing: '0.1em' }}>
+                <Mail size={18} style={{ color: 'var(--event-primary-light)' }} /> Delegate Registration
+              </h3>
+              <p className="miami-body text-white/65 text-sm mb-6">
+                For brands, agencies, investors, technology providers, service providers, commercial partners, and football business professionals looking to access the Soccerex Miami platform.
+              </p>
+              <a
+                href="https://soccerexmiami2026.eventify.io/t2/tickets/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="miami-pill-primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                Register Now <ArrowLeft size={15} style={{ transform: 'rotate(180deg)' }} />
+              </a>
+            </div>
+
+            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--event-primary-border)', padding: 'clamp(24px, 3vw, 36px)' }}>
+              <h3 className="miami-subhead text-white mb-2 flex items-center gap-2" style={{ fontSize: '1.05rem', letterSpacing: '0.1em' }}>
+                <Briefcase size={18} style={{ color: 'var(--event-primary-light)' }} /> Sponsorship & Partnership Opportunities
+              </h3>
+              <p className="miami-body text-white/65 text-sm mb-6">
+                For brands, sponsors, agencies, investors, and strategic partners seeking visibility, executive access, activation opportunities, and year-round platform integration across Soccerex Miami.
+              </p>
+              <InquiryModalButton
+                kind="sponsorship-inquiry"
+                label="Explore Partnership Opportunities"
+                modalTitle="Partner with Soccerex Miami"
+                eyebrow="Sponsorship & partnership"
+                intro="Tell us a little about your organisation and what you'd like to achieve. We'll send the right partnership pack."
+                schema={sponsorshipSchema}
+                extraPayload={{ event_slug: 'soccerex-miami-2026', source: 'miami-registration-partnership' }}
+                submitLabel="Send inquiry"
+                successTitle="Inquiry received."
+                successBody="A partnerships lead will follow up by email."
+                bookingUrl={bookCallUrl('success-miami-partnership')}
+                buttonClassName="miami-pill-primary"
+                buttonStyle={{ width: '100%', justifyContent: 'center' }}
+              />
+            </div>
+
+            <div style={{ background: 'linear-gradient(145deg, var(--event-primary-bg), rgba(255,255,255,0.02))', border: '1px solid var(--event-primary-border)', padding: 'clamp(24px, 3vw, 36px)' }}>
+              <h3 className="miami-subhead text-white mb-2 flex items-center gap-2" style={{ fontSize: '1.05rem', letterSpacing: '0.1em' }}>
+                <Trophy size={18} style={{ color: 'var(--event-primary-light)' }} /> Rightsholder Access
+              </h3>
+              <div className="inline-flex items-center gap-2 px-3 py-1 mb-4" style={{ background: 'var(--event-primary)', color: '#fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                Complimentary pass
+              </div>
+              <p className="miami-body text-white/75 text-sm mb-5 leading-relaxed">
+                Clubs, leagues, federations, national teams, competitions, and qualifying rightsholders may apply for a complimentary delegate pass.
+              </p>
+              <InquiryModalButton
+                kind="preregister"
+                label="Apply for Rightsholder Pass"
+                modalTitle="Apply for Rightsholder Pass"
+                eyebrow="Complimentary pass"
+                intro="Clubs, leagues, federations, national teams, competitions, and qualifying rightsholders may apply for a complimentary delegate pass to Soccerex Miami 2026."
+                schema={rightsholderSchema}
+                extraPayload={{
+                  event_slug: 'miami-2026',
+                  attendee_type: 'rights_holder',
+                  interest: 'Complimentary rightsholder pass',
+                  source: 'miami-2026-rightsholder-pass',
+                  marketing_opt_in: true,
+                }}
+                submitLabel="Submit application"
+                successTitle="Application received."
+                successBody="Your application is under review. The Soccerex team will follow up by email to confirm eligibility."
+                bookingUrl={bookCallUrl('success-miami-rightsholder')}
+                buttonClassName="miami-pill-primary"
+                buttonStyle={{ width: '100%', justifyContent: 'center' }}
+              >
+                Apply for Rightsholder Pass <ArrowLeft size={15} style={{ transform: 'rotate(180deg)' }} />
+              </InquiryModalButton>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
   )
 }
