@@ -333,7 +333,11 @@ export default function Miami2026V2() {
             Inter Miami CF opened Nu Stadium on April 4, 2026 to a packed house. It sits at the heart of Miami Freedom Park, the largest active development in the city, two minutes from Miami International and steps from the Intermodal Center. Delegates land and arrive without ever needing a car.
           </p>
 
-          <img src={`${V2}/venue/mfp-aerial-render.jpg`} alt="Nu Stadium and the Miami Freedom Park district, with the Miami skyline beyond"
+          {/* Our own photography, already cleared and in production on the live page.
+              The Miami Freedom Park aerial render is a Norm Li visualization owned by
+              the developer: it is in the asset repo but stays off this page until the
+              venue gives us written permission. */}
+          <img src={`${IMG}/sections/nu-stadium-miami-freedom-park.jpg`} alt="Inside Nu Stadium on a matchday"
             style={{ width: '100%', objectFit: 'cover', aspectRatio: '16/9', boxShadow: '0 30px 80px -30px rgba(0,0,0,0.7)', marginBottom: 'clamp(28px,4vw,48px)' }} />
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-8 gap-x-4">
@@ -346,8 +350,8 @@ export default function Miami2026V2() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-12">
-            {['nu-stadium-grand-staircase.jpg', 'mfp-district-view.jpg', 'nu-stadium-entrance.jpg'].map((f) => (
-              <img key={f} src={`${V2}/venue/${f}`} alt="" aria-hidden loading="lazy"
+            {['nu-stadium-exterior.jpg', 'miami-skyline.jpg', 'miami-night.jpg'].map((f) => (
+              <img key={f} src={`${IMG}/sections/${f}`} alt="" aria-hidden loading="lazy"
                 style={{ width: '100%', height: 200, objectFit: 'cover', opacity: 0.92 }} />
             ))}
           </div>
@@ -430,27 +434,106 @@ export default function Miami2026V2() {
           per-event-role wall opt-in toggle. */}
 
 
-      {/* ─── ALREADY ON BOARD ────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden" style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
-        <div className="relative" style={{ maxWidth: '1180px', margin: '0 auto' }}>
-          <p className="miami-kicker miami-kicker--pink mb-3">CONFIRMED FOR MIAMI</p>
-          <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A', maxWidth: 860 }}>
-            THE GAME&rsquo;S DECISION MAKERS ARE <span style={{ color: '#E91E63' }}>ALREADY IN THE ROOM</span>
-          </h2>
-          <p className="miami-body leading-relaxed mb-10" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 760 }}>
-            A confederation, a host city, a culture business and one of the biggest clubs in the world. Every one of them announced, and every one of them on the floor in September.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {ANNOUNCED.map((p) => (
-              <div key={p.name} className="miami-card-light flex flex-col" style={{ padding: 'clamp(20px,2.4vw,28px)' }}>
-                <div className="flex items-center" style={{ height: 52, marginBottom: 16 }}>
-                  <img src={`${V2}/partners/${p.file}`} alt={p.name} loading="lazy"
-                    style={{ maxHeight: 40, maxWidth: 172, objectFit: 'contain' }} />
+      {/* ─── PARTNERS: one section each ──────────────────────────────────
+          These are the four announced publicly. Each gets its own band rather
+          than a logo tile, because a confederation of 41 member associations and
+          a club founded in 1899 do not belong in the same 200px card.
+
+          Logos: Roc Nation and Greater Miami came from the partners' own sites.
+          Concacaf and Barcelona are set in type until we have their press-kit
+          marks, because a trademarked crest lifted off Wikipedia is not cleared
+          for a commercial page. */}
+
+      {/* Concacaf */}
+      <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div className="lg:col-span-5">
+            <img src={`${V2}/partners/concacaf.svg`} alt="Concacaf" style={{ height: 82, objectFit: 'contain' }} />
+            <p className="miami-kicker miami-kicker--pink mt-6">OFFICIAL PARTNER</p>
+          </div>
+          <div className="lg:col-span-7">
+            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A' }}>
+              THE CONFEDERATION IS <span style={{ color: '#E91E63' }}>HEADQUARTERED HERE</span>
+            </h2>
+            <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+              Concacaf governs the game across North and Central America and the Caribbean, and its home is Miami. That is why this partnership goes well past a logo: executive participation, thought leadership, and a flagship presence on the exhibition floor.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+              General Secretary Philippe Moggio takes the stage, and 41 member associations sit behind the conversation.
+            </p>
+            <div className="flex flex-wrap gap-x-10 gap-y-4 mt-8">
+              {[['41', 'MEMBER ASSOCIATIONS'], ['1', 'FLAGSHIP EXHIBITION'], ['MIAMI', 'HEADQUARTERS']].map(([n, l]) => (
+                <div key={l}>
+                  <div className="event-stat-number" style={{ color: '#007C91', fontSize: 'clamp(1.4rem,2.6vw,2rem)', lineHeight: 1 }}>{n}</div>
+                  <p className="miami-subhead mt-1" style={{ color: '#607186', fontSize: '10px', letterSpacing: '0.16em' }}>{l}</p>
                 </div>
-                <p className="miami-headline mb-2" style={{ fontSize: '0.95rem', color: '#0D1B2A', letterSpacing: '0.03em', textTransform: 'none' }}>{p.name}</p>
-                <p className="miami-body" style={{ fontSize: '0.88rem', lineHeight: 1.55, color: '#5b6672', margin: 0 }}>{p.note}</p>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Roc Nation */}
+      <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div className="lg:col-span-7 lg:order-2">
+            <p className="miami-kicker mb-3" style={{ color: '#00C6D7' }}>ON STAGE, DAY ONE</p>
+            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#FFFFFF' }}>
+              WHERE FOOTBALL MEETS <span style={{ color: '#E91E63' }}>CULTURE</span>
+            </h2>
+            <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.80)' }}>
+              Roc Nation Sports built its business at the intersection of sport, business and culture: talent representation, commercial opportunity, and the athlete brands that carry a club far beyond its own supporters.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.80)' }}>
+              That perspective comes to Miami with a session of its own, in the city where football and culture already share an audience.
+            </p>
+          </div>
+          <div className="lg:col-span-5 lg:order-1">
+            <div style={{ background: '#FFFFFF', padding: 'clamp(28px,4vw,44px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src={`${V2}/partners/roc-nation-wordmark-black.png`} alt="Roc Nation Sports" style={{ width: '100%', maxWidth: 300, objectFit: 'contain' }} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Greater Miami & Miami Beach */}
+      <section className="relative overflow-hidden" style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div className="lg:col-span-5">
+            <img src={`${V2}/partners/gmcvb-corp-logo-blue.png`} alt="Greater Miami Convention &amp; Visitors Bureau" style={{ width: '100%', maxWidth: 320, objectFit: 'contain' }} />
+            <p className="miami-kicker miami-kicker--pink mt-6">OFFICIAL PARTNER</p>
+          </div>
+          <div className="lg:col-span-7">
+            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A' }}>
+              THE CITY ITSELF IS <span style={{ color: '#E91E63' }}>PART OF THE PROGRAM</span>
+            </h2>
+            <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+              The Greater Miami Convention &amp; Visitors Bureau joins us as an official partner, opening the energy, culture and business of Greater Miami and Miami Beach to the global football industry.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+              Three days at Nu Stadium, in a city that has spent a decade becoming one of the most important crossroads in the world game.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* FC Barcelona */}
+      <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center" style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div className="lg:col-span-7 lg:order-2">
+            <p className="miami-kicker miami-kicker--pink mb-3">ON STAGE, DAY TWO</p>
+            <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A' }}>
+              ONE HUNDRED AND TWENTY SEVEN YEARS OF <span style={{ color: '#E91E63' }}>FC BARCELONA</span>
+            </h2>
+            <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+              Founded in 1899 and owned by its members ever since, Barcelona is one of the few clubs whose commercial decisions are studied by the entire industry.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+              They join the Miami stage on day two, alongside Club America, AFA, Bundesliga, MLS and Inter Miami.
+            </p>
+          </div>
+          <div className="lg:col-span-5 lg:order-1 flex justify-center">
+            <img src={`${V2}/partners/fc-barcelona.svg`} alt="FC Barcelona" style={{ width: '100%', maxWidth: 190, objectFit: 'contain' }} />
           </div>
         </div>
       </section>
