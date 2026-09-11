@@ -7,8 +7,9 @@ React + Vite single-page site, deployed to **Netlify** (site `soccerex1`, https:
 Same GitHub repo, fixed roles:
 
 - **PRIMARY, work here: `~/projects/soccerex`.** SSH remote, clean git (never synced through iCloud).
-- **BACKUP: `~/iCloud/Sites/Soccerex-front`.** iCloud mirror for work from any Mac. It can build and deploy, but iCloud occasionally corrupts `.git` (`bad object HEAD` heals with `git fetch origin`). macOS privacy protection stops background services from reading iCloud folders, so never point a LaunchAgent at it.
-- **RUNTIME CLONE (some Macs): `~/Library/Application Support/Teamdigitalhost/Soccerex/runtime/Soccerex-front`** serves the local site `https://soccerex.front` through a LaunchAgent (`npm run dev` on port 5173).
+- **BACKUP: `~/iCloud/Sites/Soccerex-front`.** iCloud mirror for work from any Mac. It can build and deploy, but iCloud occasionally corrupts `.git` (`bad object HEAD` heals with `git fetch origin`).
+
+No fleet Mac serves a local copy of this site. To look at a change before deploying, run `npm run dev` in your working copy for the length of the task.
 
 Each copy has a local, gitignored `WORKSPACE_ROLE.md`.
 
@@ -20,6 +21,7 @@ Deploy with the fleet script, on any fleet Mac:
 
 ```bash
 ~/fleet-library/scripts/deploy-soccerex.sh            # production
+~/fleet-library/scripts/deploy-soccerex.sh --dry-run  # every check and the build, no deploy (free)
 ~/fleet-library/scripts/deploy-soccerex.sh --preview  # draft URL, still counts against the per-deploy cost
 ```
 
@@ -34,7 +36,7 @@ Claude cloud sessions cannot deploy this site, because the Netlify token lives o
 
 ## Where the deploy facts live
 
-Host IDs, the vault entry names, and each Mac's copies are in Command Center's deployment registry (fleet Macs only):
+Host IDs, the vault entry names, and the rest of this site's deploy facts are in Command Center's deployment registry (fleet Macs only):
 
 ```bash
 ssh -n -i ~/.ssh/fleet_ed25519 rtmini@100.73.2.108 'cd /Users/al/command-center && php artisan deploys:show soccerex-front'
@@ -44,7 +46,6 @@ When anything about deploying this site changes, update this file and that recor
 
 ## Notes
 
-- Local dev: `npm run dev` (Vite).
 - The live site is the source of truth for whether it works: test against https://soccerex.com. Uncommitted local changes are disposable if live is healthy.
 - `npm run build` regenerates `public/sitemap.xml` first (`prebuild`).
 - Deeper build and feature notes: `NOTES_FOR_JOEL.md`, `README.md`.
