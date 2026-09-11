@@ -1,42 +1,50 @@
-# Soccerex Frontend (website) — workspace & deploy rules
+# Soccerex website (teamdigitalhost/soccerex): workspace and deploy rules
 
-React + Vite single-page site (`teamdigitalhost/soccerex.git`), deployed to **Netlify** (`soccerex1.netlify.app`). This is the public website; it talks to the Soccerex backend API. The backend lives in a separate repo (`teamdigitalhost/soccerex-system`).
+React + Vite single-page site, deployed to **Netlify** (site `soccerex1`, https://soccerex.com). It is the public website and talks to the Soccerex backend API, which lives in `teamdigitalhost/soccerex-system`.
 
-## WORKSPACE ROLES — where to work (read this first, do not re-derive it)
+## Working copies (fleet Macs)
 
-This repo has **two working copies on each fleet Mac** — same GitHub repo, fixed roles:
+Same GitHub repo, fixed roles:
 
-- **PRIMARY — default dev home: `~/projects/soccerex`**
-  SSH remote (`git@github.com:…`), clean git (never synced through iCloud). Prefer doing development here (iCloud can corrupt `.git`). Holds the Netlify site link.
-- **BACKUP — mirror, also fully functional: `~/iCloud/Sites/Soccerex-front`**
-  iCloud copy, for work-from-any-Mac. It is **also deploy-capable** — it has the Netlify site link and an SSH remote. You *can* build, deploy, and push from here too; just **`git pull` first** so you never ship stale code, and if you see `bad object HEAD` (iCloud dropped pack files) heal with `git fetch origin`. The only reason to prefer the primary is that iCloud occasionally corrupts its `.git`.
+- **PRIMARY, work here: `~/projects/soccerex`.** SSH remote, clean git (never synced through iCloud).
+- **BACKUP: `~/iCloud/Sites/Soccerex-front`.** iCloud mirror for work from any Mac. It can build and deploy, but iCloud occasionally corrupts `.git` (`bad object HEAD` heals with `git fetch origin`). macOS privacy protection stops background services from reading iCloud folders, so never point a LaunchAgent at it.
+- **RUNTIME CLONE (some Macs): `~/Library/Application Support/Teamdigitalhost/Soccerex/runtime/Soccerex-front`** serves the local site `https://soccerex.front` through a LaunchAgent (`npm run dev` on port 5173).
 
-**Bottom line:** work in the primary by default; either copy can build + deploy after a `git pull`. Both hold the Netlify site link (`.netlify/state.json` → `siteId ec5f6ba1-c4a5-428b-bc1e-6319dc02f871`). Each copy has a local, gitignored `WORKSPACE_ROLE.md`.
+Each copy has a local, gitignored `WORKSPACE_ROLE.md`.
 
-## DEPLOY — manual Netlify, by decision (builds stopped on the site)
+## Deploying: manual, by decision
 
-**Netlify charges for builds/deploys, so deploys are MANUAL — Joel's standing decision (reaffirmed 2026-08-08).** Git push is for source history + code review, not shipping. The site is linked to `github.com/teamdigitalhost/soccerex` via the Netlify GitHub App, but **"Stopped builds" is set on `soccerex1`**: pushes and PRs trigger nothing. Do NOT re-enable builds without Joel's explicit say-so.
+Netlify bills per build, so deploys are **manual**: Joel's standing decision, reaffirmed August 8, 2026. "Stopped builds" is on for `soccerex1`, so a git push publishes nothing; pushing is for history and review. Do not turn builds back on without Joel's explicit say-so.
 
-- **ALWAYS `git pull` before building** — a manual deploy once shipped from a copy 47 commits behind main. Prefer `~/deploy-soccerex.sh` on fleet Macs: it pulls first and sources auth from the fleet vault internally.
-- Clean installs (`npm ci`, CI, cloud sandboxes) need the committed `.npmrc` (`legacy-peer-deps=true`; react-simple-maps@3 peers cap at React 18, project is on React 19). Do not delete it.
-- `VITE_SOCCEREX_API_BASE_URL` is set in Netlify's build env AND defaulted in code; local `.env` carries it for dev.
-
-By hand, from either copy:
+Deploy with the fleet script, on any fleet Mac:
 
 ```bash
-cd ~/projects/soccerex          # or ~/iCloud/Sites/Soccerex-front
-git pull                        # ALWAYS pull first so you don't ship stale code
-npm run build                   # produces dist/
-export NETLIFY_AUTH_TOKEN="$(fleet-secret get personal/netlify/deploy-token)"
-netlify deploy --prod --dir=dist   # ships to soccerex1.netlify.app (https://soccerex.com)
+~/fleet-library/scripts/deploy-soccerex.sh            # production
+~/fleet-library/scripts/deploy-soccerex.sh --preview  # draft URL, still counts against the per-deploy cost
 ```
 
-- **Netlify account, once and for all:** there is ONE Netlify account for every DH/Jett site: **Digital Host** (slug `digitalhost`, Pro plan, joel@digitalhost.co). The Jett sites only lived on a separate Netlify temporarily; that account is gone. The account-wide PAT lives in the fleet vault at **`personal/netlify/deploy-token`** (canonical; `jett/netlify/deploy-token` holds the same value at a historical path — rotate both together). `netlify login` (interactive) also works. See `fleet-secret get personal/netlify/README`.
-- **Site link:** `soccerex1` / `siteId ec5f6ba1-c4a5-428b-bc1e-6319dc02f871` (also in `.netlify/state.json` on both copies).
-- To preview a build without publishing: `netlify deploy` (no `--prod`) returns a draft URL. Weigh it against the per-deploy cost.
+It refuses to ship anything but a fresh build of `origin/main` with no uncommitted changes, takes the `VITE_*` build variables from the Netlify site, reads the Netlify token from the fleet vault, and deploys `dist/` to `soccerex1`. It exists to prevent two failures:
+
+- `netlify deploy` never builds on its own, so without a fresh `npm run build` an old `dist/` ships silently.
+- A deploy once went out from a copy 47 commits behind `main`.
+
+Keep the committed `.npmrc` (`legacy-peer-deps=true`): react-simple-maps@3 caps its React peer at 18 and this project is on React 19, so clean installs fail without it.
+
+Claude cloud sessions cannot deploy this site, because the Netlify token lives only in the fleet vault.
+
+## Where the deploy facts live
+
+Host IDs, the vault entry names, and each Mac's copies are in Command Center's deployment registry (fleet Macs only):
+
+```bash
+ssh -n -i ~/.ssh/fleet_ed25519 rtmini@100.73.2.108 'cd /Users/al/command-center && php artisan deploys:show soccerex-front'
+```
+
+When anything about deploying this site changes, update this file and that record together.
 
 ## Notes
 
-- Local dev: `npm run dev` (Vite). Local site is served as `https://soccerex.front` on configured Macs.
-- The live site is the source of truth for "is it working" — test against `soccerex1.netlify.app`. Uncommitted local changes are disposable if live is healthy.
-- Deeper build/feature notes: `NOTES_FOR_JOEL.md`, `README.md`.
+- Local dev: `npm run dev` (Vite).
+- The live site is the source of truth for whether it works: test against https://soccerex.com. Uncommitted local changes are disposable if live is healthy.
+- `npm run build` regenerates `public/sitemap.xml` first (`prebuild`).
+- Deeper build and feature notes: `NOTES_FOR_JOEL.md`, `README.md`.
