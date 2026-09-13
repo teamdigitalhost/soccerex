@@ -302,7 +302,7 @@ export default function Miami2026V2() {
             </div>
             <div>
               <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
-                WHERE THE BUSINESS OF FOOTBALL IN THE AMERICAS <span style={{ color: '#E91E63' }}>GETS DONE</span>
+                THE PEOPLE WHO RAN THE WORLD CUP ARE <span style={{ color: '#E91E63' }}>BACK IN TEN WEEKS</span>
               </h2>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
                 Three days with the people who run the clubs, hold the rights, write the checks and build the technology the game now depends on, with the conference itself inside Nu Stadium.
@@ -375,7 +375,7 @@ export default function Miami2026V2() {
         <div className="absolute inset-0 miami-grid" style={{ opacity: 0.3 }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '880px', margin: '0 auto' }}>
           <h2 className="miami-headline text-white mb-4" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)' }}>
-            EIGHTEEN TOPICS, <span className="miami-text-gradient">MAPPED BEFORE YOU REGISTER</span>
+            FROM INTER MIAMI'S PLAYBOOK TO <span className="miami-text-gradient">THE ROAD TO BRAZIL 2027</span>
           </h2>
           <p className="miami-body text-white/70 mx-auto mb-9" style={{ maxWidth: '660px' }}>
             Eighteen published topics shaping the Miami conversations, from Inter Miami&rsquo;s partnership model and the next decade of MLS to the road to Brazil 2027. Explore them online, or take the full concept with you.
@@ -420,9 +420,9 @@ export default function Miami2026V2() {
       {/* ─── WHY ATTEND (white) ──────────────────────────────────────────── */}
       <section style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
-          <p className="miami-kicker miami-kicker--pink">WHAT THREE DAYS HERE GETS YOU</p>
+          <p className="miami-kicker miami-kicker--pink">FOUR REASONS TO BE HERE</p>
           <h2 className="miami-headline mb-10" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
-            Everything You Came For Is <span style={{ color: '#E91E63' }}>Already in the Room</span>
+            The Meetings You'd Chase All Year, <span style={{ color: '#E91E63' }}>Booked Before You Land</span>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {WHY_ATTEND.map((item, i) => {
