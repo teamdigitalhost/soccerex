@@ -99,8 +99,12 @@ function ProfileBody({ speaker, eventSlug }) {
       }}>
         <img src={speaker.banner_url || DEFAULT_BANNER} alt=""
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />
+        {/* Event-brand gradient wash, translucent so the photo still reads through it. */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'var(--event-overlay)', opacity: 0.55 }} />
+        {/* Same faint grid as the homepage hero, laid over the wash for a touch of structure. */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'linear-gradient(180deg, rgba(13,27,42,0) 0%, rgba(13,27,42,0.6) 100%)',
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.10) 1px, transparent 1px)',
+          backgroundSize: '44px 44px',
         }} />
       </div>
 
