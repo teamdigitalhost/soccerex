@@ -10,6 +10,10 @@ import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState } from './EventAgendaConcept'
 import { eventSpeakers, eventAgenda } from '../lib/routes'
 
+/* Cleared photography, reused from the Miami 2026 pages, as the banner for any
+   speaker who has not uploaded their own. */
+const DEFAULT_BANNER = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg'
+
 const ROLE_STATUS_LABEL = {
   confirmed: 'Confirmed',
   invited: 'Invited',
@@ -89,13 +93,12 @@ function ProfileBody({ speaker, eventSlug }) {
         borderRadius: 18,
         overflow: 'hidden',
         marginBottom: 28,
-        background: speaker.banner_url ? '#0D1B2A' : 'var(--event-sunset)',
+        background: '#0D1B2A',
         aspectRatio: '5/2',
         minHeight: 200,
       }}>
-        {speaker.banner_url && (
-          <img src={speaker.banner_url} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />
-        )}
+        <img src={speaker.banner_url || DEFAULT_BANNER} alt=""
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />
         <div className="absolute inset-0 pointer-events-none" style={{
           background: 'linear-gradient(180deg, rgba(13,27,42,0) 0%, rgba(13,27,42,0.6) 100%)',
         }} />
