@@ -479,7 +479,7 @@ export default function Miami2026V2() {
               Concacaf brings its executives, its thinking and a flagship stand to Miami for the full run of the event. If your business needs a way into North America, Central America or the Caribbean, this is the shortest one you will find this year.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              General Secretary Philippe Moggio takes the stage, and the 41 member associations behind him are the market you are trying to reach.
+              Its heads of commercial and finance take the stage, and the 41 member associations behind them are the market you are trying to reach.
             </p>
             <div className="flex flex-wrap gap-x-10 gap-y-4 mt-8">
               {[['41', 'MEMBER ASSOCIATIONS'], ['1', 'FLAGSHIP EXHIBITION'], ['MIAMI', 'HEADQUARTERS']].map(([n, l]) => (

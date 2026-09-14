@@ -79,7 +79,7 @@ export default function SelectedSpeakers({ slug, limit = 8 }) {
                   src={s.photo_url}
                   alt={s.display_name}
                   loading="lazy"
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 5%' }}
                 />
               </div>
               <p className="miami-headline" style={{ fontSize: '1rem', color: '#FFFFFF', letterSpacing: '0.01em', lineHeight: 1.2, marginBottom: 4 }}>

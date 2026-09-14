@@ -278,7 +278,7 @@ function SpeakerChip({ speaker, eventSlug }) {
   const inner = (
     <>
       {speaker.photo_url ? (
-        <img src={speaker.photo_url} alt="" style={{ width: 22, height: 22, borderRadius: 999, objectFit: 'cover' }} />
+        <img src={speaker.photo_url} alt="" style={{ width: 22, height: 22, borderRadius: 999, objectFit: 'cover', objectPosition: 'center 5%' }} />
       ) : (
         <span style={{
           width: 22, height: 22, borderRadius: 999,

@@ -123,7 +123,7 @@ function ProfileBody({ speaker, eventSlug }) {
         }}>
           {speaker.photo_url ? (
             <img src={speaker.photo_url} alt={speaker.display_name}
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 5%' }} />
           ) : (
             <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center' }}>
               <span className="miami-headline" style={{ fontSize: 'clamp(2.6rem, 7vw, 4.4rem)', color: '#fff', letterSpacing: '0.05em' }}>
