@@ -113,16 +113,17 @@ const PASSES = [
   { slug: 'vip', name: 'VIP Pass', price: '$595', featured: true },
 ]
 
-// One list for both passes, taken from the ticket shop's own inclusions. What a
-// pass lacks stays visible and dimmed, so the difference is readable at a glance.
+// One list for both passes, taken from the ticket shop's own inclusions, except the
+// Soccerex Social Evening: it is open to every pass holder, though the shop lists it
+// under VIP only. What a pass lacks stays visible and dimmed.
 const PASS_INCLUSIONS = [
   { label: 'Every session inside Nu Stadium, September 24 and 25', tiers: ['delegate', 'vip'] },
   { label: 'The exhibition hall and the Studio area', tiers: ['delegate', 'vip'] },
   { label: 'The networking lounge', tiers: ['delegate', 'vip'] },
   { label: 'The event app, before and after the event', tiers: ['delegate', 'vip'] },
+  { label: 'The Soccerex Social Evening', tiers: ['delegate', 'vip'] },
   { label: 'The VIP lounge, with catering included', tiers: ['vip'] },
   { label: 'The VIP reception on September 23', tiers: ['vip'] },
-  { label: 'The Soccerex Social Evening', tiers: ['vip'] },
 ]
 
 const RIGHTSHOLDER_MODAL = {
@@ -159,7 +160,7 @@ const FAQS = [
   },
   {
     q: 'What is the difference between a Delegate and a VIP pass?',
-    a: <>Both passes cover every session, the exhibition hall and the networking lounge on both days. VIP adds the VIP reception on September 23, the Soccerex Social Evening and a catered VIP lounge to use between sessions.</>,
+    a: <>Both passes cover every session, the exhibition hall and the networking lounge on both days, plus the Soccerex Social Evening. VIP adds the VIP reception on September 23 and a catered VIP lounge to use between sessions.</>,
   },
   {
     q: 'Will the price go up?',
@@ -425,7 +426,7 @@ export default function Miami2026V2() {
             Choose How Close You Get to <span style={{ color: '#E91E63' }}>the People You Came to Meet</span>
           </h2>
           <p className="miami-body text-center mx-auto mb-6" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 680, lineHeight: 1.6 }}>
-            Both passes put you inside Nu Stadium for every session on September 24 and 25. VIP adds the evenings, with the VIP reception, the Soccerex Social Evening and a catered lounge to meet in between sessions.
+            Both passes put you inside Nu Stadium for every session on September 24 and 25, and into the Soccerex Social Evening. VIP adds the VIP reception on September 23 and a catered lounge to meet in between sessions.
           </p>
           <div className="flex justify-center mb-10">
             <span className="miami-subhead inline-flex items-center gap-2" style={{ fontSize: 12, letterSpacing: '0.12em', color: '#0D1B2A', background: '#FFFFFF', border: '1px solid rgba(233,30,99,0.35)', padding: '9px 15px' }}>
