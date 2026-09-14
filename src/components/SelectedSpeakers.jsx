@@ -17,7 +17,7 @@ import { eventSpeakers, eventSpeaker } from '../lib/routes'
  * Renders nothing at all until it has speakers, so a slow or failed API leaves
  * the page as it was rather than showing an empty shell.
  */
-export default function SelectedSpeakers({ slug, limit = 8 }) {
+export default function SelectedSpeakers({ slug, limit = 8, heading = null }) {
   const [speakers, setSpeakers] = useState(null)
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function SelectedSpeakers({ slug, limit = 8 }) {
       <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
         <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
           <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', lineHeight: 1.1 }}>
-            The voices shaping <span className="miami-text-gradient">Miami 2026</span>
+            {heading ?? <>The voices shaping <span className="miami-text-gradient">Miami 2026</span></>}
           </h2>
           <Link
             to={eventSpeakers(slug)}
