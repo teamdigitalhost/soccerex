@@ -85,7 +85,7 @@ const ANNOUNCED = [
 const WHY_ATTEND = [
   { title: 'Everyone You Need, In One Place', desc: 'Two full days of sessions inside Nu Stadium with the clubs, leagues, federations, investors and brands you have spent the year trying to get an hour with, opening the night before at the VIP reception.' },
   { title: 'The World Cup Just Happened Here', desc: 'Miami hosted seven matches this summer, a quarterfinal and the bronze final among them. The commercial questions the tournament opened are still open, and this is where the industry works through them.' },
-  { title: 'Meetings Booked Before You Land', desc: 'Soccerex Deal Network puts you in front of counterparties chosen for what you are actually trying to do, so your first day starts with a diary rather than a floor plan.' },
+  { title: 'Meetings Booked Before Day One', desc: 'Soccerex Deal Network puts you in front of counterparties chosen for what you are actually trying to do, so your first day starts with a diary rather than a floor plan.' },
   { title: 'Capital In The Room', desc: 'Investors, funds and family offices come to Miami looking for football exposure. If you are raising, or selling, or building something that needs backing, they are here for three days.' },
 ]
 
@@ -302,7 +302,7 @@ export default function Miami2026V2() {
             </div>
             <div>
               <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
-                THE PEOPLE WHO RAN THE WORLD CUP ARE <span style={{ color: '#E91E63' }}>BACK IN TEN WEEKS</span>
+                CLUBS, RIGHTS AND CAPITAL, <span style={{ color: '#E91E63' }}>INSIDE NU STADIUM</span>
               </h2>
               <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
                 Three days with the people who run the clubs, hold the rights, write the checks and build the technology the game now depends on, with the conference itself inside Nu Stadium.
