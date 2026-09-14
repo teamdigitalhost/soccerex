@@ -218,7 +218,7 @@ function PendingReviewBanner() {
         Your application is under review
       </p>
       <p className="miami-body" style={{ fontSize: 13, color: '#3a4a5a' }}>
-        Thanks for applying to the Deal Network. Our team is reviewing your brief — you'll unlock curated matches and concierge meetings once your membership is approved. You can keep editing your brief below in the meantime.
+        Thanks for applying to the Deal Network. Our team is reviewing your brief, and you'll unlock curated matches and concierge meetings once your membership is approved. You can keep editing your brief below in the meantime.
       </p>
     </div>
   )

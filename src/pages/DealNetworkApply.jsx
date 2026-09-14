@@ -152,11 +152,11 @@ export default function DealNetworkApply() {
   // Load preview when arriving with a token
   useEffect(() => {
     if (! tokenFromUrl) return
-    let cancelled = false
+    let canceled = false
     setBusy(true)
     dealNetworkApplyPreview(tokenFromUrl, { test: testMode, attribution: attributionRef.current })
       .then((res) => {
-        if (cancelled) return
+        if (canceled) return
         setMatched(res)
         setChosenPerson(res.person)
         setChosenCompany(res.company)
@@ -167,13 +167,13 @@ export default function DealNetworkApply() {
         }
       })
       .catch((err) => {
-        if (cancelled) return
+        if (canceled) return
         setError(describeError(err, 'This link is invalid or expired.'))
         setStep(STEP_EMAIL)
         setToken('')
       })
-      .finally(() => !cancelled && setBusy(false))
-    return () => { cancelled = true }
+      .finally(() => !canceled && setBusy(false))
+    return () => { canceled = true }
     /* attributionRef is a ref, so it is deliberately not a dependency: the preview must re-run
        for a new magic-link token, never because the attribution was cleared. */
   }, [tokenFromUrl, testMode])
@@ -754,7 +754,7 @@ function CondensedStep(props) {
  */
 const MM_STEPS = [
   { key: 'you', title: 'You', blurb: 'Who is applying, and how we reach you.' },
-  { key: 'org', title: 'Organisation', blurb: 'What kind of organisation you are, and where you operate.' },
+  { key: 'org', title: 'Organization', blurb: 'What kind of organization you are, and where you operate.' },
   { key: 'bring', title: 'What you bring', blurb: 'What you are taking to market, and what you need.' },
   { key: 'deal', title: 'The deal', blurb: 'Who you want on the other side of the table, and on what terms.' },
   { key: 'extra', title: 'Anything else', blurb: 'Whatever did not fit above.' },
