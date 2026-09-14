@@ -221,7 +221,7 @@ export default function Miami2026() {
             <div className="grid grid-cols-3 gap-3">
               {[
                 { num: '3', label: 'Days' },
-                { num: '100+', label: 'Speakers' },
+                { num: '85+', label: 'Speakers' },
                 { num: '50+', label: 'Countries' },
               ].map((s) => (
                 <div key={s.label} className="text-center px-3 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)', boxShadow: '0 4px 14px -8px rgba(13,27,42,0.18)' }}>

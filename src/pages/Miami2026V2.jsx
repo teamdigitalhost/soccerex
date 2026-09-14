@@ -266,7 +266,7 @@ export default function Miami2026V2() {
             <div className="grid grid-cols-3 gap-3">
               {[
                 { num: '3', label: 'Days' },
-                { num: '100+', label: 'Speakers' },
+                { num: '85+', label: 'Speakers' },
                 { num: '50+', label: 'Countries' },
               ].map((s) => (
                 <div key={s.label} className="text-center px-3 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)', boxShadow: '0 4px 14px -8px rgba(13,27,42,0.18)' }}>
@@ -555,11 +555,8 @@ export default function Miami2026V2() {
             <h2 className="miami-headline mb-5" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.3rem)', color: '#0D1B2A', textWrap: 'balance' }}>
               HEAR HOW <span style={{ color: '#E91E63' }}>BARCELONA</span> BUILDS A GLOBAL BUSINESS
             </h2>
-            <p className="miami-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              Barcelona's commercial decisions get studied by every club that wants to grow beyond its own market. On day two they explain how they make them.
-            </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
-              They share the day with Club America, AFA, Bundesliga, MLS and Inter Miami, so you can compare five approaches to the same problem in a single afternoon.
+              Barcelona's commercial decisions get studied by every club that wants to grow beyond its own market. On day two they explain how they make them.
             </p>
           </div>
           <div className="lg:col-span-5 lg:order-1 flex flex-col items-center">
