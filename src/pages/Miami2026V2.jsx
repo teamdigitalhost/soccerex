@@ -422,7 +422,7 @@ export default function Miami2026V2() {
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
           <p className="miami-kicker miami-kicker--pink">FOUR REASONS TO BE HERE</p>
           <h2 className="miami-headline mb-10" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A' }}>
-            The Meetings You'd Chase All Year, <span style={{ color: '#E91E63' }}>Booked Before You Land</span>
+            Clubs, Capital, and <span style={{ color: '#E91E63' }}>the People Who Ran the World Cup</span> Are Coming
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {WHY_ATTEND.map((item, i) => {
