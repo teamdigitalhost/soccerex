@@ -11,6 +11,7 @@ import {
 } from '../lib/soccerexApi'
 import { RITZ_DRAWING } from '../lib/routes'
 import { INTAKE_FORMS, INTAKE_REGIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
+import { parseNamedTargets, namedTargetsProblem } from '../lib/namedTargets'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { readCampaignAttribution, clearCampaignAttribution } from '../lib/campaignAttribution'
 import { describeError } from '../lib/smartError'
@@ -281,6 +282,8 @@ export default function DealNetworkApply() {
       const painValid = new Set([...form.pains, 'other'])
       const resolveOther = (value, other) => (value === 'Other' ? (other.trim() || undefined) : (value || undefined))
       const withOther = (list, other) => [...list, ...(other.trim() ? [other.trim()] : [])]
+      // Splits the one-line leagues input ("MLS, Liga MX, Championship"), where commas are
+      // the separator. Named targets split on new lines only: see lib/namedTargets.
       const splitList = (text) => text.split(/[\n,]+/).map((s) => s.trim()).filter(Boolean)
 
       await submitDealNetworkIntake({
@@ -301,7 +304,7 @@ export default function DealNetworkApply() {
         deal_types: withOther(mm.deal_types, mm.deal_types_other),
         deal_structure_preferences: form.dealStructures ? withOther(mm.deal_structures, mm.deal_structures_other) : undefined,
         ideal_counterpart: mm.ideal_counterpart || undefined,
-        named_targets: splitList(mm.named_targets),
+        named_targets: parseNamedTargets(mm.named_targets),
         looking_for: mm.looking_for.filter((k) => lookingValid.has(k)),
         looking_for_other: mm.looking_other.trim() || undefined,
         // Capital partners are implicitly capital providers; the doc's capital
@@ -813,19 +816,34 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
 
   const [index, setIndex] = useState(0)
   const topRef = useRef(null)
+  const targetsRef = useRef(null)
   const last = MM_STEPS.length - 1
+  const targetsProblem = namedTargetsProblem(mm.named_targets)
 
   // Land on the new question, not halfway down it. Without this a long screen
   // followed by a short one leaves you scrolled past the top of the short one.
   // scrollMarginTop on the card clears the 73px fixed nav, which would otherwise
   // sit over the step heading you just scrolled to.
-  function go(next) {
+  function go(next, target = topRef) {
     setIndex(next)
     if (typeof window !== 'undefined') {
       window.requestAnimationFrame(() => {
-        topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        target.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       })
     }
+  }
+
+  // The backend refuses the whole application over one named target it will not
+  // store, and its error shows in the banner at the top of the page while the
+  // applicant is on the last screen, one screen past the field. So Submit with a
+  // list that cannot save goes back to that field, where the reason is already
+  // showing, and sends nothing.
+  function submit() {
+    if (targetsProblem) {
+      go(3, targetsRef)
+      return
+    }
+    onSubmit()
   }
 
   // Switching side prunes any ticked signal that the new side's form does not
@@ -985,7 +1003,14 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           )}
 
           <Field label={form.counterpartLabel} value={mm.ideal_counterpart} onChange={set('ideal_counterpart')} placeholder={form.counterpartPlaceholder} disabled={busy} textarea />
-          <Field label="Named targets (optional: specific clubs, leagues, federations, or companies, one per line)" value={mm.named_targets} onChange={set('named_targets')} placeholder={'Atlanta United\nLA Galaxy\nFC Cincinnati'} disabled={busy} textarea />
+          <div ref={targetsRef} style={{ scrollMarginTop: 96 }}>
+            <Field label="Named targets (optional: specific clubs, leagues, federations, or companies, one per line)" value={mm.named_targets} onChange={set('named_targets')} placeholder={'Atlanta United\nLA Galaxy\nFC Cincinnati'} disabled={busy} textarea />
+            {targetsProblem && (
+              <p className="font-body" style={{ fontSize: '1.275rem', color: '#b3261e', marginTop: -6, marginBottom: 14, lineHeight: 1.45 }}>
+                {targetsProblem}
+              </p>
+            )}
+          </div>
 
           <div className="grid grid-cols-2 gap-3">
             <SelectField label={form.budgetLabel} value={mm.budget_range} onChange={set('budget_range')} options={[...form.budgets, 'Other']} disabled={busy} />
@@ -1038,7 +1063,7 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           </button>
         ) : (
           <button
-            type="button" onClick={onSubmit} disabled={busy}
+            type="button" onClick={submit} disabled={busy}
             className="flex-1 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
             style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
           >

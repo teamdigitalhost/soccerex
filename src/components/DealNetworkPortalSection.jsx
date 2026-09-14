@@ -12,6 +12,7 @@ import {
   ApiError,
 } from '../lib/soccerexApi'
 import { NEED_OFFER_OPTIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
+import { parseNamedTargets, namedTargetsProblem } from '../lib/namedTargets'
 
 /* ═══ Deal Network Portal Section ══════════════════════════════════════════
  * Embeds inside CompanyPortal as one of the dashboard cards. Concierge tone:
@@ -616,6 +617,14 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
 
   async function handleSave() {
     if (!canSave) return
+    // Checked before saving against the limits the backend enforces, so the member
+    // sees which entry to fix. The backend's own message names the field only as
+    // "named_targets.0".
+    const targetsProblem = namedTargetsProblem(form.named_targets)
+    if (targetsProblem) {
+      setError(targetsProblem)
+      return
+    }
     setSaving(true); setError('')
     const payload = {
       side: form.side,
@@ -631,8 +640,7 @@ function IntakeEditor({ slug, editToken, isTest, intake, limits, onClose, onSave
       additional_context: form.additional_context.trim() || undefined,
       meeting_format_preference: form.meeting_format_preference || undefined,
       specific_people_to_meet: form.specific_people_to_meet.trim() || undefined,
-      named_targets: form.named_targets
-        .split(/[\n,]+/g).map((s) => s.trim()).filter(Boolean),
+      named_targets: parseNamedTargets(form.named_targets),
       currency: limits?.default_currency || 'USD',
       looking_for: form.looking_for,
       can_offer: form.can_offer,
