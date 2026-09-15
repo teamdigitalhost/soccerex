@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
-import { ExternalLink, Search, Globe2, Building2 } from 'lucide-react'
+import { ExternalLink, Search, Building2 } from 'lucide-react'
 import { getEvent, getEventSpeakers, clapSpeaker } from '../lib/soccerexApi'
 import ClapButton from '../components/ClapButton'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
@@ -69,7 +69,7 @@ export default function EventSpeakers() {
     if (!query.trim()) return speakers
     const q = query.trim().toLowerCase()
     return speakers.filter((s) =>
-      [s.display_name, s.headline, s.company, s.country]
+      [s.display_name, s.headline, s.company]
         .filter(Boolean)
         .some((field) => field.toLowerCase().includes(q))
     )
@@ -105,7 +105,7 @@ export default function EventSpeakers() {
             </h1>
             <p className="miami-body" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 720, lineHeight: 1.6 }}>
               {isPast
-                ? 'A look back at the speakers who joined us. Use the search to find a name, company, or country.'
+                ? 'A look back at the speakers who joined us. Use the search to find a name or company.'
                 : 'Confirmed and invited voices in this year\'s program. More are added as the schedule firms up.'}
             </p>
           </div>
@@ -126,7 +126,7 @@ export default function EventSpeakers() {
                     type="search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search speakers, companies, countries"
+                    placeholder="Search speakers or companies"
                     className="prog-input"
                     style={{ paddingLeft: 38 }}
                   />
@@ -290,14 +290,9 @@ function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
           </p>
         )}
 
-        {(speaker.company || speaker.country) && (
+        {speaker.company && (
           <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1" style={{ fontSize: 12, color: '#607186' }}>
-            {speaker.company && (
-              <span className="flex items-center gap-1.5"><Building2 size={11} /> {speaker.company}</span>
-            )}
-            {speaker.country && (
-              <span className="flex items-center gap-1.5"><Globe2 size={11} /> {speaker.country}</span>
-            )}
+            <span className="flex items-center gap-1.5"><Building2 size={11} /> {speaker.company}</span>
           </div>
         )}
 

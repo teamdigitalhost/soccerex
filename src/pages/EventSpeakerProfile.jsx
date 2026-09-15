@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
-  ArrowLeft, ExternalLink, Building2, Globe2, Calendar, Clock, MapPin, Globe,
+  ArrowLeft, ExternalLink, Building2, Calendar, Clock, MapPin, Globe,
 } from 'lucide-react'
 import { getEventSpeaker, clapSpeaker } from '../lib/soccerexApi'
 import ClapButton from '../components/ClapButton'
@@ -157,9 +157,6 @@ function ProfileBody({ speaker, eventSlug }) {
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2" style={{ fontSize: 13, color: '#607186' }}>
             {speaker.company && (
               <span className="flex items-center gap-1.5"><Building2 size={13} /> {speaker.company}</span>
-            )}
-            {speaker.country && (
-              <span className="flex items-center gap-1.5"><Globe2 size={13} /> {speaker.country}</span>
             )}
             {!isPastEvent && (
               <ClapButton
