@@ -48,7 +48,7 @@ const FEATURED = {
   // Official lobby photo from the hotel's own gallery on ritzcarlton.com
   // (cache.marriott.com rendition miasb-lobby-3150).
   image: '/hotels/ritz-south-beach-lobby.jpg',
-  url: 'https://book.passkey.com/e/51313268',
+  url: 'https://book.passkey.com/event/51336191/owner/17445/home',
 }
 
 const HOTELS = [
