@@ -552,11 +552,78 @@ export default function Miami2026V2() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {ECOSYSTEM_BRAND.map(({ label, icon }) => (
-              <div key={label} className="miami-cell-light">
+              /* Impact is the eleventh of ten, so it takes the last row whole
+                 rather than sitting alone in the first column of an empty one. */
+              <div key={label} className={label === 'Impact' ? 'miami-cell-light col-span-2 sm:col-span-3 md:col-span-5' : 'miami-cell-light'}>
                 <img src={`${ICN}/${icon}.svg`} alt="" aria-hidden style={{ width: 40, height: 40, margin: '0 auto 12px', display: 'block' }} />
                 <p className="miami-subhead" style={{ color: '#0D1B2A', fontSize: '11px' }}>{label}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SOCCEREX IMPACT ─────────────────────────────────────────────
+          Sits directly under the Impact cell in the grid above, so the word
+          lands and then the proof of it does. Artwork is cut from the
+          Community Impact Event flyer. */}
+      <section className="relative overflow-hidden" style={{ background: '#FFF8F4', padding: 'clamp(76px,9vw,124px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-center" style={{ gap: 'clamp(28px,4vw,56px)' }}>
+            <div className="lg:col-span-6">
+              <img
+                src={`${IMG}/impact/community-impact.jpg`}
+                alt="Three young players in Bigger Than A Game shirts, arms around each other, looking out at the Miami skyline"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+                loading="lazy"
+              />
+            </div>
+
+            <div className="lg:col-span-6">
+              <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A', textWrap: 'balance' }}>
+                Soccerex Impact Is <span className="miami-text-gradient">Stronger Than Ever</span> This Year
+              </h2>
+              <p className="miami-body leading-relaxed mt-5" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+                The week opens with the Community Impact Event on the mini fields at Nu Stadium, an afternoon
+                for young players from across Miami and the organizations that coach them.
+              </p>
+              <p className="miami-body leading-relaxed mt-4" style={{ fontSize: '1.05rem', color: '#1a2a3a' }}>
+                Dagrosa Capital Partners leads it, and clubs, charities and local brands from across the city
+                are behind it.
+              </p>
+
+              <dl className="flex flex-wrap" style={{ gap: 'clamp(20px,3vw,40px)', marginTop: 'clamp(24px,3vw,34px)' }}>
+                {[
+                  ['DATE', 'Wednesday, September 23, 2026'],
+                  ['TIME', '3:00 PM to 6:00 PM'],
+                  ['WHERE', 'Nu Stadium, mini fields area'],
+                ].map(([label, value]) => (
+                  <div key={label}>
+                    <dt className="miami-subhead" style={{ fontSize: 10, letterSpacing: '0.16em', color: '#607186' }}>{label}</dt>
+                    <dd className="miami-body" style={{ fontSize: '0.95rem', color: '#0D1B2A', marginTop: 4 }}>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <p className="miami-subhead" style={{ fontSize: 12, letterSpacing: '0.14em', color: '#E91E63', marginTop: 'clamp(24px,3vw,32px)' }}>
+                WHEN COMMUNITIES WIN, WE ALL WIN
+              </p>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 'clamp(40px,5vw,64px)', paddingTop: 'clamp(28px,3.5vw,40px)', borderTop: '1px solid rgba(13,27,42,0.10)' }}>
+            <img
+              src={`${IMG}/impact/dagrosa-capital-partners.png`}
+              alt="Dagrosa Capital Partners"
+              style={{ height: 'clamp(38px,4.4vw,54px)', width: 'auto', display: 'block', margin: '0 auto clamp(22px,2.6vw,32px)' }}
+              loading="lazy"
+            />
+            <img
+              src={`${IMG}/impact/impact-partners.png`}
+              alt="The organizations and brands supporting the Community Impact Event"
+              style={{ width: '100%', maxWidth: 1030, height: 'auto', display: 'block', margin: '0 auto' }}
+              loading="lazy"
+            />
           </div>
         </div>
       </section>
@@ -580,9 +647,6 @@ export default function Miami2026V2() {
               <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A', textWrap: 'balance' }}>
                 Featured <span className="miami-text-gradient">Partners</span>
               </h2>
-              <p className="miami-body mt-4 mx-auto" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 640, lineHeight: 1.6 }}>
-                These are the partners announced so far, and what each one brings to your three days.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 'clamp(16px,2vw,24px)' }}>
@@ -622,7 +686,7 @@ export default function Miami2026V2() {
       <BrandWall
         featured={MIAMI_BRANDS}
         heading={<>The Companies You Came to Meet Are <span style={{ color: '#E91E63' }}>Already Here</span></>}
-        intro="Clubs, leagues, federations, brands, broadcasters, investors and technology companies across the Soccerex network. Forty organizations exhibit or sponsor in Miami this September."
+        intro="Clubs, leagues, federations and brands from across the Soccerex network."
       />
 
       {/* ─── SELECTED SPEAKERS ───────────────────────────────────────────
@@ -632,7 +696,7 @@ export default function Miami2026V2() {
       <SelectedSpeakers
         slug={MIAMI_EVENT_SLUG}
         limit={12}
-        heading={<>Learn From the Executives Behind <span className="miami-text-gradient">Football&rsquo;s Biggest Properties</span></>}
+        heading={<>Learn From the Executives<br className="hidden sm:inline" /> Behind <span className="miami-text-gradient">Football&rsquo;s Biggest Properties</span></>}
       />
 
       <TestimonialsSection background="#FFFFFF" />
