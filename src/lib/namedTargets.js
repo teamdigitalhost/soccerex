@@ -1,7 +1,7 @@
 /* Named targets on a Deal Network intake: the specific clubs, leagues, federations, or
  * companies an applicant wants to meet. The intake stores them as a list, the backend
  * validates that list the same way on the public application and on the portal brief (at
- * most 25 targets, each at most 200 characters), and the admin edits it as tags, one tag
+ * most 100 targets, each at most 200 characters), and the admin edits it as tags, one tag
  * per target.
  *
  * Both forms collect the list in a textarea, one target per line, so a new line is the only
@@ -15,7 +15,7 @@
  * where commas are the separator, and it keeps its own split.
  */
 
-export const NAMED_TARGETS_MAX = 25
+export const NAMED_TARGETS_MAX = 100
 export const NAMED_TARGET_MAX_LENGTH = 200
 
 /** One target per non-blank line, trimmed. */
