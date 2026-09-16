@@ -284,6 +284,21 @@ export async function dealNetworkApplyStart(email, opts = {}) {
     : data
 }
 
+/**
+ * White-glove start: Soccerex fills the application in with a partner on a call.
+ * The staff key comes from the caller's own bookmarked URL and is never stored
+ * in this bundle. Returns the same token the confirmation email would carry.
+ */
+export async function dealNetworkApplyStartAssisted(email, key, opts = {}) {
+  const payload = await request('/deal-network/apply/start-assisted', {
+    method: 'POST',
+    body: { email, key },
+    ...opts,
+  })
+
+  return unwrap(payload)
+}
+
 export async function dealNetworkApplyPreview(token, opts = {}) {
   return unwrap(await request('/deal-network/apply/preview', {
     method: 'POST',

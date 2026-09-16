@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { ArrowRight, Loader2, Mail, CheckCircle2, AlertTriangle, Building2, User as UserIcon, Search, ChevronRight, Lock, Sparkles } from 'lucide-react'
 import {
   dealNetworkApplyStart,
+  dealNetworkApplyStartAssisted,
   dealNetworkApplyPreview,
   dealNetworkSearchCompanies,
   dealNetworkApplyClaim,
@@ -63,6 +64,13 @@ export default function DealNetworkApply() {
   const [params] = useSearchParams()
   const tokenFromUrl = params.get('token') || ''
   const testMode = isTestModeFromUrl()
+
+  /* White-glove mode. Soccerex keeps one bookmarked link carrying this key and
+     opens it when a partner is on the phone: the form is the applicant's own,
+     with the email step answered on their behalf instead of mailed to them.
+     The key only ever lives in that URL, never in this bundle, and the server
+     is what decides whether it is good. */
+  const staffKey = params.get('staff') || ''
 
   /* Campaign attribution from the invite CTA (?track=<cohort>&sx=<click token>), read ONCE on
      mount and then held. Two reasons it cannot be re-read per render: this flow re-renders on
@@ -191,6 +199,21 @@ export default function DealNetworkApply() {
     setEmail(normalizedEmail)
     setBusy(true); setError('')
     try {
+      /* White-glove: Soccerex is on a call with the partner, typing for them.
+         There is no inbox to check, so the server hands back the token the
+         email would have carried and the form opens on the next step. */
+      if (staffKey) {
+        const started = await dealNetworkApplyStartAssisted(normalizedEmail, staffKey, { test: testMode })
+        setToken(started.token)
+        const res = await dealNetworkApplyPreview(started.token, { test: testMode, attribution: attributionRef.current })
+        setMatched(res)
+        setChosenPerson(res.person)
+        setChosenCompany(res.company)
+        setStep(res.has_matches ? STEP_PREVIEW : STEP_CONDENSED)
+
+        return
+      }
+
       const res = await dealNetworkApplyStart(normalizedEmail, { test: testMode, attribution: attributionRef.current })
       setSentMessage(res?.message || 'Check your inbox for a confirmation link.')
       setDebugMagicLink(res?.debug?.deal_network_apply_url || '')
@@ -356,7 +379,7 @@ export default function DealNetworkApply() {
 
           {error && <SmartErrorBanner error={error} />}
 
-          {step === STEP_EMAIL && <EmailStep email={email} setEmail={setEmail} busy={busy} onSubmit={handleEmailSubmit} />}
+          {step === STEP_EMAIL && <EmailStep email={email} setEmail={setEmail} busy={busy} onSubmit={handleEmailSubmit} staffMode={!! staffKey} />}
           {step === STEP_SENT && <SentStep message={sentMessage} email={email} debugMagicLink={debugMagicLink} />}
           {step === STEP_PREVIEW && matched && (
             <PreviewStep
@@ -443,14 +466,22 @@ function SmartErrorBanner({ error }) {
   )
 }
 
-function EmailStep({ email, setEmail, busy, onSubmit }) {
+function EmailStep({ email, setEmail, busy, onSubmit, staffMode = false }) {
   return (
     <form noValidate onSubmit={onSubmit} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
+      {staffMode && (
+        <p className="font-body" style={{ fontSize: '1.3rem', color: '#0f766e', background: '#e6fbf6', border: '1px solid rgba(15,118,110,0.25)', borderRadius: 8, padding: '10px 14px', marginBottom: 18, lineHeight: 1.5 }}>
+          Soccerex staff: you are filling this in for a partner. Enter their work email and the
+          form opens straight away. No email is sent to them to start.
+        </p>
+      )}
       <p className="font-body" style={{ fontSize: '1.7rem', color: '#586778', marginBottom: 22, lineHeight: 1.6 }}>
-        Start with your work email. We'll check our database and let you confirm your details. Most existing contacts can join in under 60 seconds.
+        {staffMode
+          ? "Start with the partner's work email. We'll check our database and you can confirm their details with them on the call."
+          : "Start with your work email. We'll check our database and let you confirm your details. Most existing contacts can join in under 60 seconds."}
       </p>
       <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.156rem', color: NAVY, fontWeight: 600, marginBottom: 8 }}>
-        Work email
+        {staffMode ? "Partner's work email" : 'Work email'}
       </label>
       <div style={{ position: 'relative', marginBottom: 18 }}>
         <Mail size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-brand-accent)' }} />
@@ -465,11 +496,15 @@ function EmailStep({ email, setEmail, busy, onSubmit }) {
       </div>
       <button type="submit" disabled={busy} className="w-full inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
         style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}>
-        {busy ? <><Loader2 size={16} className="animate-spin" /> Sending</> : <>Send confirmation link <ArrowRight size={16} /></>}
+        {busy
+          ? <><Loader2 size={16} className="animate-spin" /> {staffMode ? 'Opening' : 'Sending'}</>
+          : <>{staffMode ? 'Open the form' : 'Send confirmation link'} <ArrowRight size={16} /></>}
       </button>
       <p className="text-center font-body mt-4" style={{ fontSize: '1.275rem', color: '#9aa6b3', lineHeight: 1.5 }}>
         <Lock size={12} className="inline-block mr-1" style={{ marginTop: -2 }} />
-        We'll email you a link. Nothing happens until you click it.
+        {staffMode
+          ? 'The application is filed under the address you enter, the same as if they had applied themselves.'
+          : "We'll email you a link. Nothing happens until you click it."}
       </p>
     </form>
   )
