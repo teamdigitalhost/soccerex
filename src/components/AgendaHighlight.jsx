@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Users } from 'lucide-react'
+import { ArrowRight, ChevronDown, Users } from 'lucide-react'
 import { getAgenda } from '../lib/soccerexApi'
 import { eventAgenda, eventSpeakers } from '../lib/routes'
 
@@ -33,6 +33,8 @@ function eventDate(iso) {
 
 export default function AgendaHighlight({ slug, perDay = 7, lead = 'The Full Agenda for', highlight = 'Miami 2026' }) {
   const [sessions, setSessions] = useState(null)
+  // The rest of each day opens in place, so nobody has to leave the page to read the running order.
+  const [openDays, setOpenDays] = useState([])
 
   useEffect(() => {
     let cancelled = false
@@ -89,7 +91,7 @@ export default function AgendaHighlight({ slug, perDay = 7, lead = 'The Full Age
               </div>
 
               <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-                {day.rows.slice(0, perDay).map((s) => (
+                {(openDays.includes(day.key) ? day.rows : day.rows.slice(0, perDay)).map((s) => (
                   <li key={s.id || s.slug} className="flex gap-4" style={{ padding: '9px 0', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
                     <span className="font-mono" style={{ fontSize: 12, color: '#E91E63', whiteSpace: 'nowrap', paddingTop: 2, minWidth: 68, fontVariantNumeric: 'tabular-nums' }}>
                       {eventClock(s.starts_at)}
@@ -109,9 +111,23 @@ export default function AgendaHighlight({ slug, perDay = 7, lead = 'The Full Age
               </ul>
 
               {day.rows.length > perDay && (
-                <p className="font-mono uppercase" style={{ fontSize: 11, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.55)', marginTop: 14 }}>
-                  and {day.rows.length - perDay} more panels
-                </p>
+                <button
+                  type="button"
+                  aria-expanded={openDays.includes(day.key)}
+                  onClick={() => setOpenDays((open) => (open.includes(day.key) ? open.filter((k) => k !== day.key) : [...open, day.key]))}
+                  className="font-mono uppercase inline-flex items-center gap-2"
+                  style={{
+                    fontSize: 11, letterSpacing: '0.16em', color: 'rgba(255,255,255,0.72)', marginTop: 14,
+                    background: 'transparent', border: 0, padding: '4px 0', cursor: 'pointer',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#5BC8D6' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.72)' }}
+                >
+                  {openDays.includes(day.key)
+                    ? 'Show fewer'
+                    : `Show all ${day.rows.length} panels`}
+                  <ChevronDown size={13} style={{ transform: openDays.includes(day.key) ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                </button>
               )}
             </div>
           ))}

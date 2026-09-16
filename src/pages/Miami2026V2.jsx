@@ -90,16 +90,17 @@ const WHY_ATTEND = [
 ]
 
 
-// Theme descriptions written by Garrett, September 15, 2026, in his order.
+// Theme descriptions written by Garrett, September 15, 2026. Order set by Joel the same night:
+// HerSoccerex second, impact high on the list rather than last.
 const THEMES = [
   { title: 'The Global Football Economy', desc: 'Hear from the leaders shaping football\u2019s global business, with insights into the markets, partnerships and commercial opportunities driving its next chapter.' },
+  { title: 'HerSoccerex', desc: 'Champion women across football through leadership, investment and collaboration, creating meaningful opportunities to connect, lead and shape the future of the sport.' },
   { title: 'Capital, Investment & Club Ownership', desc: 'Connect with investors, club owners and financial leaders to explore acquisitions, ownership strategies and the capital powering football\u2019s growth.' },
+  { title: 'Innovation, Impact & Future Growth', desc: 'Meet the ideas and people advancing football through technology, youth development and community impact, building a stronger game on and off the pitch.' },
   { title: 'Soccerex Deal Network', desc: 'Turn connections into opportunity through curated introductions and meetings that bring clubs, investors, brands and rightsholders together to move business forward.' },
   { title: 'World Cup 2026 & Beyond', desc: 'Explore how football can translate the World Cup\u2019s momentum into lasting investment, stronger partnerships and sustained growth across the Americas.' },
   { title: 'Media, Content & Digital Revenue', desc: 'Discover how media rights, original content and digital platforms are helping football reach new audiences, deepen fan relationships and grow revenue.' },
-  { title: 'HerSoccerex', desc: 'Champion women across football through leadership, investment and collaboration, creating meaningful opportunities to connect, lead and shape the future of the sport.' },
   { title: 'Stadiums, Venues & Host Cities', desc: 'Explore how stadiums and major events can generate year-round revenue, attract investment and create lasting value for clubs, cities and communities.' },
-  { title: 'Innovation, Impact & Future Growth', desc: 'Meet the ideas and people advancing football through technology, youth development and community impact, building a stronger game on and off the pitch.' },
 ]
 
 
@@ -353,7 +354,7 @@ export default function Miami2026V2() {
             <div className="grid grid-cols-3 gap-3">
               {[
                 { num: '3', label: 'Days' },
-                { num: '90+', label: 'Speakers' },
+                { num: '70+', label: 'Speakers' },
                 { num: '50+', label: 'Countries' },
               ].map((s) => (
                 <div key={s.label} className="text-center px-3 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)', boxShadow: '0 4px 14px -8px rgba(13,27,42,0.18)' }}>
