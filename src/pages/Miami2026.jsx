@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, bookCallUrl, eventAgendaConcept } from '../lib/routes'
+import { HOME, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, bookCallUrl, eventAgenda, eventAgendaConcept } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import DeadlineBanner from '../components/DeadlineBanner'
@@ -289,22 +289,27 @@ export default function Miami2026() {
         </div>
       </section>
 
-      {/* ─── AGENDA CONCEPT (navy panel) ────────────────────────────────── */}
+      {/* ─── AGENDA (navy panel) ─────────────────────────────────────────
+          The running order is published, so the panel leads with the real
+          agenda and keeps the concept and its PDF as the background reading. */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0D1B2A 0%, #102538 100%)', padding: 'clamp(64px,8vw,104px) clamp(24px,5vw,80px)' }}>
         <div className="absolute inset-0 miami-grid" style={{ opacity: 0.3 }} />
         <div className="relative z-10 text-center" style={{ maxWidth: '880px', margin: '0 auto' }}>
           <h2 className="miami-headline text-white mb-4" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)' }}>
-            THE 2026 <span className="miami-text-gradient">AGENDA CONCEPT</span>
+            THE 2026 <span className="miami-text-gradient">AGENDA</span>
           </h2>
           <p className="miami-body text-white/70 mx-auto mb-9" style={{ maxWidth: '660px' }}>
-            Eighteen published topics shaping the Miami conversations, from Inter Miami&rsquo;s partnership model and the next decade of MLS to the road to Brazil 2027. Explore them online, or take the full concept with you.
+            Two days of panels at Nu Stadium, from the Inter Miami fireside chat and the World Cup legacy sessions to the Argentina era and the road to Brazil 2027. Every panel, with its time and what it covers, is online now.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to={eventAgendaConcept('soccerex-miami-2026')} className="miami-pill-primary">
-              Explore the Agenda Concept <ArrowRight size={15} />
+            <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-primary">
+              See the full agenda <ArrowRight size={15} />
+            </Link>
+            <Link to={eventAgendaConcept(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
+              Explore the agenda concept
             </Link>
             <a href="/downloads/soccerex-miami-2026-agenda-concept.pdf" download className="miami-pill-outline">
-              <FileText size={15} /> Download the PDF
+              <FileText size={15} /> Agenda concept (PDF)
             </a>
           </div>
         </div>
