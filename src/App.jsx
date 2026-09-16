@@ -162,7 +162,10 @@ function App() {
           <Route path={GALLERY} element={<Gallery />} />
           <Route path={PAST_SPEAKERS} element={<PastSpeakers />} />
           <Route path={EUROPE_2026} element={<Europe2026 />} />
-          <Route path={MIAMI_2026} element={<Miami2026 />} />
+          {/* The newer Miami page is the Miami page now (Joel, September 15, 2026). The
+              previous one stays in the repo; /miami-2026/v2 still resolves for links
+              already shared around. */}
+          <Route path={MIAMI_2026} element={<Miami2026V2 />} />
           {/* Prices page removed entirely (Joel, 2026-08-03). Old links redirect:
               campaign emails carried magic links into the pricing gate, so these
               paths must land somewhere real, not 404. Delegate prices live on

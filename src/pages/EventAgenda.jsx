@@ -1,12 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Calendar, Clock, MapPin, List, LayoutGrid, Star, Video } from 'lucide-react'
+import { Calendar, Clock, MapPin, List, LayoutGrid, Star, Video, FileText } from 'lucide-react'
 import { getEvent, getAgenda } from '../lib/soccerexApi'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { withPreviewSearch } from '../lib/previewMode'
 import { eventSpeaker } from '../lib/routes'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
+
+// A designed PDF of the running order, where the event has one to hand out.
+const AGENDA_PDFS = {
+  'soccerex-miami-2026': '/downloads/soccerex-miami-2026-agenda.pdf',
+}
 
 export default function EventAgenda() {
   const { slug } = useParams()
@@ -44,7 +49,6 @@ export default function EventAgenda() {
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
 
           <div className="mb-10">
-            <p className="miami-subhead mb-3" style={{ color: 'var(--event-secondary)', fontSize: 11 }}>Schedule</p>
             <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D1B2A', lineHeight: 1.05, marginBottom: 16 }}>
               The <span className="miami-text-gradient">running order</span>
             </h1>
@@ -53,6 +57,12 @@ export default function EventAgenda() {
                 ? `${sessions.length} session${sessions.length === 1 ? '' : 's'} across ${grouped.length} day${grouped.length === 1 ? '' : 's'}, grouped by stage. All times shown in event time.`
                 : 'Live program schedule, grouped by day and stage.'}
             </p>
+            {/* Some events publish a designed copy of the running order to take away. */}
+            {AGENDA_PDFS[slug] && (
+              <a href={AGENDA_PDFS[slug]} download className="miami-pill-outline mt-5" style={{ display: 'inline-flex' }}>
+                <FileText size={15} /> Download the agenda (PDF)
+              </a>
+            )}
           </div>
 
           {error && <ErrorState error={error} />}

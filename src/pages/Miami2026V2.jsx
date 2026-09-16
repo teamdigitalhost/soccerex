@@ -1,23 +1,23 @@
 /*
- * Miami 2026, second version, unlisted at /miami-2026/v2.
+ * The Miami 2026 page, served at /miami-2026 and still reachable at /miami-2026/v2
+ * for links already shared.
  *
- * The live page's design system, marketing and structure, kept intact. What is
- * added is everything that has become true since it was written: the district and
- * its scale, the partners announced publicly, twelve speakers instead of eight,
- * and the campaign line Nu Stadium published with us.
- *
- * Linked from nowhere, out of the sitemap, served noindex.
+ * It keeps the previous page's design system, marketing and structure, and adds
+ * everything that has become true since: the district and its scale, the partners
+ * announced publicly, twelve speakers instead of eight, the campaign line Nu Stadium
+ * published with us, and the agenda itself, live from the API right under the hero.
  */
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText, Check, X, ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026, MIAMI_2026_V2, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, DEAL_NETWORK, REFUND_POLICY, bookCallUrl, eventAgendaConcept } from '../lib/routes'
+import { HOME, MIAMI_2026, MIAMI_2026_V2, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, DEAL_NETWORK, REFUND_POLICY, bookCallUrl, eventAgenda, eventAgendaConcept } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
 import SelectedSpeakers from '../components/SelectedSpeakers'
+import AgendaHighlight from '../components/AgendaHighlight'
 import { sponsorshipSchema, rightsholderSchema } from '../lib/leadSchemas'
 import useScrollAnimations from '../lib/useScrollAnimations'
 
@@ -205,8 +205,7 @@ export default function Miami2026V2() {
         title="Soccerex Miami 2026 | Nu Stadium, 23-25 September"
         description="The global football business event returns to the Americas. Soccerex Miami 2026 at Nu Stadium brings together clubs, leagues, investors, brands, and innovators. 23-25 September 2026."
         image={MIAMI_OG_IMG}
-        path={MIAMI_2026_V2}
-        noindex
+        path={MIAMI_2026}
       />
 
       {/* ─── HERO ─────────────────────────────────────────────────────── */}
@@ -296,6 +295,9 @@ export default function Miami2026V2() {
               >
                 <Trophy size={15} /> Apply for Rightsholder Pass
               </InquiryModalButton>
+              <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
+                <Calendar size={15} /> See the Agenda
+              </Link>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3" style={{ maxWidth: 640 }}>
@@ -350,7 +352,7 @@ export default function Miami2026V2() {
             <div className="grid grid-cols-3 gap-3">
               {[
                 { num: '3', label: 'Days' },
-                { num: '85+', label: 'Speakers' },
+                { num: '90+', label: 'Speakers' },
                 { num: '50+', label: 'Countries' },
               ].map((s) => (
                 <div key={s.label} className="text-center px-3 py-4" style={{ background: '#FFFFFF', border: '1px solid rgba(13,27,42,0.08)', boxShadow: '0 4px 14px -8px rgba(13,27,42,0.18)' }}>
@@ -372,6 +374,12 @@ export default function Miami2026V2() {
           </div>
         </div>
       </section>
+
+      {/* ─── THE AGENDA ──────────────────────────────────────────────────
+          First thing under the hero: the published running order, live from the
+          agenda API, because the agenda is what people arrive for now that it is
+          out in public. */}
+      <AgendaHighlight slug={MIAMI_EVENT_SLUG} />
 
       {/* ─── WHAT IS SOCCEREX MIAMI ─────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)' }}>
@@ -399,7 +407,7 @@ export default function Miami2026V2() {
 
           <h3 className="miami-headline mb-3" style={{ fontSize: 'clamp(1.2rem, 2vw, 1.5rem)', color: '#0D1B2A' }}>Find Out Where the Money in Football Goes Next</h3>
           <p className="miami-body leading-relaxed mb-6" style={{ fontSize: '1rem', color: '#3a4a5a', maxWidth: 760 }}>
-            Eighteen published topics, three days, and one question behind all of them: where does the money in this game go next.
+            Eight themes run across the two days on stage, with one question behind all of them: where the money in this game goes next.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {THEMES.map((theme) => (
@@ -423,7 +431,7 @@ export default function Miami2026V2() {
       <section id="passes" className="relative overflow-hidden" style={{ background: '#FFF8F4', padding: 'clamp(80px,10vw,140px) clamp(24px,5vw,80px)', scrollMarginTop: 80 }}>
         <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
           <h2 className="miami-headline text-center mb-4" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A', textWrap: 'balance' }}>
-            Choose How Close You Get to <span style={{ color: '#E91E63' }}>the People You Came to Meet</span>
+            Pick the Pass That Fits <span style={{ color: '#E91E63' }}>Your Three Days in Miami</span>
           </h2>
           <p className="miami-body text-center mx-auto mb-6" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 680, lineHeight: 1.6 }}>
             Both passes put you inside Nu Stadium for every session on September 24 and 25, and into the Soccerex Social Evening. VIP adds the VIP reception on September 23 and a catered lounge to meet in between sessions.
@@ -534,15 +542,18 @@ export default function Miami2026V2() {
             Study Inter Miami's Playbook and <span className="miami-text-gradient">Plan Your Road to Brazil 2027</span>
           </h2>
           <p className="miami-body text-white/70 mx-auto mb-9" style={{ maxWidth: '660px' }}>
-            Eighteen published topics shaping the Miami conversations, from Inter Miami&rsquo;s partnership model and the next decade of MLS to the road to Brazil 2027. Explore them online, or take the full concept with you.
+            Thirty panels across two days, from Inter Miami&rsquo;s partnership model and the next decade of MLS to the Argentina era and the road to Brazil 2027. Read the running order online, or take it with you.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to={eventAgendaConcept('soccerex-miami-2026')} className="miami-pill-primary">
-              Explore the Agenda Concept <ArrowRight size={15} />
+            <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-primary">
+              See the full agenda <ArrowRight size={15} />
             </Link>
-            <a href="/downloads/soccerex-miami-2026-agenda-concept.pdf" download className="miami-pill-outline">
-              <FileText size={15} /> Download the PDF
+            <a href="/downloads/soccerex-miami-2026-agenda.pdf" download className="miami-pill-outline">
+              <FileText size={15} /> Agenda (PDF)
             </a>
+            <Link to={eventAgendaConcept(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
+              The thinking behind it
+            </Link>
           </div>
         </div>
       </section>

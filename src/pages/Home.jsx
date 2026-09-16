@@ -6,7 +6,10 @@ import NetworkNodes from '../animations/NetworkNodes'
 import TopoDivider from '../components/TopoDivider'
 import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
-import { HOME, EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, GALLERY, eventSpeakers, pressRelease, PAST_SPEAKERS } from '../lib/routes'
+import { HOME, EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, GALLERY, eventAgenda, eventSpeakers, pressRelease, PAST_SPEAKERS } from '../lib/routes'
+import AgendaHighlight from '../components/AgendaHighlight'
+
+const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
 import PageMeta from '../components/PageMeta'
 import { FEATURED_SPEAKERS as HOME_SPEAKERS } from '../data/speakers'
 import ImageGrid from '../components/ImageGrid'
@@ -99,6 +102,7 @@ function UpcomingEventSection() {
   // and is linked from the event-page tabs and from the Europe2026 callout.
   const eventLinks = [
     { label: 'Register Now',         href: 'https://soccerexmiami2026.eventify.io/t2/tickets/', external: true, primary: true, icon: Mail },
+    { label: 'See the Agenda',       to: eventAgenda(MIAMI_EVENT_SLUG),                              icon: Calendar },
     { label: 'Event Info',           to: MIAMI_2026,                                                 icon: Globe },
   ]
 
@@ -1546,6 +1550,9 @@ export default function Home() {
           pixel content — any wave/edge effect inevitably reveals a seam.
           The hero's overlay already feathers softly into white at its base. */}
       <UpcomingEventSection />
+      {/* The Miami running order, straight after the opening block: the agenda is
+          public now, and it is the first thing most visitors arrive for. */}
+      <AgendaHighlight slug={MIAMI_EVENT_SLUG} perDay={6} />
       <EventsSection />
       <ByTheNumbersSection />
       <PixelDivider color="#FFFFFF" layers={4} height={110} speed={0.6} />
