@@ -110,6 +110,15 @@ export async function clapSession(slug, sessionId, count = 1) {
   })
 }
 
+/** Reply to an invitation around an event (the welcome night and its kind). */
+export async function submitEventRsvp(slug, payload, opts = {}) {
+  return unwrap(await request(`/events/${encodeURIComponent(slug)}/rsvps`, {
+    method: 'POST',
+    body: payload,
+    ...opts,
+  }))
+}
+
 export async function getAgenda(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}/agenda`, opts))
 }

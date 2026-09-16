@@ -77,6 +77,12 @@ export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
 // excluded from the sitemap, served noindex. Delete this line to retire it.
 export const MIAMI_2026_V2   = `${MIAMI_2026}/v2`
 
+// The welcome night invitation and its reply form, September 23 at the Savoy.
+// Sent to guests by email, so it stays out of the sitemap and out of search.
+export const MIAMI_2026_RSVP = `${MIAMI_2026}/rsvp`
+// Short path for the email button and anything printed.
+export const RSVP = '/rsvp'
+
 // Evergreen, top-level travel + accommodations page (partner-hotel booking
 // links). One live event at a time, so this holds the current event's hotels
 // and is updated when the event changes; event pages link here. The misspelled
