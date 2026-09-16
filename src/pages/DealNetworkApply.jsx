@@ -117,6 +117,12 @@ export default function DealNetworkApply() {
   const [chosenPerson, setChosenPerson] = useState(null)
   const [chosenCompany, setChosenCompany] = useState(null)
 
+  /* White-glove only: colleagues the caller names during the application. One
+     box, commas or new lines, because somebody on a phone should not be made to
+     click "add another" four times. Sent as alternate addresses on the person,
+     which is what the portal and the access links already read. */
+  const [extraEmails, setExtraEmails] = useState('')
+
   // Condensed form
   const [personName, setPersonName] = useState('')
   const [personTitle, setPersonTitle] = useState('')
@@ -278,6 +284,12 @@ export default function DealNetworkApply() {
         payload.company_industry = companyIndustry.trim() || undefined
       }
 
+      const alsoOn = extraEmails
+        .split(/[\s,;]+/)
+        .map((address) => address.trim().toLowerCase())
+        .filter((address) => address.includes('@'))
+      if (alsoOn.length > 0) payload.additional_emails = alsoOn
+
       const res = await dealNetworkApplyClaim(payload, { test: testMode, attribution: attributionRef.current })
       setMatchmakingToken(res.matchmaking_token)
       setChosenPerson(res.person)
@@ -396,6 +408,8 @@ export default function DealNetworkApply() {
               }}
               onNeedCondensed={() => setStep(STEP_CONDENSED)}
               busy={busy}
+              staffMode={!! staffKey}
+              extraEmails={extraEmails} setExtraEmails={setExtraEmails}
             />
           )}
           {step === STEP_CONDENSED && (
@@ -413,6 +427,8 @@ export default function DealNetworkApply() {
               pickCompany={(c) => { setChosenCompany(c); setCompanyName('') }}
               busy={busy}
               onContinue={handleClaim}
+              staffMode={!! staffKey}
+              extraEmails={extraEmails} setExtraEmails={setExtraEmails}
             />
           )}
           {step === STEP_MATCHMAKING && (
@@ -536,7 +552,33 @@ function SentStep({ message, email, debugMagicLink }) {
   )
 }
 
-function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, setChosenCompany, companyQuery, companyResults, searchCompanies, onContinue, onNeedCondensed, busy }) {
+/* White-glove: the caller can put a partner's colleagues on the same
+   application, so a team does not have to be run through the form one address
+   at a time. They become alternate addresses on the person, which is what the
+   portal and the access links read. */
+function ColleagueEmails({ value, onChange, disabled }) {
+  return (
+    <div className="mb-4" style={{ background: '#f4fbf9', border: '1px solid rgba(15,118,110,0.22)', borderRadius: 10, padding: '16px 18px' }}>
+      <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.054rem', color: '#0f766e', fontWeight: 700, marginBottom: 6 }}>
+        Anyone else on this application
+      </label>
+      <p className="font-body" style={{ fontSize: '1.19rem', color: '#4a6b66', marginBottom: 10, lineHeight: 1.5 }}>
+        Colleagues who should reach it too. Separate addresses with commas.
+      </p>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        disabled={disabled}
+        placeholder="colleague@company.com, another@company.com"
+        autoComplete="off"
+        style={{ width: '100%', padding: '10px 12px', fontSize: '1.45rem', background: '#fff', border: '1px solid rgba(9,32,62,0.14)', borderRadius: 6, color: NAVY, outline: 'none' }}
+      />
+    </div>
+  )
+}
+
+function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, setChosenCompany, companyQuery, companyResults, searchCompanies, onContinue, onNeedCondensed, busy, staffMode = false, extraEmails = '', setExtraEmails = () => {} }) {
   const personMatched = !! matched.person
   const companyMatched = !! matched.company
 
@@ -605,6 +647,8 @@ function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, se
         </div>
       )}
 
+      {staffMode && <ColleagueEmails value={extraEmails} onChange={setExtraEmails} disabled={busy} />}
+
       <button
         type="button" onClick={onContinue} disabled={busy || ! chosenPerson || ! chosenCompany}
         className="w-full mt-6 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
@@ -651,6 +695,7 @@ function CondensedStep(props) {
     companyName, setCompanyName, companyWebsite, setCompanyWebsite, companyCountry, setCompanyCountry,
     companyIndustry, setCompanyIndustry, companyQuery, companyResults, searchCompanies,
     companySearch, pickCompany, busy, onContinue,
+    staffMode = false, extraEmails = '', setExtraEmails = () => {},
   } = props
 
   const needsPerson = ! chosenPerson
@@ -764,6 +809,8 @@ function CondensedStep(props) {
           )}
         </div>
       )}
+
+      {staffMode && <ColleagueEmails value={extraEmails} onChange={setExtraEmails} disabled={busy} />}
 
       <button
         type="button" onClick={onContinue} disabled={busy || ! canContinue}
