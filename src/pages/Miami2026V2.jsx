@@ -90,15 +90,16 @@ const WHY_ATTEND = [
 ]
 
 
+// Theme descriptions written by Garrett, September 15, 2026, in his order.
 const THEMES = [
-  { title: 'The Global Football Economy', desc: 'Where the money is moving in the game right now, who is moving it, and what that means for your next deal.' },
-  { title: 'Capital, Investment & Club Ownership', desc: 'What clubs are selling for, how multi club groups get put together, and who is buying next.' },
-  { title: 'Soccerex Deal Network', desc: 'Meetings with counterparties who can actually transact, matched to what you are trying to do and set up before you land.' },
-  { title: 'World Cup 2026 & Beyond', desc: 'What the tournament left behind in this region, and how to build a business on top of it.' },
-  { title: 'Media, Content & Digital Revenue', desc: 'How rights are being sold now, what streaming has changed, and where the next revenue is coming from.' },
-  { title: 'Stadiums, Venues & Host Cities', desc: 'What it costs to build one, what it gives back, and how a venue reshapes the city around it.' },
-  { title: 'HerSoccerex', desc: 'Where the money is going in women\u2019s football, what it is buying, and who is getting there first.' },
-  { title: 'Innovation, Impact & Future Growth', desc: 'The technology changing how clubs operate, and the community work that keeps them welcome in their own city.' },
+  { title: 'The Global Football Economy', desc: 'Hear from the leaders shaping football\u2019s global business, with insights into the markets, partnerships and commercial opportunities driving its next chapter.' },
+  { title: 'Capital, Investment & Club Ownership', desc: 'Connect with investors, club owners and financial leaders to explore acquisitions, ownership strategies and the capital powering football\u2019s growth.' },
+  { title: 'Soccerex Deal Network', desc: 'Turn connections into opportunity through curated introductions and meetings that bring clubs, investors, brands and rightsholders together to move business forward.' },
+  { title: 'World Cup 2026 & Beyond', desc: 'Explore how football can translate the World Cup\u2019s momentum into lasting investment, stronger partnerships and sustained growth across the Americas.' },
+  { title: 'Media, Content & Digital Revenue', desc: 'Discover how media rights, original content and digital platforms are helping football reach new audiences, deepen fan relationships and grow revenue.' },
+  { title: 'HerSoccerex', desc: 'Champion women across football through leadership, investment and collaboration, creating meaningful opportunities to connect, lead and shape the future of the sport.' },
+  { title: 'Stadiums, Venues & Host Cities', desc: 'Explore how stadiums and major events can generate year-round revenue, attract investment and create lasting value for clubs, cities and communities.' },
+  { title: 'Innovation, Impact & Future Growth', desc: 'Meet the ideas and people advancing football through technology, youth development and community impact, building a stronger game on and off the pitch.' },
 ]
 
 
