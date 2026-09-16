@@ -27,6 +27,24 @@ const GFX = '/events/miami/2026/graphics'
 const ICN = '/events/miami/2026/icons'
 const V2  = '/events/miami/2026/v2'
 
+// The four partners announced publicly. Garrett's note on the old layout was
+// that four full-width bands made the partner list look thin, not that the
+// partners should come down, so they run as one row of cards above the wall of
+// everyone else. Flip SHOW_FEATURED_PARTNERS to false to take the row off the
+// page without touching anything else.
+const SHOW_FEATURED_PARTNERS = true
+
+const FEATURED_PARTNERS = [
+  { name: 'Concacaf', file: 'concacaf.svg', href: 'https://www.concacaf.com', role: 'Official partner', mark: 'crest',
+    note: 'The confederation and its 41 member associations, headquartered here in Miami, with executives on stage and a flagship stand on the floor.' },
+  { name: 'Greater Miami & Miami Beach', file: 'gmcvb-corp-logo-blue.png', href: 'https://www.miamiandbeaches.com', role: 'Official partner', mark: 'wordmark',
+    note: 'The destination itself works for you as hard as the agenda does: where to stay, where to take a meeting, where the industry ends up after hours.' },
+  { name: 'Roc Nation Sports', file: 'roc-nation-wordmark-black.png', href: 'https://www.rocnation.com', role: 'Exhibitor and speaker', mark: 'wordmark',
+    note: 'Bring them the brand, the rights or the roster you are trying to move. They are on stage on day one and on the floor alongside it.' },
+  { name: 'FC Barcelona', file: 'fc-barcelona.svg', href: 'https://www.fcbarcelona.com', role: 'On stage, day two', mark: 'crest',
+    note: 'How a club founded in 1899 makes the commercial decisions every other club studies. They explain them on day two.' },
+]
+
 // Miami 2026's own sponsors and exhibitors, the five we hold artwork for out of
 // forty on the floor. They lead the first row of the wall. Add the rest here as
 // the logo pack comes in.
@@ -551,6 +569,50 @@ export default function Miami2026V2() {
           restoring the AttendeeWall block; consent lives in the admin
           per-event-role wall opt-in toggle. */}
 
+
+      {/* ─── FEATURED PARTNERS ───────────────────────────────────────────
+          One row, four cards, directly above the wall: the announced partners
+          read as a lineup rather than four separate bands. */}
+      {SHOW_FEATURED_PARTNERS && (
+        <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+          <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+            <div className="text-center" style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
+              <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A', textWrap: 'balance' }}>
+                Featured <span className="miami-text-gradient">Partners</span>
+              </h2>
+              <p className="miami-body mt-4 mx-auto" style={{ fontSize: '1.05rem', color: '#3a4a5a', maxWidth: 640, lineHeight: 1.6 }}>
+                These are the partners announced so far, and what each one brings to your three days.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 'clamp(16px,2vw,24px)' }}>
+              {FEATURED_PARTNERS.map((partner) => (
+                <a key={partner.name} href={partner.href} target="_blank" rel="noopener noreferrer"
+                  className="miami-card-light flex flex-col"
+                  style={{ textDecoration: 'none', padding: 'clamp(22px,2.4vw,30px)' }}
+                  aria-label={`${partner.name}, opens in a new tab`}
+                >
+                  <div className="flex items-center justify-center" style={{ height: 86, marginBottom: 20 }}>
+                    <img src={`${V2}/partners/${partner.file}`} alt={partner.name}
+                      style={partner.mark === 'crest'
+                        ? { maxHeight: 68, maxWidth: '70%', objectFit: 'contain' }
+                        : { maxHeight: 44, maxWidth: '100%', objectFit: 'contain' }} />
+                  </div>
+                  <p className="miami-subhead" style={{ fontSize: 10, letterSpacing: '0.16em', color: '#007C91', marginBottom: 10 }}>
+                    {partner.role.toUpperCase()}
+                  </p>
+                  <p className="miami-body leading-relaxed" style={{ fontSize: '0.92rem', color: '#3a4a5a', flexGrow: 1 }}>
+                    {partner.note}
+                  </p>
+                  <span className="miami-subhead inline-flex items-center gap-1.5" style={{ color: '#0D1B2A', fontSize: 11, marginTop: 16 }}>
+                    {partner.href.replace('https://www.', '')} <ArrowRight size={12} />
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── BRAND WALL ──────────────────────────────────────────────────
           Replaces the four single-partner bands. Miami's own sponsors and
