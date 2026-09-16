@@ -102,6 +102,14 @@ export async function clapConcept(slug, topicSlug, count = 1) {
   })
 }
 
+/** Public applause on a published panel. Unlimited; batches several claps per call. Returns { claps }. */
+export async function clapSession(slug, sessionId, count = 1) {
+  return request(`/events/${encodeURIComponent(slug)}/agenda/${encodeURIComponent(sessionId)}/clap`, {
+    method: 'POST',
+    body: { count },
+  })
+}
+
 export async function getAgenda(slug, opts = {}) {
   return unwrap(await request(`/events/${encodeURIComponent(slug)}/agenda`, opts))
 }

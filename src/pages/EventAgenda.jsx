@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Calendar, Clock, MapPin, List, LayoutGrid, Star, Video, FileText } from 'lucide-react'
-import { getEvent, getAgenda } from '../lib/soccerexApi'
+import { getEvent, getAgenda, clapSession } from '../lib/soccerexApi'
+import ClapButton from '../components/ClapButton'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { withPreviewSearch } from '../lib/previewMode'
 import { eventSpeaker } from '../lib/routes'
@@ -268,6 +269,16 @@ function SessionCard({ session, compact }) {
           ))}
         </div>
       )}
+
+      {/* Applause, the same as the concepts and the speaker pages carry. */}
+      <div className="flex justify-end mt-1">
+        <ClapButton
+          initial={session.claps || 0}
+          onFlush={(n) => clapSession(session._eventSlug, session.id, n)}
+          ariaLabel={`Clap for ${session.title}`}
+          idleLabel="Clap"
+        />
+      </div>
     </article>
   )
 }
