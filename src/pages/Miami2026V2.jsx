@@ -38,7 +38,7 @@ const SHOW_FEATURED_PARTNERS = true
 const FEATURED_PARTNERS = [
   { name: 'Concacaf', file: 'concacaf.svg', href: 'https://www.concacaf.com', role: 'Official partner', mark: 'crest',
     note: 'The confederation and its 41 member associations, headquartered here in Miami, with executives on stage and a flagship stand on the floor.' },
-  { name: 'Greater Miami & Miami Beach', file: 'gmcvb-corp-logo-blue.png', href: 'https://www.miamiandbeaches.com', role: 'Official partner', mark: 'wordmark',
+  { name: 'Greater Miami & Miami Beach', file: 'gmcvb-corporate-aubergine.png', href: 'https://www.miamiandbeaches.com', role: 'Official partner', mark: 'wordmark',
     note: 'The destination itself works for you as hard as the agenda does: where to stay, where to take a meeting, where the industry ends up after hours.' },
   { name: 'Roc Nation Sports', file: 'roc-nation-wordmark-black.png', href: 'https://www.rocnation.com', role: 'Exhibitor and speaker', mark: 'wordmark',
     note: 'Bring them the brand, the rights or the roster you are trying to move. They are on stage on day one and on the floor alongside it.' },
