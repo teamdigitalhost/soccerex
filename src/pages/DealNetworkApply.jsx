@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { ArrowRight, Loader2, Mail, CheckCircle2, AlertTriangle, Building2, User as UserIcon, Search, ChevronRight, Lock, Sparkles } from 'lucide-react'
 import {
   dealNetworkApplyStart,
   dealNetworkApplyStartAssisted,
+  dealNetworkApplyStartUnverified,
   dealNetworkApplyPreview,
   dealNetworkSearchCompanies,
   dealNetworkApplyClaim,
@@ -24,7 +25,7 @@ function deriveSide(company) {
   const t = company?.type
   return t === 'club' || t === 'federation' ? 'property' : 'brand'
 }
-// Property = rightsholder, Brand = company, Capital = capital — the values
+// Property = rightsholder, Brand = company, Capital = capital: the values
 // submitIntake expects. Capital is its own matched side (capital & impact
 // partners), not folded into Brand.
 const SIDE_TO_BACKEND = { property: 'rightsholder', brand: 'company', capital: 'capital' }
@@ -38,7 +39,7 @@ const SIDE_TO_BACKEND = { property: 'rightsholder', brand: 'company', capital: '
  * Step 5: matchmaking screen (looking-for, can-offer, deal types, ...)
  * Step 6: confirmation
  *
- * The page is deliberately not linked from the main /deal-network — it is
+ * The page is deliberately not linked from the main /deal-network; it is
  * distributed via direct email / QR code / hand-shared link.
  */
 
@@ -55,6 +56,142 @@ const STEP_MATCHMAKING = 'matchmaking'
 const STEP_DONE = 'done'
 
 const EMPTY_ATTRIBUTION = { sx: '', track: '' }
+
+const BACKEND_TO_SIDE = { rightsholder: 'property', property: 'property', company: 'brand', brand: 'brand', capital: 'capital' }
+
+function emptyMatchmaking(side) {
+  return {
+    side,
+    // company information extras
+    website: '', phone: '', attendance: '',
+    // about your organization
+    organization_type: '', organization_type_other: '',
+    league_level: '', industry_sector: '', aum_range: '',
+    primary_geography: '', primary_geography_other: '',
+    // your deal / mandate
+    pitch: '',
+    looking_for: [], looking_other: '',
+    can_offer: [], offer_other: '',
+    pain_points: [], pain_point_detail: '',
+    deal_types: [], deal_types_other: '',
+    deal_structures: [], deal_structures_other: '',
+    // counterpart & parameters
+    ideal_counterpart: '', named_targets: '',
+    budget_range: '', budget_other: '',
+    investment_geography: '', leagues_interest: '',
+    decision_timeline: '',
+    // additional context
+    additional_context: '',
+  }
+}
+
+/**
+ * Turns the company's latest intake (claim response `existing_intake`, keyed like
+ * the submitIntake payload) back into the form's own state, so a returning company
+ * or a white-glove call starts from what we already know. Values the current form
+ * cannot show as an option land in that question's "Other" box rather than being
+ * dropped, and signal keys the side does not ask about are left out, the same
+ * pruning a side switch does.
+ */
+function matchmakingFromIntake(intake, fallbackSide) {
+  const side = BACKEND_TO_SIDE[intake?.side] || fallbackSide
+  const form = INTAKE_FORMS[side]
+  const mm = emptyMatchmaking(side)
+  if (! intake || typeof intake !== 'object' || ! form) return mm
+
+  const text = (v) => (typeof v === 'string' ? v : (v == null ? '' : String(v)))
+  const list = (v) => (Array.isArray(v) ? v.map(text).map((s) => s.trim()).filter(Boolean) : (text(v).trim() ? [text(v).trim()] : []))
+  const pickOrOther = (value, options) => {
+    const v = text(value).trim()
+    if (! v) return ['', '']
+    return options.includes(v) ? [v, ''] : ['Other', v]
+  }
+  const pickKnown = (value, options) => (options?.includes(text(value).trim()) ? text(value).trim() : '')
+  const splitKnown = (values, options) => {
+    const all = list(values)
+    return [all.filter((v) => options.includes(v)), all.filter((v) => ! options.includes(v)).join(', ')]
+  }
+  const keys = (pairs) => new Set((pairs || []).map(([key]) => key))
+
+  mm.website = text(intake.website)
+  mm.phone = text(intake.primary_contact_phone)
+  const attendance = text(intake.decision_maker_attendance).toLowerCase()
+  mm.attendance = ['yes', 'no', 'tbc'].includes(attendance) ? attendance : ''
+
+  ;[mm.organization_type, mm.organization_type_other] = pickOrOther(intake.organization_type, form.orgTypes)
+  mm.league_level = side === 'property' ? pickKnown(intake.league_level, form.leagueLevels) : ''
+  mm.industry_sector = side === 'brand' ? pickKnown(intake.industry_sector, form.industries) : ''
+  mm.aum_range = side === 'capital' ? pickKnown(intake.aum_range, form.aumRanges) : ''
+  ;[mm.primary_geography, mm.primary_geography_other] = pickOrOther(intake.primary_geography, INTAKE_REGIONS)
+
+  mm.pitch = text(intake.deal_description).trim() || text(intake.one_sentence_pitch).trim()
+
+  const lookingValid = keys(form.lookingFor)
+  const offerValid = keys(form.canProvide)
+  const painValid = new Set([...form.pains, 'other'])
+  mm.looking_for = list(intake.looking_for).filter((k) => lookingValid.has(k))
+  mm.looking_other = text(intake.looking_for_other)
+  mm.can_offer = list(intake.can_offer).filter((k) => offerValid.has(k))
+  mm.offer_other = text(intake.can_offer_other)
+  mm.pain_points = list(intake.pain_points).filter((k) => painValid.has(k))
+  mm.pain_point_detail = text(intake.pain_point_detail)
+
+  ;[mm.deal_types, mm.deal_types_other] = splitKnown(intake.deal_types, form.dealTypes)
+  if (form.dealStructures) {
+    ;[mm.deal_structures, mm.deal_structures_other] = splitKnown(intake.deal_structure_preferences, form.dealStructures)
+  }
+
+  mm.ideal_counterpart = text(intake.ideal_counterpart)
+  mm.named_targets = list(intake.named_targets).join('\n')
+  ;[mm.budget_range, mm.budget_other] = pickOrOther(intake.budget_range, form.budgets)
+  if (side === 'capital') {
+    mm.investment_geography = pickKnown(intake.investment_geography, INTAKE_REGIONS)
+    mm.leagues_interest = list(intake.leagues_competitions).join(', ')
+  }
+  mm.decision_timeline = text(intake.decision_timeline)
+  mm.additional_context = text(intake.additional_context)
+
+  return mm
+}
+
+/* Layout for this page lives here rather than inline, because the fixes need
+   container queries: the card is at most ~560px wide at every viewport, so
+   what decides whether two fields fit side by side is the card, not the
+   window. Class names are prefixed so nothing else on the site can collide. */
+const APPLY_CSS = `
+.dna-card { background:#fff; border-radius:16px; padding:clamp(20px,4.5vw,36px); box-shadow:0 30px 80px rgba(0,0,0,0.45); container-type:inline-size; min-width:0; }
+.dna-card * { min-width:0; }
+.dna-card, .dna-card p, .dna-card label, .dna-card button, .dna-card span, .dna-card div { overflow-wrap:anywhere; }
+.dna-card input, .dna-card select, .dna-card textarea { max-width:100%; box-sizing:border-box; text-overflow:ellipsis; }
+.dna-row2 { display:grid; grid-template-columns:minmax(0,1fr); column-gap:12px; }
+@container (min-width: 460px) { .dna-row2 { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+.dna-sides { display:grid; grid-template-columns:minmax(0,1fr); gap:8px; }
+.dna-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; text-align:center; white-space:normal; line-height:1.3; }
+.dna-btn svg { flex-shrink:0; }
+.dna-nav { display:flex; align-items:stretch; gap:10px; margin-top:24px; }
+.dna-nav > .dna-next { flex:1 1 0; }
+.dna-nav > .dna-back { flex:0 0 auto; }
+.dna-match { display:flex; flex-wrap:wrap; align-items:flex-start; column-gap:12px; row-gap:4px; }
+.dna-match-body { flex:1 1 170px; }
+.dna-match-reject { flex:0 0 auto; margin-left:auto; }
+.dna-actions { display:grid; grid-template-columns:minmax(0,1fr); gap:10px; }
+@container (min-width: 400px) { .dna-actions { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+.dna-progress-head { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; column-gap:12px; row-gap:2px; }
+`
+
+/* One type scale for everything inside the card. The card is narrow, so the
+   sizes are set for it: step title, then body copy, then the field labels and
+   small print, and inputs at 16px or more so phones do not zoom on focus. */
+const T = {
+  title: '1.6rem',
+  lead: '1.125rem',
+  body: '1.0625rem',
+  input: '1.0625rem',
+  chip: '0.9375rem',
+  label: '0.8125rem',
+  button: '0.9375rem',
+  small: '0.875rem',
+}
 
 function normalizeApplyEmail(value) {
   return String(value || '').trim().replace(/[.,;:]+$/g, '').toLowerCase()
@@ -134,34 +271,19 @@ export default function DealNetworkApply() {
   // Company search
   const [companyQuery, setCompanyQuery] = useState('')
   const [companyResults, setCompanyResults] = useState([])
-  /** idle | short | searching | found | empty | error — drives what the picker says. */
+  /** idle | short | searching | found | empty | error: drives what the picker says. */
   const [companySearch, setCompanySearch] = useState('idle')
 
-  // Matchmaking — tailored per-side intake (2026-06 intake forms doc)
+  // Matchmaking: tailored per-side intake (2026-06 intake forms doc)
   const [matchmakingToken, setMatchmakingToken] = useState('')
-  const [mm, setMm] = useState({
-    side: trackSide || 'brand',
-    // company information extras
-    website: '', phone: '', attendance: '',
-    // about your organization
-    organization_type: '', organization_type_other: '',
-    league_level: '', industry_sector: '', aum_range: '',
-    primary_geography: '', primary_geography_other: '',
-    // your deal / mandate
-    pitch: '',
-    looking_for: [], looking_other: '',
-    can_offer: [], offer_other: '',
-    pain_points: [], pain_point_detail: '',
-    deal_types: [], deal_types_other: '',
-    deal_structures: [], deal_structures_other: '',
-    // counterpart & parameters
-    ideal_counterpart: '', named_targets: '',
-    budget_range: '', budget_other: '',
-    investment_geography: '', leagues_interest: '',
-    decision_timeline: '',
-    // additional context
-    additional_context: '',
-  })
+  const [mm, setMm] = useState(() => emptyMatchmaking(trackSide || 'brand'))
+  // True when the matchmaking answers opened from the company's previous intake.
+  const [prefilled, setPrefilled] = useState(false)
+
+  /* False only after "Continue without confirming": the applicant could not get
+     the confirmation email through their company's mail filter. The server keeps
+     that token from revealing any existing profile, and review sees the flag. */
+  const [emailVerified, setEmailVerified] = useState(true)
 
   // Load preview when arriving with a token
   useEffect(() => {
@@ -172,6 +294,7 @@ export default function DealNetworkApply() {
       .then((res) => {
         if (canceled) return
         setMatched(res)
+        setEmailVerified(res?.email_verified !== false)
         setChosenPerson(res.person)
         setChosenCompany(res.company)
         if (! res.has_matches) {
@@ -213,6 +336,7 @@ export default function DealNetworkApply() {
         setToken(started.token)
         const res = await dealNetworkApplyPreview(started.token, { test: testMode, attribution: attributionRef.current })
         setMatched(res)
+        setEmailVerified(res?.email_verified !== false)
         setChosenPerson(res.person)
         setChosenCompany(res.company)
         setStep(res.has_matches ? STEP_PREVIEW : STEP_CONDENSED)
@@ -226,6 +350,52 @@ export default function DealNetworkApply() {
       setStep(STEP_SENT)
     } catch (err) {
       setError(describeError(err, 'Could not send confirmation link.'))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  /** "Send it again" on the check-your-email step. Resolves true when it went out. */
+  async function handleResend() {
+    const normalizedEmail = normalizeApplyEmail(email)
+    if (! normalizedEmail) return false
+    setError('')
+    try {
+      const res = await dealNetworkApplyStart(normalizedEmail, { test: testMode, attribution: attributionRef.current })
+      if (res?.message) setSentMessage(res.message)
+      setDebugMagicLink(res?.debug?.deal_network_apply_url || '')
+
+      return true
+    } catch (err) {
+      setError(describeError(err, 'Could not send the confirmation link again.'))
+
+      return false
+    }
+  }
+
+  /**
+   * "Continue without confirming": for a company mail filter that holds our email.
+   * The server only allows it for an address that asked for a link in the last
+   * day, and the token it returns never shows existing profile data, so the
+   * applicant lands on the details step and types their own. Review sees the
+   * address as unconfirmed until the emailed link is clicked.
+   */
+  async function handleContinueUnverified() {
+    const normalizedEmail = normalizeApplyEmail(email)
+    if (! normalizedEmail || busy) return
+    setBusy(true); setError('')
+    try {
+      const started = await dealNetworkApplyStartUnverified(normalizedEmail, { test: testMode, attribution: attributionRef.current })
+      setToken(started.token)
+      const res = await dealNetworkApplyPreview(started.token, { test: testMode, attribution: attributionRef.current })
+      setMatched(res)
+      setEmailVerified(false)
+      /* Whatever the preview says, an unverified token starts from blank details. */
+      setChosenPerson(null)
+      setChosenCompany(null)
+      setStep(STEP_CONDENSED)
+    } catch (err) {
+      setError(describeError(err, 'Could not continue without confirming. Please try again.'))
     } finally {
       setBusy(false)
     }
@@ -296,7 +466,25 @@ export default function DealNetworkApply() {
       setChosenCompany(res.company)
       // Track param wins over the company-type guess (lets a rightsholder who
       // came in on a free-email address land on the property grid).
-      setMm((prev) => ({ ...prev, side: trackSide || deriveSide(res.company) }))
+      const guessedSide = trackSide || deriveSide(res.company)
+      /* The server only sends existing_intake when prefill is safe (white-glove,
+         or a confirmed address whose company is clearly theirs); the local flag is
+         a second guard so an unconfirmed session never shows it. */
+      const claimVerified = emailVerified && res?.email_verified !== false
+      if (! claimVerified) setEmailVerified(false)
+      const existing = claimVerified && res?.existing_intake && typeof res.existing_intake === 'object'
+        ? res.existing_intake
+        : null
+      if (existing) {
+        /* The company has applied before (or Soccerex is on a call with them):
+           open on their latest answers, every one of them still editable. */
+        setMm(matchmakingFromIntake(existing, guessedSide))
+        if (! personTitle.trim() && typeof existing.primary_contact_title === 'string') setPersonTitle(existing.primary_contact_title)
+        setPrefilled(true)
+      } else {
+        setMm((prev) => ({ ...prev, side: guessedSide }))
+        setPrefilled(false)
+      }
       setStep(STEP_MATCHMAKING)
     } catch (err) {
       setError(describeError(err, 'Could not save your profile.'))
@@ -374,25 +562,30 @@ export default function DealNetworkApply() {
 
   return (
     <div style={{ background: NAVY_DEEP, minHeight: '100vh' }}>
+      <style>{APPLY_CSS}</style>
       <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '100vh' }}>
         <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at top, #0d2b52 0%, ${NAVY_DEEP} 70%)` }} />
         <div className="absolute pointer-events-none" style={{ top: '10%', left: '50%', transform: 'translateX(-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(191,177,112,0.10) 0%, transparent 60%)' }} />
 
-        <div className="relative z-10 w-full" style={{ maxWidth: 640, padding: 'clamp(40px,6vw,80px) clamp(20px,4vw,40px)' }}>
-          <div className="flex justify-center mb-7">
+        {/* 680 rather than 640 gives the card room for two fields side by side on
+            desktop; the container queries stack them whenever it does not fit. */}
+        <div className="relative z-10 w-full" style={{ maxWidth: 680, minWidth: 0, padding: 'clamp(40px,6vw,80px) clamp(16px,4vw,40px)', paddingTop: 'max(clamp(40px,6vw,80px), calc(var(--app-top-offset, 72px) + 20px))' }}>
+          <div className="flex justify-center mb-6">
             <img src="/brand/crests/crest-main-white.svg" alt="Soccerex" style={{ height: 56 }} />
           </div>
-          <p className="font-mono uppercase tracking-[0.18em] text-center mb-2" style={{ fontSize: '1.105rem', color: 'var(--color-brand-accent)', fontWeight: 700 }}>
-            Soccerex Deal Network
-          </p>
-          <h1 className="font-heading font-bold text-white text-center mb-6" style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', lineHeight: 1.2 }}>
-            Apply to join
+          <h1 className="font-heading font-bold text-white text-center mb-6" style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', lineHeight: 1.2, overflowWrap: 'anywhere' }}>
+            Apply to join the Soccerex Deal Network
           </h1>
 
           {error && <SmartErrorBanner error={error} />}
 
           {step === STEP_EMAIL && <EmailStep email={email} setEmail={setEmail} busy={busy} onSubmit={handleEmailSubmit} staffMode={!! staffKey} />}
-          {step === STEP_SENT && <SentStep message={sentMessage} email={email} debugMagicLink={debugMagicLink} />}
+          {step === STEP_SENT && (
+            <SentStep
+              message={sentMessage} email={email} debugMagicLink={debugMagicLink}
+              busy={busy} onResend={handleResend} onContinueUnverified={handleContinueUnverified}
+            />
+          )}
           {step === STEP_PREVIEW && matched && (
             <PreviewStep
               matched={matched}
@@ -429,6 +622,7 @@ export default function DealNetworkApply() {
               onContinue={handleClaim}
               staffMode={!! staffKey}
               extraEmails={extraEmails} setExtraEmails={setExtraEmails}
+              emailVerified={emailVerified}
             />
           )}
           {step === STEP_MATCHMAKING && (
@@ -436,11 +630,12 @@ export default function DealNetworkApply() {
               person={chosenPerson} company={chosenCompany}
               mm={mm} setMm={setMm}
               busy={busy} onSubmit={handleMatchmakingSubmit}
+              prefilled={prefilled}
             />
           )}
-          {step === STEP_DONE && <DoneStep person={chosenPerson} email={email || matched?.email} testMode={testMode} />}
+          {step === STEP_DONE && <DoneStep person={chosenPerson} email={email || matched?.email} testMode={testMode} emailVerified={emailVerified} />}
 
-          <p className="text-center font-body mt-5" style={{ fontSize: '1.275rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>
+          <p className="text-center font-body mt-5" style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.55)', lineHeight: 1.5 }}>
             The first 100 completed applications are entered into the drawing for a Soccerex-covered stay at
             The Ritz-Carlton, South Beach.{' '}
             <a href={RITZ_DRAWING} style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'underline' }}>Official terms</a>
@@ -464,7 +659,7 @@ function SmartErrorBanner({ error }) {
       : { bg: 'rgba(239,68,68,0.15)', border: 'rgba(239,68,68,0.35)', fg: '#fecaca' }
 
   return (
-    <div className="mb-4 px-4 py-3 rounded-lg" style={{ background: palette.bg, border: `1px solid ${palette.border}`, color: palette.fg }}>
+    <div className="mb-4 px-4 py-3 rounded-lg" style={{ background: palette.bg, border: `1px solid ${palette.border}`, color: palette.fg, overflowWrap: 'anywhere' }}>
       <div className="flex items-start gap-2.5">
         <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: 2 }} />
         <div style={{ minWidth: 0 }}>
@@ -482,41 +677,54 @@ function SmartErrorBanner({ error }) {
   )
 }
 
+const inputStyle = {
+  width: '100%', padding: '11px 12px', fontSize: T.input, lineHeight: 1.4,
+  background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none',
+}
+
+const primaryButtonStyle = (enabled = true, busy = false) => ({
+  background: enabled ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)',
+  color: NAVY, padding: '14px 18px', fontSize: T.button, border: 'none', borderRadius: 4,
+  cursor: busy ? 'wait' : (enabled ? 'pointer' : 'not-allowed'),
+})
+
 function EmailStep({ email, setEmail, busy, onSubmit, staffMode = false }) {
   return (
-    <form noValidate onSubmit={onSubmit} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
+    <form noValidate onSubmit={onSubmit} className="dna-card">
       {staffMode && (
-        <p className="font-body" style={{ fontSize: '1.3rem', color: '#0f766e', background: '#e6fbf6', border: '1px solid rgba(15,118,110,0.25)', borderRadius: 8, padding: '10px 14px', marginBottom: 18, lineHeight: 1.5 }}>
+        <p className="font-body" style={{ fontSize: T.small, color: '#0f766e', background: '#e6fbf6', border: '1px solid rgba(15,118,110,0.25)', borderRadius: 8, padding: '10px 14px', marginBottom: 18, lineHeight: 1.5 }}>
           Soccerex staff: you are filling this in for a partner. Enter their work email and the
           form opens straight away. No email is sent to them to start.
         </p>
       )}
-      <p className="font-body" style={{ fontSize: '1.7rem', color: '#586778', marginBottom: 22, lineHeight: 1.6 }}>
+      <p className="font-body" style={{ fontSize: T.lead, color: '#586778', marginBottom: 20, lineHeight: 1.6 }}>
         {staffMode
           ? "Start with the partner's work email. We'll check our database and you can confirm their details with them on the call."
           : "Start with your work email. We'll check our database and let you confirm your details. Most existing contacts can join in under 60 seconds."}
       </p>
-      <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.156rem', color: NAVY, fontWeight: 600, marginBottom: 8 }}>
+      <label htmlFor="dna-email" className="block font-mono uppercase tracking-[0.08em]" style={{ fontSize: T.label, color: NAVY, fontWeight: 600, marginBottom: 8 }}>
         {staffMode ? "Partner's work email" : 'Work email'}
       </label>
-      <div style={{ position: 'relative', marginBottom: 18 }}>
+      <div style={{ position: 'relative', marginBottom: 16 }}>
         <Mail size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--color-brand-accent)' }} />
         <input
+          id="dna-email"
           type="email" required value={email}
           onChange={(e) => setEmail(e.target.value)}
           onBlur={(e) => setEmail(normalizeApplyEmail(e.target.value))}
           placeholder="you@company.com"
+          autoComplete="email"
           disabled={busy}
-          style={{ width: '100%', padding: '14px 14px 14px 40px', fontSize: '1.615rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 8, color: NAVY, outline: 'none' }}
+          style={{ ...inputStyle, padding: '13px 12px 13px 40px' }}
         />
       </div>
-      <button type="submit" disabled={busy} className="w-full inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}>
+      <button type="submit" disabled={busy} className="dna-btn w-full font-body font-semibold uppercase tracking-[0.12em]"
+        style={primaryButtonStyle(true, busy)}>
         {busy
           ? <><Loader2 size={16} className="animate-spin" /> {staffMode ? 'Opening' : 'Sending'}</>
           : <>{staffMode ? 'Open the form' : 'Send confirmation link'} <ArrowRight size={16} /></>}
       </button>
-      <p className="text-center font-body mt-4" style={{ fontSize: '1.275rem', color: '#9aa6b3', lineHeight: 1.5 }}>
+      <p className="text-center font-body mt-4" style={{ fontSize: T.small, color: '#7a8896', lineHeight: 1.5 }}>
         <Lock size={12} className="inline-block mr-1" style={{ marginTop: -2 }} />
         {staffMode
           ? 'The application is filed under the address you enter, the same as if they had applied themselves.'
@@ -526,28 +734,90 @@ function EmailStep({ email, setEmail, busy, onSubmit, staffMode = false }) {
   )
 }
 
-function SentStep({ message, email, debugMagicLink }) {
+const RESEND_COOLDOWN_MS = 30000
+
+function SentStep({ message, email, debugMagicLink, busy, onResend, onContinueUnverified }) {
+  const [resending, setResending] = useState(false)
+  const [resentAt, setResentAt] = useState(null)
+  const [coolingDown, setCoolingDown] = useState(false)
+
+  useEffect(() => {
+    if (! coolingDown) return undefined
+    const timer = setTimeout(() => setCoolingDown(false), RESEND_COOLDOWN_MS)
+    return () => clearTimeout(timer)
+  }, [coolingDown])
+
+  async function resend() {
+    if (resending || coolingDown) return
+    setResending(true)
+    const ok = await onResend()
+    setResending(false)
+    if (ok) {
+      setResentAt(new Date())
+      setCoolingDown(true)
+    }
+  }
+
+  const resendDisabled = busy || resending || coolingDown
+
   return (
-    <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)', textAlign: 'center' }}>
-      <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#d4f1e1', color: '#166534', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
+    <div className="dna-card" style={{ textAlign: 'center' }}>
+      <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#d4f1e1', color: '#166534', display: 'grid', placeItems: 'center', margin: '0 auto 18px' }}>
         <CheckCircle2 size={28} />
       </div>
-      <h2 className="font-heading font-bold" style={{ fontSize: '2.21rem', color: NAVY, marginBottom: 10 }}>Check your email</h2>
-      <p className="font-body" style={{ fontSize: '1.615rem', color: '#586778', lineHeight: 1.6 }}>
+      <h2 className="font-heading font-bold" style={{ fontSize: T.title, color: NAVY, marginBottom: 10, lineHeight: 1.25 }}>Check your email</h2>
+      <p className="font-body" style={{ fontSize: T.lead, color: '#586778', lineHeight: 1.6 }}>
         {message}
       </p>
-      <p className="font-body mt-3" style={{ fontSize: '1.445rem', color: '#9aa6b3' }}>
-        Sent to <span className="font-mono">{email}</span>
+      <p className="font-body mt-3" style={{ fontSize: T.body, color: '#7a8896' }}>
+        Sent to <span className="font-mono" style={{ overflowWrap: 'anywhere' }}>{email}</span>
       </p>
       {debugMagicLink && (
         <a
           href={debugMagicLink}
-          className="inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em] mt-5"
-          style={{ background: NAVY, color: '#fff', padding: '12px 18px', fontSize: '1.224rem', borderRadius: 4, textDecoration: 'none' }}
+          className="dna-btn font-body font-semibold uppercase tracking-[0.12em] mt-5"
+          style={{ background: NAVY, color: '#fff', padding: '12px 18px', fontSize: T.small, borderRadius: 4, textDecoration: 'none' }}
         >
           Open test magic link <ArrowRight size={14} />
         </a>
       )}
+
+      {/* Some company mail gateways accept our message and then quarantine it,
+          so the link never arrives. This is the way through for them. */}
+      <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(9,32,62,0.08)', textAlign: 'left' }}>
+        <h3 className="font-heading font-semibold" style={{ fontSize: '1.25rem', color: NAVY, marginBottom: 6, lineHeight: 1.3 }}>
+          Email not arriving?
+        </h3>
+        <p className="font-body" style={{ fontSize: T.body, color: '#586778', lineHeight: 1.55, marginBottom: 14 }}>
+          Some company email filters hold messages from new senders, so it can take a while or land in a
+          quarantine folder your IT team manages.
+        </p>
+        <div className="dna-actions">
+          <button
+            type="button" onClick={resend} disabled={resendDisabled}
+            className="dna-btn font-body font-semibold uppercase tracking-[0.1em]"
+            style={{ background: 'transparent', color: resendDisabled ? '#9aa6b3' : NAVY, border: '1px solid rgba(9,32,62,0.22)', borderRadius: 4, padding: '12px 14px', fontSize: T.button, cursor: resendDisabled ? 'not-allowed' : 'pointer' }}
+          >
+            {resending ? <><Loader2 size={15} className="animate-spin" /> Sending</> : 'Send it again'}
+          </button>
+          <button
+            type="button" onClick={onContinueUnverified} disabled={busy}
+            className="dna-btn font-body font-semibold uppercase tracking-[0.1em]"
+            style={{ background: NAVY, color: '#fff', border: `1px solid ${NAVY}`, borderRadius: 4, padding: '12px 14px', fontSize: T.button, cursor: busy ? 'wait' : 'pointer' }}
+          >
+            {busy ? <><Loader2 size={15} className="animate-spin" /> Opening</> : <>Continue without confirming <ArrowRight size={15} /></>}
+          </button>
+        </div>
+        {resentAt && (
+          <p className="font-body" role="status" style={{ fontSize: T.small, color: '#166534', marginTop: 10 }}>
+            Sent again at {resentAt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+          </p>
+        )}
+        <p className="font-body" style={{ fontSize: T.small, color: '#7a8896', lineHeight: 1.5, marginTop: 12 }}>
+          If you continue now, your application is still reviewed before approval, and our team will see that
+          your email hasn't been confirmed yet. Clicking the link later confirms it.
+        </p>
+      </div>
     </div>
   )
 }
@@ -555,25 +825,44 @@ function SentStep({ message, email, debugMagicLink }) {
 /* White-glove: the caller can put a partner's colleagues on the same
    application, so a team does not have to be run through the form one address
    at a time. They become alternate addresses on the person, which is what the
-   portal and the access links read. */
+   portal and the access links read. A two-line box, so the example addresses
+   are never cut off on a phone. */
 function ColleagueEmails({ value, onChange, disabled }) {
   return (
-    <div className="mb-4" style={{ background: '#f4fbf9', border: '1px solid rgba(15,118,110,0.22)', borderRadius: 10, padding: '16px 18px' }}>
-      <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.054rem', color: '#0f766e', fontWeight: 700, marginBottom: 6 }}>
+    <div className="mb-4" style={{ background: '#f4fbf9', border: '1px solid rgba(15,118,110,0.22)', borderRadius: 10, padding: '14px 16px' }}>
+      <label htmlFor="dna-colleagues" className="block font-mono uppercase tracking-[0.08em]" style={{ fontSize: T.label, color: '#0f766e', fontWeight: 700, marginBottom: 6 }}>
         Anyone else on this application
       </label>
-      <p className="font-body" style={{ fontSize: '1.19rem', color: '#4a6b66', marginBottom: 10, lineHeight: 1.5 }}>
+      <p className="font-body" style={{ fontSize: T.small, color: '#4a6b66', marginBottom: 10, lineHeight: 1.5 }}>
         Colleagues who should reach it too. Separate addresses with commas.
       </p>
-      <input
-        type="text"
+      <textarea
+        id="dna-colleagues"
+        rows={2}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         placeholder="colleague@company.com, another@company.com"
         autoComplete="off"
-        style={{ width: '100%', padding: '10px 12px', fontSize: '1.45rem', background: '#fff', border: '1px solid rgba(9,32,62,0.14)', borderRadius: 6, color: NAVY, outline: 'none' }}
+        style={{ ...inputStyle, background: '#fff', border: '1px solid rgba(9,32,62,0.14)', resize: 'vertical' }}
       />
+    </div>
+  )
+}
+
+function CompanyResults({ results, onPick, maxHeight }) {
+  return (
+    <div style={{ background: '#fafaf7', border: '1px solid rgba(9,32,62,0.08)', borderRadius: 8, maxHeight, overflowY: 'auto', overflowX: 'hidden', marginBottom: 12 }}>
+      {results.map((c) => (
+        <button
+          key={c.id} type="button"
+          onClick={() => onPick(c)}
+          style={{ display: 'block', width: '100%', textAlign: 'left', padding: '11px 14px', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(9,32,62,0.06)', cursor: 'pointer' }}
+        >
+          <div className="font-body" style={{ fontSize: T.body, color: NAVY, fontWeight: 500, lineHeight: 1.35 }}>{c.display_name}</div>
+          {c.headline && <div className="font-body" style={{ fontSize: T.small, color: '#7a8896', lineHeight: 1.4 }}>{c.headline}</div>}
+        </button>
+      ))}
     </div>
   )
 }
@@ -581,10 +870,11 @@ function ColleagueEmails({ value, onChange, disabled }) {
 function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, setChosenCompany, companyQuery, companyResults, searchCompanies, onContinue, onNeedCondensed, busy, staffMode = false, extraEmails = '', setExtraEmails = () => {} }) {
   const personMatched = !! matched.person
   const companyMatched = !! matched.company
+  const ready = !! (chosenPerson && chosenCompany)
 
   return (
-    <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
-      <p className="font-body" style={{ fontSize: '1.615rem', color: '#586778', lineHeight: 1.6, marginBottom: 20 }}>
+    <div className="dna-card">
+      <p className="font-body" style={{ fontSize: T.lead, color: '#586778', lineHeight: 1.6, marginBottom: 18 }}>
         Welcome back. Confirm these are still right and we'll skip straight to the deal-network questions.
       </p>
 
@@ -610,70 +900,61 @@ function PreviewStep({ matched, chosenPerson, setChosenPerson, chosenCompany, se
 
       {! chosenCompany && (
         <div style={{ marginTop: 16 }}>
-          <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.156rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
+          <label htmlFor="dna-preview-company" className="block font-mono uppercase tracking-[0.08em]" style={{ fontSize: T.label, color: NAVY, fontWeight: 600, marginBottom: 6 }}>
             Find your company
           </label>
           <div style={{ position: 'relative', marginBottom: 8 }}>
-            <Search size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9aa6b3' }} />
+            <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9aa6b3' }} />
             <input
+              id="dna-preview-company"
               type="text"
               value={companyQuery}
               onChange={(e) => searchCompanies(e.target.value)}
               placeholder="Type at least 2 letters…"
-              style={{ width: '100%', padding: '10px 12px 10px 34px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }}
+              autoComplete="off"
+              style={{ ...inputStyle, paddingLeft: 36 }}
             />
           </div>
-          {companyResults.length > 0 && (
-            <div style={{ background: '#fafaf7', border: '1px solid rgba(9,32,62,0.08)', borderRadius: 8, maxHeight: 200, overflowY: 'auto' }}>
-              {companyResults.map((c) => (
-                <button
-                  key={c.id} type="button"
-                  onClick={() => setChosenCompany(c)}
-                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 14px', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(9,32,62,0.06)', cursor: 'pointer' }}
-                >
-                  <div className="font-body" style={{ fontSize: '1.53rem', color: NAVY, fontWeight: 500 }}>{c.display_name}</div>
-                  {c.headline && <div className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896' }}>{c.headline}</div>}
-                </button>
-              ))}
-            </div>
-          )}
+          {companyResults.length > 0 && <CompanyResults results={companyResults} onPick={setChosenCompany} maxHeight={220} />}
           <button
             type="button" onClick={onNeedCondensed}
-            className="inline-flex items-center gap-1 mt-2 font-mono uppercase tracking-[0.15em]"
-            style={{ fontSize: '1.19rem', color: PURPLE, background: 'transparent', border: 'none', cursor: 'pointer' }}
+            className="dna-btn font-mono uppercase tracking-[0.1em]"
+            style={{ fontSize: T.small, color: PURPLE, background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px 0', justifyContent: 'flex-start', textAlign: 'left', gap: 4 }}
           >
-            None of these, create new <ChevronRight size={12} />
+            None of these, create new <ChevronRight size={13} />
           </button>
         </div>
       )}
 
-      {staffMode && <ColleagueEmails value={extraEmails} onChange={setExtraEmails} disabled={busy} />}
+      {staffMode && <div style={{ marginTop: 16 }}><ColleagueEmails value={extraEmails} onChange={setExtraEmails} disabled={busy} /></div>}
 
       <button
-        type="button" onClick={onContinue} disabled={busy || ! chosenPerson || ! chosenCompany}
-        className="w-full mt-6 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ background: chosenPerson && chosenCompany ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: chosenPerson && chosenCompany && ! busy ? 'pointer' : 'not-allowed', borderRadius: 4 }}
+        type="button" onClick={onContinue} disabled={busy || ! ready}
+        className="dna-btn w-full mt-5 font-body font-semibold uppercase tracking-[0.12em]"
+        style={primaryButtonStyle(ready, busy)}
       >
-        {busy ? <><Loader2 size={16} className="animate-spin" /> Saving</> : <>Continue to deal-network questions <ArrowRight size={16} /></>}
+        {busy ? <><Loader2 size={16} className="animate-spin" /> Saving</> : <>Continue to the questions <ArrowRight size={16} /></>}
       </button>
     </div>
   )
 }
 
+/* On a phone the reject control drops under the name instead of squeezing the
+   name down to a few pixels (.dna-match wraps once the body is under 170px). */
 function MatchCard({ icon: Icon, label, value, subtitle, matched, onReject, rejectLabel }) {
   if (! value) return null
   return (
     <div style={{ background: matched ? 'rgba(34,197,94,0.08)' : '#fafaf7', border: '1px solid ' + (matched ? 'rgba(34,197,94,0.25)' : 'rgba(9,32,62,0.08)'), borderRadius: 10, padding: '14px 16px', marginBottom: 12 }}>
-      <div className="flex items-start gap-3">
+      <div className="dna-match">
         <span style={{ width: 36, height: 36, borderRadius: 9, background: matched ? 'rgba(34,197,94,0.18)' : 'rgba(9,32,62,0.06)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
           <Icon size={16} color={matched ? '#166534' : NAVY} strokeWidth={2.2} />
         </span>
-        <div className="flex-1 min-w-0">
-          <div className="font-mono uppercase tracking-[0.16em]" style={{ fontSize: '1.054rem', color: '#7a8896', fontWeight: 600 }}>{label}</div>
-          <div className="font-heading font-semibold" style={{ fontSize: '1.7rem', color: NAVY, marginTop: 2 }}>{value}</div>
-          {subtitle && <div className="font-body" style={{ fontSize: '1.394rem', color: '#7a8896', marginTop: 2 }}>{subtitle}</div>}
+        <div className="dna-match-body">
+          <div className="font-mono uppercase tracking-[0.12em]" style={{ fontSize: '0.75rem', color: '#7a8896', fontWeight: 600 }}>{label}</div>
+          <div className="font-heading font-semibold" style={{ fontSize: '1.1875rem', color: NAVY, marginTop: 2, lineHeight: 1.3 }}>{value}</div>
+          {subtitle && <div className="font-body" style={{ fontSize: T.small, color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{subtitle}</div>}
         </div>
-        <button type="button" onClick={onReject} className="font-mono uppercase tracking-[0.14em]" style={{ fontSize: '1.054rem', color: '#9aa6b3', background: 'transparent', border: 'none', cursor: 'pointer', flexShrink: 0, marginTop: 6 }}>
+        <button type="button" onClick={onReject} className="dna-match-reject font-mono uppercase tracking-[0.1em]" style={{ fontSize: '0.75rem', color: '#7a8896', background: 'transparent', border: 'none', cursor: 'pointer', padding: '6px 0', textAlign: 'right' }}>
           {rejectLabel}
         </button>
       </div>
@@ -696,6 +977,7 @@ function CondensedStep(props) {
     companyIndustry, setCompanyIndustry, companyQuery, companyResults, searchCompanies,
     companySearch, pickCompany, busy, onContinue,
     staffMode = false, extraEmails = '', setExtraEmails = () => {},
+    emailVerified = true,
   } = props
 
   const needsPerson = ! chosenPerson
@@ -708,15 +990,25 @@ function CondensedStep(props) {
   const canContinue = (! needsPerson || personName.trim() !== '')
     && (! needsCompany || (addingNew && companyName.trim() !== ''))
 
+  const sectionHeading = { fontSize: T.label, color: PURPLE, fontWeight: 700 }
+  const status = { fontSize: T.small, color: '#7a8896', marginBottom: 12, lineHeight: 1.45 }
+
   return (
-    <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)' }}>
-      <p className="font-body" style={{ fontSize: '1.615rem', color: '#586778', lineHeight: 1.6, marginBottom: 20 }}>
+    <div className="dna-card">
+      <p className="font-body" style={{ fontSize: T.lead, color: '#586778', lineHeight: 1.6, marginBottom: 18 }}>
         Tell us the basics. You can fill in the full profile later. This just gets you into the deal-network questions.
       </p>
 
+      {! emailVerified && (
+        <p className="font-body" style={{ fontSize: T.small, color: '#7a5b00', background: '#fdf6e3', border: '1px solid rgba(180,140,20,0.3)', borderRadius: 8, padding: '10px 14px', marginBottom: 18, lineHeight: 1.5 }}>
+          Your email isn't confirmed yet, so we can't show details we may already have on file. Enter yours
+          below, and click the link in our email whenever it arrives.
+        </p>
+      )}
+
       {needsPerson && (
         <div className="mb-4">
-          <div className="font-mono uppercase tracking-[0.16em] mb-3" style={{ fontSize: '1.054rem', color: PURPLE, fontWeight: 700 }}>Your details</div>
+          <div className="font-mono uppercase tracking-[0.12em] mb-3" style={sectionHeading}>Your details</div>
           <Field label="Your name" value={personName} onChange={setPersonName} placeholder="Jane Doe" required disabled={busy} />
           <Field label="Title / role" value={personTitle} onChange={setPersonTitle} placeholder="Head of Partnerships" disabled={busy} />
         </div>
@@ -724,63 +1016,51 @@ function CondensedStep(props) {
 
       {needsCompany && (
         <div className="mb-4">
-          <div className="font-mono uppercase tracking-[0.16em] mb-3" style={{ fontSize: '1.054rem', color: PURPLE, fontWeight: 700 }}>Your company</div>
+          <div className="font-mono uppercase tracking-[0.12em] mb-3" style={sectionHeading}>Your company</div>
 
           {! addingNew ? (
             <>
-              <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.122rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
+              <label htmlFor="dna-company-search" className="block font-mono uppercase tracking-[0.08em]" style={{ fontSize: T.label, color: NAVY, fontWeight: 600, marginBottom: 6 }}>
                 Is your company already on Soccerex?
               </label>
               <div style={{ position: 'relative', marginBottom: 8 }}>
                 <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9aa6b3' }} />
                 <input
+                  id="dna-company-search"
                   type="text"
                   value={companyQuery}
                   onChange={(e) => searchCompanies(e.target.value)}
-                  placeholder="Start typing your company name…"
+                  placeholder="Company name…"
                   autoComplete="off"
-                  style={{ width: '100%', padding: '10px 12px 10px 38px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }}
+                  style={{ ...inputStyle, paddingLeft: 38 }}
                 />
               </div>
 
-              {companySearch === 'found' && (
-                <div style={{ background: '#fafaf7', border: '1px solid rgba(9,32,62,0.08)', borderRadius: 8, maxHeight: 260, overflowY: 'auto', marginBottom: 12 }}>
-                  {companyResults.map((c) => (
-                    <button
-                      key={c.id} type="button"
-                      onClick={() => pickCompany(c)}
-                      style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 14px', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(9,32,62,0.06)', cursor: 'pointer' }}
-                    >
-                      <div className="font-body" style={{ fontSize: '1.53rem', color: NAVY, fontWeight: 500 }}>{c.display_name}</div>
-                      {c.headline && <div className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896' }}>{c.headline}</div>}
-                    </button>
-                  ))}
-                </div>
-              )}
+              {companySearch === 'found' && <CompanyResults results={companyResults} onPick={pickCompany} maxHeight={260} />}
 
               {/* Every other outcome says so out loud. A silent box is why this
                   read as a search that did not work. */}
               {companySearch === 'searching' && (
-                <p className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896', marginBottom: 12 }}>Searching…</p>
+                <p className="font-body" style={status}>Searching…</p>
               )}
               {companySearch === 'short' && (
-                <p className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896', marginBottom: 12 }}>Keep typing, at least two letters.</p>
+                <p className="font-body" style={status}>Keep typing, at least two letters.</p>
               )}
               {companySearch === 'error' && (
-                <p className="font-body" style={{ fontSize: '1.275rem', color: '#b3261e', marginBottom: 12 }}>
+                <p className="font-body" style={{ ...status, color: '#b3261e' }}>
                   We could not run that search. You can still add your company below.
                 </p>
               )}
               {companySearch === 'empty' && (
-                <p className="font-body" style={{ fontSize: '1.275rem', color: '#7a8896', marginBottom: 12 }}>
+                <p className="font-body" style={status}>
                   Nothing on Soccerex matches “{companyQuery}”.
                 </p>
               )}
 
               <button
                 type="button" onClick={() => setAddingNew(true)} disabled={busy}
-                className="w-full font-body font-semibold"
-                style={{ background: 'transparent', color: PURPLE, border: '1px solid rgba(107,58,168,0.35)', borderRadius: 6, padding: '12px 16px', fontSize: '1.326rem', cursor: busy ? 'wait' : 'pointer' }}
+                className="dna-btn w-full font-body font-semibold"
+                style={{ background: 'transparent', color: PURPLE, border: '1px solid rgba(107,58,168,0.35)', borderRadius: 6, padding: '12px 16px', fontSize: T.body, cursor: busy ? 'wait' : 'pointer' }}
               >
                 {companySearch === 'empty' || companySearch === 'error'
                   ? 'Add it as a new company'
@@ -790,18 +1070,18 @@ function CondensedStep(props) {
           ) : (
             <>
               <div className="flex items-baseline justify-between flex-wrap gap-2 mb-3">
-                <span className="font-body" style={{ fontSize: '1.326rem', color: '#586778' }}>Adding a new company</span>
+                <span className="font-body" style={{ fontSize: T.body, color: '#586778' }}>Adding a new company</span>
                 <button
                   type="button" onClick={() => setAddingNew(false)} disabled={busy}
                   className="font-body underline"
-                  style={{ background: 'transparent', border: 0, color: PURPLE, fontSize: '1.19rem', cursor: busy ? 'wait' : 'pointer', padding: 0 }}
+                  style={{ background: 'transparent', border: 0, color: PURPLE, fontSize: T.small, cursor: busy ? 'wait' : 'pointer', padding: 0 }}
                 >
                   Back to search
                 </button>
               </div>
               <Field label="Company name" value={companyName} onChange={setCompanyName} placeholder="ACME Marketing Group" required disabled={busy} />
               <Field label="Website" value={companyWebsite} onChange={setCompanyWebsite} placeholder="https://acme.com" type="url" disabled={busy} />
-              <div className="grid grid-cols-2 gap-3">
+              <div className="dna-row2">
                 <Field label="Country" value={companyCountry} onChange={setCompanyCountry} placeholder="United Kingdom" disabled={busy} />
                 <Field label="Industry" value={companyIndustry} onChange={setCompanyIndustry} placeholder="Sports marketing" disabled={busy} />
               </div>
@@ -814,8 +1094,8 @@ function CondensedStep(props) {
 
       <button
         type="button" onClick={onContinue} disabled={busy || ! canContinue}
-        className="w-full mt-2 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-        style={{ background: canContinue ? 'var(--color-brand-accent)' : 'rgba(9,32,62,0.18)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: canContinue && ! busy ? 'pointer' : 'not-allowed', borderRadius: 4 }}
+        className="dna-btn w-full mt-2 font-body font-semibold uppercase tracking-[0.12em]"
+        style={primaryButtonStyle(canContinue, busy)}
       >
         {busy ? <><Loader2 size={16} className="animate-spin" /> Saving</> : <>Continue <ArrowRight size={16} /></>}
       </button>
@@ -842,16 +1122,22 @@ const MM_STEPS = [
   { key: 'extra', title: 'Anything else', blurb: 'Whatever did not fit above.' },
 ]
 
+const SIDE_OPTIONS = [
+  { id: 'property', title: 'Rightsholder', sub: 'Club, federation, league, venue, agency', accent: NAVY, tintBg: 'rgba(9,32,62,0.07)' },
+  { id: 'brand', title: 'Commercial Partner', sub: 'Brand, sponsor, technology, media, agency', accent: PURPLE, tintBg: 'rgba(107,58,168,0.08)' },
+  { id: 'capital', title: 'Capital Partner / Nonprofit', sub: 'Investor, fund, family office, foundation', accent: GOLD, tintBg: 'rgba(143,129,54,0.12)' },
+]
+
 function MatchmakingProgress({ index }) {
   const pct = Math.round(((index + 1) / MM_STEPS.length) * 100)
 
   return (
     <div className="mb-6">
-      <div className="flex items-baseline justify-between mb-2">
-        <span className="font-heading font-semibold" style={{ fontSize: '1.615rem', color: NAVY }}>
+      <div className="dna-progress-head mb-2">
+        <span className="font-heading font-semibold" style={{ fontSize: '1.1875rem', color: NAVY }}>
           {MM_STEPS[index].title}
         </span>
-        <span className="font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.122rem', color: '#7a8896' }}>
+        <span className="font-mono uppercase tracking-[0.08em]" style={{ fontSize: T.label, color: '#7a8896', whiteSpace: 'nowrap' }}>
           Step {index + 1} of {MM_STEPS.length}
         </span>
       </div>
@@ -889,7 +1175,7 @@ function MatchmakingProgress({ index }) {
   )
 }
 
-function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
+function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit, prefilled = false }) {
   const toggle = (key, v) => setMm({ ...mm, [key]: mm[key].includes(v) ? mm[key].filter((x) => x !== v) : [...mm[key], v] })
   const set = (key) => (v) => setMm({ ...mm, [key]: v })
 
@@ -953,20 +1239,27 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
     || key
 
   return (
-    <div ref={topRef} style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)', scrollMarginTop: 96 }}>
+    <div ref={topRef} className="dna-card" style={{ scrollMarginTop: 96 }}>
       {/* Correcting who you are applying as needs a backend route: the magic-link
           token is consumed by the claim that got you here, so re-claiming from
           this screen always fails with invalid_or_expired. The control is out
           until switching is supported properly. */}
-      <div className="flex items-center gap-2 mb-4 p-3 rounded-lg flex-wrap" style={{ background: 'rgba(107,58,168,0.08)', border: '1px solid rgba(107,58,168,0.2)' }}>
-        <Sparkles size={16} color={PURPLE} />
-        <span className="font-body" style={{ fontSize: '1.445rem', color: NAVY }}>
+      <div className="flex items-start gap-2.5 mb-4 p-3 rounded-lg" style={{ background: 'rgba(107,58,168,0.08)', border: '1px solid rgba(107,58,168,0.2)' }}>
+        <Sparkles size={16} color={PURPLE} style={{ flexShrink: 0, marginTop: 3 }} />
+        <span className="font-body" style={{ fontSize: T.body, color: NAVY, lineHeight: 1.45 }}>
           Applying as <strong>{person?.display_name}</strong> at <strong>{company?.display_name}</strong>
         </span>
       </div>
 
-      <h2 className="font-heading font-bold mb-2" style={{ fontSize: '2.04rem', color: NAVY }}>Deal Network intake</h2>
-      <p className="font-body mb-5" style={{ fontSize: '1.53rem', color: '#586778', lineHeight: 1.55 }}>
+      {prefilled && (
+        <p className="font-body" style={{ fontSize: T.small, color: '#0f766e', background: '#e6fbf6', border: '1px solid rgba(15,118,110,0.25)', borderRadius: 8, padding: '10px 14px', marginBottom: 16, lineHeight: 1.5 }}>
+          We filled these in from {company?.display_name ? <strong>{company.display_name}</strong> : 'your company'}'s
+          last application. Change anything that is out of date.
+        </p>
+      )}
+
+      <h2 className="font-heading font-bold mb-2" style={{ fontSize: T.title, color: NAVY, lineHeight: 1.25 }}>Deal Network intake</h2>
+      <p className="font-body mb-5" style={{ fontSize: T.lead, color: '#586778', lineHeight: 1.55 }}>
         {MM_STEPS[index].blurb}
       </p>
 
@@ -974,32 +1267,31 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
 
       {index === 0 && (
         <>
-          {/* Side selector — drives which tailored form renders on every screen below. */}
-          <div className="mb-6">
+          {/* Side selector: drives which tailored form renders on every screen below.
+              One card per row. Three across put "Commercial Partner" in a 120px box
+              it could not fit. */}
+          <div className="mb-5">
             <Label>Which best describes you?</Label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {[
-                { id: 'property', title: 'Rightsholder', sub: 'Club, federation, league, venue, agency', accent: NAVY, tintBg: 'rgba(9,32,62,0.07)' },
-                { id: 'brand', title: 'Commercial Partner', sub: 'Brand, sponsor, technology, media, agency', accent: PURPLE, tintBg: 'rgba(107,58,168,0.08)' },
-                { id: 'capital', title: 'Capital Partner / Nonprofit', sub: 'Investor, fund, family office, foundation', accent: GOLD, tintBg: 'rgba(143,129,54,0.12)' },
-              ].map((opt) => {
+            <div className="dna-sides" role="radiogroup" aria-label="Which best describes you?">
+              {SIDE_OPTIONS.map((opt) => {
                 const active = mm.side === opt.id
                 return (
                   <button
                     key={opt.id} type="button" onClick={() => setSide(opt.id)}
-                    style={{ textAlign: 'left', background: active ? opt.tintBg : '#f8f7f4', border: '1.5px solid ' + (active ? opt.accent : 'rgba(9,32,62,0.12)'), borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
+                    role="radio" aria-checked={active}
+                    style={{ width: '100%', textAlign: 'left', background: active ? opt.tintBg : '#f8f7f4', border: '1.5px solid ' + (active ? opt.accent : 'rgba(9,32,62,0.12)'), borderRadius: 10, padding: '11px 14px', cursor: 'pointer' }}
                   >
-                    <div className="font-heading font-semibold" style={{ fontSize: '1.615rem', color: active ? opt.accent : NAVY }}>{opt.title}</div>
-                    <div className="font-body" style={{ fontSize: '1.224rem', color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{opt.sub}</div>
+                    <div className="font-heading font-semibold" style={{ fontSize: T.lead, color: active ? opt.accent : NAVY, lineHeight: 1.3 }}>{opt.title}</div>
+                    <div className="font-body" style={{ fontSize: T.small, color: '#7a8896', marginTop: 2, lineHeight: 1.4 }}>{opt.sub}</div>
                   </button>
                 )
               })}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="dna-row2">
             <Field label="Website" value={mm.website} onChange={set('website')} placeholder="https://yourcompany.com" type="url" disabled={busy} />
-            <Field label="Phone / WhatsApp" value={mm.phone} onChange={set('phone')} placeholder="+1 305 555 0100" disabled={busy} />
+            <Field label="Phone / WhatsApp" value={mm.phone} onChange={set('phone')} placeholder="+1 305 555 0100" type="tel" disabled={busy} />
           </div>
           <div className="mb-4">
             <Label>Will the decision-maker attend Miami?</Label>
@@ -1042,7 +1334,7 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
 
       {index === 2 && (
         <>
-          <Field label={form.pitchLabel} value={mm.pitch} onChange={set('pitch')} placeholder={form.pitchPlaceholder} disabled={busy} textarea />
+          <Field label={form.pitchLabel} value={mm.pitch} onChange={set('pitch')} placeholder={form.pitchPlaceholder} disabled={busy} textarea rows={4} />
 
           <div className="mb-4">
             <Label>{form.lookingForLabel || 'What are you looking for? (select all that apply)'}</Label>
@@ -1088,15 +1380,15 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           <div ref={targetsRef} style={{ scrollMarginTop: 96 }}>
             <Field label="Named targets (optional: specific clubs, leagues, federations, or companies, one per line)" value={mm.named_targets} onChange={set('named_targets')} placeholder={'Atlanta United\nLA Galaxy\nFC Cincinnati'} disabled={busy} textarea />
             {targetsProblem && (
-              <p className="font-body" style={{ fontSize: '1.275rem', color: '#b3261e', marginTop: -6, marginBottom: 14, lineHeight: 1.45 }}>
+              <p className="font-body" style={{ fontSize: T.small, color: '#b3261e', marginTop: -6, marginBottom: 14, lineHeight: 1.45 }}>
                 {targetsProblem}
               </p>
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="dna-row2">
             <SelectField label={form.budgetLabel} value={mm.budget_range} onChange={set('budget_range')} options={[...form.budgets, 'Other']} disabled={busy} />
-            <Field label="Decision timeline (optional)" value={mm.decision_timeline} onChange={set('decision_timeline')} placeholder="Q3 2026, before Miami, etc." disabled={busy} />
+            <Field label="Decision timeline (optional)" value={mm.decision_timeline} onChange={set('decision_timeline')} placeholder="Q3 2026, before Miami" disabled={busy} />
           </div>
           {mm.budget_range === 'Other' && (
             <Field label={`${form.budgetLabel} (other)`} value={mm.budget_other} onChange={set('budget_other')} placeholder="Type it in" disabled={busy} />
@@ -1105,7 +1397,7 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           {isCapital && (
             <>
               <SelectField label="Primary geography of investment interest" value={mm.investment_geography} onChange={set('investment_geography')} options={INTAKE_REGIONS} disabled={busy} />
-              <Field label="Leagues or competitions of interest (optional)" value={mm.leagues_interest} onChange={set('leagues_interest')} placeholder="e.g., MLS, Liga MX, Championship, Brasileirão" disabled={busy} />
+              <Field label="Leagues or competitions of interest (optional)" value={mm.leagues_interest} onChange={set('leagues_interest')} placeholder="e.g., MLS, Liga MX, Championship" disabled={busy} />
             </>
           )}
         </>
@@ -1118,18 +1410,20 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
           placeholder={isCapital
             ? "Context that doesn't fit above: prior deal attempts, specific constraints, ESG mandates, fund cycle timing, etc."
             : "Context that doesn't fit above: prior deal attempts, specific constraints, preferences, etc."}
-          disabled={busy} textarea
+          disabled={busy} textarea rows={5}
         />
       )}
 
       {/* Back sits beside Next rather than under it, so the primary action keeps
-          the same place on every screen and never moves under your thumb. */}
-      <div className="flex items-center gap-3 mt-6">
+          the same place on every screen and never moves under your thumb. Next
+          takes the remaining width and wraps its own label on a phone rather
+          than pushing past the card. */}
+      <div className="dna-nav">
         {index > 0 && (
           <button
             type="button" onClick={() => go(index - 1)} disabled={busy}
-            className="font-body font-semibold uppercase tracking-[0.15em]"
-            style={{ background: 'transparent', color: NAVY, padding: '15px 20px', fontSize: '1.326rem', border: '1px solid rgba(9,32,62,0.18)', borderRadius: 4, cursor: busy ? 'wait' : 'pointer' }}
+            className="dna-btn dna-back font-body font-semibold uppercase tracking-[0.1em]"
+            style={{ background: 'transparent', color: NAVY, padding: '14px 16px', fontSize: T.button, border: '1px solid rgba(9,32,62,0.18)', borderRadius: 4, cursor: busy ? 'wait' : 'pointer' }}
           >
             Back
           </button>
@@ -1138,40 +1432,48 @@ function MatchmakingStep({ person, company, mm, setMm, busy, onSubmit }) {
         {index < last ? (
           <button
             type="button" onClick={() => go(index + 1)} disabled={busy}
-            className="flex-1 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-            style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
+            className="dna-btn dna-next font-body font-semibold uppercase tracking-[0.12em]"
+            style={primaryButtonStyle(true, busy)}
           >
             Continue <ArrowRight size={16} />
           </button>
         ) : (
           <button
             type="button" onClick={submit} disabled={busy}
-            className="flex-1 inline-flex items-center justify-center gap-2 font-body font-semibold uppercase tracking-[0.15em]"
-            style={{ background: 'var(--color-brand-accent)', color: NAVY, padding: '15px 24px', fontSize: '1.394rem', border: 'none', cursor: busy ? 'wait' : 'pointer', borderRadius: 4 }}
+            className="dna-btn dna-next font-body font-semibold uppercase tracking-[0.12em]"
+            style={primaryButtonStyle(true, busy)}
           >
             {busy ? <><Loader2 size={16} className="animate-spin" /> Submitting</> : <>Submit application <ArrowRight size={16} /></>}
           </button>
         )}
       </div>
 
-      <p className="font-body mt-3" style={{ fontSize: '1.19rem', color: '#7a8896', lineHeight: 1.5 }}>
+      <p className="font-body mt-3" style={{ fontSize: T.small, color: '#7a8896', lineHeight: 1.5 }}>
         Every question is optional except the ones marked. You can go back at any point without losing an answer.
       </p>
     </div>
   )
 }
+
 function SelectField({ label, value, onChange, options, disabled }) {
+  const id = useId()
   return (
     <div style={{ marginBottom: 14 }}>
-      <Label>{label}</Label>
-      <select value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}
-        style={{ width: '100%', padding: '10px 12px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY }}>
+      <Label htmlFor={id}>{label}</Label>
+      <select id={id} value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}
+        style={{ ...inputStyle, paddingRight: 8, textOverflow: 'ellipsis' }}>
         <option value="">Choose one</option>
         {options.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
     </div>
   )
 }
+
+const chipStyle = (active) => ({
+  background: active ? NAVY : '#f8f7f4', color: active ? '#fff' : NAVY,
+  border: '1px solid ' + (active ? NAVY : 'rgba(9,32,62,0.12)'), borderRadius: 999,
+  padding: '6px 12px', fontSize: T.chip, lineHeight: 1.35, cursor: 'pointer', textAlign: 'left', maxWidth: '100%',
+})
 
 /* Chips whose VALUES are taxonomy keys but whose labels vary per side. */
 function KeyedChips({ options, value, onToggle }) {
@@ -1180,8 +1482,7 @@ function KeyedChips({ options, value, onToggle }) {
       {options.map(([key, label]) => {
         const active = value.includes(key)
         return (
-          <button key={key} type="button" onClick={() => onToggle(key)}
-            style={{ background: active ? NAVY : '#f8f7f4', color: active ? '#fff' : NAVY, border: '1px solid ' + (active ? NAVY : 'rgba(9,32,62,0.12)'), borderRadius: 999, padding: '6px 12px', fontSize: '1.326rem', cursor: 'pointer' }}>
+          <button key={key} type="button" onClick={() => onToggle(key)} aria-pressed={active} style={chipStyle(active)}>
             {label}
           </button>
         )
@@ -1197,12 +1498,13 @@ function OtherInline({ value, onChange, disabled }) {
       type="text" value={value} disabled={disabled}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Other (type in)"
-      style={{ width: '100%', marginTop: 8, padding: '8px 12px', fontSize: '1.445rem', background: '#fcfbf9', border: '1px dashed rgba(9,32,62,0.18)', borderRadius: 6, color: NAVY, outline: 'none' }}
+      aria-label="Other (type in)"
+      style={{ ...inputStyle, marginTop: 8, padding: '9px 12px', background: '#fcfbf9', border: '1px dashed rgba(9,32,62,0.18)' }}
     />
   )
 }
 
-function DoneStep({ person, email, testMode }) {
+function DoneStep({ person, email, testMode, emailVerified = true }) {
   const [portalRequested, setPortalRequested] = useState(false)
   const [portalBusy, setPortalBusy] = useState(false)
 
@@ -1219,33 +1521,39 @@ function DoneStep({ person, email, testMode }) {
   }
 
   return (
-    <div style={{ background: '#fff', borderRadius: 16, padding: 'clamp(28px,4vw,40px)', boxShadow: '0 30px 80px rgba(0,0,0,0.45)', textAlign: 'center' }}>
+    <div className="dna-card" style={{ textAlign: 'center' }}>
       <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg, var(--color-brand-accent), #d4c78e)', display: 'grid', placeItems: 'center', margin: '0 auto 20px', boxShadow: '0 20px 60px rgba(191,177,112,0.45)' }}>
         <CheckCircle2 size={36} color={NAVY} />
       </div>
-      <h2 className="font-heading font-bold mb-3" style={{ fontSize: '2.72rem', color: NAVY }}>You're in</h2>
-      <p className="font-body mb-2" style={{ fontSize: '1.7rem', color: '#586778', lineHeight: 1.6 }}>
+      <h2 className="font-heading font-bold mb-3" style={{ fontSize: '2rem', color: NAVY, lineHeight: 1.2 }}>You're in</h2>
+      <p className="font-body mb-2" style={{ fontSize: T.lead, color: '#586778', lineHeight: 1.6 }}>
         Thanks <strong>{person?.display_name}</strong>. The Soccerex team will review your application and reach out with proposed introductions.
       </p>
-      <p className="font-body" style={{ fontSize: '1.445rem', color: '#9aa6b3' }}>
+      <p className="font-body" style={{ fontSize: T.body, color: '#7a8896' }}>
         Expect to hear back within two business days.
       </p>
+      {! emailVerified && (
+        <p className="font-body" style={{ fontSize: T.small, color: '#7a5b00', background: '#fdf6e3', border: '1px solid rgba(180,140,20,0.3)', borderRadius: 8, padding: '10px 14px', marginTop: 16, lineHeight: 1.5, textAlign: 'left' }}>
+          When our confirmation email reaches you, click the link in it to confirm your address. Your
+          application is already with the team either way.
+        </p>
+      )}
 
-      {/* Profile continuity: the application lives on their Soccerex profile —
-          hand them the door to it instead of a dead end. */}
+      {/* Profile continuity: the application lives on their Soccerex profile,
+          so hand them the door to it instead of a dead end. */}
       <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(9,32,62,0.08)', textAlign: 'left' }}>
-        <p className="font-mono uppercase tracking-[0.16em]" style={{ fontSize: '1.054rem', color: PURPLE, fontWeight: 700, marginBottom: 6 }}>Your Soccerex profile</p>
-        <p className="font-body" style={{ fontSize: '1.53rem', color: '#586778', lineHeight: 1.6, marginBottom: 12 }}>
+        <h3 className="font-heading font-semibold" style={{ fontSize: '1.25rem', color: NAVY, marginBottom: 6, lineHeight: 1.3 }}>Your Soccerex profile</h3>
+        <p className="font-body" style={{ fontSize: T.body, color: '#586778', lineHeight: 1.6, marginBottom: 12 }}>
           This application is saved to <strong>{person?.display_name}</strong>'s Soccerex profile. Your portal keeps everything in one place: Deal Network requests and meetings, event access, speaking, and your profile details.
         </p>
         {portalRequested ? (
-          <p className="font-body" style={{ fontSize: '1.496rem', color: '#166534' }}>
+          <p className="font-body" style={{ fontSize: T.body, color: '#166534' }}>
             ✓ Check your inbox. We emailed you a secure link to your Soccerex portal.
           </p>
         ) : (
           <button type="button" onClick={requestPortalLink} disabled={portalBusy}
-            className="inline-flex items-center gap-2 font-body font-semibold uppercase tracking-[0.12em]"
-            style={{ background: NAVY, color: '#fff', padding: '11px 18px', fontSize: '1.224rem', border: 'none', borderRadius: 6, cursor: portalBusy ? 'wait' : 'pointer' }}>
+            className="dna-btn font-body font-semibold uppercase tracking-[0.1em]"
+            style={{ background: NAVY, color: '#fff', padding: '11px 18px', fontSize: T.small, border: 'none', borderRadius: 6, cursor: portalBusy ? 'wait' : 'pointer' }}>
             {portalBusy ? <><Loader2 size={14} className="animate-spin" /> Sending</> : <>Open my Soccerex portal <ArrowRight size={14} /></>}
           </button>
         )}
@@ -1254,26 +1562,29 @@ function DoneStep({ person, email, testMode }) {
   )
 }
 
-function Field({ label, value, onChange, placeholder, type = 'text', required, textarea, disabled }) {
+function Field({ label, value, onChange, placeholder, type = 'text', required, textarea, disabled, rows = 3 }) {
+  const id = useId()
   return (
     <div style={{ marginBottom: 14 }}>
-      <label className="block font-mono uppercase tracking-[0.1em]" style={{ fontSize: '1.122rem', color: NAVY, fontWeight: 600, marginBottom: 6 }}>
+      <Label htmlFor={id}>
         {label}{required && <span style={{ color: 'var(--color-brand-accent)', marginLeft: 4 }}>*</span>}
-      </label>
+      </Label>
       {textarea ? (
-        <textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} disabled={disabled} rows={3}
-          style={{ width: '100%', padding: '10px 12px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none', resize: 'vertical' }} />
+        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} disabled={disabled} rows={rows}
+          style={{ ...inputStyle, resize: 'vertical' }} />
       ) : (
-        <input type={type} required={required} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} disabled={disabled}
-          style={{ width: '100%', padding: '10px 12px', fontSize: '1.53rem', background: '#f8f7f4', border: '1px solid rgba(9,32,62,0.12)', borderRadius: 6, color: NAVY, outline: 'none' }} />
+        <input id={id} type={type} required={required} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} disabled={disabled}
+          style={inputStyle} />
       )}
     </div>
   )
 }
 
-function Label({ children }) {
+/* Field labels: mono uppercase, sized for the card so a long question wraps to
+   two lines on a phone instead of five. */
+function Label({ children, htmlFor }) {
   return (
-    <label className="block font-mono uppercase tracking-[0.1em] mb-2" style={{ fontSize: '1.122rem', color: NAVY, fontWeight: 600 }}>{children}</label>
+    <label htmlFor={htmlFor} className="block font-mono uppercase tracking-[0.06em] mb-2" style={{ fontSize: T.label, color: NAVY, fontWeight: 600, lineHeight: 1.45 }}>{children}</label>
   )
 }
 
@@ -1283,8 +1594,7 @@ function ChipGroup({ options, value, onToggle }) {
       {options.map((o) => {
         const active = value.includes(o)
         return (
-          <button key={o} type="button" onClick={() => onToggle(o)}
-            style={{ background: active ? NAVY : '#f8f7f4', color: active ? '#fff' : NAVY, border: '1px solid ' + (active ? NAVY : 'rgba(9,32,62,0.12)'), borderRadius: 999, padding: '6px 12px', fontSize: '1.326rem', cursor: 'pointer' }}>
+          <button key={o} type="button" onClick={() => onToggle(o)} aria-pressed={active} style={chipStyle(active)}>
             {o}
           </button>
         )

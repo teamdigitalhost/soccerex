@@ -308,6 +308,20 @@ export async function dealNetworkApplyStartAssisted(email, key, opts = {}) {
   return unwrap(payload)
 }
 
+/**
+ * Continue without confirming: for applicants whose company mail filter holds the
+ * confirmation email. Only works for an address that went through start in the
+ * last day. Returns { token }, a short-lived token that never reveals existing
+ * profile data, so the applicant types their own details.
+ */
+export async function dealNetworkApplyStartUnverified(email, opts = {}) {
+  return unwrap(await request('/deal-network/apply/start-unverified', {
+    method: 'POST',
+    body: { ...campaignAttributionPayload(opts.attribution), email },
+    test: opts.test,
+  }))
+}
+
 export async function dealNetworkApplyPreview(token, opts = {}) {
   return unwrap(await request('/deal-network/apply/preview', {
     method: 'POST',
