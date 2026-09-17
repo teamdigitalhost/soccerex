@@ -573,7 +573,7 @@ export default function DealNetworkApply() {
           <div className="flex justify-center mb-6">
             <img src="/brand/crests/crest-main-white.svg" alt="Soccerex" style={{ height: 56 }} />
           </div>
-          <h1 className="font-heading font-bold text-white text-center mb-6" style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', lineHeight: 1.2, overflowWrap: 'anywhere' }}>
+          <h1 className="font-heading font-bold text-white text-center mb-6" style={{ fontSize: 'clamp(1.6rem, 3vw, 2rem)', lineHeight: 1.2, overflowWrap: 'anywhere', textWrap: 'balance' }}>
             Apply to join the Soccerex Deal Network
           </h1>
 
