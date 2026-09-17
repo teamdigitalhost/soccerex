@@ -29,6 +29,14 @@
   to = "/sitemap.xml"
   status = 200
 
+# Old "Book your stay" links (print, email, the previous site) land on the accommodations page.
+# 301: the move is permanent, so browsers and search engines can update the link.
+[[redirects]]
+  from = "/book-your-stay"
+  to = "/accommodations"
+  status = 301
+  force = true
+
 # /portal forwards to the Eventify event portal for the current event (Miami 2026).
 # 302 on purpose: the target changes each event cycle, keep browsers/crawlers re-checking.
 [[redirects]]
