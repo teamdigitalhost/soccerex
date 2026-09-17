@@ -77,11 +77,22 @@ export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
 // excluded from the sitemap, served noindex. Delete this line to retire it.
 export const MIAMI_2026_V2   = `${MIAMI_2026}/v2`
 
-// The welcome night invitation and its reply form, September 23 at the Savoy.
-// Sent to guests by email, so it stays out of the sitemap and out of search.
-export const MIAMI_2026_RSVP = `${MIAMI_2026}/rsvp`
-// Short path for the email button and anything printed.
-export const RSVP = '/rsvp'
+/* Invitations to the evenings around an event: the VIP night, the social
+   evening, whatever a future event runs. One page serves all of them, so the
+   URL names both the event and the evening. Sent to guests by email, so these
+   stay out of the sitemap and out of search.
+
+   The Miami alias exists because a link in an invitation should read like the
+   event it belongs to. */
+const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
+export const EVENT_RSVP_PATTERN = '/events/:eventSlug/rsvp/:occasion'
+export const MIAMI_2026_RSVP_PATTERN = `${MIAMI_2026}/rsvp/:occasion`
+export const eventRsvp = (eventSlug, occasion) =>
+  eventSlug === MIAMI_EVENT_SLUG
+    ? `${MIAMI_2026}/rsvp/${occasion}`
+    : `/events/${eventSlug}/rsvp/${occasion}`
+// The evening before Miami opens, at the Savoy.
+export const MIAMI_2026_VIP_NIGHT = `${MIAMI_2026}/rsvp/vip-night`
 
 // Evergreen, top-level travel + accommodations page (partner-hotel booking
 // links). One live event at a time, so this holds the current event's hotels

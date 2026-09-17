@@ -1,30 +1,22 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Calendar, Clock, MapPin, Car, Check, Loader2 } from 'lucide-react'
 import PageMeta from '../components/PageMeta'
-import { submitEventRsvp } from '../lib/soccerexApi'
-import { MIAMI_2026, MIAMI_2026_RSVP } from '../lib/routes'
+import { getEventRsvpInvitation, submitEventRsvp } from '../lib/soccerexApi'
+import { MIAMI_2026, eventRsvp } from '../lib/routes'
 
 /*
- * The welcome night invitation and its reply form. Reached from an email to VIP
- * guests, so it answers the four things an invitation has to answer before it
- * asks for anything: what, when, where, and how to get there.
+ * One invitation, one reply form, for any evening around any event: the VIP
+ * welcome night, the social evening, whatever a future event runs. The copy,
+ * the times and the venue come from the invitation record, so a new evening is
+ * a row in the admin rather than a new page here.
  *
- * Name and email are all anyone has to give. Company and job title help the team
- * work the room, and a guest who skips them is on the list all the same.
+ * It answers what, when, where and how to arrive before it asks for anything,
+ * then asks for as little as it can. Name and email are all anyone has to give.
  */
 
-const EVENT_SLUG = 'soccerex-miami-2026'
-const HERO = '/events/miami/2026/sections/miami-night.jpg'
-
-const DETAILS = [
-  { icon: Calendar, label: 'Date', value: 'Wednesday, September 23, 2026' },
-  { icon: Clock, label: 'Time', value: '7:00 PM to 10:00 PM' },
-  { icon: MapPin, label: 'Where', value: 'Savoy Hotel and Beach Club, Miami Beach' },
-  { icon: Car, label: 'Getting there', value: 'Parking at the hotel is limited. A ride share is the easier arrival.' },
-]
-
 const NAVY = '#0D1B2A'
+const FALLBACK_HERO = '/events/miami/2026/sections/miami-night.jpg'
 
 function Field({ label, value, onChange, type = 'text', required = false, placeholder, disabled, autoComplete }) {
   return (
@@ -52,7 +44,14 @@ function Field({ label, value, onChange, type = 'text', required = false, placeh
   )
 }
 
-export default function MiamiWelcomeNight() {
+export default function EventRsvp({ eventSlug: eventSlugProp, occasion: occasionProp }) {
+  const params = useParams()
+  const eventSlug = eventSlugProp || params.eventSlug
+  const occasion = occasionProp || params.occasion
+
+  const [invitation, setInvitation] = useState(null)
+  const [loadFailed, setLoadFailed] = useState(false)
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [company, setCompany] = useState('')
@@ -63,6 +62,16 @@ export default function MiamiWelcomeNight() {
   const [done, setDone] = useState(null)
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    setInvitation(null); setLoadFailed(false)
+    getEventRsvpInvitation(eventSlug, occasion)
+      .then((data) => { if (!cancelled) setInvitation(data) })
+      .catch(() => { if (!cancelled) setLoadFailed(true) })
+
+    return () => { cancelled = true }
+  }, [eventSlug, occasion])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -77,7 +86,7 @@ export default function MiamiWelcomeNight() {
 
     setBusy(true); setError('')
     try {
-      await submitEventRsvp(EVENT_SLUG, {
+      await submitEventRsvp(eventSlug, occasion, {
         name: cleanName,
         email: cleanEmail,
         company: company.trim() || undefined,
@@ -92,35 +101,67 @@ export default function MiamiWelcomeNight() {
     }
   }
 
+  if (loadFailed) {
+    return (
+      <div className="event-page theme-miami" style={{ background: '#FFF8F4', minHeight: '70vh', display: 'grid', placeItems: 'center', padding: '80px 24px' }}>
+        <div style={{ maxWidth: 520, textAlign: 'center' }}>
+          <h1 className="miami-headline" style={{ fontSize: 'clamp(1.6rem,3vw,2.2rem)', color: NAVY, marginBottom: 14 }}>
+            We could not find that invitation
+          </h1>
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
+            The link may have changed since it was sent. Reply to the email that brought you here and
+            the Soccerex team will send a current one.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!invitation) {
+    return <div style={{ minHeight: '70vh', background: '#FFF8F4' }} />
+  }
+
+  const details = [
+    invitation.date_label && { icon: Calendar, label: 'Date', value: invitation.date_label },
+    invitation.time_label && { icon: Clock, label: 'Time', value: invitation.time_label },
+    invitation.venue && { icon: MapPin, label: 'Where', value: invitation.venue },
+    invitation.travel_note && { icon: Car, label: 'Getting there', value: invitation.travel_note },
+  ].filter(Boolean)
+
+  const eventName = invitation.event?.name || 'Soccerex'
+  const backTo = invitation.event?.slug === 'soccerex-miami-2026' ? MIAMI_2026 : null
+
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4', minHeight: '100vh' }}>
       <PageMeta
-        title="Soccerex Miami Welcome Night | September 23 at the Savoy"
-        description="The night before Soccerex Miami 2026 opens: drinks on the sand at the Savoy Hotel and Beach Club, Miami Beach, from 7:00 PM. Places are limited, so please reply."
-        path={MIAMI_2026_RSVP}
+        title={`${invitation.name} | ${eventName}`}
+        description={invitation.lede || `An invitation to the ${invitation.name} at ${eventName}.`}
+        path={eventRsvp(eventSlug, occasion)}
         noindex
       />
 
-      {/* ─── INVITATION ──────────────────────────────────────────────────── */}
+      {/* ─── THE INVITATION ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: NAVY }}>
-        <img src={HERO} alt="" aria-hidden
+        <img src={invitation.hero_path || FALLBACK_HERO} alt="" aria-hidden
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', opacity: 0.45 }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,27,42,0.72) 0%, rgba(13,27,42,0.6) 40%, rgba(13,27,42,0.94) 100%)' }} />
 
         <div className="relative z-10" style={{ maxWidth: 1100, margin: '0 auto', padding: 'clamp(70px,10vw,110px) clamp(24px,5vw,72px) clamp(48px,7vw,80px)' }}>
-          <Link to={MIAMI_2026} className="inline-flex items-center gap-2 font-mono uppercase" style={{ color: 'rgba(255,255,255,0.88)', fontSize: 11, letterSpacing: '0.2em', textDecoration: 'none', marginBottom: 28 }}>
-            <ArrowLeft size={14} /> Soccerex Miami 2026
-          </Link>
+          {backTo && (
+            <Link to={backTo} className="inline-flex items-center gap-2 font-mono uppercase" style={{ color: 'rgba(255,255,255,0.88)', fontSize: 11, letterSpacing: '0.2em', textDecoration: 'none', marginBottom: 28 }}>
+              <ArrowLeft size={14} /> {eventName}
+            </Link>
+          )}
 
           <h1 className="miami-headline" style={{ fontSize: 'clamp(2rem, 5vw, 3.4rem)', color: '#FFFFFF', lineHeight: 1.08, maxWidth: 900, textWrap: 'balance' }}>
-            Start Miami on the Sand,<br />
-            <span className="miami-text-gradient">the Night Before It All Begins</span>
+            {invitation.headline || invitation.name}
           </h1>
 
-          <p className="miami-body" style={{ fontSize: 'clamp(1rem, 1.6vw, 1.15rem)', color: 'rgba(255,255,255,0.86)', maxWidth: 680, lineHeight: 1.65, marginTop: 22 }}>
-            You are invited to the Soccerex Miami welcome night at the Savoy Hotel and Beach Club.
-            An evening with the people you came to meet, before a single session starts.
-          </p>
+          {invitation.lede && (
+            <p className="miami-body" style={{ fontSize: 'clamp(1rem, 1.6vw, 1.15rem)', color: 'rgba(255,255,255,0.86)', maxWidth: 680, lineHeight: 1.65, marginTop: 22 }}>
+              {invitation.lede}
+            </p>
+          )}
         </div>
       </section>
 
@@ -129,28 +170,28 @@ export default function MiamiWelcomeNight() {
         <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'minmax(0,1fr)' }} className="rsvp-grid">
           <div>
             <dl style={{ display: 'grid', gap: 18, margin: 0 }}>
-              {DETAILS.map((detail) => {
+              {details.map((detail) => {
                 const Icon = detail.icon
-                const { label, value } = detail
 
                 return (
-                <div key={label} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                  <span style={{ width: 38, height: 38, flexShrink: 0, background: 'rgba(0,124,145,0.09)', border: '1px solid rgba(0,124,145,0.22)', display: 'grid', placeItems: 'center', borderRadius: 8 }}>
-                    <Icon size={17} style={{ color: '#007C91' }} />
-                  </span>
-                  <span>
-                    <dt className="font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.16em', color: '#607186', marginBottom: 3 }}>{label}</dt>
-                    <dd className="miami-body" style={{ fontSize: '1rem', color: NAVY, margin: 0, lineHeight: 1.5 }}>{value}</dd>
-                  </span>
-                </div>
+                  <div key={detail.label} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                    <span style={{ width: 38, height: 38, flexShrink: 0, background: 'rgba(0,124,145,0.09)', border: '1px solid rgba(0,124,145,0.22)', display: 'grid', placeItems: 'center', borderRadius: 8 }}>
+                      <Icon size={17} style={{ color: '#007C91' }} />
+                    </span>
+                    <span>
+                      <dt className="font-mono uppercase" style={{ fontSize: 10, letterSpacing: '0.16em', color: '#607186', marginBottom: 3 }}>{detail.label}</dt>
+                      <dd className="miami-body" style={{ fontSize: '1rem', color: NAVY, margin: 0, lineHeight: 1.5 }}>{detail.value}</dd>
+                    </span>
+                  </div>
                 )
               })}
             </dl>
 
-            <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.65, marginTop: 28, maxWidth: 520 }}>
-              The beach club holds a set number of people, and places are confirmed in the order
-              replies come in. Let us know you are coming and we will hold yours.
-            </p>
+            {invitation.blurb && (
+              <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.65, marginTop: 28, maxWidth: 520 }}>
+                {invitation.blurb}
+              </p>
+            )}
           </div>
 
           {/* The reply */}
@@ -165,12 +206,23 @@ export default function MiamiWelcomeNight() {
                 </h2>
                 <p className="miami-body" style={{ fontSize: '0.98rem', color: '#3a4a5a', lineHeight: 1.6 }}>
                   We have your reply at <span style={{ color: NAVY, fontWeight: 600 }}>{done.email}</span>.
-                  It is the Savoy Hotel and Beach Club on Wednesday, September 23, from 7:00 PM.
-                  Bring a colleague's name to the door and we will do what we can.
+                  {invitation.venue ? ` It is ${invitation.venue}` : ''}
+                  {invitation.date_label ? ` on ${invitation.date_label.replace(/^[A-Za-z]+day, /, '')}` : ''}
+                  {invitation.time_label ? `, from ${invitation.time_label.split(' to ')[0]}` : ''}.
                 </p>
-                <Link to={MIAMI_2026} className="inline-flex items-center gap-2 font-body font-semibold uppercase" style={{ marginTop: 22, fontSize: 12, letterSpacing: '0.14em', color: '#007C91', textDecoration: 'none' }}>
-                  See what else is on <ArrowRight size={14} />
-                </Link>
+                {backTo && (
+                  <Link to={backTo} className="inline-flex items-center gap-2 font-body font-semibold uppercase" style={{ marginTop: 22, fontSize: 12, letterSpacing: '0.14em', color: '#007C91', textDecoration: 'none' }}>
+                    See what else is on <ArrowRight size={14} />
+                  </Link>
+                )}
+              </div>
+            ) : invitation.is_open === false ? (
+              <div>
+                <h2 className="miami-headline" style={{ fontSize: '1.4rem', color: NAVY, marginBottom: 10 }}>Replies are closed</h2>
+                <p className="miami-body" style={{ fontSize: '0.98rem', color: '#3a4a5a', lineHeight: 1.6 }}>
+                  This one has reached the room's capacity. Reply to the email that brought you here
+                  and the Soccerex team will tell you where things stand.
+                </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate>

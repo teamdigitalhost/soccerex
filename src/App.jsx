@@ -15,7 +15,7 @@ import {
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
-  ROUTE_PATTERNS, MIAMI_2026_V2, MIAMI_2026_RSVP, RSVP } from './lib/routes'
+  ROUTE_PATTERNS, MIAMI_2026_V2, EVENT_RSVP_PATTERN, MIAMI_2026_RSVP_PATTERN, MIAMI_2026_VIP_NIGHT } from './lib/routes'
 
 /* Map pathname to a theme class. Applied at app root so the navbar
    and footer (which sit outside the page component) pick up the
@@ -87,7 +87,7 @@ const PastSpeakers = lazy(() => import('./pages/PastSpeakers'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
 const Miami2026V2 = lazy(() => import('./pages/Miami2026V2'))
-const MiamiWelcomeNight = lazy(() => import('./pages/MiamiWelcomeNight'))
+const EventRsvp = lazy(() => import('./pages/EventRsvp'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
 const MiamiAccommodations = lazy(() => import('./pages/MiamiAccommodations'))
 const Sponsor = lazy(() => import('./pages/Sponsor'))
@@ -151,9 +151,13 @@ function App() {
       <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050d1a' }} />}>
         <Routes>
           <Route path={MIAMI_2026_V2} element={<Miami2026V2 />} />
-          {/* Welcome night invitation, sent by email. /rsvp is the short form for the button. */}
-          <Route path={MIAMI_2026_RSVP} element={<MiamiWelcomeNight />} />
-          <Route path={RSVP} element={<Navigate to={MIAMI_2026_RSVP} replace />} />
+          {/* Invitations to the evenings around an event, sent by email. The Miami
+              alias reads like the event; the canonical path works for any event.
+              The bare paths forward to the VIP night, which is where the first links pointed. */}
+          <Route path={MIAMI_2026_RSVP_PATTERN} element={<EventRsvp eventSlug="soccerex-miami-2026" />} />
+          <Route path={EVENT_RSVP_PATTERN} element={<EventRsvp />} />
+          <Route path={`${MIAMI_2026}/rsvp`} element={<Navigate to={MIAMI_2026_VIP_NIGHT} replace />} />
+          <Route path="/rsvp" element={<Navigate to={MIAMI_2026_VIP_NIGHT} replace />} />
           <Route path={HOME} element={<Home />} />
           <Route path={ABOUT} element={<About />} />
           <Route path={GLOBAL_NETWORK} element={<GlobalNetwork />} />
