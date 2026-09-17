@@ -27,11 +27,12 @@ const GFX = '/events/miami/2026/graphics'
 const ICN = '/events/miami/2026/icons'
 const V2  = '/events/miami/2026/v2'
 
-// The four partners announced publicly. Garrett's note on the old layout was
-// that four full-width bands made the partner list look thin, not that the
-// partners should come down, so they run as one row of cards above the wall of
-// everyone else. Flip SHOW_FEATURED_PARTNERS to false to take the row off the
-// page without touching anything else.
+// The partners announced publicly. Garrett's note on the old layout was that four
+// full-width bands made the partner list look thin, not that the partners should
+// come down, so they run as one row of cards above the wall of everyone else.
+// Flip SHOW_FEATURED_PARTNERS to false to take the row off the page without
+// touching anything else. SPORTFIVE is always written in capitals, at the
+// agency's request.
 const SHOW_FEATURED_PARTNERS = true
 
 const FEATURED_PARTNERS = [
@@ -43,6 +44,8 @@ const FEATURED_PARTNERS = [
     note: 'Bring them the brand, the rights or the roster you are trying to move. They are on stage on day one and on the floor alongside it.' },
   { name: 'FC Barcelona', file: 'fc-barcelona.svg', href: 'https://www.fcbarcelona.com', role: 'On stage, day two', mark: 'crest',
     note: 'How a club founded in 1899 makes the commercial decisions every other club studies. They explain them on day two.' },
+  { name: 'SPORTFIVE', file: 'sportfive.svg', href: 'https://sportfive.com', role: 'Partner', mark: 'wordmark',
+    note: 'The sports marketing agency building partnerships for brands, rightsholders and media platforms. Talk to them about selling your rights or finding the right property for your brand.' },
 ]
 
 // Miami 2026's own sponsors and exhibitors, the five we hold artwork for out of
@@ -638,22 +641,29 @@ export default function Miami2026V2() {
 
 
       {/* ─── FEATURED PARTNERS ───────────────────────────────────────────
-          One row, four cards, directly above the wall: the announced partners
-          read as a lineup rather than four separate bands. */}
+          One row of cards directly above the wall: the announced partners read
+          as a lineup rather than separate bands. */}
       {SHOW_FEATURED_PARTNERS && (
         <section className="relative overflow-hidden" style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
-          <div style={{ maxWidth: '1180px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '1320px', margin: '0 auto' }}>
+            <style>{`
+              .miami-featured-row { --fp-gap: clamp(16px,1.6vw,22px); display: flex; flex-wrap: wrap; justify-content: center; gap: var(--fp-gap); }
+              .miami-featured-card { width: 100%; }
+              @media (min-width: 640px)  { .miami-featured-card { width: calc((100% - var(--fp-gap)) / 2 - 1px); } }
+              @media (min-width: 1024px) { .miami-featured-card { width: calc((100% - 2 * var(--fp-gap)) / 3 - 1px); } }
+              @media (min-width: 1280px) { .miami-featured-card { width: calc((100% - 4 * var(--fp-gap)) / 5 - 1px); } }
+            `}</style>
             <div className="text-center" style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
               <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#0D1B2A', textWrap: 'balance' }}>
                 Featured <span className="miami-text-gradient">Partners</span>
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 'clamp(16px,2vw,24px)' }}>
+            <div className="miami-featured-row">
               {FEATURED_PARTNERS.map((partner) => (
                 <a key={partner.name} href={partner.href} target="_blank" rel="noopener noreferrer"
-                  className="miami-card-light flex flex-col"
-                  style={{ textDecoration: 'none', padding: 'clamp(22px,2.4vw,30px)' }}
+                  className="miami-card-light miami-featured-card flex flex-col"
+                  style={{ textDecoration: 'none', padding: 'clamp(20px,2vw,26px)' }}
                   aria-label={`${partner.name}, opens in a new tab`}
                 >
                   <div className="flex items-center justify-center" style={{ height: 86, marginBottom: 20 }}>
@@ -669,7 +679,7 @@ export default function Miami2026V2() {
                     {partner.note}
                   </p>
                   <span className="miami-subhead inline-flex items-center gap-1.5" style={{ color: '#0D1B2A', fontSize: 11, marginTop: 16 }}>
-                    {partner.href.replace('https://www.', '')} <ArrowRight size={12} />
+                    {partner.href.replace(/^https?:\/\/(www\.)?/, '')} <ArrowRight size={12} />
                   </span>
                 </a>
               ))}
