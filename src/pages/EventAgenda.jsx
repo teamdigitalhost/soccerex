@@ -306,6 +306,10 @@ function SpeakerChip({ speaker, eventSlug }) {
         }}>{initials}</span>
       )}
       <span className="miami-body" style={{ color: '#0D1B2A' }}>{speaker.display_name}</span>
+      {/* Who they work for is the part a reader scans a lineup for. */}
+      {speaker.company && (
+        <span className="miami-body" style={{ color: '#607186' }}>{speaker.company}</span>
+      )}
       {speaker.role && speaker.role !== 'speaker' && (
         <span className="miami-subhead" style={{ fontSize: 9, color: 'var(--event-primary)', letterSpacing: '0.14em' }}>{speaker.role}</span>
       )}
