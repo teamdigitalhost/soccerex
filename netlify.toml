@@ -37,6 +37,14 @@
   status = 301
   force = true
 
+# The old hand-made agenda PDF was removed when the API started building one per
+# request. Links to it are in print and email, so they follow to the live file.
+[[redirects]]
+  from = "/downloads/soccerex-miami-2026-agenda.pdf"
+  to = "https://soccerex.digitalhost.co/api/v1/events/soccerex-miami-2026/agenda.pdf"
+  status = 301
+  force = true
+
 # /portal forwards to the Eventify event portal for the current event (Miami 2026).
 # 302 on purpose: the target changes each event cycle, keep browsers/crawlers re-checking.
 [[redirects]]
