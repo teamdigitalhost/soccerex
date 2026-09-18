@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Calendar, Clock, MapPin, List, LayoutGrid, Star, Video, FileText } from 'lucide-react'
-import { getEvent, getAgenda, clapSession } from '../lib/soccerexApi'
+import { getEvent, getAgenda, clapSession, eventAgendaPdfUrl } from '../lib/soccerexApi'
 import ClapButton from '../components/ClapButton'
 import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { withPreviewSearch } from '../lib/previewMode'
@@ -10,10 +10,6 @@ import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
 
 // A designed PDF of the running order, where the event has one to hand out.
-const AGENDA_PDFS = {
-  'soccerex-miami-2026': '/downloads/soccerex-miami-2026-agenda.pdf',
-}
-
 export default function EventAgenda() {
   const { slug } = useParams()
   const [event, setEvent] = useState(null)
@@ -59,8 +55,9 @@ export default function EventAgenda() {
                 : 'Live program schedule, grouped by day and stage.'}
             </p>
             {/* Some events publish a designed copy of the running order to take away. */}
-            {AGENDA_PDFS[slug] && (
-              <a href={AGENDA_PDFS[slug]} download className="miami-pill-outline mt-5" style={{ display: 'inline-flex' }}>
+            {/* Built by the API on click, so the file matches the schedule above. */}
+            {sessions && sessions.length > 0 && (
+              <a href={eventAgendaPdfUrl(slug)} className="miami-pill-outline mt-5" style={{ display: 'inline-flex' }}>
                 <FileText size={15} /> Download the agenda (PDF)
               </a>
             )}

@@ -223,6 +223,12 @@ export function articlePdfUrl(slug, gate = '') {
   return `${API_BASE_URL}/articles/${encodeURIComponent(slug)}/pdf${suffix}`
 }
 
+/* The event agenda as a PDF, rendered by the API when the link is clicked, so the
+   file always carries the running order the page is showing. */
+export function eventAgendaPdfUrl(slug) {
+  return `${API_BASE_URL}/events/${encodeURIComponent(slug)}/agenda.pdf`
+}
+
 /* Returns { data, gate }: the article, and the token to hold on to. Throws an
    ApiError with status 422 when the password is wrong, 429 when the visitor has
    been guessing. */
