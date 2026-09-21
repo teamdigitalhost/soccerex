@@ -24,9 +24,10 @@ const ROUTES = {
   parkingMap: 'https://www.intermiamicf.com/nu-stadium/parking',
 }
 
-/* Blacklane is the event's Preferred Chauffeur Transport Partner. The contract
-   names the three things to promote: booking ahead, airport transfers and cars
-   during the event. The link carries our campaign tags so Blacklane can see
+/* Blacklane is the event's Official Chauffeur Partner (Joel's wording, which
+   replaces the contract's "Preferred Chauffeur Transport Partner" on the site).
+   The contract names the three things to promote: booking ahead, airport
+   transfers and cars during the event. The link carries our campaign tags so Blacklane can see
    bookings that came from Soccerex. Every use of Blacklane's name or logo needs
    their written approval before it is published. */
 const BLACKLANE = {
@@ -176,11 +177,25 @@ export default function MiamiAttendeeGuide() {
             </GuideCard>
 
             <GuideCard icon={Navigation} title="Rideshare">
+              {/* Blacklane leads the card as the event's chauffeur partner, with
+                  the everyday apps underneath. */}
+              <div style={{ background: BLACKLANE.black, padding: '18px 20px', marginBottom: 16 }}>
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                  <img src={BLACKLANE.logo} alt="Blacklane" width={1504} height={291} style={{ width: 118, height: 'auto', display: 'block' }} />
+                  <span style={{ color: BLACKLANE.blue, fontSize: 13, fontWeight: 700 }}>Official Chauffeur Partner</span>
+                </div>
+                <p style={{ color: 'rgba(255,255,255,0.82)', marginTop: 12 }}>
+                  Book a professional chauffeur ahead of time to meet you at the airport, take you from your hotel to Nu Stadium, or wait between meetings.
+                </p>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2" style={{ marginTop: 14 }}>
+                  <a href={BLACKLANE.book} target="_blank" rel="noopener" className="inline-flex items-center gap-2" style={{ background: BLACKLANE.blue, color: BLACKLANE.black, padding: '10px 18px', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
+                    Book with Blacklane <ExternalLink size={14} />
+                  </a>
+                  <a href="#blacklane" style={{ color: BLACKLANE.blue, fontWeight: 600, fontSize: 14 }}>What you can book</a>
+                </div>
+              </div>
               <p>
-                Choose <strong>Miami Freedom Park</strong> as your destination in Uber or Lyft. Drivers use the park&rsquo;s own pickup and drop-off area, a short walk from the stadium, and it is the simplest option if you are coming from a hotel on the beach.
-              </p>
-              <p className="mt-3">
-                For a professional chauffeur booked ahead, use <a href="#blacklane" style={{ color: '#007C91', fontWeight: 600 }}>Blacklane</a>, our transport partner.
+                For Uber or Lyft, choose <strong>Miami Freedom Park</strong> as your destination. Drivers use the park&rsquo;s own pickup and drop-off area, a short walk from the stadium, and it is the simplest option if you are coming from a hotel on the beach.
               </p>
             </GuideCard>
 
@@ -208,7 +223,7 @@ export default function MiamiAttendeeGuide() {
               Book a chauffeur for the whole trip
             </h2>
             <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, maxWidth: 520 }}>
-              Blacklane is the Preferred Chauffeur Transport Partner of Soccerex Miami 2026. Book ahead and a professional chauffeur will be ready when you land, when the sessions end and whenever you have a meeting across town.
+              Blacklane is the Official Chauffeur Partner of Soccerex Miami 2026. Book ahead and a professional chauffeur will be ready when you land, when the sessions end and whenever you have a meeting across town.
             </p>
             <a href={BLACKLANE.book} target="_blank" rel="noopener" className="inline-flex items-center gap-2 mt-8" style={{ background: BLACKLANE.blue, color: BLACKLANE.black, padding: '14px 26px', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none' }}>
               Book with Blacklane <ExternalLink size={15} />
