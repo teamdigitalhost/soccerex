@@ -98,7 +98,7 @@ export default function MiamiAttendeeGuide() {
   const thursday = windows['2026-09-24'] || { start: '09:20', end: '18:40' }
   const friday = windows['2026-09-25'] || { start: '09:30', end: '16:50' }
   const impact = agendaEntry(sessions, 'Soccerex Impact Event', { start: '15:00', end: '18:00', room: 'Mini Fields' })
-  const social = agendaEntry(sessions, 'Social Evening', { start: '18:40', end: '20:30', room: 'East Club' })
+  const social = agendaEntry(sessions, 'Social Evening', { start: '19:00', end: '20:00', room: 'East Club' })
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
@@ -304,7 +304,7 @@ export default function MiamiAttendeeGuide() {
                 On the {impact.room.toLowerCase()} at Nu Stadium, an afternoon for young players from across Miami and the organizations that coach them.
               </DayItem>
               <DayItem time="7:00 to 10:00 PM" title="VIP Welcome Night">
-                At the Savoy Hotel and Beach Club, 425 Ocean Drive, Miami Beach, for VIP pass holders. Parking at the hotel is limited, so a rideshare or a <a href="#blacklane" style={{ color: '#007C91', fontWeight: 600 }}>Blacklane chauffeur</a> is easier, and please <Link to={MIAMI_2026_VIP_NIGHT} style={{ color: '#007C91', fontWeight: 600 }}>let us know you are coming</Link>. Check in at the registration desk in the lobby when you arrive, and bring your QR code and photo ID so we can print your badge.
+                At the Savoy Hotel and Beach Club, 425 Ocean Drive, Miami Beach, for VIP pass holders. Parking at the hotel is limited, so a rideshare or a <a href="#blacklane" style={{ color: '#007C91', fontWeight: 600 }}>Blacklane chauffeur</a> is easier, and please <Link to={MIAMI_2026_VIP_NIGHT} style={{ color: '#007C91', fontWeight: 600 }}>let us know you are coming</Link>. Bring your QR code and check in at the registration desk in the lobby when you arrive.
               </DayItem>
             </DayCard>
 
