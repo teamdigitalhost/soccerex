@@ -43,6 +43,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://soccerex.com/hersoccerex</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://soccerex.com/miami-2026</loc>
     <lastmod>2026-09-21</lastmod>
     <changefreq>weekly</changefreq>

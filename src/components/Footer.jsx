@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Mail, MapPin } from 'lucide-react'
 import {
   HOME, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS,
-  DEAL_NETWORK, EUROPE_2026, MIAMI_2026, RIYADH_2027,
+  DEAL_NETWORK, HERSOCCEREX, EUROPE_2026, MIAMI_2026, RIYADH_2027,
 } from '../lib/routes'
 
 /* Route-aware accent. Mirrors the navbar's ctaThemeFor() so the
@@ -145,6 +145,7 @@ export default function Footer() {
                 { label: 'About', to: ABOUT },
                 { label: 'Global Network', to: GLOBAL_NETWORK },
                 { label: 'Deal Network', to: DEAL_NETWORK },
+                { label: 'HerSoccerex', to: HERSOCCEREX },
                 { label: 'Insights', to: INSIGHTS },
               ].map(l => (
                 <li key={l.to} style={{ marginBottom: '12px' }}>

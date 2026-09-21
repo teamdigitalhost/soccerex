@@ -27,6 +27,7 @@ export const GALLERY         = '/gallery'
 export const PAST_SPEAKERS   = '/past-speakers'
 export const APP_PAGE        = '/app'
 export const DEAL_NETWORK    = '/deal-network'
+export const HERSOCCEREX     = '/hersoccerex'
 export const DEAL_NETWORK_APPLY = '/deal-network/apply'
 // Official terms for the Ritz-Carlton stay drawing (first 100 completed
 // Deal Network applications). Linked from the invite emails + apply page.

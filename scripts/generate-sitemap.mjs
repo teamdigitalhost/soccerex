@@ -25,6 +25,7 @@ const STATIC_ROUTES = [
   { path: '/global-network',             priority: '0.7', changefreq: 'monthly' },
   { path: '/gallery',                    priority: '0.6', changefreq: 'monthly' },
   { path: '/past-speakers',             priority: '0.6', changefreq: 'monthly' },
+  { path: '/hersoccerex',                priority: '0.8', changefreq: 'monthly' },
   { path: '/miami-2026',                 priority: '0.9', changefreq: 'weekly'  },
   { path: '/miami-2026/press-release',   priority: '0.7', changefreq: 'monthly' },
   { path: '/miami-2026/pricing',         priority: '0.8', changefreq: 'weekly'  },
