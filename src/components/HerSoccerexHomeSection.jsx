@@ -26,7 +26,7 @@ export default function HerSoccerexHomeSection() {
             A community for women across the business of soccer
           </h2>
           <p style={{ fontSize: 'clamp(1.02rem, 1.35vw, 1.12rem)', lineHeight: 1.7, marginTop: 18, maxWidth: 580 }}>
-            <span style={{ color: HER.pink }}>Her</span>Soccerex brings together women who influence the game, women building their careers in it, and the allies who can open doors for both. It begins with a Founding Table of 35 women, and it turns those relationships into introductions, careers and business.
+            <span style={{ color: HER.pink }}>Her</span>Soccerex brings together women who influence the game, women building their careers in it, and the allies who can open doors for both. It begins with a Founding Table of 40 women, and it turns those relationships into introductions, careers and business.
           </p>
           <figure style={{ margin: '28px 0 0', borderLeft: `3px solid ${HER.pink}`, paddingLeft: 20, maxWidth: 560 }}>
             <blockquote style={{ fontFamily: HER_SERIF, fontStyle: 'italic', fontSize: 'clamp(1.3rem, 2vw, 1.55rem)', lineHeight: 1.4, color: HER.navy }}>

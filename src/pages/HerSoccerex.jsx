@@ -166,7 +166,7 @@ export default function HerSoccerex() {
           <div>
             <Heading>Who is shaping <Brand /> first?</Heading>
             <Lead>
-              <Brand /> begins with the Founding Table, a select group of 35 women whose experience, leadership and vision will shape what this community becomes.
+              <Brand /> begins with the Founding Table, a select group of 40 women whose experience, leadership and vision will shape what this community becomes.
             </Lead>
             <p style={{ ...cardBody, fontSize: '1.02rem', marginTop: 18 }}>
               Each founding member brings her experience, relationships, resources and influence to the work. The direction is set, and the details are ours to build together.
