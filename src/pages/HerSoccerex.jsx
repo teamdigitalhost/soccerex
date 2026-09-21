@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Check } from 'lucide-react'
 import PageMeta from '../components/PageMeta'
 import HerSoccerexDocument from '../components/HerSoccerexDocument'
+import { pageMeta } from '../lib/pageMeta'
 import { HERSOCCEREX, HERSOCCEREX_FOUNDING_PDF, MIAMI_2026, PRIVACY_POLICY } from '../lib/routes'
 import { submitLead } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
@@ -71,12 +72,7 @@ export default function HerSoccerex() {
 
   return (
     <div style={{ background: C.paper, color: C.body }}>
-      <PageMeta
-        title="HerSoccerex | Soccerex"
-        description="HerSoccerex brings together women who influence the game, women building their careers and the allies who can open doors for both, in collaboration with Wellness Universe Corporate."
-        image={`${ASSETS}/og.jpg`}
-        path={HERSOCCEREX}
-      />
+      <PageMeta {...pageMeta(HERSOCCEREX)} />
 
       {/* ─── HERO ─────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ padding: 'calc(72px + clamp(96px, 11vw, 150px)) clamp(20px, 5vw, 80px) clamp(64px, 8vw, 110px)' }}>

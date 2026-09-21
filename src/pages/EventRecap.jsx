@@ -6,7 +6,9 @@ import PixelDivider from '../components/PixelDivider'
 import ImageGrid from '../components/ImageGrid'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { EVENTS, GALLERY, MIAMI_2026 } from '../lib/routes'
-import { RECENT } from './Events'
+import { RECENT } from '../data/recentEvents'
+import PageMeta from '../components/PageMeta'
+import { recapMeta } from '../lib/pageMeta'
 
 // Recap page for a past Soccerex event. Data comes from the same RECENT array the
 // Events page uses; photos are pulled inline from the gallery manifest, filtered
@@ -43,6 +45,7 @@ export default function EventRecap() {
 
   return (
     <div style={{ background: '#050d1a' }}>
+      <PageMeta {...recapMeta(event)} />
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center">
         <div className="absolute inset-0" style={{

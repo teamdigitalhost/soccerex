@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ImageGrid from '../components/ImageGrid'
-import { HOME } from '../lib/routes'
+import { HOME, GALLERY } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 const FILTERS = [
   { key: 'all', label: 'All' },
@@ -38,6 +40,7 @@ export default function Gallery() {
 
   return (
     <div className="gallery-page" style={{ background: '#050d1a', minHeight: '100vh' }}>
+      <PageMeta {...pageMeta(GALLERY)} />
       {/* Hero banner */}
       <section className="gallery-hero inner-hero" style={{
         display: 'flex',

@@ -4,7 +4,9 @@ import {
   ArrowLeft, ArrowRight, MapPin, Calendar, BedDouble, ShieldCheck, Lock,
   Plane, Clock, Globe2, Car, ExternalLink, BadgeCheck,
 } from 'lucide-react'
-import { HOME, MIAMI_2026 } from '../lib/routes'
+import { HOME, MIAMI_2026, ACCOMMODATIONS } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 const HERO_IMG = '/events/miami/2026/sections/miami-night.jpg'
 const SKYLINE_IMG = '/events/miami/2026/sections/miami-skyline.jpg'
@@ -134,11 +136,11 @@ const GETTING_AROUND = [
 export default function MiamiAccommodations() {
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.title = 'Accommodations | Soccerex Miami 2026'
   }, [])
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
+      <PageMeta {...pageMeta(ACCOMMODATIONS)} />
 
       {/* ─── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', minHeight: 'min(82vh, 720px)', display: 'flex', alignItems: 'flex-end' }}>

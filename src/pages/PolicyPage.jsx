@@ -1,15 +1,19 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { HOME } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 export default function PolicyPage({ title, eyebrow, lastUpdated, sections }) {
+  const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
     <div style={{ background: '#f4f3f0' }}>
+      <PageMeta {...pageMeta(pathname)} />
       {/* Hero */}
       <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '45vh', background: 'linear-gradient(135deg, #09203e 0%, #0d2b52 50%, #050d1a 100%)' }}>
         <NetworkNodes color="#ffffff" accentColor="var(--color-brand-accent)" nodeCount={30} opacity={0.12} />

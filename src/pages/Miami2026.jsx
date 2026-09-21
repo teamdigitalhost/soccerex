@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase
 import { Link } from 'react-router-dom'
 import { HOME, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, bookCallUrl, eventAgenda, eventAgendaConcept } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import DeadlineBanner from '../components/DeadlineBanner'
 import LogoMarquee from '../components/LogoMarquee'
@@ -58,7 +59,6 @@ const THEMES = [
   { title: 'Innovation, Impact & Future Growth', desc: 'Technology, startups, brand activation, purpose-driven investment, community impact, and the next wave of football opportunity.' },
 ]
 
-const MIAMI_OG_IMG = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg'
 
 // 87 verified confirmed rightsholders for Miami 2026 as of 2026-08-01.
 
@@ -71,12 +71,7 @@ export default function Miami2026() {
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
-      <PageMeta
-        title="Soccerex Miami 2026 | Nu Stadium, 23-25 September"
-        description="The global football business event returns to the Americas. Soccerex Miami 2026 at Nu Stadium brings together clubs, leagues, investors, brands, and innovators — 23-25 September 2026."
-        image={MIAMI_OG_IMG}
-        path={MIAMI_2026}
-      />
+      <PageMeta {...pageMeta(MIAMI_2026)} />
 
       {/* ─── HERO ─────────────────────────────────────────────────────── */}
       <section className="miami-hero relative overflow-hidden">

@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Calendar, Clock, MapPin, Car, Check, Loader2 } from 'lucide-react'
 import PageMeta from '../components/PageMeta'
+import { rsvpMeta } from '../lib/pageMeta'
 import { getEventRsvpInvitation, submitEventRsvp } from '../lib/soccerexApi'
-import { MIAMI_2026, eventRsvp } from '../lib/routes'
+import { MIAMI_2026 } from '../lib/routes'
 
 /*
  * One invitation, one reply form, for any evening around any event: the VIP
@@ -133,12 +134,7 @@ export default function EventRsvp({ eventSlug: eventSlugProp, occasion: occasion
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4', minHeight: '100vh' }}>
-      <PageMeta
-        title={`${invitation.name} | ${eventName}`}
-        description={invitation.lede || `An invitation to the ${invitation.name} at ${eventName}.`}
-        path={eventRsvp(eventSlug, occasion)}
-        noindex
-      />
+      <PageMeta {...rsvpMeta(invitation, eventSlug, occasion)} />
 
       {/* ─── THE INVITATION ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: NAVY }}>

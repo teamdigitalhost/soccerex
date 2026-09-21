@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { HOME } from '../lib/routes'
+import { HOME, PAST_SPEAKERS } from '../lib/routes'
 import { FEATURED_SPEAKERS, NAMED_SPEAKERS, FACE_WALL } from '../data/speakers'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 const NAVY = '#09203e'
 
@@ -42,6 +44,7 @@ export default function PastSpeakers() {
 
   return (
     <main style={{ background: 'linear-gradient(180deg, #f4f3f0 0%, #eae8e4 100%)', minHeight: '100vh', padding: 'clamp(90px,11vw,150px) clamp(24px,5vw,80px) clamp(70px,9vw,120px)' }}>
+      <PageMeta {...pageMeta(PAST_SPEAKERS)} />
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div className="text-center" style={{ marginBottom: 'clamp(40px,5vw,64px)' }}>
           <p className="font-body uppercase" style={{ color: NAVY, fontWeight: 600, letterSpacing: '0.18em', fontSize: '0.72rem', marginBottom: 16 }}>THE VOICES OF THE GAME</p>

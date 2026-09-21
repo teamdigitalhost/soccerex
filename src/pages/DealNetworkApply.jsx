@@ -11,12 +11,14 @@ import {
   submitDealNetworkIntake,
   ApiError,
 } from '../lib/soccerexApi'
-import { RITZ_DRAWING } from '../lib/routes'
+import { RITZ_DRAWING, DEAL_NETWORK_APPLY } from '../lib/routes'
 import { INTAKE_FORMS, INTAKE_REGIONS, PAIN_OPTIONS } from '../lib/dealNetworkTaxonomy'
 import { parseNamedTargets, namedTargetsProblem } from '../lib/namedTargets'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { readCampaignAttribution, clearCampaignAttribution } from '../lib/campaignAttribution'
 import { describeError } from '../lib/smartError'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 // company Profile type → applicant side. club/federation are rightsholders
 // (Property side); everything else is treated as a company (Brand side).
@@ -315,12 +317,6 @@ export default function DealNetworkApply() {
        for a new magic-link token, never because the attribution was cleared. */
   }, [tokenFromUrl, testMode])
 
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.title = 'Apply to the Soccerex Deal Network'
-    }
-  }, [])
-
   async function handleEmailSubmit(e) {
     e?.preventDefault?.()
     const normalizedEmail = normalizeApplyEmail(email)
@@ -562,6 +558,7 @@ export default function DealNetworkApply() {
 
   return (
     <div style={{ background: NAVY_DEEP, minHeight: '100vh' }}>
+      <PageMeta {...pageMeta(DEAL_NETWORK_APPLY)} />
       <style>{APPLY_CSS}</style>
       <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '100vh' }}>
         <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at top, #0d2b52 0%, ${NAVY_DEEP} 70%)` }} />

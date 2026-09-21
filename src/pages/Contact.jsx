@@ -7,10 +7,12 @@ import {
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { submitLead } from '../lib/soccerexApi'
-import { bookCallUrl } from '../lib/routes'
+import { bookCallUrl, CONTACT } from '../lib/routes'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { Loader2 } from 'lucide-react'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 // ═══ INQUIRY TYPES ════════════════════════════════════════════════════════════
 /* Each inquiry type maps to a backend lead endpoint:
@@ -247,6 +249,7 @@ export default function Contact() {
 
   return (
     <div style={{ background: '#050d1a' }}>
+      <PageMeta {...pageMeta(CONTACT)} />
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center">

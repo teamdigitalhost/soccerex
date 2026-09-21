@@ -6,6 +6,9 @@ import PixelDivider from '../components/PixelDivider'
 import { submitLead } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
+import PageMeta from '../components/PageMeta'
+import { APP_PAGE } from '../lib/routes'
+import { pageMeta } from '../lib/pageMeta'
 
 const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.teks.eventify&hl=en_US'
 const APP_STORE = 'https://apps.apple.com/us/app/soccerex-events/id6737689519'
@@ -53,6 +56,7 @@ export default function SoccerexApp() {
 
   return (
     <div style={{ background: '#050d1a' }}>
+      <PageMeta {...pageMeta(APP_PAGE)} />
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center">

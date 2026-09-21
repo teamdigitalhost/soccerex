@@ -12,6 +12,7 @@ import HerSoccerexHomeSection from '../components/HerSoccerexHomeSection'
 
 const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
 import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 import { FEATURED_SPEAKERS as HOME_SPEAKERS } from '../data/speakers'
 import ImageGrid from '../components/ImageGrid'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
@@ -1541,11 +1542,7 @@ export default function Home() {
 
   return (
     <>
-      <PageMeta
-        title="Soccerex — 30 Years at the Center of the Business of Football"
-        description="Soccerex connects the people who drive the global game forward — clubs, leagues, brands, investors, and innovators — across events in Miami, Europe, and the Middle East. Est. 1996."
-        path={HOME}
-      />
+      <PageMeta {...pageMeta(HOME)} />
       <HeroSlideshow />
       {/* No wave divider here. A photographic slideshow ends in arbitrary
           pixel content — any wave/edge effect inevitably reveals a seam.

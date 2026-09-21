@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Loader2, Check, MapPin, Calendar, ArrowRight, ShieldCheck } from 'lucide-react'
 import PageMeta from '../components/PageMeta'
+import { partnerMeta } from '../lib/pageMeta'
 import { getReferralPartner, captureReferral } from '../lib/soccerexApi'
 import sxLogo from '../assets/soccerex---logo-landscape-blue.svg'
 import sxLogoWhite from '../assets/soccerex---logo-landscape-white.svg'
@@ -208,11 +209,7 @@ export default function PartnerLanding() {
 
   return (
     <div style={{ background: '#fff', minHeight: '100vh' }}>
-      <PageMeta
-        title={`${partner.name} at ${event?.name || 'Soccerex'} | Soccerex`}
-        description={partner.subheadline}
-        path={`/partners/${slug}`}
-      />
+      <PageMeta {...partnerMeta(partner, slug)} />
 
       {/* ABOVE THE FOLD: pitch on the left, the form on the right. */}
       <section style={{

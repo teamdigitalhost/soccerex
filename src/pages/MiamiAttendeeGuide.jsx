@@ -5,6 +5,7 @@ import {
   BadgeCheck, Smartphone, BedDouble, Mail, FileText, Clock, ExternalLink,
 } from 'lucide-react'
 import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 import {
   MIAMI_2026, MIAMI_2026_VIP_NIGHT, MIAMI_2026_ATTENDEE_GUIDE, ACCOMMODATIONS, APP_PAGE, eventAgenda,
 } from '../lib/routes'
@@ -88,12 +89,7 @@ export default function MiamiAttendeeGuide() {
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
-      <PageMeta
-        title="Attendee Guide | Soccerex Miami 2026"
-        description="Getting to Nu Stadium, where to park, what happens when you arrive, and what is on each day of Soccerex Miami 2026, September 23 to 25."
-        image={HERO_IMG}
-        path={MIAMI_2026_ATTENDEE_GUIDE}
-      />
+      <PageMeta {...pageMeta(MIAMI_2026_ATTENDEE_GUIDE)} />
 
       {/* ─── HERO ─────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', padding: 'clamp(96px,11vw,150px) clamp(24px,5vw,80px) clamp(64px,8vw,100px)' }}>

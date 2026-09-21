@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import PageMeta from '../components/PageMeta'
+import { ctaMeta } from '../lib/pageMeta'
 import { CtaButton, CtaForm } from '../components/CtaAction'
 import { HOME } from '../lib/routes'
 import { getCta } from '../lib/soccerexApi'
@@ -31,7 +32,7 @@ export default function CtaLanding() {
 
   return (
     <div style={{ background: NAVY, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <PageMeta title={cta ? `${cta.title} | Soccerex` : 'Soccerex'} description={cta?.body || ''} />
+      <PageMeta {...ctaMeta(cta, slug)} />
 
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(90px,12vh,140px) 20px clamp(48px,8vh,80px)' }}>
         <div style={{ width: '100%', maxWidth: 480 }}>

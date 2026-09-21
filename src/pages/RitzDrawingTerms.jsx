@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import {
   ArrowLeft, ArrowRight, Gift, FileCheck2, Ticket, BedDouble, Mail, ScrollText,
 } from 'lucide-react'
-import { MIAMI_2026, ACCOMMODATIONS, DEAL_NETWORK_APPLY } from '../lib/routes'
+import { MIAMI_2026, ACCOMMODATIONS, DEAL_NETWORK_APPLY, RITZ_DRAWING } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 const HERO_IMG = '/hotels/ritz-south-beach-lobby.jpg'
 
@@ -122,11 +124,11 @@ const TERMS = [
 export default function RitzDrawingTerms() {
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.title = 'Ritz-Carlton Drawing | Soccerex Miami 2026'
   }, [])
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
+      <PageMeta {...pageMeta(RITZ_DRAWING)} />
 
       {/* ─── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', minHeight: 'min(62vh, 560px)', display: 'flex', alignItems: 'flex-end' }}>

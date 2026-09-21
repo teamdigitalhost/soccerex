@@ -8,6 +8,8 @@ import { isPreviewFromUrl, withPreviewSearch } from '../lib/previewMode'
 import { eventSpeaker } from '../lib/routes'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
+import PageMeta from '../components/PageMeta'
+import { eventPageMeta } from '../lib/pageMeta'
 
 const ROLE_STATUS_LABEL = {
   confirmed: 'Confirmed',
@@ -87,6 +89,7 @@ export default function EventSpeakers() {
 
   return (
     <div className={`event-page ${eventThemeClass(slug)}`} style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+      {event && <PageMeta {...eventPageMeta('speakers', event, slug)} />}
       <EventHeader event={event} slug={slug} active="speakers" loading={!event && !error} />
 
       <section style={{ padding: 'clamp(40px,6vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>

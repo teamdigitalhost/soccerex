@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { CheckCircle2, Loader2, Mail, ArrowRight, ShieldCheck, AlertTriangle, Building2, Handshake } from 'lucide-react'
 import { previewInvitation, acceptInvitation, declineInvitation } from '../lib/soccerexApi'
 import { HOME, CONTACT } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { staticMetaFor } from '../lib/pageMeta'
 
 /* Soccerex invitation accept page.
  *
@@ -32,16 +34,11 @@ const TYPE_BADGE = {
 }
 
 export default function InviteAccept() {
+  const { pathname } = useLocation()
   const { token } = useParams()
   const [state, setState] = useState('loading') // 'loading' | 'preview' | 'accepting' | 'declined' | 'error'
   const [data, setData] = useState(null)
   const [errorMsg, setErrorMsg] = useState('')
-
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.title = 'Soccerex Invitation'
-    }
-  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -98,6 +95,7 @@ export default function InviteAccept() {
 
   return (
     <div style={{ background: NAVY_DEEP, minHeight: '100vh' }}>
+      <PageMeta {...staticMetaFor(pathname)} />
       <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '100vh' }}>
         <div className="absolute inset-0" style={{
           background: `radial-gradient(ellipse at top, #0d2b52 0%, ${NAVY_DEEP} 70%)`,

@@ -84,7 +84,7 @@ export default function AgendaCollab() {
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.title = 'Agenda Review — Soccerex'
+      document.title = 'Agenda Review | Soccerex'
     }
   }, [])
 

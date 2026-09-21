@@ -48,4 +48,5 @@ When anything about deploying this site changes, update this file and that recor
 
 - The live site is the source of truth for whether it works: test against https://soccerex.com. Uncommitted local changes are disposable if live is healthy.
 - `npm run build` regenerates `public/sitemap.xml` first (`prebuild`).
+- Page titles, descriptions and link-preview images live in `src/lib/pageMeta.js`. Pages render them through `PageMeta`, and the edge function `netlify/edge-functions/social-meta.js` writes the same tags into the HTML for link unfurlers, which never run the app. A new route gets its entry there; a new preview image is cut by `scripts/og-images.sh`. Check a route the way Facebook sees it with `curl -s -A "facebookexternalhit/1.1" https://soccerex.com/<path> | grep og:`.
 - Deeper build and feature notes: `NOTES_FOR_JOEL.md`, `README.md`.

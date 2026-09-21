@@ -8,6 +8,8 @@ import { withPreviewSearch } from '../lib/previewMode'
 import { eventSpeaker } from '../lib/routes'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState, EmptyState } from './EventAgendaConcept'
+import PageMeta from '../components/PageMeta'
+import { eventPageMeta } from '../lib/pageMeta'
 
 // A designed PDF of the running order, where the event has one to hand out.
 export default function EventAgenda() {
@@ -40,6 +42,7 @@ export default function EventAgenda() {
 
   return (
     <div className={`event-page ${eventThemeClass(slug)}`} style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+      {event && <PageMeta {...eventPageMeta('agenda', event, slug)} />}
       <EventHeader event={event} slug={slug} active="agenda" loading={!event && !error} />
 
       <section style={{ padding: 'clamp(40px,6vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>

@@ -1,56 +1,28 @@
 import { Helmet } from 'react-helmet-async'
-
-const SITE_NAME   = 'Soccerex'
-const SITE_URL    = 'https://soccerex.com'
-const DEFAULT_IMG = `${SITE_URL}/images/soccerex-og-default.jpg`
+import { headTags } from '../lib/pageMeta'
 
 /**
  * Per-route <head> metadata for social sharing and SEO.
  *
- * Usage:
- *   <PageMeta
- *     title="Sponsor | Soccerex Miami 2026"
- *     description="Partner with Soccerex and reach football's decision-makers."
- *     image="/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg"
- *     path="/sponsor"
- *   />
+ * Usage, for a route with fixed meta (see PAGES in src/lib/pageMeta.js):
+ *   <PageMeta {...pageMeta(SPONSOR)} />
  *
- * All props are optional — sensible site defaults apply.
+ * Pages built from API data pass the result of the matching builder in pageMeta.js
+ * (articleMeta, speakerMeta, eventPageMeta...). The social-meta edge function renders
+ * the same tags into the HTML for link unfurlers, so both always agree.
+ *
+ * Props: title, description, image, path, type, noindex, card. All optional; the site
+ * defaults fill anything left out.
  */
-export default function PageMeta({
-  title       = 'Soccerex — 30 Years at the Center of the Business of Football',
-  description = 'Soccerex connects the people who drive the global game forward — clubs, leagues, brands, investors, and innovators — across events in Miami, Europe, and the Middle East.',
-  image       = DEFAULT_IMG,
-  path        = '',
-  type        = 'website',
-  noindex     = false,
-}) {
-  const canonical = `${SITE_URL}${path}`
-  // Resolve relative image paths to absolute URLs for OG/Twitter cards
-  const ogImage = image.startsWith('http') ? image : `${SITE_URL}${image}`
-
+export default function PageMeta(props) {
+  const { title, tags } = headTags(props)
   return (
     <Helmet>
       <title>{title}</title>
-      <meta name="description" content={description} />
-      <link rel="canonical" href={canonical} />
-      {/* A page held back before its announcement must not turn up in a search
-          result, which would defeat the point of holding it back. */}
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
-
-      {/* Open Graph */}
-      <meta property="og:site_name"   content={SITE_NAME} />
-      <meta property="og:type"        content={type} />
-      <meta property="og:url"         content={canonical} />
-      <meta property="og:title"       content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image"       content={ogImage} />
-
-      {/* Twitter / X Card */}
-      <meta name="twitter:card"        content="summary_large_image" />
-      <meta name="twitter:title"       content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image"       content={ogImage} />
+      {tags.map(([tag, attrs]) => {
+        const key = attrs.name || attrs.property || attrs.rel
+        return tag === 'link' ? <link key={key} {...attrs} /> : <meta key={key} {...attrs} />
+      })}
     </Helmet>
   )
 }

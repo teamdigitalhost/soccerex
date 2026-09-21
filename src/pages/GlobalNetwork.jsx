@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom'
 import { Users, Globe, Handshake, Megaphone, ArrowRight, Mail, Newspaper } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { INSIGHTS } from '../lib/routes'
+import { INSIGHTS, GLOBAL_NETWORK } from '../lib/routes'
 import { submitLead } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 import { Check } from 'lucide-react'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { NETWORK_LOGOS, shuffleLogos } from '../data/networkLogos'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 // ─── Full logo inventory (228 logos from soccerex.com/global-network) ───────
 const LOGOS = NETWORK_LOGOS
@@ -105,6 +107,7 @@ export default function GlobalNetwork() {
 
   return (
     <div style={{ background: '#050d1a' }}>
+      <PageMeta {...pageMeta(GLOBAL_NETWORK)} />
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center">

@@ -9,6 +9,8 @@ import { isTestModeFromUrl, withTestSearch } from '../lib/testMode'
 import { eventThemeClass } from '../lib/eventTheme'
 import { EventHeader, LoadingState, ErrorState } from './EventAgendaConcept'
 import { eventSpeakers, eventAgenda } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { speakerMeta } from '../lib/pageMeta'
 
 /* Cleared photography, reused from the Miami 2026 pages, as the banner for any
    speaker who has not uploaded their own. */
@@ -60,6 +62,7 @@ export default function EventSpeakerProfile() {
 
   return (
     <div className={`event-page ${eventThemeClass(slug)}`} style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+      {speaker && <PageMeta {...speakerMeta(speaker, slug)} />}
       <EventHeader event={event} slug={slug} active="speakers" loading={!event && !error} />
 
       <section style={{ padding: 'clamp(24px,3vw,40px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>

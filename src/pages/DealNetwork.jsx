@@ -1,4 +1,4 @@
-import { createElement, useEffect, useState } from 'react'
+import { createElement, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Handshake, Building2, Briefcase, ArrowRight, Sparkles, Shield,
@@ -7,8 +7,10 @@ import {
 } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
-import { PROFILE_ACCESS, dealNetworkApplyWithTrack } from '../lib/routes'
+import { PROFILE_ACCESS, dealNetworkApplyWithTrack, DEAL_NETWORK } from '../lib/routes'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 /* ═══ Deal Network: public marketing page ═══════════════════════════════
  * No intake form on the public page. Two CTAs route to the application /
@@ -101,14 +103,9 @@ export default function DealNetwork() {
   // needs the observer to mark it visible.
   useScrollAnimations(activeTrackId)
 
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.title = 'Soccerex Deal Network'
-    }
-  }, [])
-
   return (
     <div style={{ background: NAVY_DEEP }}>
+      <PageMeta {...pageMeta(DEAL_NETWORK)} />
 
       {/* ═══ HERO ════════════════════════════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center">

@@ -5,6 +5,7 @@ import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { INSIGHTS, insightArticle } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
+import { articleMeta, lockedArticleMeta } from '../lib/pageMeta'
 import { CtaButton } from '../components/CtaAction'
 import { articlePdfUrl, getArticle, unlockArticle } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
@@ -120,12 +121,7 @@ function ArticleLock({ slug, onUnlocked }) {
 
   return (
     <div style={{ background: '#050d1a', minHeight: '100vh' }}>
-      <PageMeta
-        title="Soccerex"
-        description="This page is available to invited readers."
-        path={insightArticle(slug)}
-        noindex
-      />
+      <PageMeta {...lockedArticleMeta(slug)} />
       <section className="relative overflow-hidden" style={{ minHeight: '100vh' }}>
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at top, #0d2b52 0%, #050d1a 70%)',
@@ -200,19 +196,15 @@ function ArticleLock({ slug, onUnlocked }) {
    which supplies its own article and an empty related list — so a draft renders
    EXACTLY as it will look once published. */
 export function ArticleLayout({ article, related = [], pdfHref = null }) {
-  const articleDesc = article.excerpt
-    ? article.excerpt.replace(/<[^>]+>/g, '').slice(0, 200)
-    : 'Read the latest insights from Soccerex on the business of football.'
-
   return (
     <div style={{ background: '#050d1a' }}>
-      <PageMeta
-        title={`${article.title} | Soccerex Insights`}
-        description={articleDesc}
-        image={article.featuredImage || undefined}
-        path={insightArticle(article.slug)}
-        type="article"
-      />
+      {/* The CMS's own SEO fields win when an editor has filled them in. */}
+      <PageMeta {...articleMeta({
+        slug: article.slug,
+        title: article.metaTitle || article.title,
+        description: article.metaDescription || article.excerpt,
+        image: article.ogImage || article.featuredImage,
+      })} />
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════
           A compact title band, not a viewport-filling image. Height comes from
@@ -410,6 +402,11 @@ export function normalizeCmsArticleDetail(a) {
     categories: categories.length ? categories : ['Insight'],
     date: formatCmsDate(a.published_at),
     featuredImage: a.hero_image_url || a.og_image_url || '',
+    // What a shared link shows. The API fills each from the title, excerpt and hero
+    // when an editor leaves it blank.
+    metaTitle: a.meta_title || '',
+    metaDescription: a.meta_description || '',
+    ogImage: a.og_image_url || '',
     paragraphs: bodyToParagraphs(a.body),
     blocks: parseBlocks(a.body),
     inlineImages: [],

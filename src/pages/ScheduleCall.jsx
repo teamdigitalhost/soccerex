@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import {
   CalendarCheck, CalendarClock, CheckCircle2, Clock, Globe, Loader2, MailCheck,
   AlertTriangle, ArrowRight, User,
@@ -7,6 +7,8 @@ import {
 import { getSchedulerAvailability, bookSchedulerSlot, requestSchedulerCall } from '../lib/soccerexApi'
 import { describeError } from '../lib/smartError'
 import { CONTACT } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { staticMetaFor } from '../lib/pageMeta'
 
 /* Public sales-call booking page.
  *
@@ -34,6 +36,7 @@ const NAVY_DEEP = '#050d1a'
 const REQUEST_FIELDS = ['name', 'email', 'company', 'availability', 'notes']
 
 export default function ScheduleCall() {
+  const { pathname } = useLocation()
   const { code } = useParams()
   /* Attribution only. The links that bring people here append ?source=
      (nurture emails via CallScheduler::withSource, lead-form success screens
@@ -56,12 +59,6 @@ export default function ScheduleCall() {
   const [requestError, setRequestError] = useState('')
   const [fieldErrors, setFieldErrors] = useState({}) // 422: field -> first message
   const [requested, setRequested] = useState(null) // { name, email } as submitted
-
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.title = 'Book a call — Soccerex'
-    }
-  }, [])
 
   const loadAvailability = useCallback(async ({ keepSelection = false } = {}) => {
     try {
@@ -206,6 +203,7 @@ export default function ScheduleCall() {
 
   return (
     <div style={{ background: '#f4f3f0', minHeight: '100vh' }}>
+      <PageMeta {...staticMetaFor(pathname)} />
 
       {/* ═══ DARK HERO STRIP ═══════════════════════════════════════════════ */}
       <section className="relative overflow-hidden" style={{ background: NAVY_DEEP }}>

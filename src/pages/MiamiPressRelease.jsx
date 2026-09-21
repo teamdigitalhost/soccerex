@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { ArrowLeft, Download } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { MIAMI_2026 } from '../lib/routes'
+import { MIAMI_2026, MIAMI_2026_PRESS_RELEASE } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 // The downloadable original lives in public/ and is served at the site root.
 const PDF_URL = '/events/miami/2026/soccerex-miami-2026-press-release.pdf'
@@ -40,13 +42,11 @@ const ABOUT_SOCCEREX = [
 export default function MiamiPressRelease() {
   useEffect(() => {
     window.scrollTo(0, 0)
-    const prev = document.title
-    document.title = 'Press Release: Soccerex Miami 2026 at Nu Stadium | Soccerex'
-    return () => { document.title = prev }
   }, [])
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4', color: NAVY }}>
+      <PageMeta {...pageMeta(MIAMI_2026_PRESS_RELEASE)} />
 
       {/* ─── Navy masthead (mirrors the official release header) ─────────── */}
       <section style={{ background: NAVY, position: 'relative', overflow: 'hidden' }}>

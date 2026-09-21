@@ -8,6 +8,8 @@ import { eventThemeClass } from '../lib/eventTheme'
 import ProgrammingSubmissionForm from '../components/ProgrammingSubmissionForm'
 import ClapButton from '../components/ClapButton'
 import { HOME, eventAgendaConcept, eventAgenda, eventSpeakers } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { eventPageMeta } from '../lib/pageMeta'
 
 const STATUS_LABEL = {
   in_program: 'In program',
@@ -66,6 +68,7 @@ export default function EventAgendaConcept() {
 
   return (
     <div className={`event-page ${eventThemeClass(slug)}`} style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+      {event && <PageMeta {...eventPageMeta('themes', event, slug)} />}
       <EventHeader event={event} slug={slug} active="agenda-concept" loading={!event && !error} />
 
       <section style={{ padding: 'clamp(40px,6vw,80px) clamp(24px,5vw,80px) clamp(80px,10vw,120px)' }}>

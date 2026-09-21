@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { HOME, EVENTS, SPONSOR, EXHIBIT, bookCallUrl } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
 import DeadlineBanner from '../components/DeadlineBanner'
@@ -91,12 +92,7 @@ export default function Exhibit() {
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
-      <PageMeta
-        title="Exhibit at Soccerex Miami 2026 | Reach Football's Buyers"
-        description="Showcase your product or service to 1,500+ football industry professionals. Floor stands, stands packages, and branded spaces at Nu Stadium, Miami — 23-25 September 2026."
-        image={HERO_IMG}
-        path={EXHIBIT}
-      />
+      <PageMeta {...pageMeta(EXHIBIT)} />
 
       {/* ─── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', minHeight: 'min(88vh, 760px)', display: 'flex', alignItems: 'flex-end' }}>

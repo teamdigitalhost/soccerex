@@ -3,8 +3,11 @@ import { ArrowLeft, ArrowRight, Calendar, FileText, Mic, Users, CheckCircle2 } f
 import { Link } from 'react-router-dom'
 import PixelDivider from '../components/PixelDivider'
 import {
+  EUROPE_2026,
   HOME, MIAMI_2026, pressRelease, eventSpeakers, eventAgenda, eventAgendaConcept,
 } from '../lib/routes'
+import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 
 const EVENT_API_SLUG = 'soccerex-europe-2026'
 
@@ -77,6 +80,7 @@ export default function Europe2026() {
 
   return (
     <div className="event-page theme-europe" style={{ background: 'var(--event-bg-dark)' }}>
+      <PageMeta {...pageMeta(EUROPE_2026)} />
 
       {/* ─── HERO ─────────────────────────────────────────────────────────── */}
       <section className="inner-hero relative overflow-hidden flex items-center">

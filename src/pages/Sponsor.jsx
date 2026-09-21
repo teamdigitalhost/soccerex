@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { HOME, EVENTS, EXHIBIT, SPONSOR, bookCallUrl } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import LeadForm from '../components/LeadForm'
 import DeadlineBanner from '../components/DeadlineBanner'
@@ -104,12 +105,7 @@ export default function Sponsor() {
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
-      <PageMeta
-        title="Sponsor Soccerex Miami 2026 | Partnership Opportunities"
-        description="Put your brand in front of football's decision-makers. Soccerex Miami 2026, Nu Stadium, 23-25 September. Headline sponsorships and bespoke partnership packages available."
-        image={HERO_IMG}
-        path={SPONSOR}
-      />
+      <PageMeta {...pageMeta(SPONSOR)} />
 
       {/* ─── HERO ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden" style={{ background: '#0D1B2A', minHeight: 'min(88vh, 760px)', display: 'flex', alignItems: 'flex-end' }}>

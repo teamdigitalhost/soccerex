@@ -5,6 +5,7 @@ import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { CONTACT, MIAMI_2026, ABOUT } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
+import { pageMeta } from '../lib/pageMeta'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // ─── Timeline data ──────────────────────────────────────────────────────────
@@ -169,12 +170,7 @@ export default function About() {
 
   return (
     <div style={{ background: '#050d1a' }}>
-      <PageMeta
-        title="About Soccerex | 30 Years at the Center of Football Business"
-        description="Since 1996, Soccerex has brought together the people shaping the global game — clubs, leagues, investors, brands, and innovators — across events in Miami, Europe, and the Middle East."
-        image="/images/about/discover-soccerex.jpg"
-        path={ABOUT}
-      />
+      <PageMeta {...pageMeta(ABOUT)} />
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="inner-hero relative overflow-hidden flex items-center justify-center">
