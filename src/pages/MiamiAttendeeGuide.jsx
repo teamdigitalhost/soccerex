@@ -119,7 +119,7 @@ export default function MiamiAttendeeGuide() {
             Soccerex Miami opens on September 23, with sessions on September 24 and 25 at Nu Stadium in Miami Freedom Park. This guide walks you through getting there, getting in and what is on each day, so you can arrive and go straight to your meetings.
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <a href={ROUTES.google} target="_blank" rel="noopener noreferrer" className="miami-pill-primary">
+            <a href={ROUTES.parkingMap} target="_blank" rel="noopener noreferrer" className="miami-pill-primary">
               <Navigation size={16} /> Directions to parking
             </a>
             <Link to={eventAgenda(EVENT_SLUG)} className="miami-pill-outline" style={{ background: 'transparent', color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>

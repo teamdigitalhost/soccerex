@@ -22,6 +22,15 @@ const ROLE_STATUS_LABEL = {
   completed: 'Completed',
 }
 
+/* When a speaker's session runs, in the event's own time zone ("Thu 5:25 PM").
+   The tracker's panel code ("1/2") is internal, so the page shows the time instead. */
+const sessionWhen = (iso) => {
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  return d.toLocaleString('en-US', { timeZone: 'America/New_York', weekday: 'short', hour: 'numeric', minute: '2-digit' })
+}
+
 export default function EventSpeakers() {
   const { slug } = useParams()
   const location = useLocation()
@@ -319,7 +328,7 @@ function SpeakerCard({ speaker, archived, highlighted, eventSlug }) {
           <div className="flex flex-col gap-1 mt-2">
             {speaker.sessions.map((s, i) => (
               <span key={i} className="miami-body" style={{ fontSize: 11, color: '#0f7a52' }}>
-                {s.panel ? `${s.panel} · ` : ''}{s.title}
+                {sessionWhen(s.starts_at) ? `${sessionWhen(s.starts_at)} · ` : ''}{s.title}
               </span>
             ))}
           </div>
