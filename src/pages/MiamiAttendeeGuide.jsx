@@ -164,10 +164,10 @@ export default function MiamiAttendeeGuide() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <GuideCard icon={Car} title="Driving and parking">
               <p>
-                Park in the <strong>Audi Black Lot</strong>. Enter the park from NW 37th Avenue, across from NW 19th Terrace, and follow the signs for the Audi Black Lot. It sits on the west side of the stadium, right beside the VIP entrance you will walk in through.
+                Park in the <strong>Audi Black Lot</strong>. Enter the park from NW 37th Avenue, across from NW 19th Terrace, and follow the signs for the Audi Black Lot. It sits on the west side of the stadium, right beside the West Club VIP Entrance you will walk in through.
               </p>
               <p className="mt-3">
-                Buy your parking pass in advance at <a href="https://www.parking.com" target="_blank" rel="noopener noreferrer" style={{ color: '#007C91', fontWeight: 600 }}>parking.com</a>. Passes are not sold on site.
+                Parking in the Audi Black Lot is free for Soccerex delegates, and our staff will be there to help with directions when you arrive.
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
                 <MapLink href={ROUTES.google}>Google Maps</MapLink>
@@ -259,7 +259,7 @@ export default function MiamiAttendeeGuide() {
 
           <ol className="grid grid-cols-1 md:grid-cols-3 gap-5" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {[
-              { n: 1, title: 'Park and walk in', body: 'Leave the car in the Audi Black Lot and walk to the VIP entrance on the west side of the stadium, right beside the lot.' },
+              { n: 1, title: 'Park and walk in', body: 'Leave the car in the Audi Black Lot and walk to the West Club VIP Entrance on the west side of the stadium, right beside the lot.' },
               { n: 2, title: 'Pick up your badge', body: 'Registration sits at the entrance and opens at 8:00 AM on Thursday. Bring photo ID that matches the name on your pass, and have your QR code open in your welcome email or the Soccerex Events app so the team can print your badge.' },
               { n: 3, title: 'Wear it both days', body: 'Your badge gets you into the sessions, the exhibition and Thursday\u2019s Social Evening, and you will need it again on Friday.' },
             ].map(({ n, title, body }) => (
@@ -304,7 +304,7 @@ export default function MiamiAttendeeGuide() {
                 On the {impact.room.toLowerCase()} at Nu Stadium, an afternoon for young players from across Miami and the organizations that coach them.
               </DayItem>
               <DayItem time="7:00 to 10:00 PM" title="VIP Welcome Night">
-                At the Savoy Hotel and Beach Club, Miami Beach, for VIP pass holders. Parking at the hotel is limited, so a rideshare or a <a href="#blacklane" style={{ color: '#007C91', fontWeight: 600 }}>Blacklane chauffeur</a> is easier, and please <Link to={MIAMI_2026_VIP_NIGHT} style={{ color: '#007C91', fontWeight: 600 }}>let us know you are coming</Link>. A registration desk at the reception prints badges, so bring your QR code and photo ID and walk straight in on Thursday.
+                At the Savoy Hotel and Beach Club, 425 Ocean Drive, Miami Beach, for VIP pass holders. Parking at the hotel is limited, so a rideshare or a <a href="#blacklane" style={{ color: '#007C91', fontWeight: 600 }}>Blacklane chauffeur</a> is easier, and please <Link to={MIAMI_2026_VIP_NIGHT} style={{ color: '#007C91', fontWeight: 600 }}>let us know you are coming</Link>. Check in at the registration desk in the lobby when you arrive, and bring your QR code and photo ID so we can print your badge.
               </DayItem>
             </DayCard>
 
