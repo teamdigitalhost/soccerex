@@ -7,6 +7,7 @@ import { pageMeta } from '../lib/pageMeta'
 import { HERSOCCEREX, HERSOCCEREX_FOUNDING_PDF, MIAMI_2026, PRIVACY_POLICY } from '../lib/routes'
 import { submitLead } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
+import { countryNames } from '../lib/countries'
 import { HER as C, HER_SERIF as SERIF, HER_ASSETS as ASSETS, herPill as pill } from '../lib/hersoccerexTheme'
 
 /* The launch party opens the community on the first day of Soccerex Miami.
@@ -228,7 +229,7 @@ export default function HerSoccerex() {
 }
 
 function JoinForm() {
-  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', company: '', role: '', joiningAs: '', message: '' })
+  const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', country: '', company: '', role: '', joiningAs: '', message: '' })
   const [state, setState] = useState('idle') // idle | sending | sent
   const [error, setError] = useState('')
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
@@ -252,6 +253,8 @@ function JoinForm() {
         last_name: lastName || undefined,
         name: [firstName, lastName].filter(Boolean).join(' '),
         email: form.email.trim(),
+        phone: form.phone.trim(),
+        country: form.country.trim(),
         company: form.company.trim() || undefined,
         role: form.role.trim() || undefined,
         subject: 'HerSoccerex',
@@ -284,6 +287,11 @@ function JoinForm() {
         <Field label="First name" required value={form.firstName} onChange={set('firstName')} autoComplete="given-name" />
         <Field label="Last name" value={form.lastName} onChange={set('lastName')} autoComplete="family-name" />
         <Field label="Email" type="email" required value={form.email} onChange={set('email')} autoComplete="email" />
+        <Field label="Phone" type="tel" required value={form.phone} onChange={set('phone')} autoComplete="tel" placeholder="+1 305 555 0100" maxLength={50} />
+        <Field label="Country" required value={form.country} onChange={set('country')} autoComplete="country-name" list="hersoccerex-countries" maxLength={200} />
+        <datalist id="hersoccerex-countries">
+          {countryNames().map((name) => <option key={name} value={name} />)}
+        </datalist>
         <Field label="Organization" value={form.company} onChange={set('company')} autoComplete="organization" />
         <div className="sm:col-span-2">
           <Field label="Role" value={form.role} onChange={set('role')} autoComplete="organization-title" />
