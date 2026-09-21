@@ -24,6 +24,18 @@ const ROUTES = {
   parkingMap: 'https://www.intermiamicf.com/nu-stadium/parking',
 }
 
+/* Blacklane is the event's Preferred Chauffeur Transport Partner. The contract
+   names the three things to promote: booking ahead, airport transfers and cars
+   during the event. The link carries our campaign tags so Blacklane can see
+   bookings that came from Soccerex. Every use of Blacklane's name or logo needs
+   their written approval before it is published. */
+const BLACKLANE = {
+  book: 'https://www.blacklane.com/en/?utm_source=soccerex&utm_medium=partner&utm_campaign=soccerex-miami-2026',
+  logo: '/images/partners/blacklane-wordmark-light.svg',
+  black: '#0F1319',
+  blue: '#B3DBF5',
+}
+
 const APP_STORE = 'https://apps.apple.com/us/app/soccerex-events/id6737689519'
 const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.teks.eventify&hl=en_US'
 
@@ -167,6 +179,9 @@ export default function MiamiAttendeeGuide() {
               <p>
                 Choose <strong>Miami Freedom Park</strong> as your destination in Uber or Lyft. Drivers use the park&rsquo;s own pickup and drop-off area, a short walk from the stadium, and it is the simplest option if you are coming from a hotel on the beach.
               </p>
+              <p className="mt-3">
+                For a professional chauffeur booked ahead, use <a href="#blacklane" style={{ color: '#007C91', fontWeight: 600 }}>Blacklane</a>, our transport partner.
+              </p>
             </GuideCard>
 
             <GuideCard icon={TrainFront} title="Train">
@@ -177,10 +192,40 @@ export default function MiamiAttendeeGuide() {
 
             <GuideCard icon={Plane} title="Flying in">
               <p>
-                Miami International Airport is next door. From the terminal it is a short rideshare, or take the MIA Mover to the Miami Intermodal Center and follow the walking route above. Hotels in the airport cluster run free shuttles to the terminal.
+                Miami International Airport is next door. From the terminal it is a short rideshare or a <a href="#blacklane" style={{ color: '#007C91', fontWeight: 600 }}>Blacklane transfer</a>, or take the MIA Mover to the Miami Intermodal Center and follow the walking route above. Hotels in the airport cluster run free shuttles to the terminal.
               </p>
             </GuideCard>
           </div>
+        </div>
+      </section>
+
+      {/* ─── BLACKLANE ────────────────────────────────────────────────── */}
+      <section id="blacklane" style={{ background: BLACKLANE.black, padding: 'clamp(64px,8vw,110px) clamp(24px,5vw,80px)', scrollMarginTop: 72 }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16 items-center" style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <div>
+            <img src={BLACKLANE.logo} alt="Blacklane" width={1504} height={291} style={{ width: 'min(220px, 60vw)', height: 'auto', display: 'block', marginBottom: 32 }} />
+            <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.4vw, 2.5rem)', color: '#FFFFFF', marginBottom: 14 }}>
+              Book a chauffeur for the whole trip
+            </h2>
+            <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, maxWidth: 520 }}>
+              Blacklane is the Preferred Chauffeur Transport Partner of Soccerex Miami 2026. Book ahead and a professional chauffeur will be ready when you land, when the sessions end and whenever you have a meeting across town.
+            </p>
+            <a href={BLACKLANE.book} target="_blank" rel="noopener" className="inline-flex items-center gap-2 mt-8" style={{ background: BLACKLANE.blue, color: BLACKLANE.black, padding: '14px 26px', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none' }}>
+              Book with Blacklane <ExternalLink size={15} />
+            </a>
+          </div>
+          <dl className="grid grid-cols-1 gap-3">
+            {[
+              { label: 'Airport transfers', body: 'From Miami International or Fort Lauderdale to your hotel, booked before you fly.' },
+              { label: 'Hotel to stadium', body: 'To Nu Stadium in the morning and back after the last session or the Social Evening.' },
+              { label: 'By the hour', body: 'A car and chauffeur for as long as you need one, between meetings, dinners and the VIP Welcome Night on Miami Beach.' },
+            ].map((item) => (
+              <div key={item.label} style={{ border: '1px solid rgba(179,219,245,0.22)', padding: '18px 20px' }}>
+                <dt className="miami-body" style={{ color: BLACKLANE.blue, fontWeight: 700, fontSize: '1.02rem', marginBottom: 4 }}>{item.label}</dt>
+                <dd className="miami-body" style={{ color: 'rgba(255,255,255,0.78)', fontSize: '0.98rem', lineHeight: 1.55 }}>{item.body}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
@@ -241,7 +286,7 @@ export default function MiamiAttendeeGuide() {
                 On the {impact.room.toLowerCase()} at Nu Stadium, an afternoon for young players from across Miami and the organizations that coach them.
               </DayItem>
               <DayItem time="7:00 to 10:00 PM" title="VIP Welcome Night">
-                At the Savoy Hotel and Beach Club, Miami Beach, for VIP pass holders. Parking at the hotel is limited, so a rideshare is easier, and please <Link to={MIAMI_2026_VIP_NIGHT} style={{ color: '#007C91', fontWeight: 600 }}>let us know you are coming</Link>.
+                At the Savoy Hotel and Beach Club, Miami Beach, for VIP pass holders. Parking at the hotel is limited, so a rideshare or a <a href="#blacklane" style={{ color: '#007C91', fontWeight: 600 }}>Blacklane chauffeur</a> is easier, and please <Link to={MIAMI_2026_VIP_NIGHT} style={{ color: '#007C91', fontWeight: 600 }}>let us know you are coming</Link>.
               </DayItem>
             </DayCard>
 
