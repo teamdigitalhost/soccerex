@@ -15,7 +15,7 @@ import {
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
-  ROUTE_PATTERNS, MIAMI_2026_V2, EVENT_RSVP_PATTERN, MIAMI_2026_RSVP_PATTERN, MIAMI_2026_VIP_NIGHT } from './lib/routes'
+  ROUTE_PATTERNS, MIAMI_2026_V2, EVENT_RSVP_PATTERN, MIAMI_2026_RSVP_PATTERN, MIAMI_2026_VIP_NIGHT, MIAMI_2026_ATTENDEE_GUIDE } from './lib/routes'
 
 /* Map pathname to a theme class. Applied at app root so the navbar
    and footer (which sit outside the page component) pick up the
@@ -90,6 +90,7 @@ const Miami2026V2 = lazy(() => import('./pages/Miami2026V2'))
 const EventRsvp = lazy(() => import('./pages/EventRsvp'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
 const MiamiAccommodations = lazy(() => import('./pages/MiamiAccommodations'))
+const MiamiAttendeeGuide = lazy(() => import('./pages/MiamiAttendeeGuide'))
 const Sponsor = lazy(() => import('./pages/Sponsor'))
 const Exhibit = lazy(() => import('./pages/Exhibit'))
 const PressRelease = lazy(() => import('./pages/PressRelease'))
@@ -174,6 +175,7 @@ function App() {
               previous one stays in the repo; /miami-2026/v2 still resolves for links
               already shared around. */}
           <Route path={MIAMI_2026} element={<Miami2026V2 />} />
+          <Route path={MIAMI_2026_ATTENDEE_GUIDE} element={<MiamiAttendeeGuide />} />
           {/* Prices page removed entirely (Joel, 2026-08-03). Old links redirect:
               campaign emails carried magic links into the pricing gate, so these
               paths must land somewhere real, not 404. Delegate prices live on

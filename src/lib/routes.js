@@ -93,6 +93,8 @@ export const eventRsvp = (eventSlug, occasion) =>
     : `/events/${eventSlug}/rsvp/${occasion}`
 // The evening before Miami opens, at the Savoy.
 export const MIAMI_2026_VIP_NIGHT = `${MIAMI_2026}/rsvp/vip-night`
+// Practical guide for people with a pass: getting there, parking, arriving, each day.
+export const MIAMI_2026_ATTENDEE_GUIDE = `${MIAMI_2026}/attendee-guide`
 
 // Evergreen, top-level travel + accommodations page (partner-hotel booking
 // links). One live event at a time, so this holds the current event's hotels

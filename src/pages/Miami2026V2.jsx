@@ -10,7 +10,7 @@
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText, Check, X, ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026, MIAMI_2026_V2, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, DEAL_NETWORK, REFUND_POLICY, bookCallUrl, eventAgenda } from '../lib/routes'
+import { HOME, MIAMI_2026, MIAMI_2026_V2, MIAMI_2026_ATTENDEE_GUIDE, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, DEAL_NETWORK, REFUND_POLICY, bookCallUrl, eventAgenda } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
 import DeadlineBanner from '../components/DeadlineBanner'
@@ -160,7 +160,7 @@ const FAQ_LINK = { color: '#007C91', fontWeight: 600, textDecoration: 'underline
 const FAQS = [
   {
     q: 'When and where is Soccerex Miami 2026?',
-    a: <>The VIP reception opens the event on the evening of September 23. Sessions run on September 24 and 25 inside Nu Stadium at Miami Freedom Park, two minutes from Miami International Airport.</>,
+    a: <>The VIP reception opens the event on the evening of September 23. Sessions run on September 24 and 25 inside Nu Stadium at Miami Freedom Park, two minutes from Miami International Airport. The <Link to={MIAMI_2026_ATTENDEE_GUIDE} style={FAQ_LINK}>attendee guide</Link> covers parking, getting in and what is on each day.</>,
   },
   {
     q: 'Who comes to Soccerex Miami?',

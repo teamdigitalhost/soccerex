@@ -28,6 +28,7 @@ const STATIC_ROUTES = [
   { path: '/miami-2026',                 priority: '0.9', changefreq: 'weekly'  },
   { path: '/miami-2026/press-release',   priority: '0.7', changefreq: 'monthly' },
   { path: '/miami-2026/pricing',         priority: '0.8', changefreq: 'weekly'  },
+  { path: '/miami-2026/attendee-guide',  priority: '0.8', changefreq: 'weekly'  },
   { path: '/accommodations',             priority: '0.7', changefreq: 'monthly' },
   { path: '/sponsor',                    priority: '0.9', changefreq: 'weekly'  },
   { path: '/exhibit',                    priority: '0.9', changefreq: 'weekly'  },
