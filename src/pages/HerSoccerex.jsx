@@ -2,26 +2,16 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Check } from 'lucide-react'
 import PageMeta from '../components/PageMeta'
-import { HERSOCCEREX, MIAMI_2026, PRIVACY_POLICY } from '../lib/routes'
+import HerSoccerexDocument from '../components/HerSoccerexDocument'
+import { HERSOCCEREX, HERSOCCEREX_FOUNDING_PDF, MIAMI_2026, PRIVACY_POLICY } from '../lib/routes'
 import { submitLead } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
+import { HER as C, HER_SERIF as SERIF, HER_ASSETS as ASSETS, herPill as pill } from '../lib/hersoccerexTheme'
 
-/* The page takes its look from the HerSoccerex founding document: warm cream
-   paper, the navy and pink of the wordmark, gold rules and a serif display
-   face. The cream matches the florals' own background exactly, so the
-   corner artwork sits on the page with no visible edge. */
-const C = {
-  paper: '#F9F6EF',
-  card: '#FDFBF6',
-  line: '#E7DECB',
-  navy: '#20356A',
-  ink: '#1B2340',
-  body: '#4A4F5E',
-  pink: '#E72F87',
-  gold: '#A67C3B',
-}
-const SERIF = "'Cormorant Garamond', Georgia, 'Times New Roman', serif"
-const ASSETS = '/images/hersoccerex'
+/* The launch party opens the community on the first day of Soccerex Miami.
+   The sentence about it changes tense once the party has started. */
+const LAUNCH_AT = new Date('2026-09-23T16:00:00-04:00')
+
 const CONTACT_EMAIL = 'partner@soccerex.com'
 
 const AUDIENCES = [
@@ -69,7 +59,15 @@ const ROLES = [
 ]
 
 export default function HerSoccerex() {
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  /* Links from elsewhere (the home page's "Join the community") land on a
+     section; everything else starts at the top. */
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (!id) { window.scrollTo(0, 0); return }
+    const frame = window.requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView())
+    return () => window.cancelAnimationFrame(frame)
+  }, [])
+  const [launched] = useState(() => Date.now() >= LAUNCH_AT.getTime())
 
   return (
     <div style={{ background: C.paper, color: C.body }}>
@@ -105,7 +103,7 @@ export default function HerSoccerex() {
           </blockquote>
           <div className="flex flex-wrap justify-center gap-3" style={{ marginTop: 36 }}>
             <a href="#join" style={pill(true)}>Join HerSoccerex <ArrowRight size={16} /></a>
-            <a href="#building" style={pill(false)}>See what we are building</a>
+            <a href={HERSOCCEREX_FOUNDING_PDF} target="_blank" rel="noopener" style={pill(false)}>Read the founding document</a>
           </div>
         </div>
       </section>
@@ -202,6 +200,19 @@ export default function HerSoccerex() {
         </div>
       </section>
 
+      {/* ─── FOUNDING DOCUMENT ────────────────────────────────────────── */}
+      <Section id="founding-document">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-14 items-center">
+          <div>
+            <Heading>Read the founding document</Heading>
+            <Lead>
+              Keep a copy for yourself, or send it to someone who belongs at the table.
+            </Lead>
+          </div>
+          <HerSoccerexDocument title="HerSoccerex Founding Document" />
+        </div>
+      </Section>
+
       {/* ─── JOIN ─────────────────────────────────────────────────────── */}
       <section id="join" className="relative overflow-hidden" style={{ padding: 'clamp(72px, 9vw, 120px) clamp(20px, 5vw, 80px) clamp(96px, 12vw, 160px)', scrollMarginTop: 72 }}>
         <img
@@ -211,7 +222,7 @@ export default function HerSoccerex() {
         <div className="relative" style={{ maxWidth: 760, margin: '0 auto' }}>
           <Heading>Join <Brand /></Heading>
           <Lead>
-            Tell us who you are and how you would like to take part, and the <Brand /> team will be in touch. The community launches in Miami on September 23, the opening day of <Link to={MIAMI_2026} style={{ color: C.navy, fontWeight: 600 }}>Soccerex Miami 2026</Link>.
+            Tell us who you are and how you would like to take part, and the <Brand /> team will be in touch. The community {launched ? 'launched' : 'launches'} in Miami on September 23, the opening day of <Link to={MIAMI_2026} style={{ color: C.navy, fontWeight: 600 }}>Soccerex Miami 2026</Link>.
           </Lead>
           <JoinForm />
         </div>
@@ -363,17 +374,6 @@ function Diamond({ light, style }) {
       <span style={{ width: 90, height: 1, background: rule }} />
     </div>
   )
-}
-
-function pill(primary) {
-  return {
-    display: 'inline-flex', alignItems: 'center', gap: 8,
-    padding: '14px 26px', borderRadius: 999,
-    fontSize: '0.95rem', fontWeight: 600, textDecoration: 'none',
-    background: primary ? C.pink : 'transparent',
-    color: primary ? '#fff' : C.navy,
-    border: primary ? `1px solid ${C.pink}` : `1px solid ${C.navy}`,
-  }
 }
 
 const cardTitle = { fontFamily: SERIF, fontWeight: 600, color: C.ink, fontSize: 'clamp(1.55rem, 2.3vw, 1.85rem)', lineHeight: 1.15, marginBottom: 10 }

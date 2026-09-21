@@ -11,7 +11,7 @@
 # a headless-rendered snapshot so search engines and link-unfurlers see full content.
 # No code change needed when toggling; this comment documents the intent.
 #
-# Explicit pass-throughs for static SEO files — Netlify serves files from dist/
+# Explicit pass-throughs for static SEO files. Netlify serves files from dist/
 # before evaluating redirect rules, so robots.txt and sitemap.xml are already safe,
 # but declaring them as direct 200 routes makes the intent unambiguous.
 [[redirects]]
@@ -64,6 +64,25 @@
   for = "/article-preview/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+# The HerSoccerex founding document at the link people share. Served as the PDF
+# itself, so the address stays short and the file saves under a readable name.
+[[redirects]]
+  from = "/hersoccerex/founding-document"
+  to = "/downloads/hersoccerex-founding-document.pdf"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/hersoccerex/founding-document"
+  [headers.values]
+    Content-Type = "application/pdf"
+    Content-Disposition = "inline; filename=\"HerSoccerex Founding Document.pdf\""
+
+[[headers]]
+  for = "/downloads/hersoccerex-founding-document.pdf"
+  [headers.values]
+    Content-Disposition = "inline; filename=\"HerSoccerex Founding Document.pdf\""
 
 # SPA fallback so React Router routes like /events, /about, /contact work on refresh
 [[redirects]]

@@ -8,6 +8,7 @@ import PixelDivider from '../components/PixelDivider'
 import HeroSlideshow from '../components/HeroSlideshow'
 import { HOME, EVENTS, CONTACT, EUROPE_2026, MIAMI_2026, MIAMI_2026_PRESS_RELEASE, GALLERY, eventAgenda, eventSpeakers, pressRelease, PAST_SPEAKERS } from '../lib/routes'
 import AgendaHighlight from '../components/AgendaHighlight'
+import HerSoccerexHomeSection from '../components/HerSoccerexHomeSection'
 
 const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
 import PageMeta from '../components/PageMeta'
@@ -1559,7 +1560,10 @@ export default function Home() {
       <HeritageMapSection />
       <PixelDivider color="#0c1a2e" layers={4} height={90} speed={0.5} />
       <SpeakersShowcase />
-      <PixelDivider color="#eae8e4" layers={4} height={90} speed={0.5} />
+      {/* HerSoccerex sits in the middle of the page, in its own cream and serif,
+          with the founding document beside it. The waves below take its cream. */}
+      <HerSoccerexHomeSection />
+      <PixelDivider color="#F9F6EF" layers={4} height={90} speed={0.5} />
       {/* Soccerex Ecosystem moved above Testimonials per the GN revisions
           doc so visitors see the breadth of the network before the social
           proof / quotes. */}

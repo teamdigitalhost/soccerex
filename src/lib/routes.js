@@ -28,6 +28,10 @@ export const PAST_SPEAKERS   = '/past-speakers'
 export const APP_PAGE        = '/app'
 export const DEAL_NETWORK    = '/deal-network'
 export const HERSOCCEREX     = '/hersoccerex'
+// The founding document as a file, and the link people share. Netlify serves the
+// same PDF at the shared path, so it is an <a href>, never a router <Link>.
+export const HERSOCCEREX_FOUNDING_PDF   = '/downloads/hersoccerex-founding-document.pdf'
+export const HERSOCCEREX_FOUNDING_SHARE = '/hersoccerex/founding-document'
 export const DEAL_NETWORK_APPLY = '/deal-network/apply'
 // Official terms for the Ritz-Carlton stay drawing (first 100 completed
 // Deal Network applications). Linked from the invite emails + apply page.
