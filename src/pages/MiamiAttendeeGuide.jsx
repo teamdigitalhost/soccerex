@@ -390,6 +390,32 @@ export default function MiamiAttendeeGuide() {
           </GuideCard>
         </div>
       </section>
+
+      {/* ─── A GIFT FOR THE PLAYERS ───────────────────────────────────── */}
+      <section style={{ background: '#0D1B2A', padding: 'clamp(56px,7vw,90px) clamp(24px,5vw,80px)' }}>
+        <div className="grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-8 md:gap-12 items-center" style={{ maxWidth: '1120px', margin: '0 auto' }}>
+          <img
+            src="/images/partners/soccer-united-socks.jpg" alt="TAPEDESIGN grip socks" loading="lazy"
+            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12, background: '#fff' }}
+          />
+          <div>
+            <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.4vw, 2.5rem)', color: '#FFFFFF', marginBottom: 14 }}>
+              Thank you for the socks
+            </h2>
+            <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, maxWidth: 560 }}>
+              A thousand TAPEDESIGN grip socks are coming to Soccerex Miami 2026, a gift from Soccer United in New Zealand and TAPEDESIGN, who make the grip socks the professional game wears. Thank you both.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-10 gap-y-5" style={{ marginTop: 28 }}>
+              <a href="https://soccerunited.co.nz" target="_blank" rel="noopener noreferrer" aria-label="Soccer United">
+                <img src="/images/partners/soccer-united-logo.png" alt="Soccer United" width={233} height={199} style={{ width: 96, height: 'auto', display: 'block' }} />
+              </a>
+              <a href="https://www.tape-design.com/en/" target="_blank" rel="noopener noreferrer" aria-label="TAPEDESIGN">
+                <img src="/images/partners/tapedesign-logo-white.png" alt="TAPEDESIGN" width={340} height={70} style={{ width: 170, height: 'auto', display: 'block' }} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
