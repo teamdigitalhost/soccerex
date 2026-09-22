@@ -40,7 +40,7 @@ const BLACKLANE = {
 const APP_STORE = 'https://apps.apple.com/us/app/soccerex-events/id6737689519'
 const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.teks.eventify&hl=en_US'
 
-const HELP_EMAIL = 'registrations@soccerex.com'
+const HELP_EMAIL = 'enquiries@soccerex.com'
 
 /* Read the day's opening and closing times off the live agenda, so this page
    moves when the running order does. Only panels count: registration, the
@@ -133,7 +133,7 @@ export default function MiamiAttendeeGuide() {
               { icon: MapPin, label: 'Venue', value: '1000 Stadium Drive, Miami, FL 33125' },
               { icon: Car, label: 'Parking', value: 'Audi Black Lot' },
               { icon: Clock, label: 'Registration opens', value: '8:00 AM, Thursday, September 24' },
-              { icon: Mail, label: 'Questions', value: <>registrations<wbr />@soccerex.com</>, href: `mailto:${HELP_EMAIL}` },
+              { icon: Mail, label: 'Questions', value: <>enquiries<wbr />@soccerex.com</>, href: `mailto:${HELP_EMAIL}` },
             ].map((fact) => {
               const FactIcon = fact.icon
               return (
@@ -164,7 +164,7 @@ export default function MiamiAttendeeGuide() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <GuideCard icon={Car} title="Driving and parking">
               <p>
-                Park in the <strong>Audi Black Lot</strong>. Enter the park from NW 37th Avenue, across from NW 19th Terrace, and follow the signs for the Audi Black Lot. It sits on the west side of the stadium, right beside the West Club VIP Entrance you will walk in through.
+                Park in the <strong>Audi Black Lot</strong>. Enter the park from NW 37th Avenue, across from NW 19th Terrace, and follow the signs for the Audi Black Lot. It sits on the west side of the stadium, right beside the West Club VIP Entrance you will walk in through. No parking pass is needed.
               </p>
               <p className="mt-3">
                 Parking in the Audi Black Lot is free for Soccerex delegates, and our staff will be there to help with directions when you arrive.
