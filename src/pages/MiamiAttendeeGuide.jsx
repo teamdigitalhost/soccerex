@@ -130,7 +130,7 @@ export default function MiamiAttendeeGuide() {
           {/* The four things people look for first, as labeled values. */}
           <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-12">
             {[
-              { icon: MapPin, label: 'Venue', value: '1900 NW 37th Avenue, Miami, FL 33125' },
+              { icon: MapPin, label: 'Venue', value: '1000 Stadium Drive, Miami, FL 33125' },
               { icon: Car, label: 'Parking', value: 'Audi Black Lot' },
               { icon: Clock, label: 'Registration opens', value: '8:00 AM, Thursday, September 24' },
               { icon: Mail, label: 'Questions', value: <>registrations<wbr />@soccerex.com</>, href: `mailto:${HELP_EMAIL}` },
