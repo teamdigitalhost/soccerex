@@ -391,29 +391,27 @@ export default function MiamiAttendeeGuide() {
         </div>
       </section>
 
-      {/* ─── THANK YOU ───────────────────────────────────────────────── */}
-      <section style={{ background: '#0D1B2A', padding: 'clamp(56px,7vw,90px) clamp(24px,5vw,80px)' }}>
-        <div className="grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-8 md:gap-12 items-center" style={{ maxWidth: '1120px', margin: '0 auto' }}>
-          <img
-            src="/images/partners/soccer-united-socks.jpg" alt="TAPEDESIGN grip socks" loading="lazy"
-            style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12, background: '#fff' }}
-          />
-          <div>
-            <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.4vw, 2.5rem)', color: '#FFFFFF', marginBottom: 14 }}>
-              Thank you for the gear
-            </h2>
-            <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, maxWidth: 560 }}>
-              Soccer United in New Zealand and TAPEDESIGN sent a gear donation to Soccerex Miami 2026. Thank you both.
-            </p>
-            <div className="flex flex-wrap items-center gap-x-10 gap-y-5" style={{ marginTop: 28 }}>
-              <a href="https://soccerunited.co.nz" target="_blank" rel="noopener noreferrer" aria-label="Soccer United">
-                <img src="/images/partners/soccer-united-logo.png" alt="Soccer United" width={233} height={199} style={{ width: 96, height: 'auto', display: 'block' }} />
-              </a>
-              <a href="https://www.tape-design.com/en/" target="_blank" rel="noopener noreferrer" aria-label="TAPEDESIGN">
-                <img src="/images/partners/tapedesign-logo-white.png" alt="TAPEDESIGN" width={340} height={70} style={{ width: 170, height: 'auto', display: 'block' }} />
-              </a>
-            </div>
+      {/* ─── ACKNOWLEDGEMENT ─────────────────────────────────────────── */}
+      <section style={{ background: '#0D1B2A', padding: 'clamp(64px,8vw,110px) clamp(24px,5vw,80px)' }}>
+        <div className="text-center" style={{ maxWidth: 720, margin: '0 auto' }}>
+          <h2 className="miami-headline" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', color: '#FFFFFF', marginBottom: 18 }}>
+            With thanks
+          </h2>
+          <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.7 }}>
+            Soccerex would like to thank <a href="https://soccerunited.co.nz" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontWeight: 600 }}>Soccer United</a> and <a href="https://www.tape-design.com/en/" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontWeight: 600 }}>TAPEDESIGN</a> for their generous gear donation to Soccerex Miami 2026, and for their support of this year&rsquo;s event.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-6" style={{ marginTop: 36 }}>
+            <a href="https://soccerunited.co.nz" target="_blank" rel="noopener noreferrer" aria-label="Soccer United">
+              <img src="/images/partners/soccer-united-logo.png" alt="Soccer United" width={233} height={199} style={{ width: 92, height: 'auto', display: 'block' }} />
+            </a>
+            <a href="https://www.tape-design.com/en/" target="_blank" rel="noopener noreferrer" aria-label="TAPEDESIGN">
+              <img src="/images/partners/tapedesign-logo-white.png" alt="TAPEDESIGN" width={340} height={70} style={{ width: 168, height: 'auto', display: 'block' }} />
+            </a>
           </div>
+          <img
+            src="/images/partners/soccer-united-socks.jpg" alt="" aria-hidden loading="lazy"
+            style={{ width: 'min(420px, 100%)', height: 'auto', display: 'block', margin: '36px auto 0', borderRadius: 12, background: '#fff' }}
+          />
         </div>
       </section>
     </div>
