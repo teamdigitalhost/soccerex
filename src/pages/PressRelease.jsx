@@ -1,10 +1,29 @@
-import { useEffect } from 'react'
+import { useEffect, Fragment } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { HOME } from '../lib/routes'
 import { PRESS_RELEASES } from '../data/pressReleases'
 import PageMeta from '../components/PageMeta'
 import { pressReleaseMeta } from '../lib/pageMeta'
+
+/* A release names its companies' sites in running text ("neauwater.com"). Turn those into links,
+   and nothing else: only a bare domain on a known suffix, never an email address. */
+const SITE = /\b((?:[a-z0-9-]+\.)+(?:com|org|net|io|co))\b/gi
+function withLinks(text) {
+  const parts = []
+  let last = 0
+  for (const m of text.matchAll(SITE)) {
+    if (text[m.index - 1] === '@' || text[m.index - 1] === '.') continue
+    parts.push(text.slice(last, m.index))
+    parts.push(
+      <a key={m.index} href={`https://${m[0]}`} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-red)' }}>{m[0]}</a>,
+    )
+    last = m.index + m[0].length
+  }
+  if (parts.length === 0) return text
+  parts.push(text.slice(last))
+  return parts.map((part, i) => <Fragment key={i}>{part}</Fragment>)
+}
 
 export default function PressRelease() {
   const { slug } = useParams()
@@ -40,6 +59,9 @@ export default function PressRelease() {
           <h1 className="font-heading font-bold leading-tight mb-4" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', color: '#1a1a1a' }}>
             {release.title}
           </h1>
+          {release.subtitle && (
+            <p className="font-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#555' }}>{release.subtitle}</p>
+          )}
           <p className="font-body text-sm" style={{ color: '#999' }}>{release.date}</p>
         </div>
       </section>
@@ -52,7 +74,7 @@ export default function PressRelease() {
               return (
                 <p key={i} className="font-body leading-relaxed mb-5" style={{ fontSize: '1.05rem', color: '#444' }}>
                   {block.bold && <strong style={{ color: '#1a1a1a' }}>{block.text.split('.')[0]}.</strong>}
-                  {block.bold ? block.text.split('.').slice(1).join('.') : block.text}
+                  {withLinks(block.bold ? block.text.split('.').slice(1).join('.') : block.text)}
                 </p>
               )
             }
@@ -79,9 +101,20 @@ export default function PressRelease() {
             <p className="font-body leading-relaxed text-sm mb-4" style={{ color: '#666' }}>
               Soccerex is the world's leading football business event platform, connecting the global football industry through conferences, exhibitions, media, and networking. For 30 years, Soccerex has brought together the most influential stakeholders in the game to shape its commercial, strategic, and institutional future.
             </p>
-            <p className="font-body text-sm" style={{ color: '#999' }}>
-              Media Contact: <a href="mailto:press@soccerex.com" style={{ color: 'var(--color-red)', textDecoration: 'none' }}>press@soccerex.com</a>
-            </p>
+            {release.contacts ? (
+              <div className="font-body text-sm" style={{ color: '#999' }}>
+                <p className="mb-2" style={{ color: '#555', fontWeight: 600 }}>Media contacts</p>
+                {release.contacts.map((c) => (
+                  <p key={c.email} className="mb-1">
+                    {c.org}: <a href={`mailto:${c.email}`} style={{ color: 'var(--color-red)', textDecoration: 'none' }}>{c.email}</a>
+                  </p>
+                ))}
+              </div>
+            ) : (
+              <p className="font-body text-sm" style={{ color: '#999' }}>
+                Media Contact: <a href="mailto:press@soccerex.com" style={{ color: 'var(--color-red)', textDecoration: 'none' }}>press@soccerex.com</a>
+              </p>
+            )}
           </div>
         </article>
       </section>

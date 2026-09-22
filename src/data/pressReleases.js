@@ -6,11 +6,16 @@
 export const PRESS_RELEASES = {
   'neau-water-soccerex-miami-2026': {
     title: 'Soccerex and neaū Water Renew Hydration Partnership for Soccerex Miami 2026',
+    subtitle: 'A second consecutive year of partnership brings neaū\u2019s premium, PFAS-free water and H.A.R.T.® Technology to Soccerex guests and VIPs in Miami.',
     date: 'September 22, 2026',
     category: 'Partnership',
     image: '/images/og/miami-2026.jpg',
     backLink: '/miami-2026',
     backLabel: 'Back to Miami 2026',
+    contacts: [
+      { org: 'neaū water, Press & Media', email: 'media@neauwater.com' },
+      { org: 'Soccerex, Media & Communications', email: 'ivan@soccerex.com' },
+    ],
     content: [
       { type: 'p', bold: true, text: 'Miami, FL.' },
       { type: 'p', text: 'Soccerex and neaū water today announced the renewal of their partnership for Soccerex Miami 2026, marking the second consecutive year the global football business platform and premium hydration technology company will work together to provide Soccerex guests, executives and VIPs with PFAS-free premium water.' },

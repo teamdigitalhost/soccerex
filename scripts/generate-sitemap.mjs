@@ -1,13 +1,14 @@
 /**
  * Prebuild sitemap generator.
- * Reads public/insights-manifest.json and emits public/sitemap.xml with all
- * static routes + one entry per insight article.
+ * Reads public/insights-manifest.json and src/data/pressReleases.js, and emits public/sitemap.xml
+ * with all static routes plus one entry per insight article and per press release.
  *
  * Run via:  node scripts/generate-sitemap.mjs
  * Wired as: "prebuild" in package.json so it runs before every `vite build`.
  */
 
 import { readFileSync, writeFileSync } from 'fs'
+import { PRESS_RELEASES } from '../src/data/pressReleases.js'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
@@ -80,6 +81,13 @@ const entries = [
     lastmod: a.date || today,
     changefreq: 'monthly',
     priority: '0.7',
+  })),
+  // Press releases: each one is a page partners and media link to.
+  ...Object.entries(PRESS_RELEASES).map(([slug, release]) => urlEntry({
+    loc: `${SITE}/press/${encodeURIComponent(slug)}`,
+    lastmod: new Date(release.date).toString() === 'Invalid Date' ? today : new Date(release.date).toISOString().slice(0, 10),
+    changefreq: 'monthly',
+    priority: '0.6',
   })),
 ]
 
