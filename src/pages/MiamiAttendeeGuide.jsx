@@ -391,7 +391,7 @@ export default function MiamiAttendeeGuide() {
         </div>
       </section>
 
-      {/* ─── A GIFT FOR THE PLAYERS ───────────────────────────────────── */}
+      {/* ─── THANK YOU ───────────────────────────────────────────────── */}
       <section style={{ background: '#0D1B2A', padding: 'clamp(56px,7vw,90px) clamp(24px,5vw,80px)' }}>
         <div className="grid grid-cols-1 md:grid-cols-[0.85fr_1.15fr] gap-8 md:gap-12 items-center" style={{ maxWidth: '1120px', margin: '0 auto' }}>
           <img
@@ -400,10 +400,10 @@ export default function MiamiAttendeeGuide() {
           />
           <div>
             <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.4vw, 2.5rem)', color: '#FFFFFF', marginBottom: 14 }}>
-              Thank you for the socks
+              Thank you for the gear
             </h2>
             <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, maxWidth: 560 }}>
-              A thousand TAPEDESIGN grip socks are coming to Soccerex Miami 2026, a gift from Soccer United in New Zealand and TAPEDESIGN, who make the grip socks the professional game wears. Thank you both.
+              Soccer United in New Zealand and TAPEDESIGN sent a gear donation to Soccerex Miami 2026. Thank you both.
             </p>
             <div className="flex flex-wrap items-center gap-x-10 gap-y-5" style={{ marginTop: 28 }}>
               <a href="https://soccerunited.co.nz" target="_blank" rel="noopener noreferrer" aria-label="Soccer United">
