@@ -1,5 +1,5 @@
 import { useEffect, Fragment } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Download } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { HOME } from '../lib/routes'
 import { PRESS_RELEASES } from '../data/pressReleases'
@@ -63,6 +63,15 @@ export default function PressRelease() {
             <p className="font-body leading-relaxed mb-4" style={{ fontSize: '1.05rem', color: '#555' }}>{release.subtitle}</p>
           )}
           <p className="font-body text-sm" style={{ color: '#999' }}>{release.date}</p>
+          {release.pdf && (
+            <a
+              href={release.pdf} download
+              className="inline-flex items-center gap-2 font-body"
+              style={{ marginTop: 20, padding: '11px 20px', borderRadius: 999, fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none', color: '#09203e', border: '1px solid rgba(9,32,62,0.25)' }}
+            >
+              <Download size={16} /> Download the release (PDF)
+            </a>
+          )}
         </div>
       </section>
 

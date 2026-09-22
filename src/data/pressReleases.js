@@ -11,6 +11,7 @@ export const PRESS_RELEASES = {
     category: 'Partnership',
     image: '/images/press/neau-water-soccerex.jpg',
     visual: { src: '/images/press/neau-water-soccerex.jpg', alt: 'neaū water and Soccerex' },
+    pdf: '/downloads/press-neau-water-soccerex-miami-2026.pdf',
     backLink: '/miami-2026',
     backLabel: 'Back to Miami 2026',
     contacts: [
