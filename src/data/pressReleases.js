@@ -4,6 +4,29 @@
  * headline. `image` is the preview image for that link.
  */
 export const PRESS_RELEASES = {
+  'neau-water-soccerex-miami-2026': {
+    title: 'Soccerex and neaū Water Renew Hydration Partnership for Soccerex Miami 2026',
+    date: 'September 22, 2026',
+    category: 'Partnership',
+    image: '/images/og/miami-2026.jpg',
+    backLink: '/miami-2026',
+    backLabel: 'Back to Miami 2026',
+    content: [
+      { type: 'p', bold: true, text: 'Miami, FL.' },
+      { type: 'p', text: 'Soccerex and neaū water today announced the renewal of their partnership for Soccerex Miami 2026, marking the second consecutive year the global football business platform and premium hydration technology company will work together to provide Soccerex guests, executives and VIPs with PFAS-free premium water.' },
+      { type: 'p', text: 'The renewed partnership reflects neaū\'s growing presence within global soccer and its commitment to advancing the conversation around water quality, hydration and performance.' },
+      { type: 'p', text: 'At the heart of neaū water is its proprietary H.A.R.T.® (Hydration by Advanced Restorative Technology®), a physical water-refinement process designed to improve filtration efficiency and deliver exceptionally clean, smooth-tasting water without chemical additives.' },
+      { type: 'p', text: 'The company\'s approach is centered on the belief that water should be treated as a critical part of health, performance, longevity and wellbeing, particularly in elite sport where hydration plays an essential role in preparation, competition and recovery.' },
+      { type: 'quote', text: '\u201cSoccerex brings together many of the most influential people and organizations shaping the future of the game, which makes this partnership especially meaningful for neaū. Hydration is fundamental to performance, focus and recovery, and we believe athletes and consumers should expect more from the water they drink. Returning to Soccerex for a second year allows us to continue introducing the global soccer community to a cleaner and more advanced approach to hydration.\u201d', author: 'Hani Beshara', role: 'CEO, neaū water' },
+      { type: 'p', text: 'neaū has continued to expand its footprint within professional soccer through its official partnership with Concacaf, supporting player hydration across major Concacaf competitions. The relationship places neaū alongside elite athletes competing at the highest levels of the sport and reinforces the company\'s broader strategy of partnering with organizations that value performance, innovation and player wellbeing.' },
+      { type: 'quote', text: '\u201cSoccerex is focused on creating an environment that reflects the innovation and standards of the modern game. We are pleased to welcome neaū water back for a second consecutive year. Their commitment to hydration innovation, their growing presence in soccer and their partnership with organizations such as Concacaf make them a strong fit for the Soccerex community.\u201d', author: 'Garrett Navia', role: 'CEO, Soccerex' },
+      { type: 'p', text: 'At Soccerex Miami 2026, neaū water will be available to guests and VIPs throughout the event, bringing the company\'s clean hydration platform directly to executives, clubs, federations, brands, investors, media and other leaders from across the international football industry.' },
+      { type: 'p', text: 'The renewed collaboration comes at an important time for soccer in the United States and the Americas, as Miami continues to strengthen its position as a major center for the sport, its business and its culture.' },
+      { type: 'p', bold: true, text: 'About neaū Water.' },
+      { type: 'p', text: 'neaū water is a premium clean-hydration company focused on water science, purity and innovation. Its proprietary H.A.R.T.® (Hydration by Advanced Restorative Technology®) is designed to enhance water refinement and filtration while delivering a clean, smooth hydration experience. neaū water is PFAS-free and has established partnerships across professional sports, including an official partnership with Concacaf supporting player hydration across major competitions. neauwater.com' },
+    ],
+  },
+
   'soccerex-europe-amsterdam-may-2026': {
     title: 'Soccerex Europe Returns to Amsterdam in May 2026 at the Johan Cruijff ArenA',
     date: 'January 14, 2026',
