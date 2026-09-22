@@ -69,6 +69,12 @@ export default function PressRelease() {
       {/* Article body */}
       <section style={{ padding: 'clamp(40px,6vw,70px) clamp(24px,5vw,80px)' }}>
         <article style={{ maxWidth: '760px', margin: '0 auto' }}>
+          {release.visual && (
+            <img
+              src={release.visual.src} alt={release.visual.alt || ''}
+              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 10, marginBottom: 'clamp(28px,4vw,44px)' }}
+            />
+          )}
           {release.content.map((block, i) => {
             if (block.type === 'p') {
               return (

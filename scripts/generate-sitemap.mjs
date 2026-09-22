@@ -76,7 +76,7 @@ const entries = [
     priority: r.priority,
   })),
   // Insight articles
-  ...articles.map(a => urlEntry({
+  ...articles.filter(a => !a.externalUrl).map(a => urlEntry({
     loc: `${SITE}/insights/${encodeURIComponent(a.slug)}`,
     lastmod: a.date || today,
     changefreq: 'monthly',

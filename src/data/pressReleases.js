@@ -9,7 +9,8 @@ export const PRESS_RELEASES = {
     subtitle: 'A second consecutive year of partnership brings neaū\u2019s premium, PFAS-free water and H.A.R.T.® Technology to Soccerex guests and VIPs in Miami.',
     date: 'September 22, 2026',
     category: 'Partnership',
-    image: '/images/og/miami-2026.jpg',
+    image: '/images/press/neau-water-soccerex.jpg',
+    visual: { src: '/images/press/neau-water-soccerex.jpg', alt: 'neaū water and Soccerex' },
     backLink: '/miami-2026',
     backLabel: 'Back to Miami 2026',
     contacts: [

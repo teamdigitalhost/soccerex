@@ -279,7 +279,9 @@ export default function InsightsList() {
                 <div className="flex flex-col gap-4">
                   {articles.slice(0, 5).map((a) => {
                     const LinkTag = a.externalUrl
-                      ? ({ children, ...rest }) => <a href={a.externalUrl} target="_blank" rel="noreferrer" {...rest}>{children}</a>
+                      ? ({ children, ...rest }) => (a.externalUrl.startsWith('/')
+                        ? <Link to={a.externalUrl} {...rest}>{children}</Link>
+                        : <a href={a.externalUrl} target="_blank" rel="noreferrer" {...rest}>{children}</a>)
                       : ({ children, ...rest }) => <Link to={insightArticle(a.slug)} {...rest}>{children}</Link>
                     return (
                     <LinkTag key={a.id} className="group block" style={{ textDecoration: 'none' }}>
@@ -407,7 +409,9 @@ function uniqueLabels(values) {
 
 function ArticleAnchor({ article, children, className, style }) {
   if (article.externalUrl) {
-    return <a href={article.externalUrl} target="_blank" rel="noreferrer" className={className} style={style}>{children}</a>
+    return article.externalUrl.startsWith('/')
+      ? <Link to={article.externalUrl} className={className} style={style}>{children}</Link>
+      : <a href={article.externalUrl} target="_blank" rel="noreferrer" className={className} style={style}>{children}</a>
   }
   return <Link to={insightArticle(article.slug)} className={className} style={style}>{children}</Link>
 }
