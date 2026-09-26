@@ -81,6 +81,10 @@ export const MIAMI_2026_PRESS_RELEASE = `${MIAMI_2026}/press-release`
 // Unlisted second version of the Miami page, for team review. Linked from nowhere,
 // excluded from the sitemap, served noindex. Delete this line to retire it.
 export const MIAMI_2026_V2   = `${MIAMI_2026}/v2`
+// The post-event page, unlisted while Joel reviews it. Same rules as /miami-2026/v2:
+// linked from nowhere, out of the sitemap, served noindex. It takes over MIAMI_2026
+// when it is approved.
+export const MIAMI_2026_RECAP_DRAFT = '/miami-2026-draft'
 
 /* Invitations to the evenings around an event: the VIP night, the social
    evening, whatever a future event runs. One page serves all of them, so the

@@ -15,7 +15,7 @@ import {
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
-  ROUTE_PATTERNS, MIAMI_2026_V2, EVENT_RSVP_PATTERN, MIAMI_2026_RSVP_PATTERN, MIAMI_2026_VIP_NIGHT, MIAMI_2026_ATTENDEE_GUIDE } from './lib/routes'
+  ROUTE_PATTERNS, MIAMI_2026_V2, MIAMI_2026_RECAP_DRAFT, EVENT_RSVP_PATTERN, MIAMI_2026_RSVP_PATTERN, MIAMI_2026_VIP_NIGHT, MIAMI_2026_ATTENDEE_GUIDE } from './lib/routes'
 
 /* Map pathname to a theme class. Applied at app root so the navbar
    and footer (which sit outside the page component) pick up the
@@ -87,6 +87,7 @@ const PastSpeakers = lazy(() => import('./pages/PastSpeakers'))
 const Europe2026 = lazy(() => import('./pages/Europe2026'))
 const Miami2026 = lazy(() => import('./pages/Miami2026'))
 const Miami2026V2 = lazy(() => import('./pages/Miami2026V2'))
+const Miami2026Recap = lazy(() => import('./pages/Miami2026Recap'))
 const EventRsvp = lazy(() => import('./pages/EventRsvp'))
 const MiamiPressRelease = lazy(() => import('./pages/MiamiPressRelease'))
 const MiamiAccommodations = lazy(() => import('./pages/MiamiAccommodations'))
@@ -152,6 +153,9 @@ function App() {
       <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050d1a' }} />}>
         <Routes>
           <Route path={MIAMI_2026_V2} element={<Miami2026V2 />} />
+          {/* The post-event Miami page, under review. Unlisted and noindex until it
+              replaces MIAMI_2026. */}
+          <Route path={MIAMI_2026_RECAP_DRAFT} element={<Miami2026Recap />} />
           {/* Invitations to the evenings around an event, sent by email. The Miami
               alias reads like the event; the canonical path works for any event.
               The bare paths forward to the VIP night, which is where the first links pointed. */}
