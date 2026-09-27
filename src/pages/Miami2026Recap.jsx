@@ -23,6 +23,7 @@ const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
 const GFX = '/events/miami/2026/graphics'
 const V2 = '/events/miami/2026/v2'
 const PHOTO = 'https://soccerex-public-assets.s3.amazonaws.com/events/miami-2026/gallery'
+const VIDEO = 'https://soccerex-public-assets.s3.amazonaws.com/events/miami-2026/video'
 
 const photo = (n, size = '') => `${PHOTO}/miami-2026-${String(n).padStart(2, '0')}${size}.jpg`
 
@@ -46,7 +47,7 @@ const DAYS = [
     date: 'Wednesday, September 24',
     title: 'Day one on the main stage',
     photo: 5,
-    body: 'Joseph DaGrosa Jr. and Heidi Pellerano opened the conference. The day moved through football investment, the World Cup, media rights and the commercial power of women’s football, and Roc Nation closed it with how they build a next generation agency.',
+    body: 'Joseph DaGrosa Jr. and Heidi Pellerano opened the conference. The day moved through football investment, the World Cup, media rights and the commercial power of women’s football, and Roc Nation closed it with DJ Khaled walking out to introduce their panel.',
   },
   {
     date: 'Thursday, September 25',
@@ -250,7 +251,7 @@ export default function Miami2026Recap() {
       <section style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(32px,4vw,48px)' }}>
-            Miami gave us three days
+            The week started on a mini field with kids from Miami
           </h2>
           <div className="grid gap-7" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
             {DAYS.map((d) => (
@@ -263,6 +264,39 @@ export default function Miami2026Recap() {
                 </div>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── THE KHALED MOMENT ───────────────────────────────────────────
+          Roc Nation closed day one and brought the room to its feet. It is the
+          moment that traveled furthest afterwards, so it gets its own section
+          rather than a frame in the grid. */}
+      <section style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)', overflow: 'hidden' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 'clamp(32px,5vw,64px)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', alignItems: 'center' }}>
+          <div>
+            <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)', color: '#FFFFFF', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
+              Then DJ <span style={{ color: '#FF4D8D' }}>Khaled walked out</span>
+            </h2>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.82)', marginBottom: 16 }}>
+              Roc Nation Sports International closed the first day with Built, Not Bought, their panel on building the next generation football agency. They opened it with the film they made for the World Cup, the one Khaled fronts, and he came out of the end of it in an Inter Miami shirt to introduce the panel.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.82)' }}>
+              The room came to its feet, every phone went up, and the clip traveled further than anything else from the week. Michael Yormark, Frederico Pena, Nathan Campbell, Rob Simpkins and Alan Redmond took it from there, with Diego Arrioja hosting.
+            </p>
+          </div>
+          <div style={{ justifySelf: 'center', width: '100%', maxWidth: 380 }}>
+            <video
+              controls playsInline preload="none"
+              poster={`${VIDEO}/dj-khaled-poster.jpg`}
+              style={{ width: '100%', aspectRatio: '9 / 16', borderRadius: 10, display: 'block', background: '#000', boxShadow: '0 24px 60px rgba(0,0,0,0.45)' }}
+            >
+              <source src={`${VIDEO}/dj-khaled-soccerex-miami-2026.mp4`} type="video/mp4" />
+              Your browser cannot play this video.
+            </video>
+            <p className="miami-body text-center" style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', marginTop: 12 }}>
+              Day one, Nu Stadium. Film by Cinco Creative.
+            </p>
           </div>
         </div>
       </section>
