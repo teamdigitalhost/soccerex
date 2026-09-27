@@ -89,28 +89,37 @@ const THEMES = [
 
 const GALLERY = [
   { slug: 'open', alt: 'A full room for the opening of Soccerex Miami 2026' },
+  { slug: 'dagrosa', alt: 'Joseph DaGrosa Jr., chairman of Soccerex, opening the conference' },
   { slug: 'khaled-mic', alt: 'DJ Khaled on stage at Nu Stadium with the Roc Nation Sports International panel' },
+  { slug: 'lalas', alt: 'Alexi Lalas of FOX Sports moderating on the main stage' },
   { slug: 'stands', alt: 'Delegates watching a session from the stands at Nu Stadium' },
-  { slug: 'meeting', alt: 'Two delegates in conversation on the concourse' },
-  { slug: 'investment', alt: 'The Football Investment Strategies panel on the main stage' },
-  { slug: 'khaled-room', alt: 'The room on its feet for the Built, Not Bought panel' },
+  { slug: 'guzan', alt: 'Brad Guzan of Atlanta United in conversation on the main stage' },
   { slug: 'concacaf-booth-2', alt: 'The Concacaf stand on the exhibition floor at Nu Stadium' },
+  { slug: 'worldcup', alt: 'The FIFA World Cup 26 tournament officers for Mexico, the United States and Canada on one panel' },
+  { slug: 'meeting', alt: 'Two delegates in conversation on the concourse' },
+  { slug: 'lalas-panel', alt: 'Alexi Lalas and Robin Austermann of Bundesliga Americas on Football’s Media Future' },
+  { slug: 'khaled-room', alt: 'The room on its feet for the Built, Not Bought panel' },
+  { slug: 'pellerano', alt: 'Heidi Pellerano, chief commercial officer of Concacaf, on the media panel' },
   { slug: 'floor-group', alt: 'Delegates on the exhibition floor' },
+  { slug: 'fireside-wide', alt: 'Ali Curtis and Brad Guzan in conversation with Diego Arrioja of Telemundo' },
   { slug: 'women', alt: 'The Commercial Power of Women’s Football panel' },
+  { slug: 'investment', alt: 'The Football Investment Strategies panel on the main stage' },
+  { slug: 'barber', alt: 'A speaker on The Commercial Power of Women’s Football' },
   { slug: 'concourse', alt: 'Delegates talking between sessions' },
   { slug: 'global', alt: 'State of Global Football Business in 2026 on the main stage' },
+  { slug: 'navia-floor', alt: 'Guests meeting in front of the Miami 2026 backdrop' },
   { slug: 'venue', alt: 'Inside Nu Stadium' },
+  { slug: 'biondo', alt: 'The freestyle show that opened the conference' },
   { slug: 'media', alt: 'Football’s Media Future: rights, streaming and the new media era' },
   { slug: 'networking', alt: 'Delegates meeting between sessions' },
-  { slug: 'fireside', alt: 'Ali Curtis and Brad Guzan in conversation with Diego Arrioja' },
-  { slug: 'audience', alt: 'A full house on day two' },
   { slug: 'khaled-artwork', alt: 'Roc Nation Sports International presented with a commissioned artwork on stage' },
+  { slug: 'audience', alt: 'A full house on day two' },
   { slug: 'stadiums', alt: 'Building the Stage for the Modern Game, the stadium infrastructure panel' },
   { slug: 'greeting', alt: 'Two delegates greeting each other between sessions' },
+  { slug: 'barca-booth-2', alt: 'The FC Barcelona stand on the exhibition floor' },
   { slug: 'tech', alt: 'Tech in Football: AI, performance and the modern front office' },
   { slug: 'ball', alt: 'The Soccerex match ball on the pitch at Nu Stadium' },
   { slug: 'barca', alt: 'Evolving Barça in the Americas on the main stage' },
-  { slug: 'barca-booth-2', alt: 'The FC Barcelona stand on the exhibition floor' },
   { slug: 'merch', alt: 'A delegate collecting merchandise on the exhibition floor' },
   { slug: 'argentina', alt: 'The Argentina Era panel on day two' },
   { slug: 'packed', alt: 'A packed house watching a session at Nu Stadium' },
@@ -341,25 +350,18 @@ export default function Miami2026Recap() {
             <div>
               <img src={frame('khaled-mic')} alt="DJ Khaled on stage at Nu Stadium with Michael Yormark and the Roc Nation Sports International panel"
                 loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 10, display: 'block', boxShadow: '0 24px 60px rgba(0,0,0,0.45)' }} />
-              <div className="miami-moment-reel">
-                <video controls playsInline preload="none" poster={`${ASSET}/video/dj-khaled-poster.jpg`}>
-                  <source src={`${ASSET}/video/dj-khaled-soccerex-miami-2026.mp4`} type="video/mp4" />
-                  Your browser cannot play this video.
-                </video>
-                <p className="miami-body" style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', margin: 0 }}>
-                  The reel Cinco Creative cut that evening, one of several from the week.
-                </p>
-              </div>
             </div>
           </div>
           <style>{`
             .miami-moment-top { display: grid; gap: clamp(28px,4vw,56px); grid-template-columns: 1fr; align-items: start; }
             @media (min-width: 900px) { .miami-moment-top { grid-template-columns: 1fr 1fr; } }
-            .miami-moment-reel { display: flex; gap: 18px; align-items: center; margin-top: 18px; }
-            .miami-moment-reel video { width: 150px; flex: 0 0 150px; aspect-ratio: 9 / 16; border-radius: 8px; display: block; background: #000; }
           `}</style>
 
           <div className="miami-moment-strip">
+            <video controls playsInline preload="none" poster={`${ASSET}/video/dj-khaled-poster.jpg`}>
+              <source src={`${ASSET}/video/dj-khaled-soccerex-miami-2026.mp4`} type="video/mp4" />
+              Your browser cannot play this video.
+            </video>
             {[
               ['khaled-room', 'The Built, Not Bought panel in front of a full room at Nu Stadium'],
               ['khaled-ball', 'DJ Khaled on stage with a Soccerex match ball'],
@@ -369,9 +371,11 @@ export default function Miami2026Recap() {
             ))}
           </div>
           <style>{`
-            .miami-moment-strip { display: grid; gap: 14px; grid-template-columns: 1fr; margin-top: clamp(28px,3.5vw,44px); }
-            @media (min-width: 720px) { .miami-moment-strip { grid-template-columns: repeat(3, 1fr); } }
-            .miami-moment-strip img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 6; display: block; border-radius: 6px; }
+            .miami-moment-strip { --row: clamp(150px, 15vw, 205px); display: grid; gap: 12px; margin-top: clamp(28px,3.5vw,44px);
+              grid-template-columns: 1fr 1fr; align-items: stretch; }
+            @media (min-width: 820px) { .miami-moment-strip { grid-template-columns: calc(var(--row) * 9 / 16) repeat(3, 1fr); } }
+            .miami-moment-strip img, .miami-moment-strip video { width: 100%; height: var(--row); object-fit: cover;
+              border-radius: 6px; display: block; background: #000; }
           `}</style>
         </div>
       </section>
