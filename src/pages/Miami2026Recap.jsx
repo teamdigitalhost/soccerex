@@ -279,7 +279,7 @@ export default function Miami2026Recap() {
               Then DJ <span style={{ color: '#FF4D8D' }}>Khaled walked out</span>
             </h2>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.82)', marginBottom: 16 }}>
-              Roc Nation Sports International closed the first day with Built, Not Bought, their panel on building the next generation football agency. They opened it with the film they made for the World Cup, the one Khaled fronts, and he came out of the end of it in an Inter Miami shirt to introduce the panel.
+              Roc Nation Sports International closed the first day with Built, Not Bought, their panel on building the next generation football agency. They opened it with the film they made for the World Cup, the one Khaled fronts, and he came out at the end of it in an Inter Miami shirt to introduce the panel.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.82)' }}>
               The room came to its feet, every phone went up, and the clip traveled further than anything else from the week. Michael Yormark, Frederico Pena, Nathan Campbell, Rob Simpkins and Alan Redmond took it from there, with Diego Arrioja hosting.
