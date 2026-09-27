@@ -94,6 +94,7 @@ const GALLERY = [
   { slug: 'meeting', alt: 'Two delegates in conversation on the concourse' },
   { slug: 'investment', alt: 'The Football Investment Strategies panel on the main stage' },
   { slug: 'khaled-room', alt: 'The room on its feet for the Built, Not Bought panel' },
+  { slug: 'concacaf-booth', alt: 'The Concacaf stand on the exhibition floor at Nu Stadium' },
   { slug: 'floor-group', alt: 'Delegates on the exhibition floor' },
   { slug: 'women', alt: 'The Commercial Power of Women’s Football panel' },
   { slug: 'concourse', alt: 'Delegates talking between sessions' },
@@ -109,9 +110,10 @@ const GALLERY = [
   { slug: 'tech', alt: 'Tech in Football: AI, performance and the modern front office' },
   { slug: 'ball', alt: 'The Soccerex match ball on the pitch at Nu Stadium' },
   { slug: 'barca', alt: 'Evolving Barça in the Americas on the main stage' },
+  { slug: 'barca-booth', alt: 'The FC Barcelona stand on the exhibition floor' },
   { slug: 'merch', alt: 'A delegate collecting merchandise on the exhibition floor' },
   { slug: 'argentina', alt: 'The Argentina Era panel on day two' },
-  { slug: 'khaled-phones', alt: 'Phones up across the room as DJ Khaled takes the stage' },
+  { slug: 'packed', alt: 'A packed house watching a session at Nu Stadium' },
   { slug: 'vip', alt: 'The Soccerex sign at the VIP reception' },
   { slug: 'impact', alt: 'Young players at the Community Impact Event on the mini fields at Nu Stadium' },
 ]
@@ -219,7 +221,7 @@ export default function Miami2026Recap() {
 
           <img src={`${GFX}/logo-primary.svg`} alt="Soccerex Miami 2026" style={{ width: 'min(420px, 72vw)', marginBottom: 'clamp(28px,4vw,40px)', filter: 'brightness(0) invert(1)' }} />
 
-          <h1 className="miami-headline" style={{ fontSize: 'clamp(2.1rem, 5vw, 3.6rem)', color: '#FFFFFF', lineHeight: 1.05, maxWidth: 940, marginBottom: 'clamp(18px,2.4vw,26px)' }}>
+          <h1 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(2.1rem, 5vw, 3.6rem)', color: '#FFFFFF', lineHeight: 1.05, maxWidth: 940, marginBottom: 'clamp(18px,2.4vw,26px)' }}>
             Football in the Americas <span style={{ color: '#FF4D8D' }}>fits in one room</span>
           </h1>
           <p className="miami-body" style={{ fontSize: 'clamp(1.02rem, 1.4vw, 1.18rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.65, maxWidth: 700 }}>
@@ -256,13 +258,13 @@ export default function Miami2026Recap() {
             Figures from Soccerex registrations and the official event app, September 2026.
           </p>
 
-          <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,40px)' }}>
-            Concacaf in one chair, Bayern in the next
+          <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,40px)' }}>
+            Who else was in the building
           </h2>
           <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 720, marginTop: -8, marginBottom: 'clamp(28px,3.5vw,40px)' }}>
-            873 organizations registered, and every one named here had someone on the stage or on the floor at Nu Stadium.
+            873 organizations registered. These are some of the names that had someone on the stage or on the floor, and the delegate list ran to thirty nine pages.
           </p>
-          <div className="grid gap-x-10 gap-y-9" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+          <div className="miami-cohorts">
             {COHORTS.map((c) => (
               <div key={c.heading}>
                 <h3 className="miami-headline" style={{ fontSize: '1rem', color: '#007C91', marginBottom: 10, textTransform: 'none', letterSpacing: '0.02em' }}>{c.heading}</h3>
@@ -270,6 +272,30 @@ export default function Miami2026Recap() {
               </div>
             ))}
           </div>
+          <style>{`
+            .miami-cohorts { display: grid; gap: 34px 48px; grid-template-columns: 1fr; }
+            @media (min-width: 760px) { .miami-cohorts { grid-template-columns: 1fr 1fr; } }
+          `}</style>
+
+          <div className="miami-floor-two" style={{ marginTop: 'clamp(40px,5vw,64px)' }}>
+            <figure style={{ margin: 0 }}>
+              <img src={frame('concacaf-booth', '-w800')} alt="The Concacaf stand on the exhibition floor at Nu Stadium" loading="lazy" />
+              <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
+                Concacaf built a stand with its own coffee bar and a wall of Gold Cup artwork, and ran meetings out of it for three days.
+              </figcaption>
+            </figure>
+            <figure style={{ margin: 0 }}>
+              <img src={frame('barca-booth', '-w800')} alt="The FC Barcelona stand on the exhibition floor at Nu Stadium" loading="lazy" />
+              <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
+                FC Barcelona took the stand across from it. Thirty companies built on that floor, and the coffee line was where half the introductions started.
+              </figcaption>
+            </figure>
+          </div>
+          <style>{`
+            .miami-floor-two { display: grid; gap: 22px; grid-template-columns: 1fr; }
+            @media (min-width: 760px) { .miami-floor-two { grid-template-columns: 1fr 1fr; gap: 28px; } }
+            .miami-floor-two img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block; }
+          `}</style>
         </div>
       </section>
 
@@ -277,7 +303,7 @@ export default function Miami2026Recap() {
       <section style={{ background: '#FFF8F4', padding: 'clamp(64px,8vw,104px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
           <div>
-            <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 18 }}>
+            <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 18 }}>
               The conversations that never happen on a video call
             </h2>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
@@ -302,8 +328,8 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <div style={{ display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
             <div>
-              <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)', color: '#FFFFFF', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
-                The moment the room forgot <span style={{ color: '#FF4D8D' }}>it was a conference</span>
+              <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)', color: '#FFFFFF', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
+                DJ Khaled, in an Inter Miami shirt, <span style={{ color: '#FF4D8D' }}>on a Soccerex stage</span>
               </h2>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
                 Roc Nation Sports International closed the first day with Built, Not Bought, their case for how a modern football agency gets built. They opened it with the film from their World Cup campaign, the one Khaled fronts, and he came out at the end of it in an Inter Miami shirt, sat down with the panel and handed it to Michael Yormark.
@@ -327,16 +353,20 @@ export default function Miami2026Recap() {
             </div>
           </div>
 
-          <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', marginTop: 'clamp(28px,3.5vw,44px)' }}>
+          <div className="miami-moment-strip">
             {[
-              ['khaled-phones', 'Phones up across the room as DJ Khaled takes the stage'],
               ['khaled-room', 'The Built, Not Bought panel in front of a full room at Nu Stadium'],
+              ['khaled-ball', 'DJ Khaled on stage with a Soccerex match ball'],
               ['khaled-artwork', 'Roc Nation Sports International presented with a commissioned artwork on stage'],
             ].map(([slug, alt]) => (
-              <img key={slug} src={frame(slug, '-w800')} alt={alt} loading="lazy"
-                style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 6, display: 'block' }} />
+              <img key={slug} src={frame(slug, '-w800')} alt={alt} loading="lazy" />
             ))}
           </div>
+          <style>{`
+            .miami-moment-strip { display: grid; gap: 14px; grid-template-columns: 1fr; margin-top: clamp(28px,3.5vw,44px); }
+            @media (min-width: 720px) { .miami-moment-strip { grid-template-columns: repeat(3, 1fr); } }
+            .miami-moment-strip img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 6; display: block; border-radius: 6px; }
+          `}</style>
         </div>
       </section>
 
@@ -344,9 +374,12 @@ export default function Miami2026Recap() {
       <section style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <div className="flex flex-wrap items-end justify-between gap-4" style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
-            <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', maxWidth: 620 }}>
+            <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', maxWidth: 620 }}>
               The stage where three World Cup host nations sat down together
             </h2>
+            <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 640 }}>
+              Twenty eight sessions ran over the three days. Here are six of them.
+            </p>
             <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
               The full running order <ArrowRight size={15} />
             </Link>
@@ -369,11 +402,11 @@ export default function Miami2026Recap() {
       <section id="gallery" style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)', scrollMarginTop: 80 }}>
         <div style={{ maxWidth: 1320, margin: '0 auto' }}>
           <div style={{ marginBottom: 'clamp(28px,3.5vw,44px)', maxWidth: 680 }}>
-            <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 14 }}>
-              This is what it looked like from the inside
+            <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 14 }}>
+              Some of what you missed
             </h2>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
-              Select any frame to see it full size. Press and partners can request the full set at{' '}
+              A small selection from three days of shooting. Select any frame to see it full size, and press and partners can request the full set at{' '}
               <a href="mailto:press@soccerex.com" style={{ color: '#E91E63' }}>press@soccerex.com</a>.
             </p>
           </div>
@@ -404,14 +437,14 @@ export default function Miami2026Recap() {
       />
 
       <BrandWall
-        heading={<>The Company You Keep <span style={{ color: '#E91E63' }}>at Soccerex</span></>}
+        heading={<>Thirty Years of Building <span style={{ color: '#E91E63' }}>This Room</span></>}
         intro="Clubs, leagues, federations and brands from across the Soccerex network."
       />
 
       {/* ─── THANK YOU ───────────────────────────────────────────────────── */}
       <section style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-          <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#FFFFFF', marginBottom: 'clamp(14px,2vw,20px)' }}>
+          <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#FFFFFF', marginBottom: 'clamp(14px,2vw,20px)' }}>
             Soccerex would like to thank
           </h2>
           <p className="miami-body" style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.72)', lineHeight: 1.65, maxWidth: 720, marginBottom: 'clamp(36px,4.5vw,54px)' }}>
@@ -431,7 +464,7 @@ export default function Miami2026Recap() {
       {/* ─── KEEP READING ────────────────────────────────────────────────── */}
       <section style={{ background: '#FFFFFF', padding: 'clamp(64px,8vw,104px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-          <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,42px)' }}>
+          <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,42px)' }}>
             Everything the week left behind
           </h2>
           <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
@@ -456,7 +489,7 @@ export default function Miami2026Recap() {
       {/* ─── NEXT ────────────────────────────────────────────────────────── */}
       <section style={{ background: 'var(--miami-sunset)', padding: 'clamp(70px,9vw,118px) clamp(24px,5vw,80px)' }}>
         <div className="text-center" style={{ maxWidth: 760, margin: '0 auto' }}>
-          <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', marginBottom: 18 }}>
+          <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', marginBottom: 18 }}>
             Do not watch the next one from your feed
           </h2>
           <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.65, marginBottom: 30 }}>
