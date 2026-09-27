@@ -417,10 +417,10 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1320, margin: '0 auto' }}>
           <div style={{ marginBottom: 'clamp(28px,3.5vw,44px)', maxWidth: 680 }}>
             <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 14 }}>
-              A few frames from three days
+              Take a look through the week
             </h2>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
-              A small selection from three days of shooting. Select any frame to see it full size, and press and partners can request the full set at{' '}
+              Open any frame to see it full size. This is a small part of what the photographers shot over three days, and press and partners can ask for the full set at{' '}
               <a href="mailto:press@soccerex.com" style={{ color: '#E91E63' }}>press@soccerex.com</a>.
             </p>
           </div>
@@ -447,7 +447,7 @@ export default function Miami2026Recap() {
       <SelectedSpeakers
         slug={MIAMI_EVENT_SLUG}
         limit={12}
-        heading={<>The People Who Run <span className="miami-text-gradient">These Properties</span></>}
+        heading={<>The Voices People <span className="miami-text-gradient">Flew In to Hear</span></>}
       />
 
       <BrandWall

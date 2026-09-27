@@ -85,9 +85,13 @@ export default function SelectedSpeakers({ slug, limit = 8, heading = null }) {
               <p className="miami-headline" style={{ fontSize: '1rem', color: '#FFFFFF', letterSpacing: '0.01em', lineHeight: 1.2, marginBottom: 4 }}>
                 {s.display_name}
               </p>
-              {s.headline && (
+              {/* A title on its own says nothing: "Analyst" and "Chairman" only mean
+                  something once the organization is named beside them. */}
+              {(s.headline || s.company) && (
                 <p className="miami-body" style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.62)', lineHeight: 1.45 }}>
                   {s.headline}
+                  {s.headline && s.company && <span style={{ color: 'rgba(255,255,255,0.42)' }}>, </span>}
+                  {s.company && <span style={{ color: 'rgba(255,255,255,0.78)' }}>{s.company}</span>}
                 </p>
               )}
             </Link>
