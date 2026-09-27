@@ -46,13 +46,13 @@ const DAYS = [
     date: 'Wednesday, September 24',
     title: 'Day one on the main stage',
     photo: 5,
-    body: 'Joseph DaGrosa Jr. and Heidi Pellerano opened the conference, and the day ran from football investment through the World Cup, media rights, the commercial power of women’s football and the Bundesliga in the Americas, finishing with Roc Nation on building the next generation agency.',
+    body: 'Joseph DaGrosa Jr. and Heidi Pellerano opened the conference. The day moved through football investment, the World Cup, media rights and the commercial power of women’s football, and Roc Nation closed it with how they build a next generation agency.',
   },
   {
     date: 'Thursday, September 25',
     title: 'Day two and the close',
     photo: 11,
-    body: 'Day two took in matchday revenue, brand building with Inter Miami CF, Royal Caribbean and Nu, the Argentina era, Mexico’s World Cup legacy, academies in the Americas, stadium infrastructure, technology in the front office and football with purpose.',
+    body: 'Inter Miami CF, Royal Caribbean and Nu opened day two on how they build a brand. The afternoon ran through the Argentina era, Mexico’s World Cup legacy and academies in the Americas, and the week closed on technology in the front office and football with purpose.',
   },
 ]
 
@@ -215,7 +215,7 @@ export default function Miami2026Recap() {
             Thank you, <span style={{ color: '#FF4D8D' }}>Miami</span>
           </h1>
           <p className="miami-body" style={{ fontSize: 'clamp(1.02rem, 1.4vw, 1.18rem)', color: 'rgba(255,255,255,0.82)', lineHeight: 1.65, maxWidth: 680 }}>
-            Three days at Nu Stadium, ten weeks after the World Cup, with the clubs, leagues, federations, brands and investors shaping football in the Americas. To everyone who spoke, exhibited, volunteered and showed up: thank you.
+            We spent three days at Nu Stadium with the people who run football in the Americas, ten weeks after the World Cup ended. Thank you to everyone who spoke, exhibited, volunteered and showed up.
           </p>
 
           <div className="flex flex-wrap items-center gap-6 lg:gap-8" style={{ marginTop: 'clamp(30px,4vw,44px)' }}>
@@ -250,7 +250,7 @@ export default function Miami2026Recap() {
       <section style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(32px,4vw,48px)' }}>
-            How the three days ran
+            Miami gave us three days
           </h2>
           <div className="grid gap-7" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
             {DAYS.map((d) => (
@@ -272,7 +272,7 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1320, margin: '0 auto' }}>
           <div style={{ marginBottom: 'clamp(28px,3.5vw,44px)', maxWidth: 680 }}>
             <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 14 }}>
-              Three days in photographs
+              Look for yourself in the crowd
             </h2>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
               Select any frame to see it full size. Press and partners can request the full set at{' '}
@@ -310,7 +310,7 @@ export default function Miami2026Recap() {
             Soccerex would like to thank
           </h2>
           <p className="miami-body" style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.72)', lineHeight: 1.65, maxWidth: 720, marginBottom: 'clamp(36px,4.5vw,54px)' }}>
-            An event of this size is the work of a few hundred people over the better part of a year. These are the ones who made Miami 2026 what it was.
+            A few hundred people spent the better part of a year building this week. These are the ones who made it what it was.
           </p>
           <div className="grid gap-x-10 gap-y-9" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
             {THANKS.map((t) => (
@@ -327,11 +327,11 @@ export default function Miami2026Recap() {
       <SelectedSpeakers
         slug={MIAMI_EVENT_SLUG}
         limit={12}
-        heading={<>The Executives Who Took <span className="miami-text-gradient">the Stage in Miami</span></>}
+        heading={<>You Shared a Room With <span className="miami-text-gradient">These People</span></>}
       />
 
       <BrandWall
-        heading={<>The Companies That Made Miami 2026 <span style={{ color: '#E91E63' }}>Happen</span></>}
+        heading={<>Every One of These Companies <span style={{ color: '#E91E63' }}>Showed Up for Miami</span></>}
         intro="Clubs, leagues, federations and brands from across the Soccerex network."
       />
 
@@ -339,7 +339,7 @@ export default function Miami2026Recap() {
       <section style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,116px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,42px)' }}>
-            Keep reading
+            Take Miami with you
           </h2>
           <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
             {[
@@ -364,10 +364,10 @@ export default function Miami2026Recap() {
       <section style={{ background: 'var(--miami-sunset)', padding: 'clamp(70px,9vw,118px) clamp(24px,5vw,80px)' }}>
         <div className="text-center" style={{ maxWidth: 760, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', marginBottom: 18 }}>
-            Soccerex returns
+            We are already planning the next one
           </h2>
           <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.65, marginBottom: 30 }}>
-            Dates for the next Miami edition are being set now. Tell us you want to be there and we will come to you first, with the delegate rate that goes to the people who were with us this year.
+            We are setting the dates for the next Miami edition now. Tell us you want to be there and we will come to you first, with the delegate rate we hold for the people who were with us this year.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <InquiryModalButton
