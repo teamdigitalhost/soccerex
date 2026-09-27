@@ -220,7 +220,7 @@ export default function Miami2026Recap() {
           <img src={`${GFX}/logo-primary.svg`} alt="Soccerex Miami 2026" style={{ width: 'min(420px, 72vw)', marginBottom: 'clamp(28px,4vw,40px)', filter: 'brightness(0) invert(1)' }} />
 
           <h1 className="miami-headline" style={{ fontSize: 'clamp(2.1rem, 5vw, 3.6rem)', color: '#FFFFFF', lineHeight: 1.05, maxWidth: 940, marginBottom: 'clamp(18px,2.4vw,26px)' }}>
-            The people who run football in the Americas spent three days <span style={{ color: '#FF4D8D' }}>in Miami</span>
+            Football in the Americas <span style={{ color: '#FF4D8D' }}>fits in one room</span>
           </h1>
           <p className="miami-body" style={{ fontSize: 'clamp(1.02rem, 1.4vw, 1.18rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.65, maxWidth: 700 }}>
             873 organizations registered for Soccerex Miami 2026 at Nu Stadium, ten weeks after the World Cup. 146 of them were clubs, leagues and federations. The rest were the brands, investors, agencies and broadcasters who do business with them.
@@ -257,10 +257,10 @@ export default function Miami2026Recap() {
           </p>
 
           <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,40px)' }}>
-            Concacaf, FIFA World Cup 26, Barcelona, Bayern and 869 more
+            Concacaf in one chair, Bayern in the next
           </h2>
           <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 720, marginTop: -8, marginBottom: 'clamp(28px,3.5vw,40px)' }}>
-            Every organization named here had someone on the stage or on the floor at Nu Stadium.
+            873 organizations registered, and every one named here had someone on the stage or on the floor at Nu Stadium.
           </p>
           <div className="grid gap-x-10 gap-y-9" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
             {COHORTS.map((c) => (
@@ -278,10 +278,10 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
           <div>
             <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 18 }}>
-              2,714 introductions in three days
+              The conversations that never happen on a video call
             </h2>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
-              Delegates made 2,714 connections and sent 5,305 messages through the official event app over the three days, and 1,580 of them registered on it. None of that counts what was agreed on the exhibition floor, in the green room or at the Savoy.
+              You cannot book the conversation that starts because someone recognized your badge in a coffee line. Delegates made 2,714 connections and sent 5,305 messages through the official event app over the three days, and 1,580 of them registered on it. None of that counts what was agreed on the exhibition floor, in the green room or at the Savoy.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
               Those introductions carry on after the event through the Soccerex Deal Network, where a person reviews every approach before it is sent.
@@ -303,7 +303,7 @@ export default function Miami2026Recap() {
           <div style={{ display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
             <div>
               <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)', color: '#FFFFFF', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
-                DJ Khaled turned up to introduce a panel about <span style={{ color: '#FF4D8D' }}>agency building</span>
+                The moment the room forgot <span style={{ color: '#FF4D8D' }}>it was a conference</span>
               </h2>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
                 Roc Nation Sports International closed the first day with Built, Not Bought, their case for how a modern football agency gets built. They opened it with the film from their World Cup campaign, the one Khaled fronts, and he came out at the end of it in an Inter Miami shirt, sat down with the panel and handed it to Michael Yormark.
@@ -345,7 +345,7 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <div className="flex flex-wrap items-end justify-between gap-4" style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
             <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', maxWidth: 620 }}>
-              The six arguments that filled the main stage
+              The stage where three World Cup host nations sat down together
             </h2>
             <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
               The full running order <ArrowRight size={15} />
@@ -370,7 +370,7 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1320, margin: '0 auto' }}>
           <div style={{ marginBottom: 'clamp(28px,3.5vw,44px)', maxWidth: 680 }}>
             <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 14 }}>
-              See the room for yourself
+              This is what it looked like from the inside
             </h2>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
               Select any frame to see it full size. Press and partners can request the full set at{' '}
@@ -400,11 +400,11 @@ export default function Miami2026Recap() {
       <SelectedSpeakers
         slug={MIAMI_EVENT_SLUG}
         limit={12}
-        heading={<>92 People Took the Stage. <span className="miami-text-gradient">Here Are Twelve</span></>}
+        heading={<>The People Whose Decisions <span className="miami-text-gradient">You Read About Later</span></>}
       />
 
       <BrandWall
-        heading={<>The Network Behind <span style={{ color: '#E91E63' }}>the Room</span></>}
+        heading={<>The Company You Keep <span style={{ color: '#E91E63' }}>at Soccerex</span></>}
         intro="Clubs, leagues, federations and brands from across the Soccerex network."
       />
 
@@ -432,7 +432,7 @@ export default function Miami2026Recap() {
       <section style={{ background: '#FFFFFF', padding: 'clamp(64px,8vw,104px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,42px)' }}>
-            Read what came out of it
+            Everything the week left behind
           </h2>
           <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
             {[
@@ -457,10 +457,10 @@ export default function Miami2026Recap() {
       <section style={{ background: 'var(--miami-sunset)', padding: 'clamp(70px,9vw,118px) clamp(24px,5vw,80px)' }}>
         <div className="text-center" style={{ maxWidth: 760, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', marginBottom: 18 }}>
-            We are already planning the next one
+            Do not watch the next one from your feed
           </h2>
           <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.65, marginBottom: 30 }}>
-            We are setting the dates for the next Miami edition now. Leave your details and we will send them to you before they go public, along with the delegate rates when they open.
+            The clips will be everywhere again next September, and they are a poor substitute for the room. We are setting the dates for the next Miami edition now. Leave your details and we will send them to you before they go public, along with the delegate rates when they open.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <InquiryModalButton
