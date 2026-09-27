@@ -365,7 +365,7 @@ export default function Miami2026Recap() {
             </video>
             {[
               ['khaled-room', 'The Built, Not Bought panel in front of a full room at Nu Stadium'],
-              ['khaled-ball', 'DJ Khaled on stage with a Soccerex match ball'],
+              ['khaled-arrioja', 'DJ Khaled on stage with Diego Arrioja of Telemundo, who hosted the panel'],
               ['khaled-artwork', 'Roc Nation Sports International presented with a commissioned artwork on stage'],
             ].map(([slug, alt]) => (
               <img key={slug} src={frame(slug, '-w800')} alt={alt} loading="lazy" />
