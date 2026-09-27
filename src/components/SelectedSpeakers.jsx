@@ -86,12 +86,15 @@ export default function SelectedSpeakers({ slug, limit = 8, heading = null }) {
                 {s.display_name}
               </p>
               {/* A title on its own says nothing: "Analyst" and "Chairman" only mean
-                  something once the organization is named beside them. */}
+                  something once the organization is named beside them. Plenty of headlines
+                  already end with the organization, so only add it when it is missing. */}
               {(s.headline || s.company) && (
                 <p className="miami-body" style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.62)', lineHeight: 1.45 }}>
                   {s.headline}
-                  {s.headline && s.company && <span style={{ color: 'rgba(255,255,255,0.42)' }}>, </span>}
-                  {s.company && <span style={{ color: 'rgba(255,255,255,0.78)' }}>{s.company}</span>}
+                  {s.headline && s.company && !s.headline.toLowerCase().includes(s.company.toLowerCase().split(',')[0].trim())
+                    && <span style={{ color: 'rgba(255,255,255,0.42)' }}>, </span>}
+                  {s.company && (!s.headline || !s.headline.toLowerCase().includes(s.company.toLowerCase().split(',')[0].trim()))
+                    && <span style={{ color: 'rgba(255,255,255,0.78)' }}>{s.company}</span>}
                 </p>
               )}
             </Link>

@@ -317,7 +317,7 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
           <div>
             <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 18 }}>
-              The conversations that start in a coffee line
+              The conversations that email cannot replace
             </h2>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
               A conversation that starts because someone recognized a badge in the coffee line does not get scheduled. Delegates made 2,714 connections and sent 5,305 messages through the official event app over the three days, and 1,580 of them registered on it. None of that counts what was agreed on the exhibition floor, in the green room or at the Savoy.
