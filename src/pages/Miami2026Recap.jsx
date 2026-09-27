@@ -232,10 +232,10 @@ export default function Miami2026Recap() {
           <img src={`${GFX}/logo-primary.svg`} alt="Soccerex Miami 2026" style={{ width: 'min(420px, 72vw)', marginBottom: 'clamp(28px,4vw,40px)', filter: 'brightness(0) invert(1)' }} />
 
           <h1 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(2.1rem, 5vw, 3.6rem)', color: '#FFFFFF', lineHeight: 1.05, maxWidth: 940, marginBottom: 'clamp(18px,2.4vw,26px)' }}>
-            Football in the Americas <span style={{ color: '#FF4D8D' }}>fits in one room</span>
+            The meetings that take a year to arrange <span style={{ color: '#FF4D8D' }}>happened in three days</span>
           </h1>
           <p className="miami-body" style={{ fontSize: 'clamp(1.02rem, 1.4vw, 1.18rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.65, maxWidth: 700 }}>
-            873 organizations registered for Soccerex Miami 2026 at Nu Stadium, ten weeks after the World Cup. 146 of them were clubs, leagues and federations. The rest were the brands, investors, agencies and broadcasters who do business with them.
+            873 organizations came to Nu Stadium for Soccerex Miami 2026, ten weeks after the World Cup. 146 of them were clubs, leagues and federations, and the rest were the brands, investors, agencies and broadcasters who spend the year trying to reach them.
           </p>
 
           <div className="flex flex-wrap items-center gap-6 lg:gap-8" style={{ marginTop: 'clamp(30px,4vw,44px)' }}>
