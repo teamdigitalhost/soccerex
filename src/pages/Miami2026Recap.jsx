@@ -272,7 +272,7 @@ export default function Miami2026Recap() {
           </p>
 
           <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,40px)' }}>
-            Who else was in the building
+            The industry showed up in one building
           </h2>
           <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 720, marginTop: -8, marginBottom: 'clamp(28px,3.5vw,40px)' }}>
             873 organizations registered. These are some of the names that had someone on the stage or on the floor, and the delegate list ran to thirty nine pages.
