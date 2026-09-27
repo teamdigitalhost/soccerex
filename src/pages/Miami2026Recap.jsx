@@ -297,7 +297,7 @@ export default function Miami2026Recap() {
             <figure style={{ margin: 0 }}>
               <img src={frame('barca-booth-2', '-w800')} alt="The FC Barcelona stand on the exhibition floor at Nu Stadium" loading="lazy" />
               <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
-                FC Barcelona took the stand across from it. Thirty companies built on that floor, and the coffee line was where half the introductions started.
+                FC Barcelona took the stand across from it. Thirty companies built on that floor, and the coffee between them ran all day.
               </figcaption>
             </figure>
           </div>
@@ -314,10 +314,10 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
           <div>
             <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 18 }}>
-              The conversations that never happen on a video call
+              The conversations that start in a coffee line
             </h2>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
-              You cannot book the conversation that starts because someone recognized your badge in a coffee line. Delegates made 2,714 connections and sent 5,305 messages through the official event app over the three days, and 1,580 of them registered on it. None of that counts what was agreed on the exhibition floor, in the green room or at the Savoy.
+              A conversation that starts because someone recognized a badge in the coffee line does not get scheduled. Delegates made 2,714 connections and sent 5,305 messages through the official event app over the three days, and 1,580 of them registered on it. None of that counts what was agreed on the exhibition floor, in the green room or at the Savoy.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
               Those introductions carry on after the event through the Soccerex Deal Network, where a person reviews every approach before it is sent.
@@ -345,7 +345,7 @@ export default function Miami2026Recap() {
                 Roc Nation Sports International closed the first day with Built, Not Bought, their case for how a modern football agency gets built. They opened it with the film from their World Cup campaign, the one Khaled fronts, and he came out at the end of it in an Inter Miami shirt, sat down with the panel and handed it to Michael Yormark.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)' }}>
-                Every phone in the room went up. Michael Yormark, Frederico Pena, Nathan Campbell, Rob Simpkins and Alan Redmond then spent half an hour on how they build a roster, with Diego Arrioja of Telemundo hosting.
+                Phones went up across the room. Michael Yormark, Frederico Pena, Nathan Campbell, Rob Simpkins and Alan Redmond then spent half an hour on how they build a roster, with Diego Arrioja of Telemundo hosting.
               </p>
             </div>
             <div>
@@ -414,7 +414,7 @@ export default function Miami2026Recap() {
         <div style={{ maxWidth: 1320, margin: '0 auto' }}>
           <div style={{ marginBottom: 'clamp(28px,3.5vw,44px)', maxWidth: 680 }}>
             <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 14 }}>
-              Some of what you missed
+              A few frames from three days
             </h2>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
               A small selection from three days of shooting. Select any frame to see it full size, and press and partners can request the full set at{' '}
@@ -444,7 +444,7 @@ export default function Miami2026Recap() {
       <SelectedSpeakers
         slug={MIAMI_EVENT_SLUG}
         limit={12}
-        heading={<>The People Whose Decisions <span className="miami-text-gradient">You Read About Later</span></>}
+        heading={<>The People Who Run <span className="miami-text-gradient">These Properties</span></>}
       />
 
       <BrandWall
@@ -476,7 +476,7 @@ export default function Miami2026Recap() {
       <section style={{ background: '#FFFFFF', padding: 'clamp(64px,8vw,104px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,42px)' }}>
-            Everything the week left behind
+            What the week left behind
           </h2>
           <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}>
             {[
@@ -501,10 +501,10 @@ export default function Miami2026Recap() {
       <section style={{ background: 'var(--miami-sunset)', padding: 'clamp(70px,9vw,118px) clamp(24px,5vw,80px)' }}>
         <div className="text-center" style={{ maxWidth: 760, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', marginBottom: 18 }}>
-            Do not watch the next one from your feed
+            First call on the next edition goes to this list
           </h2>
           <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.65, marginBottom: 30 }}>
-            The clips will be everywhere again next September, and they are a poor substitute for the room. We are setting the dates for the next Miami edition now. Leave your details and we will send them to you before they go public, along with the delegate rates when they open.
+            We are setting the dates for the next Miami edition now. Leave your details and we will send them before they go public, along with the delegate rates when they open.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <InquiryModalButton
