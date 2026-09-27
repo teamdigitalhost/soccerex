@@ -339,7 +339,7 @@ export default function Miami2026Recap() {
           <div className="miami-moment-top">
             <div>
               <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)', color: '#FFFFFF', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
-                DJ Khaled, in an Inter Miami shirt, <span style={{ color: '#FF4D8D' }}>on a Soccerex stage</span>
+                DJ Khaled on the <span style={{ color: '#FF4D8D' }}>Soccerex stage</span>
               </h2>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
                 Roc Nation Sports International closed the first day with Built, Not Bought, their case for how a modern football agency gets built. They opened it with the film from their World Cup campaign, the one Khaled fronts, and he came out at the end of it in an Inter Miami shirt, sat down with the panel and handed it to Michael Yormark.
