@@ -94,7 +94,7 @@ const GALLERY = [
   { slug: 'meeting', alt: 'Two delegates in conversation on the concourse' },
   { slug: 'investment', alt: 'The Football Investment Strategies panel on the main stage' },
   { slug: 'khaled-room', alt: 'The room on its feet for the Built, Not Bought panel' },
-  { slug: 'concacaf-booth', alt: 'The Concacaf stand on the exhibition floor at Nu Stadium' },
+  { slug: 'concacaf-booth-2', alt: 'The Concacaf stand on the exhibition floor at Nu Stadium' },
   { slug: 'floor-group', alt: 'Delegates on the exhibition floor' },
   { slug: 'women', alt: 'The Commercial Power of Women’s Football panel' },
   { slug: 'concourse', alt: 'Delegates talking between sessions' },
@@ -110,7 +110,7 @@ const GALLERY = [
   { slug: 'tech', alt: 'Tech in Football: AI, performance and the modern front office' },
   { slug: 'ball', alt: 'The Soccerex match ball on the pitch at Nu Stadium' },
   { slug: 'barca', alt: 'Evolving Barça in the Americas on the main stage' },
-  { slug: 'barca-booth', alt: 'The FC Barcelona stand on the exhibition floor' },
+  { slug: 'barca-booth-2', alt: 'The FC Barcelona stand on the exhibition floor' },
   { slug: 'merch', alt: 'A delegate collecting merchandise on the exhibition floor' },
   { slug: 'argentina', alt: 'The Argentina Era panel on day two' },
   { slug: 'packed', alt: 'A packed house watching a session at Nu Stadium' },
@@ -279,13 +279,13 @@ export default function Miami2026Recap() {
 
           <div className="miami-floor-two" style={{ marginTop: 'clamp(40px,5vw,64px)' }}>
             <figure style={{ margin: 0 }}>
-              <img src={frame('concacaf-booth', '-w800')} alt="The Concacaf stand on the exhibition floor at Nu Stadium" loading="lazy" />
+              <img src={frame('concacaf-booth-2', '-w800')} alt="The Concacaf stand on the exhibition floor at Nu Stadium" loading="lazy" />
               <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
                 Concacaf built a stand with its own coffee bar and a wall of Gold Cup artwork, and ran meetings out of it for three days.
               </figcaption>
             </figure>
             <figure style={{ margin: 0 }}>
-              <img src={frame('barca-booth', '-w800')} alt="The FC Barcelona stand on the exhibition floor at Nu Stadium" loading="lazy" />
+              <img src={frame('barca-booth-2', '-w800')} alt="The FC Barcelona stand on the exhibition floor at Nu Stadium" loading="lazy" />
               <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
                 FC Barcelona took the stand across from it. Thirty companies built on that floor, and the coffee line was where half the introductions started.
               </figcaption>
@@ -326,7 +326,7 @@ export default function Miami2026Recap() {
       {/* ─── THE MOMENT ──────────────────────────────────────────────────── */}
       <section style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)', overflow: 'hidden' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-          <div style={{ display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
+          <div className="miami-moment-top">
             <div>
               <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)', color: '#FFFFFF', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
                 DJ Khaled, in an Inter Miami shirt, <span style={{ color: '#FF4D8D' }}>on a Soccerex stage</span>
@@ -334,24 +334,30 @@ export default function Miami2026Recap() {
               <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
                 Roc Nation Sports International closed the first day with Built, Not Bought, their case for how a modern football agency gets built. They opened it with the film from their World Cup campaign, the one Khaled fronts, and he came out at the end of it in an Inter Miami shirt, sat down with the panel and handed it to Michael Yormark.
               </p>
-              <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 20 }}>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)' }}>
                 Every phone in the room went up. Michael Yormark, Frederico Pena, Nathan Campbell, Rob Simpkins and Alan Redmond then spent half an hour on how they build a roster, with Diego Arrioja of Telemundo hosting.
-              </p>
-              <video controls playsInline preload="none"
-                poster={`${ASSET}/video/dj-khaled-poster.jpg`}
-                style={{ width: '100%', maxWidth: 260, aspectRatio: '9 / 16', borderRadius: 10, display: 'block', background: '#000', boxShadow: '0 20px 50px rgba(0,0,0,0.45)' }}>
-                <source src={`${ASSET}/video/dj-khaled-soccerex-miami-2026.mp4`} type="video/mp4" />
-                Your browser cannot play this video.
-              </video>
-              <p className="miami-body" style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', marginTop: 10 }}>
-                Film by Cinco Creative
               </p>
             </div>
             <div>
               <img src={frame('khaled-mic')} alt="DJ Khaled on stage at Nu Stadium with Michael Yormark and the Roc Nation Sports International panel"
-                loading="lazy" style={{ width: '100%', borderRadius: 10, display: 'block', boxShadow: '0 24px 60px rgba(0,0,0,0.45)' }} />
+                loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 10, display: 'block', boxShadow: '0 24px 60px rgba(0,0,0,0.45)' }} />
+              <div className="miami-moment-reel">
+                <video controls playsInline preload="none" poster={`${ASSET}/video/dj-khaled-poster.jpg`}>
+                  <source src={`${ASSET}/video/dj-khaled-soccerex-miami-2026.mp4`} type="video/mp4" />
+                  Your browser cannot play this video.
+                </video>
+                <p className="miami-body" style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', margin: 0 }}>
+                  The reel Cinco Creative cut that evening, one of several from the week.
+                </p>
+              </div>
             </div>
           </div>
+          <style>{`
+            .miami-moment-top { display: grid; gap: clamp(28px,4vw,56px); grid-template-columns: 1fr; align-items: start; }
+            @media (min-width: 900px) { .miami-moment-top { grid-template-columns: 1fr 1fr; } }
+            .miami-moment-reel { display: flex; gap: 18px; align-items: center; margin-top: 18px; }
+            .miami-moment-reel video { width: 150px; flex: 0 0 150px; aspect-ratio: 9 / 16; border-radius: 8px; display: block; background: #000; }
+          `}</style>
 
           <div className="miami-moment-strip">
             {[
