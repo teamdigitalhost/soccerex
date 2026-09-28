@@ -215,8 +215,8 @@ export default function Miami2026Recap() {
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
       <PageMeta
-        title="Soccerex Miami 2026: what happened at Nu Stadium"
-        description="873 organizations registered, 146 of them clubs, leagues and federations, and 2,714 introductions were made in the event app over three days at Nu Stadium. See who was in the room."
+        title="Soccerex Miami 2026 at Nu Stadium"
+        description="A year’s worth of networking happened in three days. 873 organizations came to Nu Stadium, 146 of them clubs, leagues and federations, and 2,714 introductions were made in the event app. See who was in the room."
         image={frame('khaled-mic')}
         path="/miami-2026-draft"
         noindex
@@ -235,7 +235,7 @@ export default function Miami2026Recap() {
           <img src={`${GFX}/logo-primary.svg`} alt="Soccerex Miami 2026" style={{ width: 'min(420px, 72vw)', marginBottom: 'clamp(28px,4vw,40px)', filter: 'brightness(0) invert(1)' }} />
 
           <h1 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(2.1rem, 5vw, 3.6rem)', color: '#FFFFFF', lineHeight: 1.05, maxWidth: 940, marginBottom: 'clamp(18px,2.4vw,26px)' }}>
-            A year of networking <span style={{ color: '#FF4D8D' }}>happened in three days</span>
+            A year’s worth of networking <span style={{ color: '#FF4D8D' }}>happened in three days</span>
           </h1>
           <p className="miami-body" style={{ fontSize: 'clamp(1.02rem, 1.4vw, 1.18rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.65, maxWidth: 700 }}>
             873 organizations came to Nu Stadium for Soccerex Miami 2026, ten weeks after the World Cup. 146 of them were clubs, leagues and federations, and the rest were the brands, investors, agencies and broadcasters who spend the year trying to reach them.
@@ -387,16 +387,19 @@ export default function Miami2026Recap() {
       {/* ─── ON STAGE ────────────────────────────────────────────────────── */}
       <section style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-          <div className="flex flex-wrap items-end justify-between gap-4" style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
-            <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', maxWidth: 620 }}>
-              The stage where three World Cup host nations sat down together
-            </h2>
-            <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 640 }}>
-              Twenty eight sessions ran over the three days. Here are six of them.
+          <div style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', maxWidth: 720 }}>
+                The stage where three World Cup host nations sat down together
+              </h2>
+              <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
+                The full running order <ArrowRight size={15} />
+              </Link>
+            </div>
+            <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 680, marginTop: 14 }}>
+              Ninety two speakers took 28 sessions over three days, and the people running the properties did the
+              talking. These six show the level of the room.
             </p>
-            <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
-              The full running order <ArrowRight size={15} />
-            </Link>
           </div>
           <div className="grid gap-7" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
             {THEMES.map((t) => (
@@ -420,8 +423,8 @@ export default function Miami2026Recap() {
               Take a look through the week
             </h2>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
-              Open any frame to see it full size. This is a small part of what the photographers shot over three days, and press and partners can ask for the full set at{' '}
-              <a href="mailto:press@soccerex.com" style={{ color: '#E91E63' }}>press@soccerex.com</a>.
+              Everybody in these frames blocked out the same three days for Miami. Club owners, federation leadership,
+              broadcasters and the people who never reply to a cold email were all in one building, a coffee table apart.
             </p>
           </div>
 
@@ -440,6 +443,11 @@ export default function Miami2026Recap() {
             .miami-gallery-tile img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; transition: transform .45s ease, opacity .3s ease; }
             .miami-gallery-tile:hover img, .miami-gallery-tile:focus-visible img { transform: scale(1.04); opacity: 0.92; }
           `}</style>
+
+          <p className="miami-body" style={{ fontSize: '0.82rem', color: '#8a97a5', marginTop: 18 }}>
+            Press and partners can request the full set from{' '}
+            <a href="mailto:press@soccerex.com" style={{ color: '#8a97a5', textDecoration: 'underline' }}>press@soccerex.com</a>.
+          </p>
         </div>
       </section>
 
