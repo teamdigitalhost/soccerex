@@ -58,14 +58,6 @@ const COHORTS = [
   },
 ]
 
-/* Every organization the event records show with a stand, so an exhibitor can
-   find itself on the page. Names are written the way each company writes them. */
-const EXHIBITORS = 'Concacaf, FC Barcelona, Club América, Chivas de Guadalajara, Roc Nation, Catapult, '
-  + 'LandTek, Terraplas, Series Seating, Stadium Structures, LaBella Associates, ICONS, Scout Lab AI, '
-  + 'KeeperKonnect, Creatorz.fans, Camaleonic, Notivera, StemNova, Newtest, Metalu Plast, ROLARA, 8E6, '
-  + 'Viva Agency, Sun Global Transportation, Laurel Springs School, Youth World Challenge, Impact Soccer '
-  + 'and the Global Institute of Sport.'
-
 /* Why each part of the room came, in the order they weigh it. */
 const RETURNS = [
   'Clubs, leagues and federations met investors, commercial partners, peers and the technology providers shaping the game.',
@@ -124,8 +116,8 @@ const GALLERY = [
   { slug: 'pellerano', alt: 'Heidi Pellerano, chief commercial officer of Concacaf, on the main stage' },
   { slug: 'dorrance', alt: 'Anson Dorrance, coach emeritus of the United States and UNC women’s soccer' },
   { slug: 'meis', alt: 'The architect Dan Meis on the stadium panel' },
-  { slug: 'open', alt: 'The conference opens at Nu Stadium' },
-  { slug: 'biondo', alt: 'A freestyle performance on the Soccerex stage' },
+  { slug: 'navia-floor', alt: 'Guests in front of the Miami 2026 partner backdrop' },
+  { slug: 'barca-booth', alt: 'The FC Barcelona stand serving delegates on the exhibition floor' },
   { slug: 'impact-joy', alt: 'Young players at the Soccerex Community Impact Event' },
   { slug: 'vip-evening', alt: 'Guests at the VIP evening at The Savoy' },
 
@@ -150,14 +142,15 @@ const GALLERY = [
   { slug: 'packed', alt: 'A packed house watching a session at Nu Stadium' },
   { slug: 'audience', alt: 'The room on day two' },
   { slug: 'floor-group', alt: 'Delegates on the exhibition floor' },
+  { slug: 'merch', alt: 'A delegate with a painting at Nu Stadium' },
+  { slug: 'open', alt: 'The conference opens at Nu Stadium' },
+  { slug: 'biondo', alt: 'A freestyle performance on the Soccerex stage' },
   { slug: 'concourse', alt: 'Delegates talking between sessions' },
   { slug: 'networking', alt: 'Delegates meeting between sessions' },
   { slug: 'meeting', alt: 'Two delegates in conversation on the concourse' },
   { slug: 'greeting', alt: 'Two delegates greeting each other between sessions' },
-  { slug: 'navia-floor', alt: 'Guests meeting in front of the Miami 2026 backdrop' },
   { slug: 'venue', alt: 'Inside Nu Stadium' },
   { slug: 'ball', alt: 'The Soccerex match ball on the pitch at Nu Stadium' },
-  { slug: 'merch', alt: 'A delegate collecting merchandise on the exhibition floor' },
   { slug: 'impact', alt: 'The mini fields at Nu Stadium set up for the Community Impact Event' },
   { slug: 'impact-youth', alt: 'Young players lining up at the Soccerex Community Impact Event' },
   { slug: 'vip', alt: 'The Soccerex sign at the VIP evening at The Savoy' },
@@ -368,14 +361,24 @@ export default function Miami2026Recap() {
             @media (min-width: 760px) { .miami-cohorts { grid-template-columns: 1fr 1fr; } }
           `}</style>
 
-          <figure style={{ margin: 'clamp(40px,5vw,64px) 0 0' }}>
-            <img src={frame('stands', '-w800')} alt="Delegates watching a session from the stands at Nu Stadium" loading="lazy"
-              style={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', borderRadius: 8, display: 'block' }} />
-            <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
-              The main stage ran inside the stadium bowl, so a session and the exhibition floor were a staircase apart.
-            </figcaption>
-          </figure>
+          <div className="miami-floor-two" style={{ marginTop: 'clamp(40px,5vw,64px)' }}>
+            <figure style={{ margin: 0 }}>
+              <img src={frame('concacaf-booth-2', '-w800')} alt="The Concacaf stand on the exhibition floor at Nu Stadium" loading="lazy" />
+              <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
+                Concacaf built a stand with its own coffee bar and a wall of Gold Cup artwork, and ran meetings out of it for three days.
+              </figcaption>
+            </figure>
+            <figure style={{ margin: 0 }}>
+              <img src={frame('barca-booth-2', '-w800')} alt="The FC Barcelona stand on the exhibition floor at Nu Stadium" loading="lazy" />
+              <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
+                FC Barcelona took the stand across from it. Thirty companies built on that floor, and the coffee between them ran all day.
+              </figcaption>
+            </figure>
+          </div>
           <style>{`
+            .miami-floor-two { display: grid; gap: 22px; grid-template-columns: 1fr; }
+            @media (min-width: 760px) { .miami-floor-two { grid-template-columns: 1fr 1fr; gap: 28px; } }
+            .miami-floor-two img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block; }
           `}</style>
         </div>
       </section>
@@ -527,8 +530,9 @@ export default function Miami2026Recap() {
                 elite performance and technology to architecture, infrastructure, investment and mobility.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
-                Concacaf hosted conversations from its Gold Cup stand and FC Barcelona activated directly across the
-                way, with clubs, federations and the companies that supply them taking the rest of the floor.
+                Concacaf hosted conversations from its Gold Cup stand and FC Barcelona activated directly across
+                the way, with Catapult, LaBella Associates, LandTek, Terraplas, ICONS and Scout Lab AI among the
+                companies that took the rest of the floor.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
                 A stand at Soccerex puts a brand inside the conversation rather than beside it, and the Deal Network
@@ -551,29 +555,16 @@ export default function Miami2026Recap() {
                 Partner with Soccerex <ArrowRight size={15} />
               </InquiryModalButton>
             </div>
-            <div>
-              <h3 className="miami-headline" style={{ fontSize: '0.95rem', color: '#007C91', marginBottom: 12, textTransform: 'none', letterSpacing: '0.02em' }}>
-                Who took a stand
-              </h3>
-              <p className="miami-body leading-relaxed" style={{ fontSize: '0.94rem', color: '#3a4a5a' }}>{EXHIBITORS}</p>
+            <div className="miami-partner-shots">
+              <img src={frame('floor-group', '-w800')} alt="Delegates meeting on the exhibition floor at Nu Stadium" loading="lazy" />
+              <img src={frame('stands', '-w800')} alt="Delegates watching a session from the stands at Nu Stadium" loading="lazy" />
             </div>
           </div>
-          <div className="miami-floor-row">
-            {[
-              ['concacaf-booth-2', 'The Concacaf stand on the exhibition floor at Nu Stadium'],
-              ['barca-booth-2', 'The FC Barcelona stand on the exhibition floor'],
-              ['merch', 'A delegate at a stand on the exhibition floor'],
-              ['floor-group', 'Delegates meeting on the exhibition floor'],
-            ].map(([slug, alt]) => (
-              <img key={slug} src={frame(slug, '-w800')} alt={alt} loading="lazy" />
-            ))}
-          </div>
           <style>{`
-            .miami-partner-grid { display: grid; gap: clamp(28px,4vw,52px); grid-template-columns: 1fr; align-items: start; }
+            .miami-partner-grid { display: grid; gap: clamp(28px,4vw,52px); grid-template-columns: 1fr; align-items: center; }
             @media (min-width: 900px) { .miami-partner-grid { grid-template-columns: 1.05fr 1fr; } }
-            .miami-floor-row { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); margin-top: clamp(32px,4vw,48px); }
-            @media (min-width: 900px) { .miami-floor-row { grid-template-columns: repeat(4, 1fr); } }
-            .miami-floor-row img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 6px; display: block; }
+            .miami-partner-shots { display: grid; gap: 14px; }
+            .miami-partner-shots img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; display: block; }
           `}</style>
         </div>
       </section>
