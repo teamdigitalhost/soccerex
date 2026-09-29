@@ -29,12 +29,12 @@ const ASSET = 'https://soccerex-public-assets.s3.amazonaws.com/events/miami-2026
 const FRAME_V = 3 // bump when a frame is recropped under the same name
 const frame = (slug, size = '') => `${ASSET}/frames/${slug}${size}.jpg?v=${FRAME_V}`
 
-/* Rounded from Soccerex registration, program and event-app figures, September 2026. */
+/* Ivan's rounded set, used everywhere the page states scale. */
 const NUMBERS = [
   { figure: '850+', label: 'Organizations represented' },
-  { figure: 'Nearly 150', label: 'Clubs, leagues & federations' },
+  { figure: '150+', label: 'Clubs, leagues & federations' },
   { figure: '90+', label: 'Speakers on stage' },
-  { figure: '30', label: 'Exhibitors on the floor' },
+  { figure: '30+', label: 'Exhibitors on the floor' },
   { figure: '2,700+', label: 'Connections through the event app' },
 ]
 
@@ -71,7 +71,7 @@ const RETURNS = [
 const THEMES = [
   {
     title: 'Football’s investment future',
-    photo: 'investment',
+    photo: 'investment-panel',
     body: 'Joseph DaGrosa Jr. and Suvin Malik of Fortress Investment Group opened the conference with Football Investment Strategies, bringing serious capital and football expertise into the same conversation on the game’s next era of ownership, growth and value creation.',
   },
   {
@@ -96,7 +96,7 @@ const THEMES = [
   },
   {
     title: 'A Miami moment no one expected',
-    photo: 'stadiums',
+    photo: 'khaled-room',
     body: 'Roc Nation Sports International closed day one with Built, Not Bought, a packed conversation on building a modern football agency. When DJ Khaled joined Michael Yormark, Frederico Peña, Nathan Campbell, Rob Simpkins and Alan Redmond on stage, the room erupted.',
   },
 ]
@@ -111,14 +111,14 @@ const GALLERY = [
   { slug: 'registration', alt: 'Delegates arriving at Nu Stadium' },
   { slug: 'lalas', alt: 'Alexi Lalas of FOX Sports on the main stage' },
   { slug: 'sponsor-board', alt: 'The sponsor board on the screen at Nu Stadium' },
-  { slug: 'gis-stand', alt: 'A conversation at the Global Institute of Sport stand' },
+  { slug: 'floor-group', alt: 'Delegates meeting on the exhibition floor' },
   { slug: 'guzan', alt: 'Brad Guzan, sporting advisor and club ambassador at Atlanta United' },
   { slug: 'freestyle-ball', alt: 'A freestyler with the match ball at Nu Stadium' },
   { slug: 'barca-booth', alt: 'The FC Barcelona stand serving delegates on the exhibition floor' },
   { slug: 'dagrosa', alt: 'Joseph DaGrosa Jr., chairman of Soccerex, on the main stage' },
   { slug: 'coffee', alt: 'A Soccerex Miami coffee at Nu Stadium' },
   { slug: 'impact-joy', alt: 'Young players at the Soccerex Community Impact Event' },
-  { slug: 'vip-evening', alt: 'Guests at the VIP evening at The Savoy' },
+  { slug: 'vip-evening', alt: 'Guests at the VIP evening at the Savoy Hotel and Beach Club' },
 
   /* Behind View more. Nothing here appears anywhere else on the page, and no two
      frames are the same moment: the audience block, the panel wides and the youth
@@ -137,7 +137,7 @@ const GALLERY = [
   { slug: 'venue', alt: 'Inside Nu Stadium' },
   { slug: 'ball', alt: 'The Soccerex match ball on the pitch at Nu Stadium' },
   { slug: 'impact', alt: 'The mini fields at Nu Stadium during the Community Impact Event' },
-  { slug: 'vip', alt: 'The Soccerex sign at the VIP evening at The Savoy' },
+  { slug: 'vip', alt: 'The Soccerex sign at the VIP evening at the Savoy Hotel and Beach Club' },
 ]
 
 const THANKS = [
@@ -151,7 +151,7 @@ const THANKS = [
   },
   {
     heading: 'Our sponsors and exhibitors',
-    body: '30 companies took stands and made the exhibition what delegates spent their breaks in, from elite performance and technology to architecture, infrastructure, investment and mobility.',
+    body: '30+ exhibitors took stands and made the exhibition what delegates spent their breaks in, from elite performance and technology to architecture, infrastructure, investment and mobility.',
   },
   {
     heading: 'Everyone who took the stage',
@@ -251,7 +251,7 @@ export default function Miami2026Recap() {
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
       <PageMeta
         title="Soccerex Miami 2026 | The New Standard for Football Business"
-        description="More than 850 organizations, nearly 150 clubs, leagues and federations, 90 speakers and 30 exhibitors came to Nu Stadium for Soccerex Miami 2026. See who was in the room, and how the introductions carry on."
+        description="More than 850 organizations, 150+ clubs, leagues and federations, 90+ speakers and 30+ exhibitors came to Nu Stadium for Soccerex Miami 2026. See who was in the room, and how the introductions carry on."
         image={frame('khaled-mic')}
         path="/miami-2026-draft"
         noindex
@@ -283,7 +283,7 @@ export default function Miami2026Recap() {
             room, and the momentum is carrying forward through the Soccerex Deal Network and into what comes next.
           </p>
           <p className="miami-headline" style={{ fontSize: 'clamp(0.95rem, 1.2vw, 1.05rem)', color: '#FF4D8D', lineHeight: 1.5, maxWidth: 760, marginTop: 'clamp(18px,2.2vw,24px)', textTransform: 'none', letterSpacing: '0.01em' }}>
-            850+ organizations. Nearly 150 clubs, leagues and federations. 90+ speakers. 30 exhibitors.
+            850+ organizations. 150+ clubs, leagues and federations. 90+ speakers. 30+ exhibitors.
             One stadium full of possibility.
           </p>
 
@@ -334,9 +334,6 @@ export default function Miami2026Recap() {
               </div>
             ))}
           </div>
-          <p className="miami-body miami-proof-source">
-            Rounded from Soccerex registration, program and event-app figures.
-          </p>
         </div>
         <style>{`
           .miami-proof { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 18px; }
@@ -344,19 +341,17 @@ export default function Miami2026Recap() {
           .miami-proof > div:last-child { grid-column: 1 / -1; }
           .miami-proof-figure { font-size: 1.5rem; line-height: 1.05; color: #0D1B2A; }
           .miami-proof-label { font-size: 0.82rem; color: #5b6b7c; margin-top: 6px; line-height: 1.4; }
-          .miami-proof-source { font-size: 0.78rem; color: #97a3b0; margin-top: 22px; }
           @media (min-width: 720px) {
             .miami-proof { grid-template-columns: repeat(5, 1fr); gap: 26px; }
             .miami-proof > div:last-child { grid-column: auto; }
             .miami-proof-figure { font-size: clamp(1.7rem, 2.6vw, 2.2rem); }
             .miami-proof-label { font-size: 0.88rem; }
-            .miami-proof-source { text-align: center; margin-top: 28px; }
           }
         `}</style>
       </section>
 
       {/* ─── THE ROOM ────────────────────────────────────────────────────── */}
-      <section id="the-room" style={{ scrollMarginTop: 72, background: '#FFFFFF', padding: '0 clamp(24px,5vw,80px) clamp(64px,8vw,100px)' }}>
+      <section id="the-room" style={{ scrollMarginTop: 72, background: '#FFFFFF', padding: 'clamp(30px,4vw,48px) clamp(24px,5vw,80px) clamp(64px,8vw,100px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(18px,2.4vw,24px)' }}>
             The room everyone in football was talking about
@@ -395,15 +390,7 @@ export default function Miami2026Recap() {
             @media (min-width: 760px) { .miami-cohorts { grid-template-columns: 1fr 1fr; } }
           `}</style>
 
-          <div className="miami-floor-two" style={{ marginTop: 'clamp(40px,5vw,64px)' }}>
-            <img src={frame('concacaf-booth-2', '-w800')} alt="The Concacaf stand on the exhibition floor at Nu Stadium" loading="lazy" />
-            <img src={frame('barca-booth-2', '-w800')} alt="The FC Barcelona stand on the exhibition floor at Nu Stadium" loading="lazy" />
-          </div>
-          <style>{`
-            .miami-floor-two { display: grid; gap: 22px; grid-template-columns: 1fr; }
-            @media (min-width: 760px) { .miami-floor-two { grid-template-columns: 1fr 1fr; gap: 28px; } }
-            .miami-floor-two img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; display: block; }
-          `}</style>
+
         </div>
       </section>
 
@@ -548,7 +535,7 @@ export default function Miami2026Recap() {
               Your browser cannot play this video.
             </video>
             {[
-              ['khaled-room', 'The Built, Not Bought panel in front of a full room at Nu Stadium'],
+              ['khaled-phones', 'The room filming the Built, Not Bought panel'],
               ['khaled-arrioja', 'DJ Khaled on stage with Diego Arrioja of Telemundo, who hosted the panel'],
               ['khaled-artwork', 'Roc Nation Sports International presented with a commissioned artwork on stage'],
             ].map(([slug, alt]) => (
@@ -580,12 +567,12 @@ export default function Miami2026Recap() {
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
                 Concacaf, Roc Nation Sports International, FC Barcelona, SPORTFIVE, Inter Miami CF and Nu Stadium
-                shaped the experience. Across the exhibition floor, 30 companies brought the ecosystem to life, from
+                shaped the experience. Across the exhibition floor, 30+ exhibitors brought the ecosystem to life, from
                 elite performance and technology to architecture, infrastructure, investment and mobility.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
                 Concacaf hosted conversations from its Gold Cup stand and FC Barcelona activated directly across
-                the way, with Catapult, LaBella Associates, LandTek, Terraplas, ICONS and Scout Lab AI among the
+                the way, with Catapult, LaBella Associates, LandTek, Terraplas and Scout Lab AI among the
                 companies that took the rest of the floor.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
@@ -615,16 +602,24 @@ export default function Miami2026Recap() {
                 Partner with Soccerex <ArrowRight size={15} />
               </InquiryModalButton>
             </div>
-            <div className="miami-partner-shots">
-              <img src={frame('floor-group', '-w800')} alt="Delegates meeting on the exhibition floor at Nu Stadium" loading="lazy" />
-              <img src={frame('stands', '-w800')} alt="Delegates watching a session from the stands at Nu Stadium" loading="lazy" />
+            <div className="miami-booths">
+              {[
+                ['concacaf-booth-2', 'The Concacaf stand on the exhibition floor at Nu Stadium'],
+                ['barca-booth-2', 'The FC Barcelona stand on the exhibition floor'],
+                ['striker-booth', 'The Striker and PES Pro Event Solutions shooting activation'],
+                ['gis-stand', 'The Global Institute of Sport stand'],
+                ['art-stand', 'The art stand on the exhibition floor'],
+                ['concacaf-lounge', 'The Concacaf lounge on the exhibition floor'],
+              ].map(([slug, alt]) => (
+                <img key={slug} src={frame(slug, '-w800')} alt={alt} loading="lazy" />
+              ))}
             </div>
           </div>
           <style>{`
             .miami-partner-grid { display: grid; gap: clamp(28px,4vw,52px); grid-template-columns: 1fr; align-items: center; }
             @media (min-width: 900px) { .miami-partner-grid { grid-template-columns: 1.05fr 1fr; } }
-            .miami-partner-shots { display: grid; gap: 14px; }
-            .miami-partner-shots img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; display: block; }
+            .miami-booths { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+            .miami-booths img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 6px; display: block; }
           `}</style>
         </div>
       </section>
@@ -642,7 +637,7 @@ export default function Miami2026Recap() {
             </h2>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
               Miami marked the launch of HerSoccerex, a platform built to bring together the women shaping the
-              future of football. The inaugural Founding Table Afternoon Tea at The Savoy gathered leaders,
+              future of football. The inaugural Founding Table Afternoon Tea at the Savoy Hotel and Beach Club gathered leaders,
               executives, players and rising voices for honest conversation and introductions that lead somewhere.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
