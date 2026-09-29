@@ -193,7 +193,7 @@ export default function TheNetwork() {
             style={{ width: '100%', maxWidth: 380, aspectRatio: '4 / 5', objectFit: 'cover', borderRadius: 16, margin: '0 auto', boxShadow: '0 24px 60px rgba(9,32,62,0.22)' }} />
           <div>
             <h2 className="font-heading font-bold" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.08, color: NAVY }}>
-              The voice of the Soccerex stage, one guest at a time
+              The voices of the Soccerex rooms, one guest at a time
             </h2>
             <p style={{ fontSize: 'clamp(1rem, 1.3vw, 1.12rem)', lineHeight: 1.75, color: '#3a4a5a', marginTop: 18 }}>
               Diego Arrioja is an Emmy-winning journalist at NBCUniversal Telemundo Enterprises. He co-hosts the daily show El Pelotazo and reports from the Sunday Night Football sideline, and he has covered three FIFA World Cups, the Super Bowl and the UEFA Euro.
