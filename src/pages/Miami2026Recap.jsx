@@ -206,10 +206,6 @@ function Lightbox({ index, onClose, onMove }) {
       <figure onClick={(e) => e.stopPropagation()} style={{ margin: 0, maxWidth: 1180, width: '100%' }}>
         <img src={frame(item.slug)} alt={item.alt}
           style={{ width: '100%', height: 'auto', maxHeight: '78vh', objectFit: 'contain', borderRadius: 6, display: 'block', margin: '0 auto' }} />
-        <figcaption className="font-body text-center" style={{ color: 'rgba(255,255,255,0.72)', fontSize: '0.86rem', marginTop: 14 }}>
-          {item.alt}
-          <span style={{ color: 'rgba(255,255,255,0.4)', marginLeft: 10 }}>{index + 1} / {GALLERY.length}</span>
-        </figcaption>
       </figure>
     </div>
   )
@@ -380,18 +376,8 @@ export default function Miami2026Recap() {
           `}</style>
 
           <div className="miami-floor-two" style={{ marginTop: 'clamp(40px,5vw,64px)' }}>
-            <figure style={{ margin: 0 }}>
-              <img src={frame('concacaf-booth-2', '-w800')} alt="The Concacaf stand on the exhibition floor at Nu Stadium" loading="lazy" />
-              <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
-                Concacaf built a stand with its own coffee bar and a wall of Gold Cup artwork, and ran meetings out of it for three days.
-              </figcaption>
-            </figure>
-            <figure style={{ margin: 0 }}>
-              <img src={frame('barca-booth-2', '-w800')} alt="The FC Barcelona stand on the exhibition floor at Nu Stadium" loading="lazy" />
-              <figcaption className="miami-body" style={{ fontSize: '0.88rem', color: '#607186', marginTop: 10 }}>
-                FC Barcelona took the stand across from it. Thirty companies built on that floor, and the coffee between them ran all day.
-              </figcaption>
-            </figure>
+            <img src={frame('concacaf-booth-2', '-w800')} alt="The Concacaf stand on the exhibition floor at Nu Stadium" loading="lazy" />
+            <img src={frame('barca-booth-2', '-w800')} alt="The FC Barcelona stand on the exhibition floor at Nu Stadium" loading="lazy" />
           </div>
           <style>{`
             .miami-floor-two { display: grid; gap: 22px; grid-template-columns: 1fr; }
