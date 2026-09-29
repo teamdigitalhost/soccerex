@@ -122,17 +122,18 @@ const GALLERY = [
 
   /* Behind View more. Nothing here appears anywhere else on the page, and no two
      frames are the same moment: the audience block, the panel wides and the youth
-     pitches each keep one frame, not four. */
+     pitches each keep one frame, not four.
+
+     Keep the total a multiple of twelve. The grid runs two columns on a phone and
+     three from 760px, so any other count leaves the last row short. */
   { slug: 'curtis', alt: 'Ali Curtis, president of MLS NEXT PRO, alongside Brad Guzan' },
   { slug: 'pellerano', alt: 'Heidi Pellerano, chief commercial officer of Concacaf, on the main stage' },
   { slug: 'dorrance', alt: 'Anson Dorrance, coach emeritus of the United States and UNC women’s soccer' },
   { slug: 'meis', alt: 'The architect Dan Meis on the stadium panel' },
-  { slug: 'global', alt: 'State of Global Football Business in 2026 on the main stage' },
   { slug: 'open', alt: 'The conference opens at Nu Stadium' },
   { slug: 'concourse', alt: 'Delegates talking between sessions' },
   { slug: 'greeting', alt: 'Two delegates greeting each other between sessions' },
   { slug: 'navia-floor', alt: 'Guests in front of the Miami 2026 partner backdrop' },
-  { slug: 'merch', alt: 'A delegate with a painting at Nu Stadium' },
   { slug: 'venue', alt: 'Inside Nu Stadium' },
   { slug: 'ball', alt: 'The Soccerex match ball on the pitch at Nu Stadium' },
   { slug: 'impact', alt: 'The mini fields at Nu Stadium during the Community Impact Event' },
