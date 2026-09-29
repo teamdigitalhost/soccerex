@@ -108,7 +108,7 @@ const GALLERY = [
      set does not read as one photographer's stage coverage. Captions say only what
      the frame shows or what its own name card on the LED wall says. */
   { slug: 'worldcup', alt: 'The FIFA World Cup 26 chief tournament officers for the United States, Mexico and Canada on one stage' },
-  { slug: 'pitchside', alt: 'Delegates pitchside at Nu Stadium' },
+  { slug: 'registration', alt: 'Delegates arriving at Nu Stadium' },
   { slug: 'lalas', alt: 'Alexi Lalas of FOX Sports on the main stage' },
   { slug: 'sponsor-board', alt: 'The sponsor board on the screen at Nu Stadium' },
   { slug: 'gis-stand', alt: 'A conversation at the Global Institute of Sport stand' },
@@ -129,7 +129,6 @@ const GALLERY = [
   { slug: 'meis', alt: 'The architect Dan Meis on the stadium panel' },
   { slug: 'global', alt: 'State of Global Football Business in 2026 on the main stage' },
   { slug: 'open', alt: 'The conference opens at Nu Stadium' },
-  { slug: 'packed', alt: 'A full house watching a session at Nu Stadium' },
   { slug: 'concourse', alt: 'Delegates talking between sessions' },
   { slug: 'greeting', alt: 'Two delegates greeting each other between sessions' },
   { slug: 'navia-floor', alt: 'Guests in front of the Miami 2026 partner backdrop' },
