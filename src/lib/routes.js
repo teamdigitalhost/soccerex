@@ -28,6 +28,8 @@ export const PAST_SPEAKERS   = '/past-speakers'
 export const APP_PAGE        = '/app'
 export const DEAL_NETWORK    = '/deal-network'
 export const HERSOCCEREX     = '/hersoccerex'
+// Unlisted: the slug works as a password. No nav, footer or sitemap link.
+export const THE_NETWORK     = '/the-network-cyw6wbqhl1lh'
 // The founding document as a file, and the link people share. Netlify serves the
 // same PDF at the shared path, so it is an <a href>, never a router <Link>.
 export const HERSOCCEREX_FOUNDING_PDF   = '/downloads/hersoccerex-founding-document.pdf'
