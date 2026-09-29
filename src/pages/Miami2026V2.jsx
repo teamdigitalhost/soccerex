@@ -10,7 +10,7 @@
 import { useEffect } from 'react'
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Mail, Trophy, Users, Briefcase, Star, FileText, Check, X, ChevronDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026, MIAMI_2026_V2, MIAMI_2026_ATTENDEE_GUIDE, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, DEAL_NETWORK, REFUND_POLICY, bookCallUrl, eventAgenda } from '../lib/routes'
+import { HOME, MIAMI_2026, MIAMI_2026_V2, MIAMI_2026_ATTENDEE_GUIDE, MIAMI_2026_PRESS_RELEASE, ACCOMMODATIONS, SPONSOR, EXHIBIT, DEAL_NETWORK, REFUND_POLICY, CONTACT, bookCallUrl, eventAgenda } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import { pageMeta } from '../lib/pageMeta'
 import InquiryModalButton from '../components/InquiryModalButton'
@@ -181,7 +181,7 @@ const FAQS = [
   },
   {
     q: 'Can I get a refund if my plans change?',
-    a: <>All registrations are final. You can move the full value of your pass to a future Soccerex event by emailing <a href="mailto:registrations@soccerex.com" style={FAQ_LINK}>registrations@soccerex.com</a> at least seven days before the event, as the <Link to={REFUND_POLICY} style={FAQ_LINK}>refund policy</Link> sets out.</>,
+    a: <>All registrations are final. You can move the full value of your pass to a future Soccerex event by <Link to={`${CONTACT}?type=general`} style={FAQ_LINK}>asking the team</Link> at least seven days before the event, as the <Link to={REFUND_POLICY} style={FAQ_LINK}>refund policy</Link> sets out.</>,
   },
   {
     q: 'Can I set up meetings before I arrive?',

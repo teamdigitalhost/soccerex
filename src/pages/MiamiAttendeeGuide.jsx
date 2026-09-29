@@ -7,7 +7,7 @@ import {
 import PageMeta from '../components/PageMeta'
 import { pageMeta } from '../lib/pageMeta'
 import {
-  MIAMI_2026, MIAMI_2026_VIP_NIGHT, MIAMI_2026_ATTENDEE_GUIDE, ACCOMMODATIONS, APP_PAGE, eventAgenda,
+  MIAMI_2026, MIAMI_2026_VIP_NIGHT, MIAMI_2026_ATTENDEE_GUIDE, ACCOMMODATIONS, APP_PAGE, CONTACT, eventAgenda,
 } from '../lib/routes'
 import { getAgenda, eventAgendaPdfUrl } from '../lib/soccerexApi'
 
@@ -40,7 +40,6 @@ const BLACKLANE = {
 const APP_STORE = 'https://apps.apple.com/us/app/soccerex-events/id6737689519'
 const PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.teks.eventify&hl=en_US'
 
-const HELP_EMAIL = 'enquiries@soccerex.com'
 
 /* Read the day's opening and closing times off the live agenda, so this page
    moves when the running order does. Only panels count: registration, the
@@ -133,7 +132,7 @@ export default function MiamiAttendeeGuide() {
               { icon: MapPin, label: 'Venue', value: '1000 Stadium Drive, Miami, FL 33125' },
               { icon: Car, label: 'Parking', value: 'Audi Black Lot' },
               { icon: Clock, label: 'Registration opens', value: '8:00 AM, Thursday, September 24' },
-              { icon: Mail, label: 'Questions', value: <>enquiries<wbr />@soccerex.com</>, href: `mailto:${HELP_EMAIL}` },
+              { icon: Mail, label: 'Questions', value: 'Ask the team', href: `${CONTACT}?type=general` },
             ].map((fact) => {
               const FactIcon = fact.icon
               return (
@@ -385,7 +384,7 @@ export default function MiamiAttendeeGuide() {
           </GuideCard>
           <GuideCard icon={BadgeCheck} title="Something about your pass?">
             <p>
-              Email <a href={`mailto:${HELP_EMAIL}`} style={{ color: '#007C91', fontWeight: 600 }}>{HELP_EMAIL}</a> with the name you registered under and the team will sort it out, whether it is a change of name, a missing confirmation or a question about what your pass includes.
+              <Link to={`${CONTACT}?type=general`} style={{ color: '#007C91', fontWeight: 600 }}>Send us the name you registered under</Link> and the team will sort it out, whether it is a change of name, a missing confirmation or a question about what your pass includes.
             </p>
           </GuideCard>
         </div>

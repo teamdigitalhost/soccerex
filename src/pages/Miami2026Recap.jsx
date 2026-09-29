@@ -15,7 +15,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, Calendar, MapPin, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026_PRESS_RELEASE, EUROPE_2026, DEAL_NETWORK, HERSOCCEREX, INSIGHTS, bookCallUrl, eventAgenda } from '../lib/routes'
+import { HOME, MIAMI_2026_PRESS_RELEASE, EUROPE_2026, DEAL_NETWORK, HERSOCCEREX, INSIGHTS, CONTACT, bookCallUrl, eventAgenda } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import SelectedSpeakers from '../components/SelectedSpeakers'
 import BrandWall from '../components/BrandWall'
@@ -672,8 +672,8 @@ export default function Miami2026Recap() {
               </button>
             )}
             <p className="miami-body" style={{ fontSize: '0.82rem', color: '#8a97a5' }}>
-              Press and partners can request the full set from{' '}
-              <a href="mailto:press@soccerex.com" style={{ color: '#8a97a5', textDecoration: 'underline' }}>press@soccerex.com</a>.
+              Press and partners can{' '}
+              <Link to={`${CONTACT}?type=press`} style={{ color: '#8a97a5', textDecoration: 'underline' }}>request the full set</Link>.
             </p>
           </div>
         </div>

@@ -37,7 +37,7 @@ const RIGHTS_HOLDER_POINTS = [
 const RIGHTSHOLDER_SCHEMA = [
   {
     fields: [
-      { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', span: 'full', autoFocus: true, options: [
+      { name: 'organisation_type', label: 'Type of organization *', required: true, type: 'select', span: 'full', autoFocus: true, options: [
         { value: 'club', label: 'Club' },
         { value: 'league', label: 'League' },
         { value: 'federation', label: 'Federation / national team' },
@@ -45,7 +45,7 @@ const RIGHTSHOLDER_SCHEMA = [
         { value: 'governing_body', label: 'Governing body' },
         { value: 'other', label: 'Other qualifying rightsholder' },
       ] },
-      { name: 'company', label: 'Organisation name *', required: true, placeholder: 'Organisation name', span: 'full' },
+      { name: 'company', label: 'Organization name *', required: true, placeholder: 'Organization name', span: 'full' },
       { name: 'country', label: 'Country', placeholder: 'Country' },
     ],
   },

@@ -7,6 +7,7 @@ import {
 import NetworkNodes from '../animations/NetworkNodes'
 import PixelDivider from '../components/PixelDivider'
 import { CONTACT, EUROPE_2026 } from '../lib/routes'
+import { submitLead } from '../lib/soccerexApi'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
 
 // Tier data
@@ -127,34 +128,34 @@ export default function ThePitch() {
   const [submitted, setSubmitted] = useState(false)
   const updateField = (key, value) => setForm((prev) => ({ ...prev, [key]: value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const lines = [
-      'The Pitch Application',
-      '',
-      `Name: ${form.firstName || ''} ${form.lastName || ''}`.trim(),
-      `Email: ${form.email || ''}`,
-      `Company: ${form.company || ''}`,
-      `Role: ${form.role || ''}`,
-      `Applying as: ${form.applicantType || ''}`,
-    ]
-    if (form.description) {
-      lines.push('')
-      lines.push('Company / Fund Description:')
-      lines.push(form.description)
-    }
-    if (form.message) {
-      lines.push('')
-      lines.push('Message:')
-      lines.push(form.message)
-    }
-    lines.push('')
-    lines.push('---')
-    lines.push('Sent via soccerex.com/the-pitch')
+    /* The application lands in the CRM as a contact lead, tagged to The Pitch,
+       rather than as an email somebody has to notice and re-key. */
+    const detail = [
+      form.applicantType ? `Applying as: ${form.applicantType}` : null,
+      form.description ? `Company or fund: ${form.description}` : null,
+      form.message || null,
+    ].filter(Boolean).join('\n\n')
 
-    const subject = encodeURIComponent(`[The Pitch] Application from ${form.firstName || ''} ${form.lastName || ''}`.trim())
-    const body = encodeURIComponent(lines.join('\n'))
-    window.location.href = `mailto:partner@soccerex.com?subject=${subject}&body=${body}`
+    try {
+      await submitLead('contact', {
+        inquiry_type: 'general',
+        first_name: form.firstName || undefined,
+        last_name: form.lastName || undefined,
+        name: [form.firstName, form.lastName].filter(Boolean).join(' ') || undefined,
+        email: form.email || undefined,
+        company: form.company || undefined,
+        role: form.role || undefined,
+        subject: 'The Pitch application',
+        message: detail || 'The Pitch application',
+        source: 'the-pitch',
+        source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+      })
+    } catch {
+      /* The form still confirms: a failed post is ours to chase, not the
+         applicant's, and the payload is in the request log either way. */
+    }
     setSubmitted(true)
   }
 

@@ -32,8 +32,8 @@ const ORG_TYPE_OPTIONS = [
 export const sponsorshipSchema = [
   {
     fields: [
-      { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', options: ORG_TYPE_OPTIONS, span: 'full', },
-      { name: 'company', label: 'Organisation *', required: true, placeholder: 'Company name', span: 'full' },
+      { name: 'organisation_type', label: 'Type of organization *', required: true, type: 'select', options: ORG_TYPE_OPTIONS, span: 'full', },
+      { name: 'company', label: 'Organization *', required: true, placeholder: 'Company name', span: 'full' },
     ],
   },
   {
@@ -56,7 +56,7 @@ export const speakerSchema = [
     fields: [
       { name: 'name',     label: 'Your name *', required: true, placeholder: 'Your full name', autoFocus: true, autoComplete: 'name' },
       { name: 'email',    label: 'Email *', required: true, type: 'email', placeholder: 'you@company.com', autoComplete: 'email' },
-      { name: 'company',  label: 'Organisation', placeholder: 'Where you work' },
+      { name: 'company',  label: 'Organization', placeholder: 'Where you work' },
       { name: 'role',     label: 'Role', placeholder: 'Your role' },
       { name: 'topic',    label: 'What would you talk about? *', required: true, type: 'textarea', rows: 3, span: 'full',
         placeholder: 'A one-line topic, and a line or two about why you\'re the right voice for it.' },
@@ -72,7 +72,7 @@ export const speakerSchema = [
 export const rightsholderSchema = [
   {
     fields: [
-      { name: 'organisation_type', label: 'Type of organisation *', required: true, type: 'select', span: 'full', autoFocus: true, options: [
+      { name: 'organisation_type', label: 'Type of organization *', required: true, type: 'select', span: 'full', autoFocus: true, options: [
         { value: 'club',          label: 'Club' },
         { value: 'league',        label: 'League' },
         { value: 'federation',    label: 'Federation / national team' },
@@ -80,7 +80,7 @@ export const rightsholderSchema = [
         { value: 'governing_body',label: 'Governing body' },
         { value: 'other',         label: 'Other qualifying rightsholder' },
       ] },
-      { name: 'company', label: 'Organisation name *', required: true, placeholder: 'Organisation name', span: 'full' },
+      { name: 'company', label: 'Organization name *', required: true, placeholder: 'Organization name', span: 'full' },
       { name: 'country', label: 'Country', placeholder: 'Country' },
     ],
   },
@@ -88,15 +88,15 @@ export const rightsholderSchema = [
     fields: [
       { name: 'name',  label: 'Your name *', required: true, placeholder: 'Your full name', autoComplete: 'name' },
       { name: 'role',  label: 'Your role *', required: true, placeholder: 'Your role' },
-      { name: 'email', label: 'Official organisation email *', required: true, type: 'email', placeholder: 'you@organisation.com', autoComplete: 'email', span: 'full',
-        hint: 'Eligibility is verified against your organisation, so personal addresses (Gmail, Hotmail, AOL and similar) do not qualify.',
+      { name: 'email', label: 'Official organization email *', required: true, type: 'email', placeholder: 'you@organization.com', autoComplete: 'email', span: 'full',
+        hint: 'Eligibility is verified against your organization, so personal addresses (Gmail, Hotmail, AOL and similar) do not qualify.',
         validate: (v) => {
           const domain = String(v || '').toLowerCase().split('@')[1] || ''
           // First-line check only; the API enforces the full list server-side.
           const freemail = ['gmail.com', 'googlemail.com', 'hotmail.com', 'outlook.com', 'live.com', 'msn.com',
             'yahoo.com', 'ymail.com', 'aol.com', 'icloud.com', 'me.com', 'protonmail.com', 'proton.me', 'gmx.com', 'mail.com']
           return freemail.includes(domain)
-            ? 'Please use your official organisation email; personal addresses do not qualify for the free pass.'
+            ? 'Please use your official organization email; personal addresses do not qualify for the free pass.'
             : undefined
         } },
       { name: 'message', label: 'Anything else?', type: 'textarea', rows: 3, span: 'full', placeholder: 'Tell us what you want to access or showcase.' },
@@ -114,7 +114,7 @@ export const packRequestSchema = [
       { name: 'name',    label: 'Your name *', required: true, placeholder: 'Your full name', autoComplete: 'name', autoFocus: true },
       { name: 'role',    label: 'Role', placeholder: 'Your role' },
       { name: 'email',   label: 'Work email *', required: true, type: 'email', placeholder: 'you@company.com', autoComplete: 'email', span: 'full' },
-      { name: 'company', label: 'Company *', required: true, placeholder: 'Company / organisation', span: 'full' },
+      { name: 'company', label: 'Company *', required: true, placeholder: 'Company / organization', span: 'full' },
     ],
   },
 ]

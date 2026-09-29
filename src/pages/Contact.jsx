@@ -100,7 +100,7 @@ const EVENT_OPTIONS = [
 
 // Conditional field definitions. UI-only labels; wire keys live in CONTACT_KEY_MAP.
 const FIELD_DEFS = {
-  organisation: { label: 'Organisation / Company', placeholder: 'Your company or organisation', type: 'text' },
+  organisation: { label: 'Organization / Company', placeholder: 'Your company or organization', type: 'text' },
   role:         { label: 'Your Role',              placeholder: 'Title or position',           type: 'text' },
   country:      { label: 'Country',                placeholder: 'Where you are based',          type: 'text' },
   subject:      { label: 'Subject',                placeholder: 'A short line on what this is about', type: 'text' },
@@ -498,29 +498,6 @@ export default function Contact() {
           )}
           </div>
 
-          {/* Direct email fallback list */}
-          <div className="mt-12 text-center fade-up">
-            <p className="font-mono uppercase tracking-[0.15em] mb-4" style={{ fontSize: '0.7rem', color: '#666', fontWeight: 600 }}>Prefer direct email?</p>
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-              {[
-                // Speakers email removed in lockstep with the dropdown — we
-                // don't want a Speaker direct-email link when the form path
-                // doesn't surface that option either.
-                { label: 'Partnerships', email: 'partner@soccerex.com' },
-                { label: 'Press', email: 'press@soccerex.com' },
-                { label: 'Exhibit', email: 'exhibit@soccerex.com' },
-                { label: 'General', email: 'enquiries@soccerex.com' },
-              ].map((l) => (
-                <a key={l.email} href={`mailto:${l.email}`} className="inline-flex items-center gap-1.5"
-                  style={{ color: '#09203e', textDecoration: 'none', fontSize: '0.82rem', transition: 'color 0.2s', fontFamily: 'Inter, sans-serif' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-brand-accent)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = '#09203e' }}
-                >
-                  <Mail size={13} /> {l.label}
-                </a>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
     </div>

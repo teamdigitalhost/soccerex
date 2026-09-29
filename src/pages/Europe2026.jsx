@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import PixelDivider from '../components/PixelDivider'
 import {
   EUROPE_2026,
-  HOME, MIAMI_2026, pressRelease, eventSpeakers, eventAgenda, eventAgendaConcept,
+  HOME, MIAMI_2026, CONTACT, pressRelease, eventSpeakers, eventAgenda, eventAgendaConcept,
 } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import { pageMeta } from '../lib/pageMeta'
@@ -343,7 +343,7 @@ export default function Europe2026() {
             Want to be on stage in Miami? <Link to={eventAgendaConcept('soccerex-miami-2026')} style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>Browse the program themes</Link>.
           </p>
           <p className="font-body text-white/30 text-xs mt-3">
-            Partner enquiries: <a href="mailto:enquiries@soccerex.com" style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>enquiries@soccerex.com</a>
+            <Link to={`${CONTACT}?type=partner`} style={{ color: 'var(--event-primary-light)', textDecoration: 'none' }}>Partner inquiries</Link>
           </p>
         </div>
       </section>

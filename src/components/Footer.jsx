@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { Mail, MapPin } from 'lucide-react'
 import {
-  HOME, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS,
+  HOME, ABOUT, EVENTS, GLOBAL_NETWORK, INSIGHTS, CONTACT,
   DEAL_NETWORK, HERSOCCEREX, EUROPE_2026, MIAMI_2026, RIYADH_2027,
 } from '../lib/routes'
 
@@ -65,12 +65,12 @@ const SOCIALS = [
   // is left in place so we can re-add it cheaply if Soccerex changes mind.
 ]
 
-// Get in Touch sidebar pared back per GN revisions doc to a single channel.
-// EXHIBIT / SPEAK / PRESS entries removed — exhibitor + press inquiries
-// still route correctly through the main Contact form's dropdown. Keep the
-// addresses live on the backend so old links don't bounce.
+// Get in Touch sidebar pared back per GN revisions doc to a single channel,
+// and that channel is the contact form rather than an address: a request that
+// arrives as a loose email is one nobody can see, assign or chase. The
+// mailboxes stay live on the backend so old links do not bounce.
 const CONTACTS = [
-  { label: 'PARTNERSHIP OPPORTUNITIES', email: 'partner@soccerex.com' },
+  { label: 'PARTNERSHIP OPPORTUNITIES', value: 'Start a conversation', to: `${CONTACT}?type=partner` },
 ]
 
 export default function Footer() {
@@ -169,17 +169,17 @@ export default function Footer() {
             <h4 className="font-mono uppercase tracking-[0.15em] mb-6" style={{ fontSize: '0.75rem', color: 'var(--footer-accent)', fontWeight: 600 }}>Get in Touch</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {CONTACTS.map(c => (
-                <li key={c.email} style={{ marginBottom: '16px' }}>
+                <li key={c.label} style={{ marginBottom: '16px' }}>
                   <p className="font-mono uppercase" style={{ fontSize: '0.65rem', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.4)', marginBottom: '4px' }}>
                     {c.label}
                   </p>
-                  <a href={`mailto:${c.email}`} className="inline-flex items-center gap-2"
+                  <Link to={c.to} className="inline-flex items-center gap-2"
                      style={{ color: 'rgba(255,255,255,0.75)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
                      onMouseEnter={e => { e.currentTarget.style.color = 'var(--footer-accent)' }}
                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
                   >
-                    <Mail size={13} /> {c.email}
-                  </a>
+                    <Mail size={13} /> {c.value}
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Mail, Newspaper, TrendingUp, CheckCircle2, ArrowRight } from 'lucide-react'
 import NetworkNodes from '../animations/NetworkNodes'
 import { useScrollAnimations } from '../lib/useScrollAnimations'
+import { submitLead } from '../lib/soccerexApi'
 
 export default function SoccerExpert() {
   useScrollAnimations()
@@ -10,22 +11,24 @@ export default function SoccerExpert() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState('idle') // idle | submitting | success | error
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       setStatus('error')
       return
     }
     setStatus('submitting')
-    // No backend wired yet — open pre-filled mailto so the user's email client
-    // sends the sign-up to the Soccerex team. Replace with fetch() once the
-    // newsletter platform (Mailchimp / HubSpot / etc.) is connected.
-    const subject = encodeURIComponent('SoccerExpert Newsletter — Sign-Up')
-    const body = encodeURIComponent(
-      `Please add this address to the SoccerExpert mailing list.\n\nEmail: ${email}\n`
-    )
-    window.location.href = `mailto:enquiries@soccerex.com?subject=${subject}&body=${body}`
-    setStatus('success')
+    try {
+      await submitLead('newsletter', {
+        email: email.trim(),
+        source: 'soccerexpert',
+        source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+        consent: true,
+      })
+      setStatus('success')
+    } catch {
+      setStatus('error')
+    }
   }
 
   const perks = [

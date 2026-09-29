@@ -343,7 +343,7 @@ export default function ScheduleCall() {
                   <Field label="Company" style={{ marginBottom: 12 }}>
                     <input type="text" value={form.company} autoComplete="organization"
                       onChange={(e) => setForm((f) => ({ ...f, company: e.target.value }))}
-                      style={inputStyle} placeholder="Company or organisation (optional)" />
+                      style={inputStyle} placeholder="Company or organization (optional)" />
                   </Field>
                   <Field label="Notes" style={{ marginBottom: 18 }}>
                     <textarea rows={3} value={form.notes}
@@ -416,7 +416,7 @@ export default function ScheduleCall() {
                 <Field label="Company" style={{ marginBottom: 22 }} error={fieldErrors.company}>
                   <input type="text" value={request.company} autoComplete="organization"
                     onChange={(e) => setRequest((r) => ({ ...r, company: e.target.value }))}
-                    style={inputStyle} placeholder="Company or organisation (optional)" />
+                    style={inputStyle} placeholder="Company or organization (optional)" />
                 </Field>
 
                 <SectionLabel step="2" text="When you are free" />
