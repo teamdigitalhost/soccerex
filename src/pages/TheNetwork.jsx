@@ -7,9 +7,9 @@ import { submitLead } from '../lib/soccerexApi'
 import { isTestModeFromUrl } from '../lib/testMode'
 
 /* ═══ The Network: Soccerex's interview series, hosted by Diego Arrioja ═══
- * The show has not premiered. Episodes list the guest and the ground the
- * conversation covers, and each carries a pull quote taken from the
- * recording itself. When an episode publishes, give it `watchUrl` and the
+ * The show has not premiered. The copy is written to make people want to
+ * watch: each card carries a hook drawn from what the guest said on the
+ * recording, plus a pull quote taken from the recording itself. When an episode publishes, give it `watchUrl` and the
  * card switches from "Coming soon" to a Watch link.
  *
  * Audience figures come from the guest invitation (Soccerex audience data,
@@ -28,7 +28,7 @@ const EPISODES = [
     n: 1,
     guest: 'Jack Dempsey',
     role: 'Strategic Partnerships and Development Manager, Laurel Springs School',
-    topic: 'How players chasing MLS NEXT and European academies keep up with school while they train and travel.',
+    topic: 'His students train like pros and fly to tournaments before they can drive. He explains how they still graduate on time.',
     quote: 'A lot of them are competing internationally before they have a driver license.',
     img: `${IMG}/ep01.jpg`,
   },
@@ -36,7 +36,7 @@ const EPISODES = [
     n: 2,
     guest: 'Jim McCarthy',
     role: 'Founder, Impresario Strategic Growth Services',
-    topic: 'Why most clubs still play in front of empty seats, and how pricing and fan-specific tickets fill them.',
+    topic: 'He puts the share of clubs with empty seats at 95% or more. His answer involves a family zone called Gnarlyville and tacos thrown into the stands.',
     quote: 'Everything you want from your football club comes from a full stadium.',
     img: `${IMG}/ep02.jpg`,
   },
@@ -44,7 +44,7 @@ const EPISODES = [
     n: 3,
     guest: 'Michael Donald',
     role: 'Photographer and filmmaker, GOAL!',
-    topic: 'Tracking down every living man who has scored in a World Cup final, and what that goal did to the rest of their lives.',
+    topic: 'He tracked down every living man who has scored in a World Cup final. One kept a karaoke medal in the box where his World Cup medal should have been.',
     quote: 'It’s the most exclusive sporting club there is.',
     img: `${IMG}/ep03.jpg`,
   },
@@ -52,7 +52,7 @@ const EPISODES = [
     n: 4,
     guest: 'Anna Pereira',
     role: 'Founder and CEO, The Wellness Universe',
-    topic: 'What women players and executives need around them as the women’s game grows.',
+    topic: 'The women’s game is growing faster than the support around its players, and Anna is building what is missing.',
     quote: 'No matter where we fall on the food chain, we are still human beings.',
     img: `${IMG}/ep04.jpg`,
   },
@@ -60,7 +60,7 @@ const EPISODES = [
     n: 5,
     guest: 'Alex Bowden',
     role: 'Founder and CEO, Career Catalyst',
-    topic: 'Giving players a plan for the career that starts when the playing one ends.',
+    topic: 'She danced professionally in New York before she moved into HR. Now she builds players the plan for life after the game that most of them never get.',
     quote: 'People are your capital.',
     img: `${IMG}/ep05.jpg`,
   },
@@ -68,7 +68,7 @@ const EPISODES = [
     n: 6,
     guest: 'Danielle Duboc',
     role: 'Executive Director, Fútbol con Corazón',
-    topic: 'How a free after-school program turns soccer coaches into mentors, and its own teenagers into coaches.',
+    topic: 'Sixty percent of her coaches started as kids on her own fields. She explains how a free after-school program pulls that off.',
     quote: 'The goal is to help move kids from trauma to triumph.',
     img: `${IMG}/ep06.jpg`,
   },
@@ -76,7 +76,7 @@ const EPISODES = [
     n: 7,
     guest: 'Ryan Bailey',
     role: 'Chief Operating Officer, Americas, Red Knot',
-    topic: 'How soccer grew its audience in the United States, from video games to the World Cup, and how clubs tell their story.',
+    topic: 'American kids can now name every player at Borussia Dortmund. Ryan knows where that came from and what clubs should do with it.',
     quote: 'Why do we watch sport in general? It’s to be entertained.',
     img: `${IMG}/ep07.jpg`,
   },
@@ -84,21 +84,22 @@ const EPISODES = [
     n: 8,
     guest: 'Lili Cantero',
     role: 'Artist',
-    topic: 'The Paraguayan artist who paints the stories of players onto football boots, and the pair that reached Lionel Messi.',
+    topic: 'She was told she could never make a living from art. Lionel Messi ended up holding the boots she painted for him.',
     quote: 'A boot for me isn’t just an object.',
     img: `${IMG}/ep08.jpg`,
   },
 ]
 
-/* The run of show, in the order Diego takes it. A typical episode uses five
-   or six of these, so the list names the ones that carry the conversation. */
+/* The run of show, in the order Diego takes it. Written as teasers on
+   purpose: the page hints at each stretch of the conversation and leaves
+   the detail for the episode. */
 const SEGMENTS = [
-  { name: 'Kickoff', body: 'How the guest found their way into football.' },
-  { name: 'Starting XI', body: 'What they are building, and why it matters to the game.' },
-  { name: 'The Assist', body: 'The work itself: the product, the club, the project in action.' },
-  { name: 'The Goal', body: 'Where their corner of football business is heading next.' },
-  { name: 'My Soccerex Story', body: 'What the Soccerex community has meant to the way they do business.' },
-  { name: 'Final Whistle', body: 'One prediction for the future of the business of football.' },
+  { name: 'Kickoff', body: 'Where it started, often a long way from football.' },
+  { name: 'Starting XI', body: 'Who they picked, and who picked them.' },
+  { name: 'The Assist', body: 'The work, up close.' },
+  { name: 'The Goal', body: 'The moment it paid off.' },
+  { name: 'My Soccerex Story', body: 'What happened after the introduction.' },
+  { name: 'Final Whistle', body: 'The line they leave you with.' },
 ]
 
 export default function TheNetwork() {
@@ -120,15 +121,15 @@ export default function TheNetwork() {
               The Network
             </h1>
             <p className="font-heading" style={{ fontSize: 'clamp(1.35rem, 2.6vw, 2rem)', lineHeight: 1.25, marginTop: 18, color: '#fff', fontWeight: 500 }}>
-              Diego Arrioja sits down with the people who run the business of football.
+              Diego Arrioja pulls up a chair with the people behind the game and gets the stories the main stage never had time for.
             </p>
             <p style={{ fontSize: 'clamp(1rem, 1.3vw, 1.12rem)', lineHeight: 1.7, color: INK, marginTop: 20, maxWidth: 600 }}>
-              Each episode is one guest and one conversation of about 25 minutes. Club executives, founders and the people building the business around the game talk about how they got here, what they are building and where they think football is heading.
+              Each episode puts one guest across from Diego, from the strategist who fills empty stadiums to the artist whose painted boots ended up in Lionel Messi’s hands.
             </p>
             <div className="flex flex-wrap gap-3" style={{ marginTop: 32 }}>
               <a href="#notify" className="inline-flex items-center gap-2 font-semibold"
                 style={{ background: PINK, color: '#fff', padding: '14px 26px', borderRadius: 999, fontSize: '1rem' }}>
-                Get the first episode <ArrowRight size={18} />
+                Be first to watch <ArrowRight size={18} />
               </a>
               <a href="#be-a-guest" className="inline-flex items-center gap-2 font-semibold"
                 style={{ border: '1px solid rgba(255,255,255,0.35)', color: '#fff', padding: '14px 26px', borderRadius: 999, fontSize: '1rem' }}>
@@ -153,7 +154,7 @@ export default function TheNetwork() {
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
           <SectionHeading>A selection of guests</SectionHeading>
           <p style={{ fontSize: 'clamp(1rem, 1.3vw, 1.12rem)', lineHeight: 1.7, color: INK, maxWidth: 760, marginTop: 14 }}>
-            Every guest on The Network is a Soccerex patron, a partner, exhibitor or delegate from our community, given an episode of their own to tell their story. Season one was recorded ahead of Soccerex Miami 2026, and the guests run from a ticket-pricing strategist and a club communications chief to a Paraguayan artist whose painted boots reached Lionel Messi, and a photographer who tracked down every living man who has scored in a World Cup final.
+            Every guest on The Network is a Soccerex patron, a partner, exhibitor or delegate from our community, and each one gets an episode of their own. Between them, they have tracked down the men who scored in World Cup finals, turned teenagers into coaches, told clubs why their seats sit empty and walked the Soccerex floor with a carry-on full of paintings.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" style={{ marginTop: 40 }}>
             {EPISODES.map((ep) => <EpisodeCard key={ep.n} ep={ep} />)}
@@ -165,12 +166,9 @@ export default function TheNetwork() {
       <section style={{ padding: 'clamp(64px,8vw,110px) clamp(20px,5vw,64px)' }}>
         <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-16" style={{ maxWidth: 1240, margin: '0 auto' }}>
           <div>
-            <SectionHeading>Every conversation plays out like a match</SectionHeading>
+            <SectionHeading>Nobody knows the final score until the whistle</SectionHeading>
             <p style={{ fontSize: 'clamp(1rem, 1.3vw, 1.12rem)', lineHeight: 1.7, color: INK, marginTop: 14 }}>
-              Diego opens with how the guest got into football and closes with a prediction. In between, the guest decides the ground: the story of the business, the thing they are building, or what the industry is getting wrong.
-            </p>
-            <p style={{ fontSize: 'clamp(1rem, 1.3vw, 1.12rem)', lineHeight: 1.7, color: INK, marginTop: 14 }}>
-              Every guest answers the same closing question about where football business is heading, and those answers publish together as a record of what the people running the industry expected to happen.
+              Diego kicks off every episode the same way. After that, the guest takes the ball wherever they want, and at least one of them put something on the record for the first time.
             </p>
           </div>
           <ol style={{ listStyle: 'none', margin: 0, padding: 0 }}>
@@ -242,9 +240,9 @@ export default function TheNetwork() {
       <section id="notify" style={{ background: NAVY, padding: 'clamp(64px,8vw,110px) clamp(20px,5vw,64px)', scrollMarginTop: 72 }}>
         <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
           <Mic size={30} style={{ color: PINK, margin: '0 auto 16px' }} />
-          <SectionHeading center>Hear the first episode the day it lands</SectionHeading>
+          <SectionHeading center>Be in the room when the first episode drops</SectionHeading>
           <p style={{ fontSize: 'clamp(1rem, 1.3vw, 1.12rem)', lineHeight: 1.7, color: INK, marginTop: 14 }}>
-            Leave your name and email and we will send you each episode as it publishes.
+            Leave your name and email, and every episode comes straight to your inbox the day it publishes.
           </p>
           <NotifyForm />
         </div>
@@ -375,7 +373,7 @@ function NotifyForm() {
       {error && <p role="alert" style={{ color: '#ffb4c8', marginTop: 12, fontSize: '0.95rem' }}>{error}</p>}
       <button type="submit" disabled={state === 'sending'} className="inline-flex items-center justify-center gap-2 font-semibold w-full"
         style={{ marginTop: 14, background: PINK, color: '#fff', padding: '14px 26px', borderRadius: 999, fontSize: '1rem', opacity: state === 'sending' ? 0.7 : 1 }}>
-        {state === 'sending' ? 'Sending' : 'Send me the episodes'} <ArrowRight size={18} />
+        {state === 'sending' ? 'Sending' : 'Save my seat'} <ArrowRight size={18} />
       </button>
       <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.82rem', marginTop: 10, textAlign: 'center' }}>
         We use your email to send The Network and related Soccerex news. You can unsubscribe at any time.
