@@ -26,7 +26,7 @@ import useScrollAnimations from '../lib/useScrollAnimations'
 const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
 const GFX = '/events/miami/2026/graphics'
 const ASSET = 'https://soccerex-public-assets.s3.amazonaws.com/events/miami-2026'
-const FRAME_V = 2 // bump when a frame is recropped under the same name
+const FRAME_V = 3 // bump when a frame is recropped under the same name
 const frame = (slug, size = '') => `${ASSET}/frames/${slug}${size}.jpg?v=${FRAME_V}`
 
 /* Rounded from Soccerex registration, program and event-app figures, September 2026. */
