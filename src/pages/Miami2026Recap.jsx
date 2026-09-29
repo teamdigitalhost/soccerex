@@ -1,22 +1,26 @@
 /*
- * Miami 2026 after the event, written for the people who were there and the ones deciding
- * whether to come next time: who was in the room, what got done in it, and thank you.
+ * Miami 2026 after the event, written for the people deciding whether to be in the room next
+ * time: what the week was, who was in it, what it produced, and the two ways back in.
  *
  * Served unlisted at /miami-2026-draft while Joel reviews it, and built to take over
  * /miami-2026 from Miami2026V2, whose design system it reuses.
  *
+ * Scale figures are the rounded set used across the whole page (850+, nearly 150, 90+, 30,
+ * 2,700+), so a reader never has to reconcile two counts of the same thing.
+ *
  * Photography and the Roc Nation reel live on the public asset bucket. Frames carry two
- * sizes: the grid loads -w800 and the lightbox loads the 1600px file.
+ * sizes: the grid loads -w800 and the lightbox loads the 1600px file. The gallery opens on
+ * twelve curated frames and unfolds to the full set on request.
  */
 import { useCallback, useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, Calendar, MapPin, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { HOME, MIAMI_2026_PRESS_RELEASE, EUROPE_2026, DEAL_NETWORK, INSIGHTS, bookCallUrl, eventAgenda } from '../lib/routes'
+import { HOME, MIAMI_2026_PRESS_RELEASE, EUROPE_2026, DEAL_NETWORK, HERSOCCEREX, INSIGHTS, bookCallUrl, eventAgenda } from '../lib/routes'
 import PageMeta from '../components/PageMeta'
 import SelectedSpeakers from '../components/SelectedSpeakers'
 import BrandWall from '../components/BrandWall'
 import InquiryModalButton from '../components/InquiryModalButton'
-import { packRequestSchema } from '../lib/leadSchemas'
+import { packRequestSchema, sponsorshipSchema } from '../lib/leadSchemas'
 import useScrollAnimations from '../lib/useScrollAnimations'
 
 const MIAMI_EVENT_SLUG = 'soccerex-miami-2026'
@@ -25,33 +29,42 @@ const ASSET = 'https://soccerex-public-assets.s3.amazonaws.com/events/miami-2026
 const FRAME_V = 2 // bump when a frame is recropped under the same name
 const frame = (slug, size = '') => `${ASSET}/frames/${slug}${size}.jpg?v=${FRAME_V}`
 
-/* From the CRM and the event app, September 2026. */
+/* Rounded from Soccerex registration, program and event-app figures, September 2026. */
 const NUMBERS = [
-  { figure: '873', label: 'organizations registered' },
-  { figure: '146', label: 'clubs, leagues and federations' },
-  { figure: '92', label: 'speakers across 28 sessions' },
+  { figure: '850+', label: 'organizations represented' },
+  { figure: 'Nearly 150', label: 'clubs, leagues and federations' },
+  { figure: '90+', label: 'speakers on stage' },
   { figure: '30', label: 'exhibitors on the floor' },
-  { figure: '2,714', label: 'introductions in the event app' },
+  { figure: '2,700+', label: 'connections through the event app' },
 ]
 
 /* Named, because the delegate list is the product. Everyone here was on stage or on the floor. */
 const COHORTS = [
   {
-    heading: 'Federations and the World Cup',
-    names: 'Concacaf, FIFA World Cup 26 in Mexico, the United States and Canada, Federación Mexicana de Fútbol, the Argentine Football Association, and Qatar’s Supreme Committee for Delivery and Legacy.',
+    heading: 'Football’s institutions',
+    names: 'Concacaf, FIFA World Cup 26 leadership from the United States, Mexico and Canada, Federación Mexicana de Fútbol, the Argentine Football Association and Qatar’s Supreme Committee for Delivery and Legacy.',
   },
   {
-    heading: 'Clubs',
+    heading: 'The clubs building the game',
     names: 'Inter Miami CF, FC Barcelona, FC Bayern, RB Leipzig, Club América, Chivas, Brighton and Hove Albion, Orlando City SC, Vancouver Whitecaps FC, Napoli Women, Nashville SC, Atlanta United and Miami FC.',
   },
   {
-    heading: 'Leagues, media and rights',
-    names: 'LaLiga North America, Bundesliga Americas, NWSL, MLS NEXT PRO, UPSL, FOX Sports, Telemundo, TelevisaUnivision and Ateme.',
+    heading: 'The voices shaping reach, rights and culture',
+    names: 'LaLiga North America, Bundesliga Americas, NWSL, MLS NEXT PRO, FOX Sports, Telemundo, TelevisaUnivision and Ateme.',
   },
   {
-    heading: 'Brands, investors and agencies',
+    heading: 'The capital, brands and innovators moving football forward',
     names: 'Roc Nation Sports International, Royal Caribbean, Nu, Fortress Investment Group, Catapult, Gemini Sports AI, LaBella Associates, Meis+, Gensler and Buro Happold.',
   },
+]
+
+/* Why each part of the room came, in the order they weigh it. */
+const RETURNS = [
+  'Clubs, leagues and federations met investors, commercial partners, peers and the technology providers shaping the game.',
+  'Investors heard from decision-makers directly, deepened relationships and read the market from inside the industry.',
+  'Sponsors and exhibitors put their brands, services and ideas in front of a concentrated football business audience.',
+  'Delegates turned three days of insight and curated introductions into relationships that otherwise take months to build.',
+  'Women and young players connected to new leadership, opportunity and support through HerSoccerex and Soccerex Impact.',
 ]
 
 /* The agenda by argument rather than by day, which is how anyone deciding to come reads it. */
@@ -64,7 +77,7 @@ const THEMES = [
   {
     title: 'What a World Cup leaves behind',
     photo: 'argentina',
-    body: 'The tournament officers for Mexico, the United States and Canada sat together on Sustaining Momentum after the FIFA World Cup, and Mexico’s legacy panel brought the federation, TelevisaUnivision and the host committee into the same argument.',
+    body: 'For the first time the FIFA World Cup 26 Chief Tournament Officers for the United States, Mexico and Canada shared one Soccerex stage, and Mexico’s legacy panel brought the federation, TelevisaUnivision and the host committee into the same argument.',
   },
   {
     title: 'Who pays for the broadcast',
@@ -88,24 +101,30 @@ const THEMES = [
   },
 ]
 
+/* The first twelve are the curated set the page opens on; the rest unfold on request. */
+const FEATURED_COUNT = 12
 const GALLERY = [
   { slug: 'open', alt: 'A full room for the opening of Soccerex Miami 2026' },
-  { slug: 'dagrosa', alt: 'Joseph DaGrosa Jr., chairman of Soccerex, opening the conference' },
+  { slug: 'worldcup', alt: 'The FIFA World Cup 26 tournament officers for Mexico, the United States and Canada on one panel' },
   { slug: 'khaled-mic', alt: 'DJ Khaled on stage at Nu Stadium with the Roc Nation Sports International panel' },
+  { slug: 'khaled-room', alt: 'The room on its feet for the Built, Not Bought panel' },
+  { slug: 'concacaf-booth-2', alt: 'The Concacaf stand on the exhibition floor at Nu Stadium' },
+  { slug: 'barca-booth-2', alt: 'The FC Barcelona stand on the exhibition floor' },
+  { slug: 'meeting', alt: 'Two delegates in conversation on the concourse' },
+  { slug: 'women', alt: 'The Commercial Power of Women’s Football panel' },
+  { slug: 'impact-joy', alt: 'Young players at the Soccerex Community Impact Event' },
+  { slug: 'vip-evening', alt: 'The VIP evening at The Savoy' },
+  { slug: 'dagrosa', alt: 'Joseph DaGrosa Jr., chairman of Soccerex, opening the conference' },
   { slug: 'lalas', alt: 'Alexi Lalas of FOX Sports moderating on the main stage' },
+
   { slug: 'stands', alt: 'Delegates watching a session from the stands at Nu Stadium' },
   { slug: 'guzan', alt: 'Brad Guzan of Atlanta United in conversation on the main stage' },
   { slug: 'dorrance', alt: 'Anson Dorrance, coach emeritus of the United States and UNC women’s soccer, on the main stage' },
-  { slug: 'concacaf-booth-2', alt: 'The Concacaf stand on the exhibition floor at Nu Stadium' },
-  { slug: 'worldcup', alt: 'The FIFA World Cup 26 tournament officers for Mexico, the United States and Canada on one panel' },
-  { slug: 'meeting', alt: 'Two delegates in conversation on the concourse' },
   { slug: 'curtis', alt: 'Ali Curtis, president of MLS NEXT PRO, alongside Brad Guzan' },
   { slug: 'lalas-panel', alt: 'Alexi Lalas and Robin Austermann of Bundesliga Americas on Football’s Media Future' },
-  { slug: 'khaled-room', alt: 'The room on its feet for the Built, Not Bought panel' },
   { slug: 'pellerano', alt: 'Heidi Pellerano, chief commercial officer of Concacaf, on the media panel' },
   { slug: 'floor-group', alt: 'Delegates on the exhibition floor' },
   { slug: 'fireside-wide', alt: 'Ali Curtis and Brad Guzan in conversation with Diego Arrioja of Telemundo' },
-  { slug: 'women', alt: 'The Commercial Power of Women’s Football panel' },
   { slug: 'investment', alt: 'The Football Investment Strategies panel on the main stage' },
   { slug: 'barber', alt: 'A speaker on The Commercial Power of Women’s Football' },
   { slug: 'concourse', alt: 'Delegates talking between sessions' },
@@ -120,15 +139,15 @@ const GALLERY = [
   { slug: 'meis', alt: 'The architect Dan Meis on the stadium infrastructure panel' },
   { slug: 'stadiums', alt: 'Building the Stage for the Modern Game, the stadium infrastructure panel' },
   { slug: 'greeting', alt: 'Two delegates greeting each other between sessions' },
-  { slug: 'barca-booth-2', alt: 'The FC Barcelona stand on the exhibition floor' },
   { slug: 'tech', alt: 'Tech in Football: AI, performance and the modern front office' },
   { slug: 'ball', alt: 'The Soccerex match ball on the pitch at Nu Stadium' },
   { slug: 'barca', alt: 'Evolving Barça in the Americas on the main stage' },
   { slug: 'merch', alt: 'A delegate collecting merchandise on the exhibition floor' },
   { slug: 'argentina', alt: 'The Argentina Era panel on day two' },
   { slug: 'packed', alt: 'A packed house watching a session at Nu Stadium' },
-  { slug: 'vip', alt: 'The Soccerex sign at the VIP reception' },
-  { slug: 'impact', alt: 'Young players at the Community Impact Event on the mini fields at Nu Stadium' },
+  { slug: 'impact', alt: 'The mini fields at Nu Stadium set up for the Community Impact Event' },
+  { slug: 'vip', alt: 'The Soccerex sign at the VIP evening' },
+  { slug: 'impact-youth', alt: 'Young players lining up at the Soccerex Community Impact Event' },
 ]
 
 const THANKS = [
@@ -146,7 +165,7 @@ const THANKS = [
   },
   {
     heading: 'Everyone who took the stage',
-    body: '92 speakers across 28 panels and fireside chats, several of them flying in for a single session and going straight back to the airport.',
+    body: 'More than 90 speakers across 28 panels and fireside chats, several of them flying in for a single session and going straight back to the airport.',
   },
   {
     heading: 'The Community Impact Event',
@@ -206,17 +225,47 @@ function Lightbox({ index, onClose, onMove }) {
   )
 }
 
+/* The two moves every call to action on this page reinforces: business now, or the next edition.
+   The outline pill is white on pink, so it carries on the navy and sunset sections too. */
+function NextMoves({ source }) {
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Link to={DEAL_NETWORK} className="miami-pill-primary">
+        Explore the Deal Network <ArrowRight size={15} />
+      </Link>
+      <InquiryModalButton
+        kind="preregister"
+        label="Register your interest"
+        modalTitle="Register your interest"
+        eyebrow="The next Miami edition"
+        intro="Leave your details and we will send the dates, the venue and the delegate rate before they go public."
+        schema={packRequestSchema}
+        extraPayload={{ event_slug: 'miami-2027', interest: 'Miami 2027 pre-registration', source, marketing_opt_in: true }}
+        submitLabel="Register interest"
+        successTitle="You are on the list."
+        successBody="We will be in touch with dates for the next Miami edition before they go public."
+        bookingUrl={bookCallUrl('success-miami-2027')}
+        buttonClassName="miami-pill-outline"
+      >
+        Register your interest <ArrowRight size={15} />
+      </InquiryModalButton>
+    </div>
+  )
+}
+
 export default function Miami2026Recap() {
   useScrollAnimations()
   const [open, setOpen] = useState(null)
+  const [showAllFrames, setShowAllFrames] = useState(false)
   useEffect(() => { window.scrollTo(0, 0) }, [])
   const move = useCallback((dir) => setOpen((i) => (i + dir + GALLERY.length) % GALLERY.length), [])
+  const visibleFrames = showAllFrames ? GALLERY : GALLERY.slice(0, FEATURED_COUNT)
 
   return (
     <div className="event-page theme-miami" style={{ background: '#FFF8F4' }}>
       <PageMeta
-        title="Soccerex Miami 2026 at Nu Stadium"
-        description="A year’s worth of networking happened in three days. 873 organizations came to Nu Stadium, 146 of them clubs, leagues and federations, and 2,714 introductions were made in the event app. See who was in the room."
+        title="Soccerex Miami 2026 | The New Standard for Football Business"
+        description="More than 850 organizations, nearly 150 clubs, leagues and federations, 90 speakers and 30 exhibitors came to Nu Stadium for Soccerex Miami 2026. See who was in the room, and how the introductions carry on."
         image={frame('khaled-mic')}
         path="/miami-2026-draft"
         noindex
@@ -234,11 +283,13 @@ export default function Miami2026Recap() {
 
           <img src={`${GFX}/logo-primary.svg`} alt="Soccerex Miami 2026" style={{ width: 'min(420px, 72vw)', marginBottom: 'clamp(28px,4vw,40px)', filter: 'brightness(0) invert(1)' }} />
 
-          <h1 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(2.1rem, 5vw, 3.6rem)', color: '#FFFFFF', lineHeight: 1.05, maxWidth: 940, marginBottom: 'clamp(18px,2.4vw,26px)' }}>
-            A year’s worth of networking <span style={{ color: '#FF4D8D' }}>happened in three days</span>
+          <h1 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(2.1rem, 5vw, 3.6rem)', color: '#FFFFFF', lineHeight: 1.05, maxWidth: 980, marginBottom: 'clamp(18px,2.4vw,26px)' }}>
+            The most consequential Soccerex in decades, <span style={{ color: '#FF4D8D' }}>and the next one will build on it</span>
           </h1>
-          <p className="miami-body" style={{ fontSize: 'clamp(1.02rem, 1.4vw, 1.18rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.65, maxWidth: 700 }}>
-            873 organizations came to Nu Stadium for Soccerex Miami 2026, ten weeks after the World Cup. 146 of them were clubs, leagues and federations, and the rest were the brands, investors, agencies and broadcasters who spend the year trying to reach them.
+          <p className="miami-body" style={{ fontSize: 'clamp(1.02rem, 1.4vw, 1.18rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.65, maxWidth: 720 }}>
+            A year’s worth of networking happened in three days. At Nu Stadium, the people running clubs, leagues,
+            federations, investment, media and brands met on the main stage, on the exhibition floor and in the
+            conversations between them, and the momentum carries on through the Soccerex Deal Network.
           </p>
 
           <div className="flex flex-wrap items-center gap-6 lg:gap-8" style={{ marginTop: 'clamp(30px,4vw,44px)' }}>
@@ -252,30 +303,44 @@ export default function Miami2026Recap() {
               <p className="miami-headline" style={{ color: '#fff', fontSize: '1.05rem', letterSpacing: '0.04em', textTransform: 'none' }}>Nu Stadium, Miami</p>
             </div>
           </div>
+
+          <div style={{ marginTop: 'clamp(28px,3.5vw,40px)' }}>
+            <NextMoves source="miami-2026-recap-hero" />
+          </div>
         </div>
       </section>
 
-      {/* ─── THE ROOM ────────────────────────────────────────────────────── */}
-      <section style={{ background: '#FFFFFF', padding: 'clamp(64px,8vw,100px) clamp(24px,5vw,80px)' }}>
+      {/* ─── THE PROOF BAR ───────────────────────────────────────────────── */}
+      <section style={{ background: '#FFFFFF', padding: 'clamp(48px,6vw,72px) clamp(24px,5vw,80px) clamp(40px,5vw,60px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-          <div className="grid gap-y-10 gap-x-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', marginBottom: 'clamp(48px,6vw,72px)' }}>
+          <div className="grid gap-y-10 gap-x-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))' }}>
             {NUMBERS.map((n) => (
               <div key={n.label} className="text-center">
-                <p className="miami-headline" style={{ fontSize: 'clamp(2rem, 3.6vw, 2.9rem)', color: '#E91E63', lineHeight: 1 }}>{n.figure}</p>
+                <p className="miami-headline" style={{ fontSize: 'clamp(1.7rem, 3.2vw, 2.6rem)', color: '#E91E63', lineHeight: 1.05 }}>{n.figure}</p>
                 <p className="miami-body" style={{ fontSize: '0.9rem', color: '#3a4a5a', marginTop: 10 }}>{n.label}</p>
               </div>
             ))}
           </div>
-
-          <p className="miami-body text-center" style={{ fontSize: '0.82rem', color: '#8a97a5', marginTop: -28, marginBottom: 'clamp(48px,6vw,72px)' }}>
-            Figures from Soccerex registrations and the official event app, September 2026.
+          <p className="miami-body text-center" style={{ fontSize: '0.82rem', color: '#8a97a5', marginTop: 22 }}>
+            Rounded from Soccerex registration, program and event app figures.
           </p>
+        </div>
+      </section>
 
-          <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(28px,3.5vw,40px)' }}>
-            The industry showed up in one building
+      {/* ─── THE ROOM ────────────────────────────────────────────────────── */}
+      <section style={{ background: '#FFFFFF', padding: '0 clamp(24px,5vw,80px) clamp(64px,8vw,100px)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(18px,2.4vw,24px)' }}>
+            The room everyone in football was talking about
           </h2>
-          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 720, marginTop: -8, marginBottom: 'clamp(28px,3.5vw,40px)' }}>
-            873 organizations registered. These are some of the names that had someone on the stage or on the floor, and the delegate list ran to thirty nine pages.
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 760, marginBottom: 14 }}>
+            Leaders who can spend months trying to reach one another were shoulder to shoulder at Nu Stadium for
+            three days. The World Cup, global federations, major clubs, investors, broadcasters and the companies
+            building football’s future were in the same building, on the stage and across the exhibition floor.
+          </p>
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 760, marginBottom: 'clamp(30px,3.6vw,42px)' }}>
+            These are some of the names that had someone on the stage or on the floor, out of more than 850
+            organizations in the building. The delegate list ran to thirty nine pages.
           </p>
           <div className="miami-cohorts">
             {COHORTS.map((c) => (
@@ -312,48 +377,77 @@ export default function Miami2026Recap() {
         </div>
       </section>
 
-      {/* ─── WHAT IT WAS FOR ─────────────────────────────────────────────── */}
+      {/* ─── WHAT THE ROOM RETURNED ──────────────────────────────────────── */}
       <section style={{ background: '#FFF8F4', padding: 'clamp(64px,8vw,104px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(18px,2.4vw,26px)', maxWidth: 780 }}>
+            Every part of the game had a different reason to be there
+          </h2>
+          <ul className="miami-returns">
+            {RETURNS.map((r) => (
+              <li key={r} className="miami-body" style={{ fontSize: '0.98rem', color: '#3a4a5a', lineHeight: 1.6 }}>{r}</li>
+            ))}
+          </ul>
+          <style>{`
+            .miami-returns { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; max-width: 900px; }
+            .miami-returns li { padding-left: 20px; position: relative; }
+            .miami-returns li::before { content: ''; position: absolute; left: 0; top: 9px; width: 7px; height: 7px; background: #E91E63; }
+          `}</style>
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.65, maxWidth: 820, marginTop: 'clamp(24px,3vw,34px)' }}>
+            More than 2,700 connections and 5,300 messages went through the official event app, and 1,580 delegates
+            registered on it. What those figures measure is the time taken out of the middle: the months it usually
+            costs to get two people who should be doing business into the same conversation.
+          </p>
+        </div>
+      </section>
+
+      {/* ─── DEAL NETWORK ────────────────────────────────────────────────── */}
+      <section style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,118px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
           <div>
-            <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 18 }}>
-              The conversations that email cannot replace
+            <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.4vw, 2.5rem)', color: '#FFFFFF', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
+              The introductions that change <span style={{ color: '#FF4D8D' }}>what happens next</span>
             </h2>
-            <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
-              A conversation that starts because someone recognized a badge in the coffee line does not get scheduled. Delegates made 2,714 connections and sent 5,305 messages through the official event app over the three days, and 1,580 of them registered on it. None of that counts what was agreed on the exhibition floor, in the green room or at the Savoy.
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
+              The most valuable part of Miami was not confined to the stage. It happened between sessions, on the
+              exhibition floor, in private meetings and across the city, when the people behind football’s biggest
+              opportunities could finally meet face to face.
             </p>
-            <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
-              Those introductions carry on after the event through the Soccerex Deal Network, where a person reviews every approach before it is sent.
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
+              The Soccerex Deal Network carries that week forward all year. It is a curated introduction platform
+              across clubs, leagues, federations, investors, brands, technology and media, and a person reviews every
+              approach before it is made, which is what protects the relevance of each one.
             </p>
-            <Link to={DEAL_NETWORK} className="miami-pill-primary">
-              See the Deal Network <ArrowRight size={15} />
-            </Link>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 26 }}>
+              Miami made the access immediate. The Deal Network keeps it open.
+            </p>
+            <NextMoves source="miami-2026-recap-deal-network" />
           </div>
           <div>
-            <img src={frame('meeting', '-w800')} alt="Two delegates in conversation on the concourse at Nu Stadium"
-              loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 8, display: 'block' }} />
+            <img src={frame('networking', '-w800')} alt="Delegates meeting between sessions at Nu Stadium"
+              loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 10, display: 'block', boxShadow: '0 24px 60px rgba(0,0,0,0.45)' }} />
           </div>
         </div>
       </section>
 
       {/* ─── THE MOMENT ──────────────────────────────────────────────────── */}
-      <section style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)', overflow: 'hidden' }}>
+      <section style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)', overflow: 'hidden' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <div className="miami-moment-top">
             <div>
-              <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)', color: '#FFFFFF', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
-                DJ Khaled joined Roc Nation <span style={{ color: '#FF4D8D' }}>on the Soccerex stage</span>
+              <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.6vw, 2.7rem)', color: '#0D1B2A', lineHeight: 1.1, marginBottom: 'clamp(16px,2vw,22px)' }}>
+                DJ Khaled joined Roc Nation <span style={{ color: '#E91E63' }}>on the Soccerex stage</span>
               </h2>
-              <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: '#3a4a5a', marginBottom: 16 }}>
                 Roc Nation Sports International closed the first day with Built, Not Bought, their case for how a modern football agency gets built. They opened it with the film from their World Cup campaign, the one Khaled fronts, and he came out at the end of it in an Inter Miami shirt, sat down with the panel and handed it to Michael Yormark.
               </p>
-              <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)' }}>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: '#3a4a5a' }}>
                 Phones went up across the room. Michael Yormark, Frederico Pena, Nathan Campbell, Rob Simpkins and Alan Redmond then spent half an hour on how they build a roster, with Diego Arrioja of Telemundo hosting.
               </p>
             </div>
             <div>
               <img src={frame('khaled-mic')} alt="DJ Khaled on stage at Nu Stadium with Michael Yormark and the Roc Nation Sports International panel"
-                loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 10, display: 'block', boxShadow: '0 24px 60px rgba(0,0,0,0.45)' }} />
+                loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 10, display: 'block', boxShadow: '0 24px 60px rgba(13,27,42,0.22)' }} />
             </div>
           </div>
           <style>{`
@@ -385,7 +479,7 @@ export default function Miami2026Recap() {
       </section>
 
       {/* ─── ON STAGE ────────────────────────────────────────────────────── */}
-      <section style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+      <section style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <div style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -393,18 +487,19 @@ export default function Miami2026Recap() {
                 The stage where three World Cup host nations sat down together
               </h2>
               <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
-                The full running order <ArrowRight size={15} />
+                The full agenda and speakers <ArrowRight size={15} />
               </Link>
             </div>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 680, marginTop: 14 }}>
-              Ninety two speakers took 28 sessions over three days, and the people running the properties did the
+              More than 90 speakers took 28 sessions over three days, and the people running the properties did the
               talking. These six show the level of the room.
             </p>
           </div>
           <div className="grid gap-7" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
             {THEMES.map((t) => (
               <article key={t.title} className="miami-card-light" style={{ overflow: 'hidden', padding: 0 }}>
-                <img src={frame(t.photo, '-w800')} alt="" loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', display: 'block' }} />
+                <img src={frame(t.photo, '-w800')} alt="" aria-hidden loading="lazy"
+                  style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', display: 'block' }} />
                 <div style={{ padding: 'clamp(20px,2.2vw,28px)' }}>
                   <h3 className="miami-headline" style={{ fontSize: '1.1rem', color: '#0D1B2A', marginBottom: 10, textTransform: 'none', letterSpacing: '0.01em' }}>{t.title}</h3>
                   <p className="miami-body leading-relaxed" style={{ fontSize: '0.93rem', color: '#3a4a5a' }}>{t.body}</p>
@@ -415,39 +510,172 @@ export default function Miami2026Recap() {
         </div>
       </section>
 
+      {/* ─── PARTNERS AND EXHIBITORS ─────────────────────────────────────── */}
+      <section style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,118px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(18px,2.4vw,26px)', maxWidth: 820 }}>
+            Put your brand where football’s decision-makers gather
+          </h2>
+          <div className="miami-partner-grid">
+            <div>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
+                Concacaf, Roc Nation Sports International, FC Barcelona, SPORTFIVE, Inter Miami CF and Nu Stadium
+                shaped the experience. Across the exhibition floor, 30 companies brought the ecosystem to life, from
+                elite performance and technology to architecture, infrastructure, investment and mobility.
+              </p>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
+                Concacaf hosted conversations from its Gold Cup stand, FC Barcelona activated directly across the
+                way, and Catapult, Gemini Sports AI, LaBella Associates, Landtek, Gensler, Buro Happold and Meis+
+                met the industry’s decision-makers where they were already doing business.
+              </p>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
+                A stand at Soccerex puts a brand inside the conversation rather than beside it, and the Deal Network
+                keeps those relationships running after Miami.
+              </p>
+              <InquiryModalButton
+                kind="sponsorship-inquiry"
+                label="Partner with Soccerex"
+                modalTitle="Partner with Soccerex"
+                eyebrow="Partnership and exhibition"
+                intro="Tell us what you want to reach in Miami and we will come back with the formats and the rates."
+                schema={sponsorshipSchema}
+                extraPayload={{ event_slug: MIAMI_EVENT_SLUG, interest: 'Partnership', source: 'miami-2026-recap-partners' }}
+                submitLabel="Send inquiry"
+                successTitle="Thank you."
+                successBody="Our partnerships team will come back to you with formats and availability."
+                bookingUrl={bookCallUrl('success-partnership')}
+                buttonClassName="miami-pill-primary"
+              >
+                Partner with Soccerex <ArrowRight size={15} />
+              </InquiryModalButton>
+            </div>
+            <div className="miami-partner-shots">
+              <img src={frame('floor-group', '-w800')} alt="Delegates meeting on the exhibition floor at Nu Stadium" loading="lazy" />
+              <img src={frame('stands', '-w800')} alt="Delegates watching a session from the stands at Nu Stadium" loading="lazy" />
+            </div>
+          </div>
+          <style>{`
+            .miami-partner-grid { display: grid; gap: clamp(28px,4vw,52px); grid-template-columns: 1fr; align-items: center; }
+            @media (min-width: 900px) { .miami-partner-grid { grid-template-columns: 1.05fr 1fr; } }
+            .miami-partner-shots { display: grid; gap: 14px; }
+            .miami-partner-shots img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; display: block; }
+          `}</style>
+        </div>
+      </section>
+
+      {/* ─── HERSOCCEREX ─────────────────────────────────────────────────── */}
+      <section style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,118px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
+          <div>
+            <img src={frame('women', '-w800')} alt="The Commercial Power of Women’s Football panel at Nu Stadium"
+              loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 10, display: 'block' }} />
+          </div>
+          <div>
+            <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(16px,2vw,22px)' }}>
+              HerSoccerex: a new room for the women leading the game
+            </h2>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
+              Miami marked the launch of HerSoccerex, a platform built to bring together the women shaping the
+              future of football. The inaugural Founding Table Afternoon Tea at The Savoy gathered leaders,
+              executives, players and rising voices for honest conversation and introductions that lead somewhere.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
+              It was intimate by design, and the objective was a room where conversations turn into mentorship,
+              collaboration, commercial opportunity and a stronger pathway for women across the game. Heidi
+              Pellerano, Amanda Vandervort and Laura Biondo helped set the tone.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
+              HerSoccerex is a long-term commitment to making sure the women building football are seen, connected
+              and supported.
+            </p>
+            <Link to={HERSOCCEREX} className="miami-pill-primary">
+              Discover HerSoccerex <ArrowRight size={15} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── IMPACT ──────────────────────────────────────────────────────── */}
+      <section style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,118px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gap: 'clamp(28px,4vw,56px)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
+          <div>
+            <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(16px,2vw,22px)' }}>
+              The game gave back before the business started
+            </h2>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
+              Before the conference took over Nu Stadium, the Soccerex Community Impact Event filled the mini
+              pitches with at-risk youth for an afternoon of football, confidence and connection, run with Fútbol
+              con Corazón, Miami Scores, love.fútbol and Special Olympics.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
+              DaGrosa Capital Partners, Royal Caribbean, Baptist Health, Soccer United and TAPEDESIGN backed the
+              day with coaching, play, equipment and the kind of experience every young player deserves to have
+              around the game.
+            </p>
+            <InquiryModalButton
+              kind="sponsorship-inquiry"
+              label="Support Soccerex Impact"
+              modalTitle="Support Soccerex Impact"
+              eyebrow="Soccerex Impact"
+              intro="Tell us how your organization wants to take part and we will come back with the ways in."
+              schema={sponsorshipSchema}
+              extraPayload={{ event_slug: MIAMI_EVENT_SLUG, interest: 'Soccerex Impact', source: 'miami-2026-recap-impact' }}
+              submitLabel="Send inquiry"
+              successTitle="Thank you."
+              successBody="We will be in touch about taking part in the next Community Impact Event."
+              bookingUrl={bookCallUrl('success-impact')}
+              buttonClassName="miami-pill-primary"
+            >
+              Support Soccerex Impact <ArrowRight size={15} />
+            </InquiryModalButton>
+          </div>
+          <div>
+            <img src={frame('impact-youth', '-w800')} alt="Young players at the Soccerex Community Impact Event"
+              loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 10, display: 'block' }} />
+          </div>
+        </div>
+      </section>
+
       {/* ─── GALLERY ─────────────────────────────────────────────────────── */}
       <section id="gallery" style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)', scrollMarginTop: 80 }}>
         <div style={{ maxWidth: 1320, margin: '0 auto' }}>
-          <div style={{ marginBottom: 'clamp(28px,3.5vw,44px)', maxWidth: 680 }}>
+          <div style={{ marginBottom: 'clamp(28px,3.5vw,44px)', maxWidth: 700 }}>
             <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 14 }}>
-              Take a look through the week
+              Look what happens when football’s world comes together
             </h2>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
-              Everybody in these frames blocked out the same three days for Miami. Club owners, federation leadership,
-              broadcasters and the people who never reply to a cold email were all in one building, a coffee table apart.
+              Everybody in these frames blocked out the same three days for Miami. Club owners, federation
+              leadership, broadcasters and the people who never reply to a cold email were all in one building,
+              a coffee table apart.
             </p>
           </div>
 
           <div className="miami-gallery-grid">
-            {GALLERY.map((g, i) => (
+            {visibleFrames.map((g, i) => (
               <button key={g.slug} onClick={() => setOpen(i)} className="miami-gallery-tile" aria-label={`Open photograph: ${g.alt}`}>
                 <img src={frame(g.slug, '-w800')} alt={g.alt} loading="lazy" />
               </button>
             ))}
           </div>
           <style>{`
-            .miami-gallery-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
-            @media (min-width: 720px)  { .miami-gallery-grid { grid-template-columns: repeat(3, 1fr); } }
-            @media (min-width: 1100px) { .miami-gallery-grid { grid-template-columns: repeat(4, 1fr); } }
+            .miami-gallery-grid { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); }
+            @media (min-width: 760px)  { .miami-gallery-grid { grid-template-columns: repeat(3, 1fr); } }
             .miami-gallery-tile { padding: 0; border: none; background: #0D1B2A; cursor: pointer; overflow: hidden; border-radius: 4px; display: block; }
             .miami-gallery-tile img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; transition: transform .45s ease, opacity .3s ease; }
             .miami-gallery-tile:hover img, .miami-gallery-tile:focus-visible img { transform: scale(1.04); opacity: 0.92; }
           `}</style>
 
-          <p className="miami-body" style={{ fontSize: '0.82rem', color: '#8a97a5', marginTop: 18 }}>
-            Press and partners can request the full set from{' '}
-            <a href="mailto:press@soccerex.com" style={{ color: '#8a97a5', textDecoration: 'underline' }}>press@soccerex.com</a>.
-          </p>
+          <div className="flex flex-wrap items-center gap-4" style={{ marginTop: 26 }}>
+            {!showAllFrames && (
+              <button type="button" onClick={() => setShowAllFrames(true)} className="miami-pill-outline">
+                See all {GALLERY.length} frames <ArrowRight size={15} />
+              </button>
+            )}
+            <p className="miami-body" style={{ fontSize: '0.82rem', color: '#8a97a5' }}>
+              Press and partners can request the full set from{' '}
+              <a href="mailto:press@soccerex.com" style={{ color: '#8a97a5', textDecoration: 'underline' }}>press@soccerex.com</a>.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -463,14 +691,14 @@ export default function Miami2026Recap() {
         intro="Clubs, leagues, federations and brands from across the Soccerex network."
       />
 
-      {/* ─── THANK YOU ───────────────────────────────────────────────────── */}
+      {/* ─── THE PEOPLE WHO BUILT IT ─────────────────────────────────────── */}
       <section style={{ background: '#0D1B2A', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#FFFFFF', marginBottom: 'clamp(14px,2vw,20px)' }}>
-            Soccerex would like to thank
+            The people who built the week
           </h2>
           <p className="miami-body" style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.72)', lineHeight: 1.65, maxWidth: 720, marginBottom: 'clamp(36px,4.5vw,54px)' }}>
-            A few hundred people spent the better part of a year building this week. These are the ones who made it what it was.
+            A few hundred people spent the better part of a year on this week. These are the ones who made it what it was.
           </p>
           <div className="grid gap-x-10 gap-y-9" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
             {THANKS.map((t) => (
@@ -510,22 +738,24 @@ export default function Miami2026Recap() {
 
       {/* ─── NEXT ────────────────────────────────────────────────────────── */}
       <section style={{ background: 'var(--miami-sunset)', padding: 'clamp(70px,9vw,118px) clamp(24px,5vw,80px)' }}>
-        <div className="text-center" style={{ maxWidth: 760, margin: '0 auto' }}>
+        <div className="text-center" style={{ maxWidth: 780, margin: '0 auto' }}>
           <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.8rem, 3.4vw, 2.6rem)', color: '#FFFFFF', marginBottom: 18 }}>
-            First call on the next edition goes to this list
+            The next room is yours to enter
           </h2>
           <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.65, marginBottom: 30 }}>
-            We are setting the dates for the next Miami edition now. Leave your details and we will send them before they go public, along with the delegate rates when they open.
+            Miami set the standard the next edition will build on, with more access, more opportunity and more of
+            the global game in the building. We are setting the dates now, and this list hears them first, along
+            with the delegate rates when they open.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <InquiryModalButton
               kind="preregister"
               label="Register your interest"
               modalTitle="Register your interest"
-              eyebrow="Miami 2027"
+              eyebrow="The next Miami edition"
               intro="Leave your details and we will send the dates, the venue and the delegate rate before they go public."
               schema={packRequestSchema}
-              extraPayload={{ event_slug: 'miami-2027', interest: 'Miami 2027 pre-registration', source: 'miami-2026-recap', marketing_opt_in: true }}
+              extraPayload={{ event_slug: 'miami-2027', interest: 'Miami 2027 pre-registration', source: 'miami-2026-recap-footer', marketing_opt_in: true }}
               submitLabel="Register interest"
               successTitle="You are on the list."
               successBody="We will be in touch with dates for the next Miami edition before they go public."
@@ -534,6 +764,9 @@ export default function Miami2026Recap() {
             >
               Register your interest <ArrowRight size={15} />
             </InquiryModalButton>
+            <Link to={DEAL_NETWORK} className="miami-pill-outline">
+              Explore the Deal Network <ArrowRight size={15} />
+            </Link>
             <Link to={EUROPE_2026} className="miami-pill-outline">
               Soccerex Europe 2026
             </Link>
