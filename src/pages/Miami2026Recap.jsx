@@ -109,19 +109,24 @@ const GALLERY = [
      above. Captions say only what the frame shows or what its own name card
      on the LED wall says. */
   { slug: 'worldcup', alt: 'The FIFA World Cup 26 chief tournament officers for the United States, Mexico and Canada on one stage' },
-  { slug: 'dagrosa', alt: 'Joseph DaGrosa Jr., chairman of Soccerex, on the main stage' },
+  { slug: 'pitchside', alt: 'Delegates pitchside at Nu Stadium' },
   { slug: 'lalas', alt: 'Alexi Lalas of FOX Sports on the main stage' },
+  { slug: 'sponsor-board', alt: 'The sponsor board on the screen at Nu Stadium' },
+  { slug: 'gis-stand', alt: 'A conversation at the Global Institute of Sport stand' },
   { slug: 'guzan', alt: 'Brad Guzan, sporting advisor and club ambassador at Atlanta United' },
+  { slug: 'freestyle-ball', alt: 'A freestyler with the match ball at Nu Stadium' },
+  { slug: 'barca-booth', alt: 'The FC Barcelona stand serving delegates on the exhibition floor' },
+  { slug: 'dagrosa', alt: 'Joseph DaGrosa Jr., chairman of Soccerex, on the main stage' },
+  { slug: 'coffee', alt: 'A Soccerex Miami coffee at Nu Stadium' },
+  { slug: 'impact-joy', alt: 'Young players at the Soccerex Community Impact Event' },
+  { slug: 'vip-evening', alt: 'Guests at the VIP evening at The Savoy' },
+
+  /* Everything else, behind View more. */
   { slug: 'curtis', alt: 'Ali Curtis, president of MLS NEXT PRO, alongside Brad Guzan' },
   { slug: 'pellerano', alt: 'Heidi Pellerano, chief commercial officer of Concacaf, on the main stage' },
   { slug: 'dorrance', alt: 'Anson Dorrance, coach emeritus of the United States and UNC women’s soccer' },
   { slug: 'meis', alt: 'The architect Dan Meis on the stadium panel' },
   { slug: 'navia-floor', alt: 'Guests in front of the Miami 2026 partner backdrop' },
-  { slug: 'barca-booth', alt: 'The FC Barcelona stand serving delegates on the exhibition floor' },
-  { slug: 'impact-joy', alt: 'Young players at the Soccerex Community Impact Event' },
-  { slug: 'vip-evening', alt: 'Guests at the VIP evening at The Savoy' },
-
-  /* Everything else, behind View more. */
   { slug: 'khaled-mic', alt: 'DJ Khaled on stage at Nu Stadium with the Roc Nation Sports International panel' },
   { slug: 'khaled-room', alt: 'The room on its feet for the Built, Not Bought panel' },
   { slug: 'khaled-artwork', alt: 'Roc Nation Sports International presented with a commissioned artwork on stage' },
