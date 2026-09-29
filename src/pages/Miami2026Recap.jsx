@@ -70,27 +70,27 @@ const RETURNS = [
 /* The agenda by argument rather than by day, which is how anyone deciding to come reads it. */
 const THEMES = [
   {
-    title: 'Where the money goes next',
+    title: 'Football’s investment future',
     photo: 'investment',
     body: 'Football Investment Strategies opened the conference with Joseph DaGrosa Jr. and Suvin Malik of Fortress Investment Group, and the thread ran through the week into State of Global Football Business in 2026.',
   },
   {
-    title: 'What a World Cup leaves behind',
+    title: 'A historic World Cup conversation',
     photo: 'argentina',
     body: 'For the first time the FIFA World Cup 26 Chief Tournament Officers for the United States, Mexico and Canada shared one Soccerex stage, and Mexico’s legacy panel brought the federation, TelevisaUnivision and the host committee into the same argument.',
   },
   {
-    title: 'Who pays for the broadcast',
+    title: 'Media, rights and the modern fan',
     photo: 'media',
     body: 'Alexi Lalas took Football’s Media Future through rights, streaming and what the new media era costs, with Bundesliga Americas and Concacaf on the panel.',
   },
   {
-    title: 'The commercial case for women’s football',
+    title: 'The commercial power of the women’s game',
     photo: 'women',
     body: 'Paul Barber OBE, Alessandra Nencioni of Napoli Women, Amanda Vandervort and Heidi Pellerano made it, and Road to Brazil 2027 picked it up the next morning.',
   },
   {
-    title: 'Building the next generation',
+    title: 'Building football’s future, from the ground up',
     photo: 'barca',
     body: 'FC Barcelona explained how it makes commercial decisions in the Americas, the academies panel put Barça Academy, Orlando City and the Global Institute of Sport side by side, and Roc Nation closed day one on how to build a football agency.',
   },
@@ -389,6 +389,17 @@ export default function Miami2026Recap() {
       {/* ─── WHAT THE ROOM RETURNED ──────────────────────────────────────── */}
       <section style={{ background: '#FFF8F4', padding: 'clamp(64px,8vw,104px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <h3 className="miami-headline" style={{ fontSize: '1.05rem', color: '#0D1B2A', marginBottom: 12, textTransform: 'none', letterSpacing: '0.02em' }}>
+            Being in the room put organizations in the story
+          </h3>
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.65, maxWidth: 820, marginBottom: 'clamp(32px,4vw,48px)' }}>
+            Visibility at Soccerex Miami came from proximity to the people and the conversations shaping football.
+            Organizations appeared inside a shared global showcase across the conference, the exhibition floor and
+            the coverage that carries Miami forward, so a club, federation, investor or brand could be found in
+            context, alongside the leaders, partners and opportunities it came to Miami to reach. The Deal Network
+            extends that visibility into an ongoing channel for relevant introductions.
+          </p>
+
           <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(18px,2.4vw,26px)', maxWidth: 780 }}>
             Every part of the game had a different reason to be there
           </h2>
