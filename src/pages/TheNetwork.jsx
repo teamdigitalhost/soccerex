@@ -151,9 +151,9 @@ export default function TheNetwork() {
       {/* ═══ SEASON ONE ══════════════════════════════════════════════════ */}
       <section id="episodes" style={{ background: NAVY, padding: 'clamp(64px,8vw,110px) clamp(20px,5vw,64px)' }}>
         <div style={{ maxWidth: 1240, margin: '0 auto' }}>
-          <SectionHeading>The first guests in the chair</SectionHeading>
+          <SectionHeading>A selection of guests</SectionHeading>
           <p style={{ fontSize: 'clamp(1rem, 1.3vw, 1.12rem)', lineHeight: 1.7, color: INK, maxWidth: 760, marginTop: 14 }}>
-            Season one was recorded with the club builders, founders and storytellers of the Soccerex community ahead of Soccerex Miami 2026. The guests run from a ticket-pricing strategist and a club communications chief to a Paraguayan artist whose painted boots reached Lionel Messi, and a photographer who tracked down every living man who has scored in a World Cup final.
+            Every guest on The Network is a Soccerex patron, a partner, exhibitor or delegate from our community, given an episode of their own to tell their story. Season one was recorded ahead of Soccerex Miami 2026, and the guests run from a ticket-pricing strategist and a club communications chief to a Paraguayan artist whose painted boots reached Lionel Messi, and a photographer who tracked down every living man who has scored in a World Cup final.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" style={{ marginTop: 40 }}>
             {EPISODES.map((ep) => <EpisodeCard key={ep.n} ep={ep} />)}
