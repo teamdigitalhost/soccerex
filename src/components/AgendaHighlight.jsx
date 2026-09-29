@@ -123,9 +123,7 @@ export default function AgendaHighlight({ slug, perDay = 7, lead = 'The Full Age
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#5BC8D6' }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.72)' }}
                 >
-                  {openDays.includes(day.key)
-                    ? 'Show fewer'
-                    : `Show all ${day.rows.length} panels`}
+                  {openDays.includes(day.key) ? 'Show fewer' : 'Show all panels'}
                   <ChevronDown size={13} style={{ transform: openDays.includes(day.key) ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
                 </button>
               )}

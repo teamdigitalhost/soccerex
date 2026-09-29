@@ -59,7 +59,7 @@ export default function SelectedSpeakers({ slug, limit = 8, heading = null }) {
             onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.55)' }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)' }}
           >
-            All {speakers.length} speakers <ArrowRight size={15} />
+            All speakers <ArrowRight size={15} />
           </Link>
         </div>
 
