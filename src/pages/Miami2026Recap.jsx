@@ -31,11 +31,11 @@ const frame = (slug, size = '') => `${ASSET}/frames/${slug}${size}.jpg?v=${FRAME
 
 /* Rounded from Soccerex registration, program and event-app figures, September 2026. */
 const NUMBERS = [
-  { figure: '850+', label: 'organizations represented' },
-  { figure: 'Nearly 150', label: 'clubs, leagues and federations' },
-  { figure: '90+', label: 'speakers on stage' },
-  { figure: '30', label: 'exhibitors on the floor' },
-  { figure: '2,700+', label: 'connections through the event app' },
+  { figure: '850+', label: 'Organizations represented' },
+  { figure: 'Nearly 150', label: 'Clubs, leagues & federations' },
+  { figure: '90+', label: 'Speakers on stage' },
+  { figure: '30', label: 'Exhibitors on the floor' },
+  { figure: '2,700+', label: 'Connections through the event app' },
 ]
 
 /* Named, because the delegate list is the product. Everyone here was on stage or on the floor. */
@@ -326,7 +326,7 @@ export default function Miami2026Recap() {
             ))}
           </div>
           <p className="miami-body miami-proof-source">
-            Rounded from Soccerex registration, program and event app figures.
+            Rounded from Soccerex registration, program and event-app figures.
           </p>
         </div>
         <style>{`
