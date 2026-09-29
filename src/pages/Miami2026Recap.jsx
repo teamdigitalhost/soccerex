@@ -72,32 +72,32 @@ const THEMES = [
   {
     title: 'Football’s investment future',
     photo: 'investment',
-    body: 'Football Investment Strategies opened the conference with Joseph DaGrosa Jr. and Suvin Malik of Fortress Investment Group, and the thread ran through the week into State of Global Football Business in 2026.',
+    body: 'Joseph DaGrosa Jr. and Suvin Malik of Fortress Investment Group opened the conference with Football Investment Strategies, bringing serious capital and football expertise into the same conversation on the game’s next era of ownership, growth and value creation.',
   },
   {
     title: 'A historic World Cup conversation',
     photo: 'argentina',
-    body: 'For the first time the FIFA World Cup 26 Chief Tournament Officers for the United States, Mexico and Canada shared one Soccerex stage, and Mexico’s legacy panel brought the federation, TelevisaUnivision and the host committee into the same argument.',
+    body: 'For the first time, the FIFA World Cup 26 Chief Tournament Officers representing all three host nations, the United States, Mexico and Canada, shared one Soccerex stage together. It was a defining conversation about legacy, infrastructure and the opportunity ahead for football across North America.',
   },
   {
     title: 'Media, rights and the modern fan',
     photo: 'media',
-    body: 'Alexi Lalas took Football’s Media Future through rights, streaming and what the new media era costs, with Bundesliga Americas and Concacaf on the panel.',
+    body: 'Alexi Lalas, alongside leaders from Bundesliga Americas and Concacaf, explored football’s media future: rights, streaming, reach and how the game connects to a new generation of fans.',
   },
   {
     title: 'The commercial power of the women’s game',
     photo: 'women',
-    body: 'Paul Barber OBE, Alessandra Nencioni of Napoli Women, Amanda Vandervort and Heidi Pellerano made it, and Road to Brazil 2027 picked it up the next morning.',
+    body: 'Paul Barber OBE, Alessandra Nencioni of Napoli Women, Amanda Vandervort and Heidi Pellerano led a direct conversation on the commercial opportunity in women’s football, one of the most dynamic growth stories in global sport.',
   },
   {
     title: 'Building football’s future, from the ground up',
     photo: 'barca',
-    body: 'FC Barcelona explained how it makes commercial decisions in the Americas, the academies panel put Barça Academy, Orlando City and the Global Institute of Sport side by side, and Roc Nation closed day one on how to build a football agency.',
+    body: 'From FC Barcelona’s Americas strategy and academy development to modern stadium infrastructure, surfaces and the front office, the agenda paired the people setting the standard with the people building what comes next.',
   },
   {
-    title: 'Stadiums, surfaces and the front office',
+    title: 'A Miami moment no one expected',
     photo: 'stadiums',
-    body: 'Dan Meis, GMP Architekten, Buro Happold, Landtek and LaBella took apart what a modern venue costs to build and to run, and Tech in Football did the same for the front office.',
+    body: 'Roc Nation Sports International closed day one with Built, Not Bought, a packed conversation on building a modern football agency. When DJ Khaled joined Michael Yormark, Frederico Peña, Nathan Campbell, Rob Simpkins and Alan Redmond on stage, the room erupted.',
   },
 ]
 
@@ -150,7 +150,7 @@ const THANKS = [
   },
   {
     heading: 'Our sponsors and exhibitors',
-    body: '30 companies took stands and made the exhibition what delegates spent their breaks in. neaū water kept the room going across all three days, and Blacklane, our Official Chauffeur Partner, moved delegates between the airport, the hotels and the stadium.',
+    body: '30 companies took stands and made the exhibition what delegates spent their breaks in, from elite performance and technology to architecture, infrastructure, investment and mobility.',
   },
   {
     heading: 'Everyone who took the stage',
@@ -275,7 +275,15 @@ export default function Miami2026Recap() {
             For three days, Miami was where football’s global decision-makers came to meet, be seen and move
             business forward. At Nu Stadium, the leaders shaping clubs, leagues, federations, investment, media,
             technology and brands met across the main stage, the exhibition floor and the private conversations
-            between them, and the momentum carries forward through the Soccerex Deal Network.
+            between them.
+          </p>
+          <p className="miami-body" style={{ fontSize: 'clamp(1.02rem, 1.4vw, 1.18rem)', color: 'rgba(255,255,255,0.84)', lineHeight: 1.65, maxWidth: 720, marginTop: 16 }}>
+            Soccerex Miami 2026 reset what the business of football can feel like when the right people are in the
+            room, and the momentum is carrying forward through the Soccerex Deal Network and into what comes next.
+          </p>
+          <p className="miami-headline" style={{ fontSize: 'clamp(0.95rem, 1.2vw, 1.05rem)', color: '#FF4D8D', lineHeight: 1.5, maxWidth: 760, marginTop: 'clamp(18px,2.2vw,24px)', textTransform: 'none', letterSpacing: '0.01em' }}>
+            850+ organizations. Nearly 150 clubs, leagues and federations. 90+ speakers. 30 exhibitors.
+            One stadium full of possibility.
           </p>
 
           <div className="flex flex-wrap items-center gap-6 lg:gap-8" style={{ marginTop: 'clamp(30px,4vw,44px)' }}>
@@ -357,9 +365,17 @@ export default function Miami2026Recap() {
             three days. The World Cup, global federations, major clubs, investors, broadcasters and the companies
             building football’s future were in the same building, on the stage and across the exhibition floor.
           </p>
-          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 760, marginBottom: 'clamp(30px,3.6vw,42px)' }}>
-            These are some of the names that had someone on the stage or on the floor, out of more than 850
-            organizations in the building. The delegate list ran to thirty nine pages.
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 760, marginBottom: 'clamp(28px,3.4vw,38px)' }}>
+            The result was bigger than a conference agenda. It was a rare concentration of influence, ambition and
+            access, and a new benchmark for bringing football’s business community together.
+          </p>
+          <h3 className="miami-headline" style={{ fontSize: '1.05rem', color: '#0D1B2A', marginBottom: 12, textTransform: 'none', letterSpacing: '0.02em' }}>
+            The global game, in one place
+          </h3>
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 820, marginBottom: 'clamp(30px,3.6vw,42px)' }}>
+            From the leaders delivering FIFA World Cup 26 across all three host nations to global club brands,
+            influential leagues, broadcasters, institutional capital and the companies building football’s future,
+            Soccerex Miami put the people shaping the game within a few steps of one another. The room spanned:
           </p>
           <div className="miami-cohorts">
             {COHORTS.map((c) => (
@@ -369,6 +385,10 @@ export default function Miami2026Recap() {
               </div>
             ))}
           </div>
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.65, maxWidth: 820, marginTop: 'clamp(28px,3.4vw,38px)' }}>
+            Together these names signal the breadth of a gathering that brought more than 850 organizations into one
+            place: football leadership, capital, media and innovation rarely found under one roof.
+          </p>
           <style>{`
             .miami-cohorts { display: grid; gap: 34px 48px; grid-template-columns: 1fr; }
             @media (min-width: 760px) { .miami-cohorts { grid-template-columns: 1fr 1fr; } }
@@ -401,8 +421,11 @@ export default function Miami2026Recap() {
           </p>
 
           <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', marginBottom: 'clamp(18px,2.4vw,26px)', maxWidth: 780 }}>
-            Every part of the game had a different reason to be there
+            A clear return on being in the room
           </h2>
+          <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 820, marginBottom: 'clamp(20px,2.4vw,28px)' }}>
+            The case was built into the room, and each part of the football ecosystem had a different reason to be there.
+          </p>
           <ul className="miami-returns">
             {RETURNS.map((r) => (
               <li key={r} className="miami-body" style={{ fontSize: '0.98rem', color: '#3a4a5a', lineHeight: 1.6 }}>{r}</li>
@@ -414,9 +437,11 @@ export default function Miami2026Recap() {
             .miami-returns li::before { content: ''; position: absolute; left: 0; top: 9px; width: 7px; height: 7px; background: #E91E63; }
           `}</style>
           <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.65, maxWidth: 820, marginTop: 'clamp(24px,3vw,34px)' }}>
-            More than 2,700 connections and 5,300 messages went through the official event app, and 1,580 delegates
-            registered on it. What those figures measure is the time taken out of the middle: the months it usually
-            costs to get two people who should be doing business into the same conversation.
+            More than 2,700 app connections and 5,300 messages captured part of that activity. The larger return was
+            the time and the distance removed between people who could do meaningful business together. Soccerex
+            compressed months of relationship building into three days and gave those relationships a way to
+            continue afterward. Not every return appears as a deal before the doors close; many begin as access,
+            insight, visibility and an introduction that keeps working after Miami.
           </p>
         </div>
       </section>
@@ -434,18 +459,59 @@ export default function Miami2026Recap() {
               opportunities could finally meet face to face.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
-              The Soccerex Deal Network carries that week forward all year. It is a curated introduction platform
+              Over three days, delegates made more than 2,700 connections and exchanged more than 5,300 messages
+              through the official event app. The value sits in the quality behind those numbers: access to
+              football’s decision-makers, strategic capital, commercial partners and people able to open a door or
+              move an idea forward. When the right people meet in the right setting, a first conversation can become
+              the relationship that changes the next year of business.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 16 }}>
+              That momentum does not end when the doors close. The Soccerex Deal Network carries that week forward all year. It is a curated introduction platform
               across clubs, leagues, federations, investors, brands, technology and media, and a person reviews every
               approach before it is made, which is what protects the relevance of each one.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1.02rem', color: 'rgba(255,255,255,0.84)', marginBottom: 26 }}>
-              Miami made the access immediate. The Deal Network keeps it open.
+              Miami made access immediate. The Deal Network keeps the opportunity alive.
             </p>
             <NextMoves source="miami-2026-recap-deal-network" />
           </div>
           <div>
             <img src={frame('networking', '-w800')} alt="Delegates meeting between sessions at Nu Stadium"
               loading="lazy" style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', borderRadius: 10, display: 'block', boxShadow: '0 24px 60px rgba(0,0,0,0.45)' }} />
+          </div>
+        </div>
+      </section>
+
+      {/* ─── ON STAGE ────────────────────────────────────────────────────── */}
+      <section style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <div style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', maxWidth: 720 }}>
+                The stage that brought football’s biggest conversations to Miami
+              </h2>
+              <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
+                The full agenda and speakers <ArrowRight size={15} />
+              </Link>
+            </div>
+            <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 680, marginTop: 14 }}>
+              Soccerex Miami delivered the kind of programming the industry talks about long after the event: global
+              perspectives, hard business conversations and people with real authority in the room. More than 90
+              speakers took part across 28 sessions, with leaders from football’s most influential properties sharing
+              the stage with the investors, innovators and commercial minds reshaping the game.
+            </p>
+          </div>
+          <div className="grid gap-7" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+            {THEMES.map((t) => (
+              <article key={t.title} className="miami-card-light" style={{ overflow: 'hidden', padding: 0 }}>
+                <img src={frame(t.photo, '-w800')} alt="" aria-hidden loading="lazy"
+                  style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', display: 'block' }} />
+                <div style={{ padding: 'clamp(20px,2.2vw,28px)' }}>
+                  <h3 className="miami-headline" style={{ fontSize: '1.1rem', color: '#0D1B2A', marginBottom: 10, textTransform: 'none', letterSpacing: '0.01em' }}>{t.title}</h3>
+                  <p className="miami-body leading-relaxed" style={{ fontSize: '0.93rem', color: '#3a4a5a' }}>{t.body}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -498,38 +564,6 @@ export default function Miami2026Recap() {
         </div>
       </section>
 
-      {/* ─── ON STAGE ────────────────────────────────────────────────────── */}
-      <section style={{ background: '#FFF8F4', padding: 'clamp(72px,9vw,120px) clamp(24px,5vw,80px)' }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-          <div style={{ marginBottom: 'clamp(32px,4vw,48px)' }}>
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <h2 className="miami-headline" style={{ textWrap: 'balance', fontSize: 'clamp(1.7rem, 3.2vw, 2.4rem)', color: '#0D1B2A', maxWidth: 720 }}>
-                The stage that brought football’s biggest conversations to Miami
-              </h2>
-              <Link to={eventAgenda(MIAMI_EVENT_SLUG)} className="miami-pill-outline">
-                The full agenda and speakers <ArrowRight size={15} />
-              </Link>
-            </div>
-            <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6, maxWidth: 680, marginTop: 14 }}>
-              More than 90 speakers took 28 sessions over three days, and the people running the properties did the
-              talking. These six show the level of the room.
-            </p>
-          </div>
-          <div className="grid gap-7" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-            {THEMES.map((t) => (
-              <article key={t.title} className="miami-card-light" style={{ overflow: 'hidden', padding: 0 }}>
-                <img src={frame(t.photo, '-w800')} alt="" aria-hidden loading="lazy"
-                  style={{ width: '100%', aspectRatio: '3 / 2', objectFit: 'cover', display: 'block' }} />
-                <div style={{ padding: 'clamp(20px,2.2vw,28px)' }}>
-                  <h3 className="miami-headline" style={{ fontSize: '1.1rem', color: '#0D1B2A', marginBottom: 10, textTransform: 'none', letterSpacing: '0.01em' }}>{t.title}</h3>
-                  <p className="miami-body leading-relaxed" style={{ fontSize: '0.93rem', color: '#3a4a5a' }}>{t.body}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ─── PARTNERS AND EXHIBITORS ─────────────────────────────────────── */}
       <section style={{ background: '#FFFFFF', padding: 'clamp(72px,9vw,118px) clamp(24px,5vw,80px)' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
@@ -538,6 +572,11 @@ export default function Miami2026Recap() {
           </h2>
           <div className="miami-partner-grid">
             <div>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
+                Soccerex Miami was a live platform for visibility, connection and relevance, placing partners and
+                exhibitors inside the environment where clubs, leagues, federations, investors, broadcasters and
+                brands were already meeting.
+              </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
                 Concacaf, Roc Nation Sports International, FC Barcelona, SPORTFIVE, Inter Miami CF and Nu Stadium
                 shaped the experience. Across the exhibition floor, 30 companies brought the ecosystem to life, from
@@ -549,8 +588,14 @@ export default function Miami2026Recap() {
                 companies that took the rest of the floor.
               </p>
               <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
-                A stand at Soccerex puts a brand inside the conversation rather than beside it, and the Deal Network
-                keeps those relationships running after Miami.
+                For participating brands, the value was being visible in the middle of the action: in a stadium full
+                of football’s business community, alongside a major conference program and an active exhibition
+                floor. This is the Soccerex opportunity, to give a brand a place in the conversation and to keep
+                building those relationships after Miami through the Deal Network.
+              </p>
+              <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
+                Thank you to neaū water for keeping the community moving all week, and to Blacklane, Official
+                Chauffeur Partner, for moving delegates between the airport, the hotels and Nu Stadium.
               </p>
               <InquiryModalButton
                 kind="sponsorship-inquiry"
@@ -623,14 +668,18 @@ export default function Miami2026Recap() {
               The game gave back
             </h2>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 16 }}>
-              Before the conference took over Nu Stadium, the Soccerex Community Impact Event filled the mini
-              pitches with at-risk youth for an afternoon of football, confidence and connection, run with Fútbol
-              con Corazón, Miami Scores, love.fútbol and Special Olympics.
+              Before the conference took over Nu Stadium, Soccerex Impact brought football back to what matters
+              most: young people, opportunity and community. The Soccerex Community Impact Event filled the stadium
+              mini pitches with at-risk youth for an afternoon of football, confidence and connection, created with
+              Fútbol con Corazón, Miami Scores, love.fútbol and Special Olympics.
             </p>
             <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
               DaGrosa Capital Partners, Royal Caribbean, Baptist Health, Soccer United and TAPEDESIGN backed the
               day with coaching, play, equipment and the kind of experience every young player deserves to have
               around the game.
+            </p>
+            <p className="miami-body leading-relaxed" style={{ fontSize: '1rem', color: '#3a4a5a', marginBottom: 26 }}>
+              Soccerex Miami opened its doors to the future of the game as well as to its business.
             </p>
             <InquiryModalButton
               kind="sponsorship-inquiry"
@@ -664,9 +713,9 @@ export default function Miami2026Recap() {
               Look what happens when football’s world comes together
             </h2>
             <p className="miami-body" style={{ fontSize: '1rem', color: '#3a4a5a', lineHeight: 1.6 }}>
-              Everybody in these frames blocked out the same three days for Miami. Club owners, federation
-              leadership, broadcasters and the people who never reply to a cold email were all in one building,
-              a coffee table apart.
+              The packed rooms, the unexpected introductions, the conversations on the concourse, the energy on the
+              exhibition floor and the big-stage moments that made Miami feel like the center of the football
+              universe. This is Soccerex Miami 2026.
             </p>
           </div>
 
@@ -763,9 +812,14 @@ export default function Miami2026Recap() {
             If you were there, you know. If you missed it, the next room is yours to enter
           </h2>
           <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.65, marginBottom: 30 }}>
-            Miami set the standard the next edition will build on, with more access, more opportunity and more of
-            the global game in the building. We are setting the dates now, and this list hears them first, along
-            with the delegate rates when they open.
+            Soccerex Miami 2026 was a starting point. The people who were there are already carrying the
+            conversations forward, and the next edition will build on the standard Miami set, with more access, more
+            opportunity and even more of the global game in the room.
+          </p>
+          <p className="miami-body" style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.65, marginBottom: 30 }}>
+            The relationships formed in Miami continue through the Soccerex Deal Network, and the conversations on
+            investment, women’s football, media, infrastructure, technology and the 2026 World Cup legacy are only
+            getting started. Be first to hear the next dates, priority delegate opportunities and partnership news.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <InquiryModalButton
