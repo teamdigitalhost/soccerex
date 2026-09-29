@@ -11,7 +11,7 @@ import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
   MIAMI_2026, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_PRICING, MIAMI_2026_PRICING_CATEGORY, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT, MIAMI_2026_ACCOMMODATIONS, MIAMI_2026_ACCOMMODATIONS_MISSPELLED, ACCOMMODATIONS, ACCOMMODATIONS_MISSPELLED, BOOK, SPONSOR, EXHIBIT, EXHIBITOR, SPONSORSHIP, EUROPE_2026, RIYADH_2027,
   EVENT_RECAP_PATTERN,
-  INSIGHTS, PROFILE_ACCESS, PROFILE_SHORTCUT, DEAL_NETWORK, HERSOCCEREX, RITZ_DRAWING, CTA_PATTERN, AGENDA_COLLAB, PARTNERS,
+  INSIGHTS, PROFILE_ACCESS, PROFILE_SHORTCUT, DEAL_NETWORK, HERSOCCEREX, THE_NETWORK, RITZ_DRAWING, CTA_PATTERN, AGENDA_COLLAB, PARTNERS,
   INVITE_PATTERN,
   SCHEDULE_CALL_PATTERN,
   PRIVACY_POLICY, TERMS, COOKIE_POLICY, REFUND_POLICY,
@@ -136,6 +136,7 @@ function SiteChrome({ children }) {
 const ScheduleCall = lazy(() => import('./pages/ScheduleCall'))
 // SoccerExpert page retired — subscribe form on /insights#soccerexpert-subscribe
 const HerSoccerex = lazy(() => import('./pages/HerSoccerex'))
+const TheNetwork = lazy(() => import('./pages/TheNetwork'))
 // The Pitch is kept on disk but not routed until it is announced.
 
 function App() {
@@ -170,6 +171,7 @@ function App() {
           <Route path={CONTACT} element={<Contact />} />
           <Route path={DEAL_NETWORK} element={<DealNetworkPage />} />
           <Route path={HERSOCCEREX} element={<HerSoccerex />} />
+          <Route path={THE_NETWORK} element={<TheNetwork />} />
           <Route path={APP_PAGE} element={<SoccerexApp />} />
           <Route path={INSIGHTS} element={<InsightsList />} />
           <Route path={ROUTE_PATTERNS.insightArticle} element={<InsightArticle />} />

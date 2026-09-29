@@ -15,7 +15,7 @@
  */
 import {
   HOME, ABOUT, EVENTS, CONTACT, GLOBAL_NETWORK, GALLERY, PAST_SPEAKERS, APP_PAGE,
-  DEAL_NETWORK, DEAL_NETWORK_APPLY, RITZ_DRAWING, HERSOCCEREX, INSIGHTS,
+  DEAL_NETWORK, DEAL_NETWORK_APPLY, RITZ_DRAWING, HERSOCCEREX, THE_NETWORK, INSIGHTS,
   MIAMI_2026, MIAMI_2026_V2, MIAMI_2026_PRESS_RELEASE, MIAMI_2026_ATTENDEE_GUIDE,
   MIAMI_2026_PRICING, MIAMI_2026_ACCOMMODATIONS,
   MIAMI_2026_ACCOMMODATIONS_MISSPELLED, MIAMI_2026_SPONSOR, MIAMI_2026_EXHIBIT,
@@ -104,6 +104,11 @@ const PAGES = {
     title: 'HerSoccerex | Soccerex',
     description: 'HerSoccerex brings together women who influence the game, women building their careers and the allies who can open doors for both, in collaboration with Wellness Universe Corporate.',
     image: '/images/hersoccerex/og.jpg',
+  },
+  [THE_NETWORK]: {
+    title: 'The Network with Diego Arrioja | Soccerex',
+    description: 'Diego Arrioja of NBCUniversal Telemundo sits down with the people who run the business of football, one guest per episode. A Soccerex interview series.',
+    image: '/images/the-network/og-base.jpg',
   },
   [INSIGHTS]: {
     title: 'Soccerex Insights | The Business of Football',
