@@ -668,7 +668,7 @@ export default function Miami2026Recap() {
           <div className="flex flex-wrap items-center gap-4" style={{ marginTop: 26 }}>
             {!showAllFrames && (
               <button type="button" onClick={() => setShowAllFrames(true)} className="miami-pill-outline">
-                See all {GALLERY.length} frames <ArrowRight size={15} />
+                View more <ArrowRight size={15} />
               </button>
             )}
             <p className="miami-body" style={{ fontSize: '0.82rem', color: '#8a97a5' }}>
