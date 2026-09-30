@@ -106,9 +106,9 @@ const PAGES = {
     image: '/images/hersoccerex/og.jpg',
   },
   [THE_NETWORK]: {
-    title: 'The Network with Diego Arrioja | Soccerex',
-    description: 'Diego Arrioja of NBCUniversal Telemundo sits down with the people who run the business of football, one guest per episode. A Soccerex interview series.',
-    image: '/images/the-network/og-base.jpg',
+    title: 'The Network | Football’s Future, Through Its People | Soccerex',
+    description: 'Meet the people, ideas and decisions moving football forward on The Network, a Soccerex original hosted by Emmy-winning journalist Diego Arrioja.',
+    image: '/images/the-network/og-network.jpg',
     noindex: true,
   },
   [INSIGHTS]: {
