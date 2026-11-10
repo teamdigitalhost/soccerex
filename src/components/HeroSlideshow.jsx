@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { CONTACT } from '../lib/routes'
 import { withTestSearch } from '../lib/testMode'
+import { heroForViewport } from '../lib/heroImage'
 
 /* Static hero copy. The dark slideshow used to rotate through six
    taglines letter-by-letter; that's retired in favour of the static
@@ -314,7 +315,7 @@ export default function HeroSlideshow() {
       .then((r) => r.json())
       .then((data) => {
         // Build a fresh shuffled playlist: heritage every 3rd, modern randomized
-        ALL_IMAGES = buildPlaylist(data.heritage || [], data.modern || [])
+        ALL_IMAGES = buildPlaylist(data.heritage || [], data.modern || []).map(heroForViewport)
         setImagesLoaded(true)
         // Preload only the first 3 immediately. The slideshow advances every
         // few seconds and the per-cycle effect below preloads the next image
@@ -330,7 +331,14 @@ export default function HeroSlideshow() {
   // ── Fast image cycling (waits for manifest) ────────────────────────────
   useEffect(() => {
     if (!imagesLoaded || ALL_IMAGES.length === 0) return
+    // Cycle only while the hero is on screen and the tab is visible. A
+    // slideshow that keeps loading photos behind the rest of the page only
+    // adds to the memory iPhone Safari counts against the tab.
+    let onScreen = true
+    const io = new IntersectionObserver(([e]) => { onScreen = e.isIntersecting })
+    if (sectionRef.current) io.observe(sectionRef.current)
     const interval = setInterval(() => {
+      if (!onScreen || document.hidden) return
       setShowImage(false) // fade out
       setTimeout(() => {
         setCurrentImage((prev) => {
@@ -350,7 +358,7 @@ export default function HeroSlideshow() {
       }, 600) // wait for fade-out
     }, 2500) // 2.5s per image — fast cycling through 304 images
 
-    return () => clearInterval(interval)
+    return () => { clearInterval(interval); io.disconnect() }
   }, [imagesLoaded])
 
   /* Rotating tagline cycle retired — static title + subtitle now. */

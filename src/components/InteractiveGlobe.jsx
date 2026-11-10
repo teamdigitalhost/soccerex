@@ -107,6 +107,9 @@ export default function InteractiveGlobe() {
     controls.enableZoom = false
     globeRef.current.pointOfView({ lat: MIAMI.lat, lng: MIAMI.lng, altitude: 2.2 }, 0)
 
+    // A phone screen at 3x would make the WebGL buffer nine times the CSS
+    // size. 1.5x looks the same on a rotating globe and costs a quarter.
+    globeRef.current.renderer().setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 768 ? 1.5 : 2))
     const el = globeRef.current.renderer().domElement
     const pause = () => { controls.autoRotate = false }
     const resume = () => { setTimeout(() => { controls.autoRotate = true }, 2000) }

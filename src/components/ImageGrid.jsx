@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Lightbox from './Lightbox'
+import { heroSrcSet } from '../lib/heroImage'
 
 // Masonry image grid. Images render directly with native loading="lazy" so the
 // browser handles deferring off-screen downloads — simpler and more robust than
@@ -33,6 +34,8 @@ export default function ImageGrid({ images, columns = 3, showCaptions = true, ma
                 <div className="gallery-item-inner">
                   <img
                     src={img.src}
+                    srcSet={heroSrcSet(img.src)}
+                    sizes={`(max-width: 1024px) 100vw, ${Math.round(100 / columns)}vw`}
                     alt={img.caption}
                     className="gallery-image"
                     loading={eager ? 'eager' : 'lazy'}

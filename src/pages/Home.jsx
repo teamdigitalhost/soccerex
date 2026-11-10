@@ -19,6 +19,7 @@ import { useScrollAnimations } from '../lib/useScrollAnimations'
 import { lazy, Suspense } from 'react'
 import LogoMarquee from '../components/LogoMarquee'
 import TestimonialsSection from '../components/TestimonialsSection'
+import { heroSmall } from '../lib/heroImage'
 const InteractiveGlobe = lazy(() => import('../components/InteractiveGlobe'))
 
 const NU_STADIUM_IMAGE = '/events/miami/2026/sections/nu-stadium-miami-freedom-park.jpg'
@@ -278,7 +279,7 @@ function ByTheNumbersSection() {
               {/* Background image — light treatment: bright + slightly
                   desaturated so the photo reads as airy texture under
                   the cream wash above. */}
-              <img src={s.bg} alt=""
+              <img src={heroSmall(s.bg) || s.bg} alt="" loading="lazy"
                 style={{
                   position: 'absolute', inset: 0, width: '100%', height: '100%',
                   objectFit: 'cover', filter: 'saturate(0.75) brightness(1.05) contrast(0.92)',
